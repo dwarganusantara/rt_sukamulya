@@ -1,0 +1,15 @@
+/* Penyesuaian komponen ops-* di portal warga agar mengikuti gaya cdx (portal-body). */
+.portal-body .ops-field{color:#27466f}
+.portal-body .ops-field input,.portal-body .ops-field select,.portal-body .ops-field textarea{width:100%;min-height:44px;margin:0;padding:10px 12px;border:1px solid #d7e0eb;border-radius:10px;background:#fff;color:var(--theme-navy,#082654);font:inherit;font-size:14px;box-shadow:none}
+.portal-body .ops-field textarea{min-height:96px}
+.portal-body .ops-field.check input{width:18px;min-height:18px}
+.portal-body .ops-btn{text-decoration:none}
+.portal-body .cpo-types{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.portal-body .cpo-type{display:block;padding:15px;border:1px solid #edf0f4;border-radius:14px;background:#fff;color:var(--theme-navy,#082654);text-decoration:none;box-shadow:0 6px 16px #26344c0a}
+.portal-body .cpo-type:hover,.portal-body .cpo-type:focus-visible{border-color:var(--theme-accent,#f0501a)}.portal-body .cpo-type strong{display:block;font-size:15px}.portal-body .cpo-type small{display:block;margin-top:4px;color:#526d91;font-size:12.5px;line-height:1.45}
+.portal-body .cpo-contacts{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.portal-body .cpo-contact{display:flex;flex-direction:column;gap:4px;padding:14px;border:1px solid #edf0f4;border-radius:14px;background:#fff}
+.portal-body .cpo-contact strong{color:var(--theme-navy,#082654)}.portal-body .cpo-contact small{color:#526d91}.portal-body .cpo-contact .ops-btn{align-self:flex-start;margin-top:6px}
+.portal-body .cpo-contact.emergency{border-color:#f6c9c4;background:#fff8f7}
+.portal-body .cdx-card .ops-form-actions{margin-top:12px}
+@media(max-width:760px){.portal-body .cpo-types,.portal-body .cpo-contacts{grid-template-columns:minmax(0,1fr)}}

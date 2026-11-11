@@ -1,0 +1,470 @@
+/* Tema merah portal warga untuk Profil Saya, Layanan Surat, dan Pengumuman.
+   Dimuat setelah CSS bawaan tiap halaman; semua aturan di-scope ke .crd-page agar halaman lain tidak terpengaruh. */
+body.citizen-shell-body{background:radial-gradient(60% 40% at 0 30%,#fff0f4 0,transparent 70%),radial-gradient(50% 40% at 100% 45%,#fff3f6 0,transparent 70%),#fffcfd!important}
+.crd-page{--cr-red:#d9002c;--cr-red-2:#a8001d;--cr-navy:var(--dw-navy,#091c55);--cr-line:#f3d6dd;position:relative;padding-bottom:150px!important;background:transparent!important;color:var(--cr-navy)}
+.crd-page *,.crd-page *:before,.crd-page *:after{box-sizing:border-box}
+
+/* Hiasan bawah */
+.crd-deco{position:absolute;left:0;right:0;bottom:0;height:130px;pointer-events:none;z-index:0}
+.crd-deco-town{position:absolute;left:3%;bottom:42px;width:min(360px,40vw);height:auto}
+.crd-deco-wave{position:absolute;left:0;right:0;bottom:0;width:100%;height:90px}
+
+/* Tombol Kembali merah */
+.crd-page .cdx-back,.crd-page .anx-back{background:linear-gradient(135deg,#ef1d3f,var(--cr-red-2))!important;box-shadow:0 8px 18px #b0001f40!important}
+
+/* Judul kartu: pita merah dengan teks putih (dipakai Profil) */
+.crd-page .pfx-card{position:relative;border:1px solid var(--cr-line);border-radius:22px;box-shadow:0 12px 28px #5a002314;overflow:hidden}
+.crd-page .pfx-card>.pfx-head{margin:-16px -18px 14px;padding:14px 20px 18px;background:linear-gradient(100deg,#b0001f,#d9002c 45%,#ef1d3f 75%,#ff6b81);clip-path:polygon(0 0,100% 0,100% 70%,88% 100%,0 100%)}
+.crd-page .pfx-card>.pfx-head h2{color:#fff}
+.crd-page .pfx-card>.pfx-head p{color:#ffe3e9}
+.crd-page .pfx-card>.pfx-head>span,.crd-page .pfx-card>.pfx-head>span.orange,.crd-page .pfx-card>.pfx-head>span.blue{background:#ffffff26;box-shadow:inset 0 0 0 1px #ffffff47;color:#fff}
+.crd-page .pfx-edit-main,.crd-page .pfx-all{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border:1.5px solid #fff;border-radius:999px;background:#fff;color:#c8102e!important;font-weight:800;box-shadow:0 4px 10px #6b001629}
+
+/* =================== PROFIL SAYA =================== */
+.crd-page .pfy-hero{min-height:240px;background:radial-gradient(ellipse at 5% 20%,#fff0f4,transparent 50%),linear-gradient(100deg,#fff 0,#fff6f8 55%,#ffeef2 100%)}
+.crd-page .pfy-hero:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:70px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 90' preserveAspectRatio='none'%3E%3Cpath d='M0 90V40C300 80 600 86 900 60S1400 10 1600 30v60Z' fill='%23fffcfd'/%3E%3Cpath d='M900 60C1150 38 1380 6 1600 22v8C1400 12 1160 46 900 66Z' fill='%23d9002c'/%3E%3C/svg%3E") center/100% 100% no-repeat;z-index:1}
+.crd-page .pfy-hero>img{z-index:0}
+.crd-page .pfy-hero h1{color:var(--cr-navy)}
+.crd-page .pfy-hero h1 b{color:var(--cr-red)}
+.crd-page .pfx-crumb a{color:var(--cr-navy)}
+.crd-page .pfx-crumb b{color:var(--cr-red)}
+.crd-page .pfy-stats a{border:1px solid var(--cr-line);border-radius:20px;box-shadow:0 12px 26px #5a002314}
+.crd-page .pfy-stats a.orange{background:linear-gradient(120deg,#fff,#fff4ef)}
+.crd-page .pfy-stats a.blue{background:linear-gradient(120deg,#fff,#eef5ff)}
+.crd-page .pfy-stats a.green{background:linear-gradient(120deg,#fff,#effaf0)}
+.crd-page .pfy-stats a.purple{background:linear-gradient(120deg,#fff,#f5f0ff)}
+.crd-page .pfy-shortcuts a{border-radius:16px}
+.crd-page .pfx-photo .pfx-drop{border-color:#f1aab8;background:#fff7f9}
+.crd-page .pfx-photo .pfx-drop span{background:#ffe3e9;color:var(--cr-red)}
+.crd-page .pfx-tip{background:#fff1f4;color:#7a1a2c}
+.crd-page .pfx-tip svg{color:var(--cr-red)}
+.crd-page .pfx-photo-big label{background:linear-gradient(145deg,#ff5a3c,#e3062f)}
+.crd-page .pfy-content{position:relative;z-index:1}
+
+/* =================== LAYANAN SURAT =================== */
+.crd-page.cpx-services .cdx-wrap{position:relative;z-index:1}
+.crd-page .cdx-hero.cpx-warm{min-height:150px;padding:18px 30px;border-radius:26px;background:linear-gradient(100deg,#8e0019 0%,#c8102e 40%,#e3062f 62%,#ffd9e0 82%,#fff 100%);box-shadow:0 14px 30px #8a001a33}
+.crd-page .cdx-hero.cpx-warm>img{opacity:1;max-width:56%;-webkit-mask-image:linear-gradient(90deg,transparent,#000 22%);mask-image:linear-gradient(90deg,transparent,#000 22%)}
+.crd-page .cdx-hero h1{color:#fff}
+.crd-page .cdx-hero h1 b{color:#ffd23f}
+.crd-page .cdx-hero p{color:#ffe7ec}
+.crd-page .cdx-hero-icon,.crd-page .cdx-hero-icon.soft{background:#fff;color:var(--cr-red);box-shadow:0 8px 18px #5a00233d}
+.crd-page .cpx-notice{border:1px solid var(--cr-line);border-radius:18px;background:#fff;box-shadow:0 8px 20px #5a002312}
+.crd-page .cpx-notice>span{background:linear-gradient(145deg,#ef1d3f,var(--cr-red-2))}
+.portal-body .crd-page .cpx-notice>a{border:1.5px solid #e3062f;border-radius:12px;color:#c8102e}
+.crd-page .cpx-tabs button{border:1px solid var(--cr-line)!important;border-radius:14px!important;background:#fff!important;color:var(--cr-navy)!important;box-shadow:0 4px 10px #5a00230d}
+.crd-page .cpx-tabs button span{color:var(--cr-red)!important;background:transparent!important}
+.crd-page .cpx-tabs button.active{border-color:transparent!important;background:linear-gradient(95deg,#c8102e,#e3062f)!important;color:#fff!important;box-shadow:0 8px 16px #c8102e38}
+.crd-page .cpx-tabs button.active span{color:#fff!important}
+.crd-page .cpx-search{border-color:var(--cr-line);border-radius:14px;color:var(--cr-red)}
+.crd-page .cpx-search:focus-within{border-color:#e3062f}
+.crd-page .letter-card{border:1px solid var(--cr-line);border-radius:20px;background:#fff;box-shadow:0 8px 20px #5a002312}
+.crd-page .letter-card:hover{border-color:#f1aab8;box-shadow:0 14px 28px #5a00231f}
+.crd-page .letter-card h2{color:var(--cr-navy)}
+.crd-page .letter-card>a{border:1.5px solid #e3062f!important;border-radius:12px!important;background:#fff!important;color:#c8102e!important;font-weight:800}
+.crd-page .letter-card>a:hover{background:#fff1f4!important}
+.crd-page .letter-category.kependudukan{background:#ffe3e9;color:#b0001f}
+.crd-page .letter-category.keterangan{background:#efe6ff;color:#6b2bd9}
+.crd-page .letter-category.kegiatan{background:#e3f7e8;color:#16803a}
+.crd-page .letter-category.lainnya{background:#fff0dc;color:#b45309}
+
+/* =================== PENGUMUMAN =================== */
+.anx-page{font-family:var(--dw-font,"Nunito Sans","Nunito","Segoe UI",system-ui,sans-serif)}
+.anx-wrap{position:relative;width:min(1500px,calc(100% - 48px));margin-inline:auto}
+.anx-hero{position:relative;min-height:clamp(260px,20vw,330px);background:radial-gradient(ellipse at 0 30%,#ffe9ee,transparent 50%),linear-gradient(100deg,#fff 0,#fff6f8 45%,#ffeef2 100%);overflow:hidden;isolation:isolate}
+.anx-hero-art{position:absolute;z-index:-2;top:0;right:0;bottom:0;width:min(62%,1100px);-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 24%);mask-image:linear-gradient(90deg,transparent 0,#000 24%)}
+.anx-hero-art img{position:absolute;top:0;right:0;height:100%;width:auto;max-width:none}
+.anx-hero-wave{position:absolute;z-index:-1;left:0;right:0;bottom:-1px;width:100%;height:clamp(60px,6vw,96px)}
+.anx-hero-copy{padding:22px 0 90px}
+.anx-back{display:inline-flex!important;align-items:center;gap:10px;min-height:48px;padding:0 24px 0 18px!important;border-radius:999px!important;color:#fff!important;font-size:16px!important;font-weight:800!important;text-decoration:none!important}
+.anx-eyebrow{display:flex;align-items:center;gap:14px;margin:26px 0 6px;color:var(--cr-red);font-size:14px;font-weight:900;letter-spacing:.32em}
+.anx-eyebrow:after{content:"";width:60px;height:2px;background:var(--cr-red)}
+.anx-hero h1{margin:0 0 10px;font-size:clamp(38px,4vw,62px);font-weight:900;line-height:1.05;letter-spacing:-.02em;background:linear-gradient(90deg,#0b1d5c 0,#0b1d5c 55%,#a8001d 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.anx-hero p{margin:0;color:#1d2b55;font-size:clamp(15px,1.25vw,19px);font-weight:600}
+.anx-content{z-index:1;margin-top:-10px}
+.anx-tools{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:24px}
+.anx-search{flex:1 1 420px;max-width:820px;display:flex;align-items:center;gap:12px;height:56px;padding:0 6px 0 20px;border:1px solid var(--cr-line);border-radius:999px;background:#fff;color:var(--cr-red);box-shadow:0 10px 24px #5a002314}
+.anx-search:focus-within{border-color:#e3062f}
+.anx-search input{flex:1;min-width:0;height:100%;border:0!important;outline:0;background:transparent!important;box-shadow:none!important;color:var(--cr-navy);font:inherit;font-size:16px;padding:0!important;margin:0!important}
+.anx-search button{height:44px;padding:0 24px;border:0;border-radius:999px;background:#ffe3e9;color:#c8102e;font:inherit;font-size:16px;font-weight:800;cursor:pointer;box-shadow:none}
+.anx-search button:hover{background:#ffd3dc}
+.anx-filters{display:flex;flex-wrap:wrap;gap:10px}
+.anx-filters a{display:inline-flex;align-items:center;gap:8px;min-height:46px;padding:0 20px;border:1px solid var(--cr-line);border-radius:999px;background:#fff;color:var(--cr-navy);font-size:15px;font-weight:800;text-decoration:none;box-shadow:0 6px 14px #5a002312}
+.anx-filters a:hover{background:#fff4f6}
+.anx-filters a.active{border-color:transparent;background:linear-gradient(95deg,#a8001d,#d9002c);color:#fff;box-shadow:0 8px 18px #b0001f40}
+.anx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px}
+.anx-card{position:relative;display:flex;flex-direction:column;border:1px solid var(--cr-line);border-radius:22px;background:#fff;box-shadow:0 12px 28px #5a002317;overflow:hidden;transition:transform .18s,box-shadow .18s}
+.anx-card:hover{transform:translateY(-3px);box-shadow:0 18px 34px #5a002324}
+.anx-card:after{content:"";position:absolute;right:0;bottom:0;width:62%;height:46px;background:linear-gradient(170deg,transparent 45%,#ffe3e9 46%,#ffd3dc 100%);border-top-left-radius:100% 60%;opacity:.8;pointer-events:none}
+.anx-image{position:relative;display:block;aspect-ratio:16/8.4;background:linear-gradient(135deg,#fff1f4,#ffe1e8);overflow:hidden}
+.anx-image img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.anx-card:hover .anx-image img{transform:scale(1.04)}
+.anx-image-fallback{position:absolute;inset:0;display:grid;place-items:center;color:#e3062f;opacity:.75}
+.anx-cat{position:absolute;top:14px;left:14px;display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:999px;background:linear-gradient(95deg,#c8102e,#e3062f);color:#fff;font-size:14px;font-weight:800;box-shadow:0 6px 14px #8a001a40}
+.anx-cat.is-lainnya{background:linear-gradient(95deg,#6d28d9,#8b5cf6)}
+.anx-cat.is-informasi{background:linear-gradient(95deg,#1d4ed8,#3b82f6)}
+.anx-cat.is-iuran{background:linear-gradient(95deg,#047857,#10b981)}
+.anx-body{position:relative;z-index:1;display:flex;flex-direction:column;flex:1;padding:18px 22px 22px}
+.anx-body time{display:inline-flex;align-items:center;gap:8px;color:#33405e;font-size:14px;font-weight:600}
+.anx-body time svg{color:var(--cr-navy)}
+.anx-body h2{margin:8px 0 8px;font-size:clamp(18px,1.4vw,22px);font-weight:900;line-height:1.25}
+.anx-body h2 a{color:var(--cr-navy);text-decoration:none}
+.anx-body h2 a:hover{color:var(--cr-red)}
+.anx-body p{flex:1;margin:0 0 16px;color:#33405e;font-size:15px;line-height:1.55}
+.anx-more{display:inline-flex;align-items:center;gap:8px;color:#c8102e;font-size:15px;font-weight:900;text-decoration:none}
+.anx-more:hover{gap:12px}
+.anx-empty{display:grid;justify-items:center;gap:8px;padding:40px 20px;border:1px solid var(--cr-line);border-radius:22px;background:#fff;text-align:center}
+.anx-empty span{display:grid;place-items:center;width:76px;height:76px;border-radius:50%;background:#fff1f4;color:var(--cr-red)}
+.anx-empty strong{font-size:20px}
+.anx-empty a{color:#c8102e;font-weight:800}
+
+/* ---------- Responsif ---------- */
+@media(max-width:900px){
+ .anx-hero-art{width:100%;opacity:.25}
+ .anx-tools{flex-direction:column;align-items:stretch}
+ .anx-search{max-width:none}
+ .crd-page .cdx-hero.cpx-warm{background:linear-gradient(100deg,#8e0019,#c8102e 60%,#e3062f)}
+ .crd-page .cdx-hero.cpx-warm>img{display:none}
+}
+@media(max-width:600px){
+ .anx-wrap{width:calc(100% - 28px)}
+ .anx-grid{grid-template-columns:1fr}
+ .anx-filters{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px}
+ .anx-filters a{flex:none;min-height:40px;padding:0 14px;font-size:14px}
+ .anx-hero-copy{padding-bottom:70px}
+ .crd-page .pfx-card>.pfx-head{clip-path:none}
+}
+
+/* Perbaikan: sembunyikan balon kutipan di sisi kiri gambar hero layanan; tepi gambar pengumuman memudar; warna tautan. */
+.crd-page .cdx-hero.cpx-warm>img{-webkit-mask-image:linear-gradient(90deg,transparent 0,transparent 17%,#000 27%);mask-image:linear-gradient(90deg,transparent 0,transparent 17%,#000 27%)}
+.anx-hero-art{-webkit-mask-image:none;mask-image:none}
+.anx-hero-art img{-webkit-mask-image:linear-gradient(90deg,transparent 0,transparent 18%,#000 46%);mask-image:linear-gradient(90deg,transparent 0,transparent 18%,#000 46%)}
+.anx-page .anx-more,.anx-page .anx-more:visited{color:#c8102e!important}
+.anx-page .anx-body h2 a{color:var(--cr-navy)!important}
+.anx-page .anx-body h2 a:hover{color:var(--cr-red)!important}
+
+/* =====================================================================
+   Kerangka halaman layanan "cdx" (Iuran Saya, Laporan Keuangan, dll.) — tema merah
+   ===================================================================== */
+.crd-page.cdx-page .cdx-wrap{position:relative;z-index:1}
+/* Lonceng & akun sudah ada di header merah: sembunyikan duplikatnya di baris breadcrumb. */
+.crd-page .cdx-top .cdx-tools{display:none}
+.crd-page .cdx-top{min-height:0;padding:14px 0 6px}
+.crd-page .cdx-crumb{font-size:15px;font-weight:700;color:#33405e}
+.crd-page .cdx-crumb a{color:#33405e}
+.crd-page .cdx-crumb b{color:var(--cr-red)}
+/* Hero */
+.crd-page .cdx-hero.cpx-warm,.crd-page .fnx-hero{position:relative;min-height:170px;border:1px solid var(--cr-line);border-radius:26px;background:radial-gradient(ellipse at 0 20%,#fff0f4,transparent 50%),linear-gradient(100deg,#fff 0,#fff7f9 55%,#ffeef2 100%);box-shadow:0 12px 28px #5a002314;overflow:hidden}
+.crd-dues .cdx-hero.cpx-warm{background:radial-gradient(ellipse at 0 20%,#fff0f4,transparent 50%),linear-gradient(100deg,#fff 0,#fff7f9 55%,#ffeef2 100%)}
+.crd-page .cdx-hero.cpx-warm:after,.crd-page .fnx-hero:after{content:"";position:absolute;z-index:0;left:0;right:0;bottom:-1px;height:44px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 60' preserveAspectRatio='none'%3E%3Cpath d='M700 60C1000 40 1300 0 1600 10v50Z' fill='%23ffd3dc'/%3E%3Cpath d='M820 60C1100 44 1360 14 1600 22v6C1360 22 1110 50 860 60Z' fill='%23d9002c'/%3E%3C/svg%3E") center/100% 100% no-repeat;pointer-events:none}
+.crd-page .cdx-hero.cpx-warm h1,.crd-page .fnx-copy h1{color:var(--cr-navy)}
+.crd-page .cdx-hero h1 b,.crd-page .fnx-copy h1 b{color:var(--cr-red)}
+.crd-page .cdx-hero.cpx-warm p,.crd-page .fnx-copy p{color:#33405e}
+.crd-page .cdx-hero.cpx-warm .cdx-hero-icon,.crd-page .cdx-hero-icon:not(.soft){background:linear-gradient(145deg,#ef1d3f,var(--cr-red-2));color:#fff;box-shadow:0 10px 20px #b0001f40}
+.crd-dues .cdx-hero.cpx-warm>img,.crd-finance .fnx-hero>img{opacity:1;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 18%);mask-image:linear-gradient(90deg,transparent 0,#000 18%)}
+.crd-finance .fnx-copy small{display:flex;align-items:center;gap:12px;color:var(--cr-navy);letter-spacing:.14em}
+.crd-finance .fnx-copy small:after{content:"";width:70px;height:2px;background:var(--cr-red)}
+.crd-finance .fnx-copy{display:flex;flex-direction:column;padding-left:112px}
+.crd-finance .fnx-copy:before{content:"";position:absolute;left:0;top:50%;width:90px;height:90px;margin-top:-45px;border-radius:22px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fff'%3E%3Crect x='4' y='11' width='4' height='9' rx='1.5'/%3E%3Crect x='10' y='6' width='4' height='14' rx='1.5'/%3E%3Crect x='16' y='9' width='4' height='11' rx='1.5'/%3E%3C/svg%3E") center/52px no-repeat,linear-gradient(145deg,#ef1d3f,#a8001d);box-shadow:0 10px 20px #b0001f40}
+.crd-finance .fnx-period{border:1px solid var(--cr-line);border-radius:20px;box-shadow:0 12px 26px #5a00231f}
+.portal-body .crd-finance .fnx-period button{background:linear-gradient(95deg,#c8102e,#a8001d);border-radius:12px}
+.portal-body .crd-finance .fnx-period input{border-color:#eadfe3;border-radius:12px}
+/* Kartu ringkasan */
+.crd-page .cdx-metrics>*{border-radius:20px;box-shadow:0 12px 26px #5a002314}
+.crd-page .cdx-metrics .red{--c:#c8102e;--bg:#fff1f4;--line:#f6d1d9;--track:#ffd3dc}
+.crd-page .cdx-metrics .green{--c:#16803a;--bg:#eefaf1;--line:#cfeed8;--track:#c3ecd0}
+.crd-page .cdx-metrics .orange{--c:#e8590c;--bg:#fff5ec;--line:#fbe0c8;--track:#fddcbf}
+.crd-page .cdx-metrics .red .cdx-icon{background:linear-gradient(145deg,#ef1d3f,#a8001d)!important}
+.crd-page .cdx-metrics .green .cdx-icon{background:linear-gradient(145deg,#34c759,#15803d)!important}
+.crd-page .cdx-metrics .orange .cdx-icon{background:linear-gradient(145deg,#ff9f1c,#f05a0a)!important}
+/* Kartu & judul */
+.crd-page .cdx-card{border:1px solid var(--cr-line);border-radius:22px;box-shadow:0 12px 28px #5a002314}
+.crd-page .cdx-head .red{background:linear-gradient(145deg,#ef1d3f,#a8001d);box-shadow:0 6px 14px #b0001f33}
+.crd-page .cdx-head h2{color:var(--cr-navy)}
+.portal-body .crd-page .cdx-report{border:1.5px solid #e3062f;border-radius:999px;background:#fff;color:#c8102e;box-shadow:0 4px 10px #b0001f1a}
+.portal-body .crd-page .cdx-report:hover{background:#fff1f4;filter:none}
+.portal-body .crd-page .cpx-empty .cdx-report{border:0;background:linear-gradient(95deg,#c8102e,#a8001d);color:#fff;box-shadow:0 8px 18px #b0001f40}
+/* Filter & tabel */
+.portal-body .crd-page .cpx-filters select,.portal-body .crd-page .fnx-tools select,.crd-page .cpx-range,.crd-page .cpx-search{border-color:#eadfe3;border-radius:12px}
+.crd-page .cpx-search:focus-within,.crd-page .cpx-range:focus-within{border-color:#e3062f}
+.portal-body .crd-page .cdx-table th{background:#ffe8ed;color:var(--cr-navy)}
+.portal-body .crd-page .cdx-table thead th:first-child{border-radius:12px 0 0 12px}
+.portal-body .crd-page .cdx-table thead th:last-child{border-radius:0 12px 12px 0}
+/* Grafik keuangan: pemasukan merah tua, pengeluaran merah muda */
+.crd-finance .fnx-legend .in,.crd-finance .fnx-bars .in{background:linear-gradient(#e3062f,#b0001f)}
+.crd-finance .fnx-legend .out,.crd-finance .fnx-bars .out{background:linear-gradient(#ffb3c1,#ff8fa3)}
+.crd-finance .fnx-privacy{border-radius:14px;background:#fff4f6}
+@media(max-width:900px){.crd-finance .fnx-copy{padding-left:0}.crd-finance .fnx-copy:before{display:none}}
+
+.crd-finance .fnx-copy{max-width:46%}
+.crd-finance .fnx-copy h1{white-space:nowrap;font-size:clamp(28px,2.6vw,42px)}
+@media(max-width:1180px){.crd-finance .fnx-copy h1{white-space:normal}}
+.crd-finance .fnx-hero>img{width:34%;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 22%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent 0,#000 22%,#000 94%,transparent)}
+.crd-finance .fnx-copy p{max-width:470px}
+@media(max-width:1180px){.crd-finance .fnx-hero>img{opacity:.3}}
+.crd-finance .fnx-hero>img{width:auto;max-width:none;object-fit:fill;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 8%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent 0,#000 8%,#000 94%,transparent)}
+
+/* Laporan Kas RT: tombol Cetak / PDF merah penuh (sesuai mockup). */
+.portal-body .crd-finance .fnx-print{border:0;background:linear-gradient(95deg,#c8102e,#a8001d);color:#fff;border-radius:12px;box-shadow:0 8px 18px #b0001f40}
+.portal-body .crd-finance .fnx-print:hover{background:linear-gradient(95deg,#d9183a,#b0001f);filter:none}
+
+/* =================== GALERI KEGIATAN =================== */
+.glx-page .anx-hero h1.glx-title{background:none;color:var(--cr-navy)}
+.glx-page .anx-hero h1.glx-title b{color:#a8001d}
+.glx-page .anx-image{width:100%;padding:0;border:0;cursor:zoom-in;font:inherit}
+.glx-page .anx-body h2{color:var(--cr-navy)}
+.glx-page .anx-more{padding:0;border:0;background:none;cursor:pointer;font-family:inherit;box-shadow:none}
+.glx-cat.is-kerja-bakti{background:linear-gradient(95deg,#15803d,#22c55e)}
+.glx-cat.is-sosial{background:linear-gradient(95deg,#1d4ed8,#3b82f6)}
+.glx-cat.is-keagamaan{background:linear-gradient(95deg,#6d28d9,#8b5cf6)}
+.glx-cat.is-lomba{background:linear-gradient(95deg,#dc2626,#f97316)}
+.glx-cat.is-rutin{background:linear-gradient(95deg,#0e7490,#06b6d4)}
+.glx-cat.is-lainnya{background:linear-gradient(95deg,#475569,#94a3b8)}
+.glx-grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.glx-end{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:26px;padding:18px 24px;border:1px solid var(--cr-line);border-radius:22px;background:linear-gradient(100deg,#fff4f6,#fff 50%,#fff4f6)}
+.glx-end span{color:var(--cr-red)}
+.glx-end strong{display:block;color:var(--cr-navy);font-size:18px;font-weight:900}
+.glx-end small{display:block;color:#33405e;font-size:14px}
+@media(max-width:600px){.glx-end{justify-content:flex-start;padding:14px 16px}}
+.glx-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.glx-page .anx-body h2{font-size:clamp(17px,1.25vw,21px)}
+@media(max-width:1200px){.glx-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:900px){.glx-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.glx-grid{grid-template-columns:1fr}}
+
+/* =====================================================================
+   Halaman operasional warga (render_citizen): Jadwal Ronda, Pengaduan, Mutasi, Kontak Penting
+   ===================================================================== */
+/* Di semua halaman ber-header merah, lonceng & akun di baris breadcrumb disembunyikan (sudah ada di header). */
+.citizen-shell-body .cdx-top .cdx-tools{display:none}
+/* Ilustrasi hero (rasio tetap, memudar ke kiri) */
+.crd-page .crd-hero>.crd-hero-art{position:absolute;z-index:0;top:0;right:0;bottom:0;width:min(52%,760px);overflow:hidden;pointer-events:none}
+.crd-page .crd-hero>.crd-hero-art img{position:absolute;top:0;right:0;height:100%;width:auto;max-width:none;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 30%);mask-image:linear-gradient(90deg,transparent 0,#000 30%)}
+/* Varian pemandangan: gazebo/pos & rumah dari ilustrasi footer (pita merah bawahnya dipotong) */
+.crd-page .crd-hero>.crd-hero-art--scene img{top:-48%;right:-2%;height:236%}
+.crd-page .crd-hero>.cdx-hero-icon,.crd-page .crd-hero>div{position:relative;z-index:1}
+.crd-page .crd-hero>div{max-width:52%}
+/* Tombol utama merah penuh */
+.portal-body .crd-page .cdx-report.crd-btn-solid{border:0;background:linear-gradient(95deg,#c8102e,#a8001d);color:#fff;box-shadow:0 8px 18px #b0001f40}
+.portal-body .crd-page .cdx-report.crd-btn-solid:hover{background:linear-gradient(95deg,#d9183a,#b0001f)}
+.crd-page .cdx-metrics .blue{--c:#1d4ed8;--bg:#eef4ff;--line:#d6e4fb;--track:#d6e4fb}
+.crd-page .cdx-metrics .blue .cdx-icon{background:linear-gradient(145deg,#3b82f6,#1d4ed8)!important}
+.crd-page .cdx-metrics em a{color:inherit}
+.crd-metric-go{position:absolute;right:16px;bottom:16px;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:#fff;color:#c8102e!important;font-size:24px;font-weight:900;line-height:1;text-decoration:none;box-shadow:0 4px 10px #5a00231f}
+/* Tombol & tabel ops */
+.crd-ops .ops-btn{border-color:transparent;background:linear-gradient(95deg,#c8102e,#a8001d);color:#fff;border-radius:12px}
+.crd-ops .ops-btn.outline,.crd-ops .ops-btn.ghost{border:1.5px solid #e3062f;background:#fff;color:#c8102e}
+.crd-ops .ops-table th{text-transform:uppercase;letter-spacing:.03em}
+.crd-ops .ops-empty{padding:22px!important;color:#1d2b55;text-align:center}
+@media(max-width:900px){.crd-page .crd-hero>.crd-hero-art{opacity:.25;width:100%}.crd-page .crd-hero>div{max-width:none}}
+.crd-page .crd-hero>.crd-hero-art{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 26%);mask-image:linear-gradient(90deg,transparent 0,#000 26%)}
+.crd-page .crd-hero>.crd-hero-art--scene img{-webkit-mask-image:none;mask-image:none}
+
+/* Riwayat Pengajuan: baris filter dalam kartu putih, ilustrasi hero memudar ke kiri. */
+.crd-history .cdx-card.cpx-filters{padding:14px 18px}
+.crd-history .cdx-hero.cpx-warm>img{opacity:1;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 20%);mask-image:linear-gradient(90deg,transparent 0,#000 20%)}
+.portal-body .crd-page .cpx-empty .cdx-report.crd-btn-solid,.portal-body .crd-history .cpx-empty .cdx-report{border:0;background:linear-gradient(95deg,#c8102e,#a8001d);color:#fff}
+
+/* =================== AGENDA & ACARA (daftar) =================== */
+.agl-page .anx-hero h1.glx-title{background:none;color:var(--cr-navy)}
+.agl-page .anx-hero h1.glx-title b{color:var(--cr-red)}
+.agl-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.agl-cat.is-kegiatan{background:linear-gradient(95deg,#e3062f,#ff5a6e)}
+.agl-cat.is-kerja-bakti{background:linear-gradient(95deg,#15803d,#22c55e)}
+.agl-cat.is-lomba{background:linear-gradient(95deg,#dc2626,#f97316)}
+.agl-cat.is-sosial{background:linear-gradient(95deg,#1d4ed8,#3b82f6)}
+.agl-cat.is-lainnya{background:linear-gradient(95deg,#7c3aed,#a78bfa)}
+.agl-meta{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0 0 8px;color:#33405e;font-size:13.5px;font-weight:700}
+.agl-meta span{display:inline-flex;align-items:center;gap:6px}
+.agl-meta svg{color:var(--cr-red)}
+@media(max-width:1100px){.agl-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.agl-grid{grid-template-columns:1fr}}
+.agl-grid .anx-image{aspect-ratio:16/6.6}
+
+/* =================== PROFIL RT (publik) =================== */
+.prf-page{font-family:var(--dw-font,"Nunito Sans","Nunito","Segoe UI",system-ui,sans-serif)}
+.prf-wrap{position:relative;z-index:1;width:min(1500px,calc(100% - 48px));margin-inline:auto}
+.prf-hero{position:relative;min-height:clamp(300px,23vw,380px);background:radial-gradient(ellipse at 0 30%,#ffe9ee,transparent 50%),linear-gradient(100deg,#fff 0,#fff6f8 45%,#ffeef2 100%);overflow:hidden;isolation:isolate}
+.prf-hero-art{position:absolute;z-index:-2;top:0;right:0;bottom:0;width:min(64%,1150px);overflow:hidden}
+.prf-hero-art img{position:absolute;top:0;right:0;height:100%;width:auto;max-width:none;-webkit-mask-image:linear-gradient(90deg,transparent 0,transparent 22%,#000 46%);mask-image:linear-gradient(90deg,transparent 0,transparent 22%,#000 46%)}
+.prf-hero-wave{position:absolute;z-index:-1;left:0;right:0;bottom:-1px;width:100%;height:clamp(50px,5vw,90px)}
+.prf-hero-copy{padding:26px 0 70px}
+.prf-crumb{display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border:1px solid var(--cr-line);border-radius:999px;background:#fff;font-size:15px;font-weight:700;box-shadow:0 6px 14px #5a002312}
+.prf-crumb a{display:inline-flex;align-items:center;gap:6px;color:var(--cr-navy);text-decoration:none}
+.prf-crumb i{color:#9aa3b5;font-style:normal}.prf-crumb span{color:var(--cr-red)}
+.prf-eyebrow{margin-top:24px}
+.prf-hero h1{margin:0;color:var(--cr-navy);font-size:clamp(36px,3.6vw,60px);font-weight:900;line-height:1.05;letter-spacing:-.02em}
+.prf-hero h2{margin:6px 0 14px;color:var(--cr-red);font-size:clamp(26px,2.4vw,40px);font-style:italic;font-weight:900}
+.prf-hero p{margin:0;max-width:560px;color:#1d2b55;font-size:clamp(15px,1.15vw,18px);font-weight:600}
+.prf-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:22px;margin-top:-12px}
+.prf-photo{position:relative;min-height:320px;margin:0;border-radius:24px;overflow:hidden;box-shadow:0 14px 30px #5a00232a}
+.prf-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.prf-photo:after{content:"";position:absolute;inset:0;background:linear-gradient(62deg,#a8001d 0%,#c8102ef2 36%,#d9002c80 55%,transparent 75%)}
+.prf-photo figcaption{position:absolute;z-index:1;left:44px;bottom:34px;max-width:min(380px,70%);color:#fff;font-size:clamp(22px,2vw,32px);font-style:italic;font-weight:900;line-height:1.2;text-shadow:0 2px 10px #5a002366}
+.prf-photo figcaption i{display:block;width:54px;height:4px;margin-bottom:16px;border-radius:4px;background:#fff}
+.prf-about{position:relative;padding:28px 34px 32px;border:1px solid var(--cr-line);border-radius:24px;background:#fff;box-shadow:0 14px 30px #5a002317;overflow:hidden}
+.prf-about:after{content:"";position:absolute;right:0;bottom:0;width:58%;height:80px;background:linear-gradient(170deg,transparent 48%,#ffe3e9 49%,#ffc2cf 100%);border-top-left-radius:100% 70%;opacity:.8;pointer-events:none}
+.prf-about h2{margin:0 0 8px;color:var(--cr-navy);font-size:clamp(24px,2vw,32px);font-weight:900}
+.prf-about>p{margin:0 0 18px;color:#33405e;font-size:16px;line-height:1.55}
+.prf-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:22px}
+.prf-stats>div{display:flex;align-items:center;gap:12px;padding:14px;border-radius:16px}
+.prf-stats p{margin:0;line-height:1.15}
+.prf-stats strong{display:block;font-size:28px;font-weight:900}
+.prf-stats small{display:block;color:#33405e;font-size:13.5px;font-weight:600}
+.prf-tone-red{background:#fff1f4;color:#e3062f}.prf-tone-blue{background:#eef4ff;color:#1d4ed8}.prf-tone-green{background:#eefaf1;color:#16a34a}.prf-tone-purple{background:#f4efff;color:#7c3aed}
+.prf-btn{position:relative;z-index:1;display:inline-flex;align-items:center;gap:12px;min-height:54px;padding:0 30px;border-radius:999px;background:linear-gradient(95deg,#c8102e,#a8001d);color:#fff!important;font-size:18px;font-weight:900;text-decoration:none;box-shadow:0 10px 22px #b0001f40}
+.prf-btn:hover{filter:brightness(1.06)}
+.prf-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:22px;padding:16px 10px;border:1px solid var(--cr-line);border-radius:999px;background:#fff;box-shadow:0 12px 26px #5a002314}
+.prf-links a{display:flex;align-items:center;gap:16px;padding:4px 26px;color:var(--cr-navy);text-decoration:none}
+.prf-links a+a{border-left:2px solid #f1e3e7}
+.prf-links span{width:54px;height:54px;flex:none;display:grid;place-items:center;border-radius:50%;background:linear-gradient(145deg,#ef1d3f,#a8001d);color:#fff}
+.prf-links p{margin:0;min-width:0;line-height:1.3}
+.prf-links strong{display:block;font-size:17px;font-weight:900}
+.prf-links small{display:block;overflow:hidden;color:#33405e;font-size:14.5px;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:1100px){.prf-grid{grid-template-columns:1fr}.prf-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.prf-hero-art{width:100%;opacity:.22}.prf-links{grid-template-columns:1fr;border-radius:24px}.prf-links a+a{border-left:0;border-top:1px solid #f1e3e7;padding-top:12px;margin-top:8px}}
+@media(max-width:600px){.prf-wrap{width:calc(100% - 28px)}.prf-about{padding:22px 18px}.prf-photo figcaption{left:22px;bottom:22px}}
+.prf-photo:after{background:linear-gradient(62deg,#a8001d 0%,#c8102e 46%,#d9002cdd 58%,#d9002c55 70%,transparent 84%)}
+
+/* =================== KONTAK RT =================== */
+.crd-contact .ctc-hero{background:radial-gradient(ellipse at 0 30%,#ffe9ee,transparent 50%),linear-gradient(100deg,#fff 0,#fff6f8 50%,#ffeef2 100%)}
+/* Ilustrasi dalam bingkai membulat + gelombang merah (sesuai mockup) */
+.crd-contact .ctc-art{top:22px;right:3%;width:62%;height:calc(100% - 40px);border-radius:46% 46px 46px 46px / 60% 46px 46px 46px;-webkit-mask-image:none;mask-image:none;box-shadow:0 18px 36px #5a002326}
+.crd-contact .ctc-hero:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:70px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 90' preserveAspectRatio='none'%3E%3Cpath d='M0 90V60C320 96 600 30 900 48S1400 90 1600 40v50Z' fill='%23fff8fa'/%3E%3Cpath d='M560 50C760 30 900 40 1080 56S1420 78 1600 32v8C1420 88 1240 70 1060 62S760 40 560 58Z' fill='%23d9002c'/%3E%3C/svg%3E") center/100% 100% no-repeat;pointer-events:none}
+.crd-contact .ctc-leaf{opacity:.8}
+.crd-contact .ctc-crumb b{color:var(--cr-red)}
+.crd-contact .ctc-eyebrow{color:var(--cr-red);font-size:15px;font-weight:900}
+.crd-contact .ctc-copy h1 b{color:var(--cr-red)}
+.crd-contact .ctc-copy h2{color:var(--cr-navy);font-style:italic}
+.crd-contact .ctc-content{position:relative;z-index:1}
+.crd-contact .ctc-card,.crd-contact .ctc-panel{border:1px solid var(--cr-line);border-radius:22px;box-shadow:0 12px 28px #5a002314}
+/* Ikon telepon & kalender biru -> merah */
+.crd-contact .ctc-card.phone img,.crd-contact .ctc-hours-body>img{filter:hue-rotate(140deg) saturate(1.25)}
+.crd-contact .ctc-head .blue,.crd-contact .ctc-head .orange{background:linear-gradient(145deg,#ef1d3f,#a8001d)}
+.crd-contact .ctc-times>div{background:#fff1f4}
+.crd-contact .ctc-note i{background:#e3062f}
+/* Ikon kanal tetap berwarna walau belum diisi */
+.crd-contact .ctc-channel.is-empty img{filter:none;opacity:1}
+.crd-contact .ctc-channel{border-color:#f1e3e7;border-radius:16px}
+.portal-body .crd-contact .ctc-all{border:1.5px solid #e3062f;border-radius:12px;color:#c8102e}
+.crd-contact .ctc-all:hover{background:#fff1f4}
+.portal-body .crd-contact .ctc-send{border-radius:12px;background:linear-gradient(95deg,#c8102e,#e3062f);box-shadow:0 10px 20px #b0001f40}
+.crd-contact .ctc-arrow{color:#c8102e}
+@media(max-width:900px){.crd-contact .ctc-art{position:static;width:auto;height:220px;margin:0 14px;border-radius:24px}.crd-contact .ctc-hero:after{display:none}}
+
+/* =================== INFORMASI WARGA =================== */
+.crd-info .inf-hero{margin:0;border-radius:0;min-height:clamp(380px,27vw,450px);background:radial-gradient(ellipse at 0 30%,#ffe9ee,transparent 50%),linear-gradient(100deg,#fff 0,#fff6f8 50%,#ffeef2 100%)}
+/* Ilustrasi dalam bingkai membulat + gelombang merah (sesuai mockup) */
+.crd-info .inf-art{top:10px;right:0;width:63%;height:calc(100% - 50px);border-radius:52% 0 0 52% / 70% 0 0 70%;-webkit-mask-image:none;mask-image:none}
+.crd-info .inf-hero:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:90px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 90' preserveAspectRatio='none'%3E%3Cpath d='M0 90V64C320 96 560 30 860 40S1380 70 1600 46v44Z' fill='%23fff8fa'/%3E%3Cpath d='M540 52C740 26 920 30 1100 44S1420 62 1600 40v12C1420 74 1240 58 1080 54S760 44 540 64Z' fill='%23d9002c'/%3E%3C/svg%3E") center/100% 100% no-repeat;pointer-events:none}
+.crd-info .inf-copy>span{display:inline-flex;align-self:flex-start;width:max-content;padding:8px 18px;border-radius:999px;background:#ffe1e8;color:var(--cr-red);font-size:16px;font-weight:900}
+.crd-info .inf-copy h1,.crd-info .inf-copy h2{color:var(--cr-navy)}
+.crd-info .inf-copy h2 strong{color:var(--cr-red)}
+.crd-info .inf-copy p{color:#1d2b55}
+.crd-info .inf-cards{margin-top:6px}
+.crd-info .inf-card{border-radius:24px;box-shadow:0 14px 30px #5a002317}
+.crd-info .inf-card.cash{--c:#e3062f;--wave:#ffe3e9;border-color:#f6d1d9}
+.crd-info .inf-card.cash img{filter:hue-rotate(-18deg) saturate(1.1)}
+@media(max-width:900px){.crd-info .inf-art{position:static;width:auto;height:240px;margin:0 14px 14px;border-radius:24px}.crd-info .inf-hero:after{display:none}}
+/* Foto lingkungan tanpa teks tercetak: gradasi merah cukup di sisi kiri untuk keterbacaan kutipan. */
+.prf-photo img{object-position:68% 50%}
+.prf-photo:after{background:linear-gradient(90deg,#a8001df2 0%,#c8102ecc 30%,#d9002c55 52%,transparent 70%)}
+
+/* =================== BERANDA (publik) =================== */
+.crd-home{background:radial-gradient(60% 40% at 0 20%,#ffe9ee,transparent 70%),linear-gradient(180deg,#fff7f9,#fff)}
+.crd-home .home-banner{position:relative;overflow:hidden}
+/* Tutup teks yang tercetak di banner, lalu tampilkan teks dinamis dari Pengaturan */
+.crd-home .hm-veil{position:absolute;left:0;top:0;width:52%;height:78%;background:linear-gradient(90deg,#fff 0,#fff 62%,#ffffffd9 78%,transparent 100%);-webkit-mask-image:linear-gradient(180deg,#000 80%,transparent);mask-image:linear-gradient(180deg,#000 80%,transparent);pointer-events:none}
+.crd-home .hm-copy{position:absolute;left:5.5%;top:14%;max-width:40%;color:var(--dw-navy,#091c55)}
+.crd-home .hm-eyebrow{display:block;margin-bottom:10px;color:#d9002c;font-size:clamp(12px,1.2vw,19px);font-weight:900;letter-spacing:.24em}
+.crd-home .hm-copy h1{margin:0 0 14px;font-size:clamp(28px,4.4vw,74px);font-weight:900;line-height:1.02;letter-spacing:-.02em;color:#0b1d5c}
+.crd-home .hm-copy h1 b{position:relative;display:block;color:#d9002c}
+.crd-home .hm-spark{position:absolute;top:-18%;right:-14%;width:clamp(26px,3.2vw,54px);height:auto;fill:none;stroke:#e3062f;stroke-width:4.5;stroke-linecap:round}
+.crd-home .hm-copy p{margin:0;max-width:520px;color:#0b1d5c;font-size:clamp(13px,1.35vw,21px);font-weight:700;line-height:1.35}
+/* Lencana nilai: menutupi papan kayu di banner */
+.crd-home .hm-badges{position:absolute;right:3.2%;top:37%;width:clamp(120px,12.5vw,210px);display:grid;gap:clamp(4px,.6vw,10px);margin:0;padding:0;list-style:none}
+.crd-home .hm-badges li{display:flex;align-items:center;gap:8px;min-height:clamp(26px,3vw,48px);padding:3px 12px 3px 4px;border-radius:999px;background:#fff;color:#0b1d5c;font-size:clamp(12px,1.3vw,22px);font-weight:900;box-shadow:0 6px 14px #5a002333}
+.crd-home .hm-badges span{width:clamp(22px,2.5vw,40px);height:clamp(22px,2.5vw,40px);flex:none;display:grid;place-items:center;border-radius:50%;background:linear-gradient(145deg,#ef1d3f,#a8001d);color:#fff}
+.crd-home .hm-badges span svg{width:58%;height:58%}
+.crd-home .hm-badges i{margin-left:auto;color:#0b1d5c;font-style:normal}
+/* Aksen merah pada kartu */
+.crd-home .quick-menu-card,.crd-home .home-list-card,.crd-home .about-text-card{border-color:#f3d6dd!important;box-shadow:0 12px 28px #5a002314!important}
+.crd-home .about-text-card h2{color:#d9002c!important}
+.crd-home .home-card-head a{color:#d9002c!important}
+.crd-home .date-tile{background:#fff1f4!important;color:#d9002c!important}
+.crd-home .date-tile b{color:#d9002c!important}
+.crd-home .event-meta{color:#d9002c!important}
+.crd-home .home-list-items a>i{color:#d9002c}
+/* Foto "Tentang" dengan gradasi merah & kutipan */
+.crd-home .about-photo-card{position:relative;overflow:hidden;background-size:cover!important;background-position:60% 50%!important}
+.crd-home .about-photo-card:before{content:"";position:absolute;inset:0;background:linear-gradient(80deg,#a8001df2 0%,#c8102ecc 32%,#d9002c55 55%,transparent 72%)}
+.crd-home .hm-quote{position:absolute;left:28px;bottom:24px;max-width:62%;color:#fff;font-size:clamp(17px,1.5vw,24px);font-weight:900;line-height:1.25;text-shadow:0 2px 8px #5a002366}
+/* Footer "Tentang Aplikasi" + pita merah bergelombang */
+.pfr{background:linear-gradient(180deg,#fff,#fff6f8)!important;padding-bottom:0!important}
+.pfr .public-footer-art{border-color:#f3d6dd!important;background:linear-gradient(110deg,#fff 0,#fff6f8 60%,#ffeef2 100%)!important;box-shadow:0 12px 28px #5a002314}
+.pfr .footer-clear-copy h2,.pfr .footer-clear-copy h2 a{text-transform:none;color:#0b1d5c}
+.pfr .footer-demo-link{border:0!important;background:linear-gradient(95deg,#c8102e,#a8001d)!important;color:#fff!important;padding:10px 22px!important;box-shadow:0 8px 18px #b0001f40}
+.pfr .footer-demo-link>span{background:transparent!important}
+.pfr .footer-menu-icon{background:#fff1f4!important;color:#d9002c!important}
+.pfr .public-footer-meta{position:relative;width:100vw;margin:28px 0 0 calc(50% - 50vw);padding:46px max(24px,calc((100vw - 1520px)/2)) 22px;display:flex;justify-content:space-between;gap:14px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 60' preserveAspectRatio='none'%3E%3Cpath d='M0 0h1600v22C1300 58 1000 6 760 28S260 52 0 18Z' fill='%23fff6f8'/%3E%3Cpath d='M0 18C260 52 500 30 760 28S1300 58 1600 22v8C1300 66 1000 14 760 36S260 60 0 26Z' fill='%23ff8fa3'/%3E%3C/svg%3E") top/100% 46px no-repeat,linear-gradient(95deg,#8e0019,#c8102e 50%,#8e0019)}
+.pfr .public-footer-meta a{color:#fff!important;font-weight:800;text-transform:uppercase;letter-spacing:.02em}
+.pfr .public-footer-meta a:last-child{text-transform:none}
+@media(max-width:900px){.crd-home .hm-veil{width:70%}.crd-home .hm-copy{max-width:60%}.crd-home .hm-badges{display:none}}
+.crd-home .hm-veil{width:60%;height:80%;background:linear-gradient(90deg,#fff 0,#fff 74%,#ffffffcc 86%,transparent 100%)}
+.crd-home .hm-badges{top:33%;right:2.6%;width:clamp(130px,14vw,236px);padding:clamp(6px,.7vw,12px);border-radius:clamp(16px,1.6vw,26px);background:linear-gradient(160deg,#fff,#fff4f6);box-shadow:0 12px 26px #5a00232e}
+.crd-home .hm-badges li{box-shadow:0 3px 8px #5a00231f}
+
+/* Banner bersih: kotak = gambar (rasio 2172:724) sehingga posisi teks, papan & lencana selalu sejajar di semua lebar layar. */
+.crd-home .home-banner.hm-clean{width:min(1520px,calc(100% - 48px));margin:18px auto 0;padding:0;aspect-ratio:2172/724;background:none;border-radius:30px;box-shadow:0 14px 32px #5a00231f;overflow:hidden}
+.crd-home .home-banner.hm-clean>img{position:absolute;inset:0;width:100%;height:100%;margin:0;border-radius:0;box-shadow:none}
+.crd-home .hm-clean .hm-copy{left:5.6%;top:13%;max-width:42%}
+.crd-home .hm-clean .hm-copy h1{font-size:clamp(24px,4.6cqw,78px)}
+.crd-home .home-banner.hm-clean{container-type:inline-size}
+.crd-home .hm-clean .hm-eyebrow{font-size:clamp(10px,1.25cqw,20px)}
+.crd-home .hm-clean .hm-copy p{font-size:clamp(11px,1.45cqw,23px)}
+.crd-home .hm-clean .hm-spark{top:-22%;right:-16%;width:3.4cqw}
+.crd-home .hm-sign{position:absolute;left:59.7%;top:17.6%;width:18.9%;height:13.6%;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:.6cqw;background:linear-gradient(180deg,#f7ecdc,#efe0c9);box-shadow:inset 0 0 0 .18cqw #d9c4a3;color:#0b1d5c;text-align:center;line-height:1.02}
+.crd-home .hm-sign b{font-size:2.15cqw;font-weight:900;letter-spacing:.02em}
+.crd-home .hm-sign span{font-size:1.6cqw;font-weight:900;letter-spacing:.02em}
+.crd-home .hm-clean .hm-badges{left:85.2%;right:auto;top:37.2%;width:11.8%;padding:.55cqw;gap:.45cqw;border-radius:1.2cqw}
+.crd-home .hm-clean .hm-badges li{min-height:2.75cqw;padding:.2cqw .8cqw .2cqw .25cqw;gap:.5cqw;font-size:1.35cqw}
+.crd-home .hm-clean .hm-badges span{width:2.3cqw;height:2.3cqw}
+@media(max-width:900px){.crd-home .home-banner.hm-clean{width:calc(100% - 28px);border-radius:18px}.crd-home .hm-clean .hm-badges{display:grid}}
+@media(max-width:600px){.crd-home .home-banner.hm-clean{width:calc(100% - 20px);border-radius:14px}.crd-home .hm-clean .hm-copy p{display:none}}
+.crd-home .hm-copy h1 b{display:inline-block}
+.crd-home .hm-clean .hm-spark{top:-26%;right:-12%}
+.crd-home .about-photo-card:before{background:linear-gradient(62deg,#a8001d 0%,#c8102e 46%,#d9002cdd 58%,#d9002c55 70%,transparent 84%)}
+.pfr .public-footer-meta{padding-top:66px;padding-bottom:26px}
+.pfr .public-footer-meta a{position:relative;z-index:1;font-size:14px}
+.pfr .public-footer-meta{padding:70px max(24px,calc((100vw - 1520px)/2)) 26px!important;margin-top:28px!important;align-items:center}
+.pfr .footer-clear-copy h2,.pfr .footer-clear-copy h2 a{text-transform:none!important;letter-spacing:-.01em!important}
+/* Informasi (mockup terbaru): tanpa baris RT di bawah judul, garis merah pendek, ilustrasi menempel ke tepi kanan & atas. */
+.crd-info .inf-rule{display:block;width:92px;height:5px;margin:18px 0 20px;border-radius:5px;background:#d9002c}
+.crd-info .inf-art{top:0;height:calc(100% - 36px);width:64%;border-radius:0 0 0 58% / 0 0 0 30%;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 12%);mask-image:linear-gradient(90deg,transparent 0,#000 12%)}
+.crd-info .inf-copy h1{margin-top:6px}
+
+/* ===== Beranda — tampilan HP (≤600px): sembunyikan bagian Tentang; menu cepat rapi tanpa geser. Web tidak berubah. ===== */
+@media (max-width:600px){
+ .crd-home .about-photo-card,.crd-home .about-text-card{display:none!important}
+ .pfr .public-footer-art{display:none!important}
+ .pfr .public-footer-meta{margin-top:10px!important;padding:44px 18px 92px!important}
+ .crd-home .quick-menu-card{overflow:visible!important;padding:16px 8px!important}
+ .crd-home .quick-menu-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:14px 2px!important;min-width:0!important;width:auto!important}
+ .crd-home .quick-menu-grid>a{min-width:0!important;padding:0 2px!important;border:0!important}
+ .crd-home .quick-menu-grid .quick-icon{width:58px!important;height:58px!important;margin:0 auto 6px!important;display:grid!important;place-items:center!important}
+ .crd-home .quick-menu-grid .quick-icon img{width:58px!important;height:58px!important;max-width:none!important;object-fit:contain!important}
+ .crd-home .quick-menu-grid strong{font-size:12px!important;line-height:1.2!important;white-space:normal!important}
+ .crd-home .quick-menu-grid small{display:none!important}
+}
+@media (max-width:600px){.crd-home .hm-clean .hm-copy{top:11%;max-width:46%}.crd-home .hm-clean .hm-copy h1{font-size:4cqw;margin-bottom:0}.crd-home .hm-clean .hm-copy h1 b{white-space:nowrap}.crd-home .hm-clean .hm-eyebrow{font-size:1.6cqw;margin-bottom:1cqw}.crd-home .hm-clean .hm-spark{display:none}}
+/* HP: lebih ringkas — menu cepat 1 baris (4 menu penting), footer rapat */
+@media (max-width:600px){
+ .crd-home .quick-menu-grid>a[href$="/profil"],.crd-home .quick-menu-grid>a[href$="/galeri"],.crd-home .quick-menu-grid>a[href$="/kontak"]{display:none!important}
+ .crd-home .quick-menu-card{padding:12px 6px!important;min-height:0!important}
+ .crd-home .quick-menu-grid .quick-icon,.crd-home .quick-menu-grid .quick-icon img{width:52px!important;height:52px!important}
+ .crd-home .home-list-card{min-height:0!important}
+ .crd-home .home-content-grid{margin-top:0!important;gap:0!important}
+ .pfr{padding-top:0!important}
+ .pfr .public-footer-meta{margin-top:14px!important;padding:30px 18px 16px!important;gap:4px!important;background-size:100% 26px,auto!important}
+}
+@media (max-width:600px){.crd-home .home-content-grid .agenda-card{margin-top:12px!important}}

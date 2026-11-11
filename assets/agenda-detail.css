@@ -1,0 +1,97 @@
+/* Detail Agenda — desain merah portal warga (lihat application/views/site/agenda_detail.php). */
+.agx{--agx-red:#d9002c;--agx-red-2:#a8001d;--agx-navy:var(--dw-navy,#091c55);--agx-line:#f3d6dd;position:relative;padding:0 0 150px;color:var(--agx-navy);font-family:var(--dw-font,"Nunito Sans","Nunito","Segoe UI",system-ui,sans-serif);background:radial-gradient(60% 40% at 0 40%,#fff0f4 0,transparent 70%),linear-gradient(180deg,#fff 0,#fff7f9 100%);overflow:hidden}
+.agx *,.agx *:before,.agx *:after{box-sizing:border-box}
+.agx a{text-decoration:none}
+.agx-wrap{position:relative;width:min(1400px,calc(100% - 48px));margin-inline:auto}
+
+/* ---------- Hero ---------- */
+.agx-hero{position:relative;padding:22px 0 30px;isolation:isolate}
+/* Latar kanan: bagian pemandangan (rumah & pita) dari ilustrasi footer; pita merah bawahnya dipotong. Rasio gambar tetap. */
+.agx-hero-bg{position:absolute;z-index:-1;top:0;right:0;bottom:0;width:min(48%,800px);overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 28%);mask-image:linear-gradient(90deg,transparent 0,#000 28%)}
+.agx-hero-bg img{position:absolute;top:-10%;left:-4%;height:180%;width:auto;max-width:none}
+.agx-top{display:flex;align-items:center;gap:26px;flex-wrap:wrap}
+.agx-back,.agx .agx-back{display:inline-flex!important;align-items:center;gap:10px;min-height:48px;padding:0 26px 0 20px!important;border-radius:999px!important;background:linear-gradient(135deg,#ef1d3f,var(--agx-red-2))!important;color:#fff!important;font-size:16px!important;font-weight:800!important;box-shadow:0 8px 18px #b0001f40!important;transition:transform .15s,filter .15s}
+.agx-back:hover{transform:translateY(-1px);filter:brightness(1.05)}
+.agx-crumb{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:15px;font-weight:700}
+.agx-crumb a{display:inline-flex;align-items:center;gap:6px;color:var(--agx-red)}
+.agx-crumb a:hover{text-decoration:underline}
+.agx-crumb i{color:#9aa3b5;font-style:normal}
+.agx-crumb span{color:var(--agx-navy)}
+.agx-head{display:flex;align-items:center;gap:28px;margin-top:22px;max-width:62%}
+.agx-head-art{flex:none;width:clamp(110px,10vw,160px);filter:drop-shadow(0 10px 16px #b0001f2e)}
+.agx-calart{display:block;width:100%;height:auto}
+.agx-head-copy{min-width:0}
+.agx-head h1{margin:0 0 8px;color:var(--agx-navy);font-size:clamp(30px,3.4vw,52px);font-weight:900;line-height:1.08;letter-spacing:-.5px;overflow-wrap:anywhere}
+.agx-head h1 em{color:var(--agx-red);font-style:normal}
+.agx-head p{margin:0 0 16px;color:#1d2b55;font-size:clamp(15px,1.15vw,18px);font-weight:600;line-height:1.5}
+.agx-chips{display:flex;flex-wrap:wrap;gap:12px;margin:0;padding:0;list-style:none}
+.agx-chips li{display:inline-flex;align-items:center;gap:9px;min-height:42px;padding:0 18px;border:1px solid var(--agx-line);border-radius:999px;background:#fff;color:var(--agx-navy);font-size:15px;font-weight:700;box-shadow:0 6px 14px #5a002314}
+.agx-chips svg{color:var(--agx-red)}
+
+/* ---------- Kartu ---------- */
+.agx-grid{display:grid;grid-template-columns:minmax(0,1.85fr) minmax(320px,1fr);gap:24px;align-items:start}
+.agx-card{border:1px solid var(--agx-line);border-radius:24px;background:#fff;box-shadow:0 12px 30px #5a002317;overflow:hidden}
+.agx-main{padding:18px}
+.agx-photo{position:relative;margin:0;border-radius:18px;overflow:hidden;aspect-ratio:16/8.6;background:linear-gradient(135deg,#fff1f4,#ffe1e8)}
+.agx-photo img{display:block;width:100%;height:100%;object-fit:cover}
+.agx-photo-ph{position:absolute;inset:0;display:grid;place-items:center}.agx-photo-ph .agx-calart{width:min(34%,220px);opacity:.9}
+.agx-ribbon{position:absolute;top:18px;left:-6px;display:inline-flex;align-items:center;gap:10px;padding:10px 26px 10px 22px;border-radius:0 999px 999px 0;background:linear-gradient(95deg,#c8102e,#ef1d3f);color:#fff;font-size:17px;font-weight:800;box-shadow:0 8px 18px #8a001a40;transform:rotate(-4deg);transform-origin:left}
+.agx-photo-wave{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:46px}
+.agx-foot{display:flex;align-items:center;gap:22px;padding:18px 8px 6px}
+.agx-desc{flex:1;min-width:0;display:flex;align-items:flex-start;gap:16px;padding-right:22px;border-right:2px solid #f3dfe4}
+.agx-desc-ic{width:52px;height:52px;flex:none;display:grid;place-items:center;border-radius:50%;background:#fff1f4;color:var(--agx-red)}
+.agx-body{padding-top:4px;color:#1d2b55;font-size:16px;line-height:1.6;overflow-wrap:anywhere}
+.agx-btn{flex:none;display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:0 28px;border-radius:999px;background:linear-gradient(135deg,#c8102e,var(--agx-red-2));color:#fff!important;font-size:17px;font-weight:800;box-shadow:0 10px 20px #b0001f40;transition:transform .15s,filter .15s}
+.agx-btn:hover{transform:translateY(-1px);filter:brightness(1.06)}
+
+/* ---------- Sisi kanan ---------- */
+.agx-side{display:grid;gap:22px}
+.agx-side-head{position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0;padding:16px 22px;background:linear-gradient(100deg,#c8102e,#e3062f 60%,#ff4d6a);color:#fff;font-size:20px;font-weight:800;clip-path:polygon(0 0,100% 0,100% 72%,92% 100%,0 100%)}
+.agx-side-head h2{display:flex;align-items:center;gap:12px;margin:0;color:#fff;font-size:20px;font-weight:800}
+h2.agx-side-head{justify-content:flex-start}
+.agx-side-head>a{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;border-radius:999px;background:#fff;color:var(--agx-red)!important;font-size:13px;font-weight:800}
+.agx-info-body{position:relative;display:flex;align-items:center;gap:12px;padding:12px 22px 18px}
+.agx-info dl{flex:1;margin:0}
+.agx-info dl>div{display:grid;grid-template-columns:104px 1fr;gap:6px;padding:10px 0;border-bottom:1px solid #f3e6ea}
+.agx-info dl>div:last-child{border-bottom:0}
+.agx-info dt{display:flex;align-items:center;gap:10px;color:var(--agx-navy);font-weight:700}
+.agx-info dt svg{color:var(--agx-red);flex:none}
+.agx-info dd{margin:0;color:#1d2b55;font-weight:600;overflow-wrap:anywhere}
+.agx-info dd:before{content:": ";color:#7b8798}
+.agx-info-art{width:92px;flex:none;align-self:center}
+.agx-more-list{padding:6px 18px 12px}
+.agx-more-list a{display:flex;align-items:center;gap:16px;padding:12px 6px;border-bottom:1px solid #f3e6ea;color:var(--agx-navy)}
+.agx-more-list a:last-child{border-bottom:0}
+.agx-more-list a:hover{background:#fff7f9}
+.agx-more-list time{width:58px;height:54px;flex:none;display:grid;place-items:center;align-content:center;border:1px solid var(--agx-line);border-radius:14px;background:#fff7f9;color:var(--agx-red);line-height:1}
+.agx-more-list time b{font-size:21px;font-weight:900}.agx-more-list time small{margin-top:3px;font-size:12px;font-weight:800}
+.agx-more-list strong{flex:1;min-width:0;font-size:16px;font-weight:800}
+.agx-more-list svg{color:var(--agx-red);flex:none}
+.agx-empty{margin:14px 6px;color:#7b8798}
+
+/* ---------- Hiasan bawah ---------- */
+.agx-deco{position:absolute;left:0;right:0;bottom:0;height:130px;pointer-events:none}
+.agx-deco-town{position:absolute;left:3%;bottom:42px;width:min(360px,40vw);height:auto}
+.agx-deco-wave{position:absolute;left:0;right:0;bottom:0;width:100%;height:90px}
+
+/* ---------- Responsif ---------- */
+@media(max-width:1100px){
+ .agx-grid{grid-template-columns:1fr}
+ .agx-side{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+ .agx-head{max-width:70%}
+}
+@media(max-width:760px){
+ .agx-wrap{width:calc(100% - 28px)}
+ .agx-hero-bg{width:100%;opacity:.14}
+ .agx-head{max-width:none;gap:16px;align-items:flex-start}
+ .agx-head-art{width:78px}
+ .agx-side{grid-template-columns:1fr}
+ .agx-foot{flex-direction:column;align-items:stretch}
+ .agx-desc{padding:0 0 16px;border-right:0;border-bottom:2px solid #f3dfe4}
+ .agx-btn{justify-content:center}
+ .agx-info-art{display:none}
+ .agx-info dl>div{grid-template-columns:104px 1fr}
+ .agx-ribbon{font-size:14px;padding:8px 18px 8px 16px;top:12px}
+ .agx-chips li{font-size:14px;min-height:38px;padding:0 14px}
+}
+@media(max-width:480px){.agx-crumb{font-size:13.5px}.agx-top{gap:12px}}

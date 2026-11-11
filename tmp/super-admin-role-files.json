@@ -1,0 +1,19 @@
+[
+    "C:\/xampp\/htdocs\/sukamulya\/application\/controllers\/Admin.php",
+    "C:\/xampp\/htdocs\/sukamulya\/application\/controllers\/Keluarga.php",
+    "C:\/xampp\/htdocs\/sukamulya\/application\/controllers\/Langganan.php",
+    "C:\/xampp\/htdocs\/sukamulya\/application\/controllers\/Penduduk.php",
+    "C:\/xampp\/htdocs\/sukamulya\/application\/controllers\/Site.php",
+    "C:\/xampp\/htdocs\/sukamulya\/application\/views\/admin\/chat_widget.php",
+    "C:\/xampp\/htdocs\/sukamulya\/application\/views\/admin\/header.php",
+    "C:\/xampp\/htdocs\/sukamulya\/application\/views\/admin\/officials.php",
+    "C:\/xampp\/htdocs\/sukamulya\/application\/views\/admin\/official_form.php",
+    "C:\/xampp\/htdocs\/sukamulya\/application\/views\/admin\/ops\/fitur_index.php",
+    "C:\/xampp\/htdocs\/sukamulya\/application\/views\/admin\/page_form.php",
+    "C:\/xampp\/htdocs\/sukamulya\/application\/views\/admin\/post_form.php",
+    "C:\/xampp\/htdocs\/sukamulya\/application\/views\/admin\/request_detail.php",
+    "C:\/xampp\/htdocs\/sukamulya\/application\/views\/admin\/transactions.php",
+    "C:\/xampp\/htdocs\/sukamulya\/application\/helpers\/admin_alert_helper.php",
+    "C:\/xampp\/htdocs\/sukamulya\/application\/libraries\/Feature_gate.php",
+    "C:\/xampp\/htdocs\/sukamulya\/application\/config\/rt_access.php"
+]

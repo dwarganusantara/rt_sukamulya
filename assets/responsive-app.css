@@ -1,0 +1,123 @@
+@media (max-width: 950px) {
+  .admin-body .ad-workspace,.admin-body .ad-main,.admin-body .panel,.admin-body .ad-request-layout,.admin-body .letter-admin-layout,
+  .citizen-dashboard-body .citizen-top,.citizen-dashboard-body .citizen-data-grid,.citizen-dashboard-body .citizen-bottom-grid,
+  .portal-body .request-layout,.portal-body .request-panel,.portal-body .request-side {min-width:0;max-width:100%}
+  .admin-body .ad-request-layout,.admin-body .letter-admin-layout,.portal-body .request-layout,
+  .citizen-dashboard-body .citizen-top,.citizen-dashboard-body .citizen-data-grid,.citizen-dashboard-body .citizen-bottom-grid {grid-template-columns:minmax(0,1fr)}
+  .admin-body .table-scroll,.portal-body .table-scroll,.citizen-dashboard-body .citizen-table-wrap {display:block;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .admin-body .ad-request-list,.admin-body .ad-request-side,.admin-body .letter-admin-layout>.panel,
+  .citizen-dashboard-body .citizen-card,.citizen-dashboard-body .citizen-top>section,.portal-body .request-panel,.portal-body .request-side {min-width:0;width:100%;max-width:100%}
+  .admin-body .ad-request-head,.admin-body .ad-request-side-title,.admin-body .ad-request-side-title>div {min-width:0}
+  .admin-body .ad-request-side-title strong,.admin-body .ad-request-side-title small,
+  .citizen-dashboard-body .citizen-profile-card dd {overflow-wrap:anywhere}
+}
+@media (max-width: 650px) {
+  .admin-body .admin-title,.admin-body .admin-title>div,.admin-body .actions,
+  .citizen-dashboard-body .citizen-section-head,.portal-body .letter-title,
+  .portal-body .letter-notice {min-width:0;max-width:100%}
+  .admin-body .admin-title,.admin-body .actions,.citizen-dashboard-body .citizen-section-head {flex-wrap:wrap;gap:10px}
+  .admin-body .admin-title p,.portal-body .letter-title p,.citizen-dashboard-body .citizen-section-head p {overflow-wrap:anywhere}
+  .admin-body .form-grid,.admin-body .ad-detail-grid,.admin-body .ad-request-layout,.admin-body .letter-admin-layout,
+  .portal-body .request-fields,.portal-body .request-document-grid,.portal-body .request-layout {grid-template-columns:minmax(0,1fr)}
+  .admin-body .form-panel,.admin-body .form-panel form,.admin-body .form-panel label,
+  .portal-body .request-panel,.portal-body .request-side,.portal-body .request-fields>* {min-width:0;max-width:100%}
+  .portal-body .request-panel,.portal-body .request-side,.portal-body .request-fields>*,
+  .portal-body .letter-notice,.portal-body .letter-search {box-sizing:border-box}
+  .admin-body input,.admin-body select,.admin-body textarea,
+  .portal-body input,.portal-body select,.portal-body textarea {max-width:100%;box-sizing:border-box;font-size:16px}
+  .admin-body .ad-request-head form {min-width:0;width:100%}
+  .admin-body .ad-request-head input {width:0;min-width:0;flex:1}
+  .admin-body .ad-request-filters {max-width:100%;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch}
+  .admin-body .ad-request-filters a {flex:0 0 auto}
+  .admin-body .ad-request-side dl {grid-template-columns:80px minmax(0,1fr)}
+  .admin-body .ad-request-side dd {min-width:0;overflow-wrap:anywhere}
+  .citizen-dashboard-body .citizen-top,.citizen-dashboard-body .citizen-data-grid,.citizen-dashboard-body .citizen-bottom-grid {grid-template-columns:minmax(0,1fr)}
+  .citizen-dashboard-body .citizen-welcome,.citizen-dashboard-body .citizen-profile-card,.citizen-dashboard-body .citizen-family-card,
+  .citizen-dashboard-body .citizen-card,.citizen-dashboard-body .citizen-side-actions {min-width:0;max-width:100%}
+  .citizen-dashboard-body .citizen-section-head>a {max-width:100%;white-space:normal}
+  .citizen-dashboard-body .citizen-help {flex-wrap:wrap}
+  .citizen-dashboard-body .citizen-help>div {min-width:0}
+  .citizen-dashboard-body .citizen-announcement>span:nth-child(2) {min-width:0}
+  .portal-body .letter-title>div {min-width:0}
+  .portal-body .letter-title h1 {overflow-wrap:anywhere}
+  .portal-body .letter-notice {flex-wrap:wrap}
+  .portal-body .letter-notice>div {min-width:0;flex:1 1 calc(100% - 70px)}
+  .portal-body .letter-notice>a {flex:1 1 100%;border-left:0;padding:3px 0 0;white-space:normal}
+  .portal-body .letter-tools {flex-wrap:wrap}
+  .portal-body .letter-search {min-width:0;width:100%;box-sizing:border-box}
+  .portal-body .letter-search input {width:calc(100% - 30px)}
+  .portal-body .letter-filters {max-width:100%}
+  .portal-body .request-steps {grid-template-columns:repeat(2,minmax(0,1fr))}
+  .portal-body .request-steps span {min-width:0;white-space:normal}
+  .portal-body .request-steps small {overflow-wrap:anywhere}
+  .portal-body .request-preview,.portal-body iframe {max-width:100%;box-sizing:border-box}
+  .portal-body .request-actions {gap:10px;flex-wrap:wrap}
+  .portal-body .request-submit-buttons {width:100%;flex-wrap:wrap}
+  .portal-body .request-submit-buttons button {flex:1 1 145px}
+}
+@media (max-width: 380px) {
+  .admin-body .ad-hero>div {min-width:0;max-width:100%}
+  .admin-body .ad-hero h1,.admin-body .ad-hero p {overflow-wrap:anywhere}
+  .admin-body .ad-card-head {flex-wrap:wrap;gap:8px}
+  .admin-body .ad-card-head .ad-button {max-width:100%;white-space:normal}
+  .citizen-dashboard-body .citizen-account {margin-left:0}
+  .citizen-dashboard-body .citizen-account>.citizen-account-avatar,
+  .citizen-dashboard-body .citizen-account>span:not(.citizen-account-avatar) {display:none}
+  .citizen-dashboard-body .citizen-account details>div {right:0}
+}
+/* Navigasi kembali yang konsisten pada seluruh halaman tujuan menu warga. */
+.citizen-back-bar{background:#fff;border-bottom:1px solid #e8edf3;padding:10px 0;position:relative;z-index:1}
+.citizen-back-link{display:inline-flex;align-items:center;gap:8px;min-height:38px;padding:7px 15px;border:1px solid #ff5a27;border-radius:999px;color:#ed4b18;background:#fff;font-size:14px;font-weight:800;line-height:1;transition:background .2s,color .2s,transform .2s}
+.citizen-back-link:hover{background:#ff4b0a;color:#fff;transform:translateX(-2px)}
+.citizen-back-link span{font-size:20px;line-height:0}
+.citizen-letter-body .citizen-back-bar{margin-left:270px}
+@media(max-width:950px){.citizen-letter-body .citizen-back-bar{margin-left:0}}
+@media(max-width:540px){.citizen-back-bar{padding:8px 0}.citizen-back-link{min-height:36px;padding:7px 13px}}
+@media print{.citizen-back-bar{display:none!important}}
+
+/* Responsive audit foundation: shared tokens and safe intrinsic sizing. */
+:root{--brand-navy:#102b50;--brand-orange:#ff5722;--brand-orange-hover:#e94a19;--surface:#fff;--background:#fff9f1;--text-muted:#60728e;--border-soft:#e9e3dc;--radius-card:18px;--radius-control:12px;--shadow-soft:0 8px 28px rgba(16,43,80,.07);--content-max:1440px;--page-gutter:clamp(12px,3vw,32px);--section-gap:clamp(16px,2.5vw,28px)}
+html{-webkit-text-size-adjust:100%}
+body{min-width:0}
+img,video,svg,canvas{max-width:100%;height:auto}
+button,input,select,textarea{font:inherit;max-width:100%}
+main,section,article,aside,header,footer,nav,form,fieldset,div{min-width:0}
+.page-container{width:min(calc(100% - (2 * var(--page-gutter))),var(--content-max));margin-inline:auto}
+.page-section{margin-block:var(--section-gap)}
+.grid-responsive{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:16px}
+.long-text,.notice,.error,td,p{overflow-wrap:anywhere}
+.table-scroll{width:100%;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+:where(a,button,input,select,textarea,summary,[tabindex]):focus-visible{outline:3px solid rgba(255,87,34,.38);outline-offset:3px}
+:where(button,[type=button],[type=submit],[role=button],summary){touch-action:manipulation}
+.menu-toggle,.ad-hamburger,.ad-bell,.live-chat-float button{min-width:44px;min-height:44px}
+.live-chat-widget{max-height:min(620px,calc(100dvh - 92px))}
+.live-chat-widget-messages{overscroll-behavior:contain}
+.live-chat-widget textarea{font-size:16px}
+
+@media(max-width:767px){
+  .page-container{width:calc(100% - 24px)}
+  .page-section{margin-block:16px}
+  .grid-responsive{grid-template-columns:1fr;gap:12px}
+  .card{border-radius:14px}
+  .wrap{width:calc(100% - 24px)}
+  .page-title{padding:24px 0}
+  .page-title h1{font-size:clamp(30px,10vw,42px);margin-top:8px}
+  .article{padding:24px 0 40px;min-height:0;font-size:16px;line-height:1.65}
+  .section{padding:40px 0}
+  .portal-body :is(.announcement-hero,.agenda-hero,.gallery-hero,.information-hero,.profile-v2-hero,.contact-v2-hero){height:auto;min-height:0;padding-block:24px}
+  .admin-body .ad-main{padding:16px 12px 32px}
+  .admin-body .admin-title{margin-bottom:16px}
+  .admin-body .admin-title h1{font-size:clamp(27px,8vw,34px)}
+  .admin-body th,.admin-body td{padding:12px;white-space:nowrap}
+  .live-chat-float{max-width:calc(100vw - 24px);right:12px;bottom:max(12px,env(safe-area-inset-bottom))}
+  .live-chat-widget{inset:auto 12px max(76px,calc(env(safe-area-inset-bottom) + 76px)) 12px;width:auto;max-width:none;height:min(560px,calc(100dvh - 100px))}
+}
+@media(max-width:430px){
+  .portal-body .site-header .nav{min-height:62px}
+  .portal-body .brand{font-size:16px}
+  .portal-body .brand img{width:38px;height:38px}
+  .citizen-back-link{min-height:44px}
+  .admin-body .form-panel{padding:14px}
+  .admin-body .button,.portal-body .button{min-height:44px;white-space:normal;text-align:center}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}

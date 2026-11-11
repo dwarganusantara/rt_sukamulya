@@ -1,0 +1,61 @@
+/* ===== Warga · Popup keputusan admin (disetujui / ditolak / perlu perbaikan) ===== */
+.cdp{--c1:#16a34a;--c2:#4ade80;--soft:#dcfce7;--bg:#f0fdf4;--line:#86efac;--ink:#14532d;--glow:#16a34a55;
+ width:min(520px,calc(100% - 32px));max-height:calc(100vh - 32px);overflow:auto;padding:0;border:0;border-radius:30px;background:#fff;color:#0b1744;box-shadow:0 40px 90px #0f172a66;font-family:inherit}
+.cdp[data-tone=rejected]{--c1:#dc2626;--c2:#f87171;--soft:#fee2e2;--bg:#fef2f2;--line:#fca5a5;--ink:#7f1d1d;--glow:#dc262650}
+.cdp[data-tone=revision]{--c1:#d97706;--c2:#fbbf24;--soft:#fef3c7;--bg:#fffbeb;--line:#fcd34d;--ink:#78350f;--glow:#d9770650}
+.cdp::backdrop{background:#0f172a99;backdrop-filter:blur(4px)}
+.cdp.is-play{animation:cdpIn .5s cubic-bezier(.2,.9,.3,1.25)}
+.cdp .fui-icon{width:18px;height:18px;flex:none}
+.cdp-x{position:absolute;top:16px;right:16px;z-index:3;display:grid;place-items:center;width:42px;height:42px;border:0;border-radius:50%;background:#ffffffd9;color:#0b1744;cursor:pointer;box-shadow:0 3px 10px #0f172a1a}
+.cdp-x .fui-icon{width:20px;height:20px;stroke-width:2.2}
+.cdp-hero{position:relative;padding:36px 30px 22px;text-align:center;background:radial-gradient(circle at 50% 0,var(--soft),transparent 70%),linear-gradient(180deg,var(--bg),#fff);border-radius:30px 30px 0 0}
+.cdp-badge{position:relative;display:inline-grid;place-items:center;width:104px;height:104px;margin-bottom:14px;border-radius:50%;color:#fff;background:radial-gradient(circle at 30% 25%,var(--c2),var(--c1) 70%);box-shadow:0 14px 30px var(--glow),0 0 0 10px #fff,0 0 0 12px var(--soft)}
+.cdp-badge .fui-icon{width:56px;height:56px;stroke-width:2.6}
+.cdp-ring{position:absolute;inset:-12px;border-radius:50%;border:3px solid var(--c2);opacity:0}
+.cdp.is-play .cdp-ring{animation:cdpRing 1.4s ease-out .2s 2}
+.cdp.is-play .cdp-badge{animation:cdpPop .6s cubic-bezier(.2,1.4,.4,1) .1s both}
+.cdp-sym{display:none}
+.cdp[data-tone=approved] .sym-approved,.cdp[data-tone=rejected] .sym-rejected,.cdp[data-tone=revision] .sym-revision{display:inline-flex}
+.cdp.is-play[data-tone=approved] .sym-approved path{stroke-dasharray:30;stroke-dashoffset:30;animation:cdpDraw .5s ease .45s forwards}
+.cdp-kicker{margin:0 0 4px;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--c1)}
+.cdp h2{margin:0 0 8px;font-size:clamp(25px,5vw,32px);font-weight:900;line-height:1.15;color:#0b1744}
+.cdp-message{margin:0 auto;max-width:400px;font-size:15.5px;line-height:1.55;color:#334155}
+.cdp-body{padding:4px 26px 0}
+.cdp-info{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0}
+.cdp-info>div{padding:12px 14px;border:1px solid #e6ebf2;border-radius:14px;background:#fafcff;min-width:0}
+.cdp-info dt{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#64748b}
+.cdp-info dt .fui-icon{width:15px;height:15px;color:var(--c1)}
+.cdp-info dd{margin:4px 0 0;font-size:14.5px;font-weight:800;overflow-wrap:anywhere}
+.cdp-status{display:inline-block;padding:3px 10px;border-radius:999px;background:var(--soft);color:var(--ink);font-size:13px;font-weight:900}
+.cdp-note{margin-top:12px;padding:12px 14px;border-radius:14px;background:var(--bg);border:1px solid var(--line)}
+.cdp-note strong{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:900;color:var(--ink)}
+.cdp-note p{margin:5px 0 0;font-size:14.5px;line-height:1.5;color:#1f2d4d;white-space:pre-line}
+.cdp-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:20px 26px 26px;margin:0;background:none;color:inherit}
+.cdp-pager{font-size:13px;color:#64748b}
+.cdp-pager[hidden]{display:none}
+.cdp-actions{display:flex;gap:10px;margin-left:auto;flex-wrap:wrap}
+.cdp-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:52px;padding:10px 22px;border-radius:15px;font:inherit;font-size:16px;font-weight:900;text-decoration:none;cursor:pointer;transition:transform .12s,filter .12s}
+.cdp-btn:hover{transform:translateY(-1px)}
+.cdp-btn[hidden]{display:none}
+.cdp-btn.is-ghost{border:1.5px solid #cfd8e3;background:#fff;color:#0b1744}
+.cdp-btn.is-main{border:0;color:#fff;background:linear-gradient(180deg,var(--c2),var(--c1) 60%);box-shadow:0 10px 22px var(--glow)}
+.cdp-btn.is-main:hover{filter:brightness(1.05)}
+.cdp-btn:focus-visible,.cdp-x:focus-visible{outline:3px solid var(--line);outline-offset:3px}
+.cdp-confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none;border-radius:30px;z-index:2}
+.cdp-confetti i{position:absolute;top:-14px;width:9px;height:14px;border-radius:2px;opacity:0;background:#22c55e}
+.cdp-confetti i:nth-child(3n){background:#fbbf24}.cdp-confetti i:nth-child(3n+1){background:#3b82f6}.cdp-confetti i:nth-child(4n){background:#f472b6}
+.cdp-confetti i:nth-child(1){left:6%}.cdp-confetti i:nth-child(2){left:12%}.cdp-confetti i:nth-child(3){left:18%}.cdp-confetti i:nth-child(4){left:24%}.cdp-confetti i:nth-child(5){left:30%}.cdp-confetti i:nth-child(6){left:36%}.cdp-confetti i:nth-child(7){left:42%}.cdp-confetti i:nth-child(8){left:48%}.cdp-confetti i:nth-child(9){left:54%}.cdp-confetti i:nth-child(10){left:60%}.cdp-confetti i:nth-child(11){left:66%}.cdp-confetti i:nth-child(12){left:72%}.cdp-confetti i:nth-child(13){left:78%}.cdp-confetti i:nth-child(14){left:84%}.cdp-confetti i:nth-child(15){left:90%}.cdp-confetti i:nth-child(16){left:95%}.cdp-confetti i:nth-child(17){left:3%}.cdp-confetti i:nth-child(18){left:51%}
+.cdp.is-play[data-tone=approved] .cdp-confetti i{animation:cdpFall 2.4s ease-in forwards}
+.cdp-confetti i:nth-child(even){animation-delay:.25s!important}.cdp-confetti i:nth-child(3n){animation-delay:.5s!important;animation-duration:2.8s!important}.cdp-confetti i:nth-child(5n){animation-delay:.1s!important;animation-duration:2s!important}
+@keyframes cdpIn{from{opacity:0;transform:translateY(24px) scale(.94)}}
+@keyframes cdpPop{from{transform:scale(.3);opacity:0}}
+@keyframes cdpRing{from{opacity:.9;transform:scale(.85)}to{opacity:0;transform:scale(1.3)}}
+@keyframes cdpDraw{to{stroke-dashoffset:0}}
+@keyframes cdpFall{0%{opacity:1;transform:translateY(0) rotate(0)}100%{opacity:0;transform:translateY(560px) rotate(540deg)}}
+@media(max-width:520px){
+ .cdp{border-radius:24px}.cdp-hero{padding:30px 20px 18px;border-radius:24px 24px 0 0}
+ .cdp-badge{width:84px;height:84px}.cdp-badge .fui-icon{width:44px;height:44px}
+ .cdp-body{padding:4px 18px 0}.cdp-info{grid-template-columns:1fr}
+ .cdp-foot{padding:16px 18px 20px}.cdp-actions,.cdp-btn{width:100%}.cdp-btn.is-main{order:-1}
+}
+@media(prefers-reduced-motion:reduce){.cdp.is-play,.cdp.is-play .cdp-badge,.cdp.is-play .cdp-ring,.cdp.is-play .cdp-confetti i,.cdp.is-play .sym-approved path{animation:none!important;stroke-dashoffset:0;opacity:0}.cdp.is-play .cdp-badge,.cdp.is-play .sym-approved path{opacity:1}}

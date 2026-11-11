@@ -1,0 +1,7 @@
+/* Focused letter catalogue and request form, without portal navigation. */
+body.letter-focus-body{padding:0!important;background:#fafbfd}
+.letter-focus-body .site-header,.letter-focus-body .citizen-back-bar,.letter-focus-body .citizen-letter-sidebar,.letter-focus-body .mbx-nav,.letter-focus-body .mbx-sheet,.letter-focus-body .mbx-backdrop,.letter-focus-body .wa-float,.letter-focus-body .live-chat-float,.letter-focus-body .live-chat-widget{display:none!important}
+.letter-focus-body .letter-page,.letter-focus-body .letter-request-page,.letter-focus-body .lrq{margin-left:0!important;width:100%;min-height:100vh}
+.letter-focus-body .cdx-wrap{max-width:1500px;width:calc(100% - 40px);margin:0 auto}
+.letter-focus-body .cdx-top{justify-content:flex-start;min-height:64px}
+@media(max-width:650px){.letter-focus-body .cdx-wrap{width:calc(100% - 24px)}.letter-focus-body .cdx-page{padding-bottom:24px!important}}

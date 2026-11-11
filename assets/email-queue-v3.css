@@ -1,0 +1,90 @@
+/* Antrean Notifikasi Email — sesuai mockup */
+.admin-body .eq3{--eq-navy:#0c214b;--eq-muted:#5f6b85;--eq-line:#e6eaf2;color:var(--eq-navy)}
+.eq3 svg{flex-shrink:0}
+.eq3-notice{display:flex;align-items:center;gap:14px;padding:14px 18px;margin:0 0 18px;border:1px solid #ffe1bd;border-radius:16px;background:linear-gradient(110deg,#fff7ea,#fffaf3)}
+.eq3-notice-ic{display:flex;color:#e87a00}.eq3-notice-ic svg{width:24px;height:24px}
+.eq3-notice p{flex:1;margin:0;font-size:15px;color:#7a3f00}
+.eq3-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:46px;padding:0 20px;border:0;border-radius:12px;background:linear-gradient(110deg,#ff9b00,#ff6a00);color:#fff!important;font:inherit;font-weight:700;font-size:15px;text-decoration:none;cursor:pointer;white-space:nowrap}
+.eq3-btn svg{width:19px;height:19px}
+.eq3-btn.outline{background:#fff;border:1.5px solid #ffab5e;color:#e86a00!important}
+.eq3-btn.ghost{background:#fff;border:1px solid #d6dce8;color:var(--eq-navy)!important}
+.eq3-btn.danger{background:#fff;border:1.5px solid #f3b3ad;color:#c4362b!important}
+.eq3-btn.small{min-height:38px;padding:0 14px;font-size:13.5px}
+.eq3-btn:disabled{opacity:.5;cursor:not-allowed}
+.eq3-btn:focus-visible,.eq3-link:focus-visible{outline:3px solid #1e64d1;outline-offset:2px}
+.eq3-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:0 0 18px}
+.eq3-stat{display:flex;align-items:center;gap:22px;padding:18px 22px;border:1px solid var(--eq-line);border-radius:18px;background:#fff}
+.eq3-stat-ic{display:grid;place-items:center;width:66px;height:66px;border-radius:16px;flex-shrink:0}
+.eq3-stat-ic svg{width:34px;height:34px}
+.eq3-stat strong{display:block;font-size:30px;line-height:1.1;font-weight:800}
+.eq3-stat small{display:block;font-size:15px;color:#3b4a6b;margin-top:4px}
+.eq3-stat.orange{background:linear-gradient(120deg,#fff6ec,#fff)}.eq3-stat.orange .eq3-stat-ic{background:#ffe6c9;color:#f07d00}
+.eq3-stat.green{background:linear-gradient(120deg,#f2fbf4,#fff)}.eq3-stat.green .eq3-stat-ic{background:#dcf5e3;color:#1d9b4b}
+.eq3-stat.red{background:linear-gradient(120deg,#fff4f3,#fff)}.eq3-stat.red .eq3-stat-ic{background:#fde2e0;color:#d93a2f}
+.admin-body .eq3 .eq3-card{padding:22px;border-radius:20px}
+.admin-body .eq3 .eq3-card>header.eq3-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:0 0 16px;padding:0;background:none;border:0}
+.eq3-head h2{margin:0;font-size:24px}.eq3-head p{margin:4px 0 0;color:#3b5a8c;font-size:15px}
+.eq3-head-actions{display:flex;gap:10px;flex-wrap:wrap}.eq3-head-actions form{margin:0}
+.eq3-bulk{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px;margin:0 0 12px;border-radius:12px;background:#fff6ea;border:1px solid #ffe1bd}
+.eq3-bulk span{margin-right:auto;font-size:14px}
+.eq3-table-wrap{overflow-x:auto}
+.eq3-table{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px}
+.eq3-table th{background:#fff3e5;text-align:left;padding:14px 16px;font-weight:700;white-space:nowrap}
+.eq3-table th:first-child{border-radius:12px 0 0 12px}.eq3-table th:last-child{border-radius:0 12px 12px 0}
+.eq3-table td{padding:13px 16px;border-bottom:1px solid #edf0f5;vertical-align:middle}
+.eq3-table .num{text-align:center}
+.eq3-chk{width:44px}
+.eq3-check{appearance:none;-webkit-appearance:none;width:22px;height:22px;margin:0;border:2px solid #c9d1df;border-radius:6px;background:#fff;display:grid;place-items:center;cursor:pointer;vertical-align:middle}
+.eq3-check:checked,.eq3-check:indeterminate{background:#ff8a00;border-color:#ff8a00}
+.eq3-check:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:translateY(-1px) rotate(45deg)}
+.eq3-check:indeterminate::after{content:"";width:10px;height:2.5px;background:#fff;border-radius:2px}
+.eq3-check:disabled{opacity:.5;cursor:not-allowed}
+.eq3-check:focus-visible{outline:3px solid #1e64d1;outline-offset:2px}
+.eq3-subject strong{font-weight:600}.eq3-subject small{display:block;color:#b23a2e;font-size:12px;margin-top:3px}
+.eq3-status{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:13px;font-weight:700;white-space:nowrap}
+.eq3-status i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.eq3-status.pending{background:#fff0dd;color:#c25a00}.eq3-status.sending{background:#e6eeff;color:#2f5fd0}.eq3-status.sent{background:#e3f6e8;color:#1d8a43}.eq3-status.failed{background:#fde4e2;color:#c4362b}
+.eq3-sent{display:block;font-size:11.5px;color:var(--eq-muted);margin-top:3px}
+.eq3-link{border:0;background:none;color:#e86a00;font:inherit;font-weight:700;cursor:pointer;padding:4px}
+.eq3-empty{text-align:center;padding:30px 14px 26px!important}
+.eq3-empty img{display:block;margin:0 auto 10px}
+.eq3-empty h3{margin:0 0 6px;font-size:22px;color:var(--eq-navy)}
+.eq3-empty p{margin:0 0 18px;color:#3b5a8c;font-size:15px}
+.eq3-dialog{box-sizing:border-box;width:min(640px,calc(100% - 28px));max-height:calc(100dvh - 28px);overflow:auto;border:1px solid var(--eq-line);border-radius:20px;padding:22px 24px;color:var(--eq-navy);background:#fff;box-shadow:0 24px 70px #111c4b40}
+.eq3-dialog::backdrop{background:#111a3b70}
+.eq3-dialog>header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.eq3-dialog h2{display:flex;align-items:center;gap:10px;margin:0;font-size:20px}
+.eq3-dialog h2 svg{width:22px;height:22px;color:#ff7a00}
+.eq3-x{border:0;background:none;font-size:30px;line-height:1;color:var(--eq-navy);cursor:pointer}
+.eq3-info{margin:0 0 14px;padding:10px 12px;border-radius:10px;background:#f3f6fb;font-size:13.5px;line-height:1.5}
+.eq3-form fieldset{border:0;margin:0;padding:0;min-width:0}
+.eq3-grid{display:grid;grid-template-columns:1.6fr .7fr;gap:12px 14px}
+.eq3-grid .wide{grid-column:1/-1}
+.eq3-form label{display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:14px;margin:0 0 4px}
+.admin-body .eq3-form input:not([type=checkbox]),.admin-body .eq3-form select,.admin-body .eq3-form textarea,.admin-body .eq3-test input{width:100%;box-sizing:border-box;min-height:44px;padding:10px 12px;border:1px solid #d6dce8;border-radius:10px;background:#fff;font:inherit;font-weight:400;font-size:14.5px;color:var(--eq-navy)}
+.admin-body .eq3-form textarea{min-height:130px;resize:vertical}
+.eq3-form :disabled{background:#f5f7fa!important;color:#7a8299!important}
+.eq3-check-row{display:flex;align-items:center;gap:8px;font-weight:400;font-size:13px;color:var(--eq-muted)}
+.eq3-toggle{flex-direction:row!important;align-items:center;gap:10px!important;margin:14px 0 4px!important;font-weight:600!important}
+.eq3-toggle input{width:20px;height:20px;accent-color:#ff7a00}
+.eq3-note{margin:8px 0 0;font-size:12.5px;line-height:1.5;color:var(--eq-muted)}
+.eq3-dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
+.eq3-test{margin:18px 0 0;padding-top:16px;border-top:1px dashed #dfe4ee}
+.eq3-test label{display:flex;flex-direction:column;gap:8px;font-weight:700;font-size:14px}
+.eq3-test label>span{display:flex;gap:10px}
+.eq3-test input{flex:1}
+@media(max-width:900px){.eq3-stats{grid-template-columns:1fr}}
+@media(max-width:760px){
+ .eq3-notice{flex-wrap:wrap}.eq3-notice .eq3-btn{width:100%}
+ .admin-body .eq3 .eq3-card{padding:16px}
+ .eq3-head-actions,.eq3-head-actions form,.eq3-head-actions .eq3-btn{width:100%}
+ .eq3-grid{grid-template-columns:1fr}
+ .eq3-test label>span{flex-direction:column}
+ .eq3-table thead{display:none}.eq3-table,.eq3-table tbody,.eq3-table tr,.eq3-table td{display:block;width:100%}
+ .eq3-table tr{position:relative;border:1px solid var(--eq-line);border-radius:14px;margin-bottom:12px;padding:8px 4px 8px 44px}
+ .eq3-table td{border:0;padding:5px 10px;display:flex;justify-content:space-between;gap:10px;text-align:right}
+ .eq3-table td[data-label]::before{content:attr(data-label);font-size:12px;color:var(--eq-muted);font-weight:600}
+ .eq3-table td.eq3-chk{position:absolute;left:4px;top:10px;width:auto;padding:4px}
+ .eq3-table td.eq3-empty{display:block;text-align:center}
+ .eq3-table tr:has(.eq3-empty){padding-left:4px}
+}

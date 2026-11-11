@@ -1,0 +1,242 @@
+/* Masuk Portal Warga — desain merah (application/views/citizen/login.php). */
+.lgr{--lr-red:#d9002c;--lr-red-2:#a8001d;--lr-navy:var(--dw-navy,#091c55);--lr-line:#f3d6dd;position:relative;padding:26px 0 160px!important;color:var(--lr-navy);font-family:var(--dw-font,"Nunito Sans","Nunito","Segoe UI",system-ui,sans-serif);background:radial-gradient(50% 50% at 0 20%,#ffe9ee,transparent 70%),radial-gradient(40% 40% at 100% 60%,#ffeef2,transparent 70%),linear-gradient(180deg,#fff7f9,#fff)!important;overflow:hidden}
+.lgr *,.lgr *:before,.lgr *:after{box-sizing:border-box}
+.lgr a{text-decoration:none}
+.lgr-wrap{position:relative;z-index:1;width:min(1540px,calc(100% - 48px));margin-inline:auto}
+.lgr-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(360px,470px);gap:26px;align-items:start}
+
+/* Hero kiri */
+.lgr-hero{position:relative;display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);grid-template-areas:"copy art" "cards cards";gap:22px 10px;align-items:center}
+.lgr-copy{grid-area:copy;padding-left:6px}
+.lgr-pill{display:inline-flex;padding:8px 18px;border-radius:999px;background:#ffe1e8;color:var(--lr-red);font-size:15px;font-weight:900;letter-spacing:.02em}
+.lgr-copy h1{margin:20px 0 16px;color:var(--lr-navy);font-size:clamp(34px,3.6vw,60px);font-weight:900;line-height:1.05;letter-spacing:-.02em}
+.lgr-copy h1 b{display:block;color:var(--lr-red)}
+.lgr-copy p{margin:0;max-width:520px;color:#1d2b55;font-size:clamp(15px,1.2vw,19px);line-height:1.5}
+.lgr-art{grid-area:art;position:relative;align-self:stretch;min-height:360px;border-radius:0 0 40px 40px;overflow:hidden}
+.lgr-art-scene{position:absolute;inset:auto;top:-30%;left:-40%;height:190%;width:auto;max-width:none;opacity:.9;-webkit-mask-image:radial-gradient(70% 70% at 55% 50%,#000 50%,transparent 100%);mask-image:radial-gradient(70% 70% at 55% 50%,#000 50%,transparent 100%)}
+.lgr-art-main{position:absolute;left:50%;bottom:0;height:112%;width:auto;max-width:none;transform:translateX(-50%);-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14%,#000 86%,transparent);mask-image:linear-gradient(90deg,transparent 0,#000 14%,#000 86%,transparent)}
+.lgr-art-wave{position:absolute;left:-2%;right:-2%;bottom:-1px;width:104%;height:60px}
+.lgr-cards{grid-area:cards;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.lgr-cards a{display:flex;flex-direction:column;gap:6px;min-height:178px;padding:20px 22px;border:1px solid var(--lr-line);border-radius:22px;background:#fff;color:var(--lr-navy);box-shadow:0 12px 26px #5a002314;transition:transform .18s,box-shadow .18s}
+.lgr-cards a:hover{transform:translateY(-3px);box-shadow:0 18px 32px #5a002324}
+.lgr-cards span{width:58px;height:58px;display:grid;place-items:center;margin-bottom:8px;border-radius:16px;font-size:30px}
+.lgr-cards strong{font-size:clamp(17px,1.35vw,22px);font-weight:900;line-height:1.2}
+.lgr-cards small{color:#33405e;font-size:14.5px;line-height:1.45}
+.lgr-tone-red{background:linear-gradient(160deg,#fff,#fff4f6)!important}.lgr-tone-red span{background:#ffe3e9;color:#e3062f}
+.lgr-tone-blue{background:linear-gradient(160deg,#fff,#eef5ff)!important}.lgr-tone-blue span{background:#dfeaff;color:#1d4ed8}
+.lgr-tone-green{background:linear-gradient(160deg,#fff,#effaf1)!important}.lgr-tone-green span{background:#dcf5e3;color:#16a34a}
+.lgr-tone-purple{background:linear-gradient(160deg,#fff,#f5f0ff)!important}.lgr-tone-purple span{background:#ece3ff;color:#7c3aed}
+
+/* Kartu login */
+.lgr-card{position:relative;padding:34px 36px 30px;border:1px solid var(--lr-line);border-radius:30px;background:#fff;box-shadow:0 20px 44px #5a00231f}
+.lgr-eyebrow{display:flex;align-items:center;gap:14px;color:var(--lr-red);font-size:15px;font-weight:900;letter-spacing:.06em}
+.lgr-eyebrow:after{content:"";width:50px;height:2px;background:var(--lr-red)}
+.lgr-card-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:12px 0 10px}
+.lgr-card-head h2{margin:0;color:var(--lr-navy);font-size:clamp(28px,2.2vw,38px);font-weight:900;line-height:1.1}
+.lgr-card-head img{width:clamp(90px,8vw,130px);height:auto;flex:none}
+.lgr-intro{margin:0 0 22px;color:#33405e;font-size:16px;line-height:1.5}
+.lgr-alert{margin:0 0 14px;padding:11px 14px;border-radius:12px;font-weight:700}
+.lgr-alert.bad{background:#fff1f2;color:#b4232f;border:1px solid #fecdd3}
+.lgr-alert.good{background:#effaf3;color:#0a5c33;border:1px solid #bfe8cf}
+.lgr-field{display:block;margin:0 0 16px}
+.lgr-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.lgr-input{position:relative;display:flex;align-items:center}
+.lgr-input>svg{position:absolute;left:18px;width:22px;height:22px;fill:none;stroke:#7b8798;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+.lgr .lgr-input input{width:100%;height:56px;margin:0;padding:0 54px 0 52px;border:1.5px solid #e6dde1;border-radius:16px;background:#fff;color:var(--lr-navy);font:inherit;font-size:16px;box-shadow:none;transition:border-color .15s,box-shadow .15s}
+.lgr .lgr-input input:focus{outline:none;border-color:#e3062f;box-shadow:0 0 0 4px #e3062f1f}
+.lgr-eye{position:absolute;right:10px;width:40px;height:40px;display:grid;place-items:center;padding:0;border:0;border-radius:10px;background:transparent;color:#5f6c80;cursor:pointer;font-size:20px}
+.lgr-eye:hover,.lgr-eye[aria-pressed="true"]{background:#fff1f4;color:#c8102e}
+.lgr-options{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 22px;font-size:16px;font-weight:800}
+.lgr-options label{display:inline-flex;align-items:center;gap:10px;margin:0;color:var(--lr-navy);cursor:pointer}
+.lgr-options input{width:22px;height:22px;margin:0;accent-color:#c8102e}
+.lgr-options a{color:#e3062f}
+.lgr-options a:hover{text-decoration:underline}
+.lgr-submit{width:100%;height:60px;display:flex;align-items:center;justify-content:center;gap:12px;border:0;border-radius:999px;background:linear-gradient(95deg,#a8001d,#d9002c 60%,#ef1d3f);color:#fff;font:inherit;font-size:21px;font-weight:900;cursor:pointer;box-shadow:0 12px 24px #b0001f45;transition:transform .15s,filter .15s}
+.lgr-submit:hover{transform:translateY(-1px);filter:brightness(1.06)}
+.lgr-submit svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.lgr-switch{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:24px;padding-top:20px;border-top:1px solid #f1e3e7;color:var(--lr-navy);font-size:16px;font-weight:600}
+.lgr-switch a{color:#e3062f;font-weight:900}
+
+/* Strip info */
+.lgr-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:28px;padding:16px 10px;border:1px solid var(--lr-line);border-radius:999px;background:#fff;box-shadow:0 12px 28px #5a002314}
+.lgr-strip>div{display:flex;align-items:center;justify-content:center;gap:16px;padding:4px 14px}
+.lgr-strip>div+div{border-left:2px solid #f1e3e7}
+.lgr-strip span{width:54px;height:54px;flex:none;display:grid;place-items:center;border-radius:50%;background:#fff;color:#e3062f;font-size:26px;box-shadow:0 6px 14px #5a00231f}
+.lgr-strip span.fill{background:linear-gradient(145deg,#ef1d3f,#a8001d);color:#fff}
+.lgr-strip span.green{background:#e3f6e8;color:#16a34a}
+.lgr-strip p{margin:0;line-height:1.3}
+.lgr-strip b{display:block;color:var(--lr-navy);font-size:16px;font-weight:900}
+.lgr-strip small{display:block;color:#33405e;font-size:15px}
+
+/* Responsif */
+@media(max-width:1280px){.lgr-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.lgr-cards a{min-height:0}}
+@media(max-width:1023px){
+ .lgr-grid{grid-template-columns:1fr}
+ .lgr-card{max-width:620px;width:100%;margin-inline:auto}
+ .lgr-strip{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 0;border-radius:26px}
+ .lgr-strip>div:nth-child(3){border-left:0}
+}
+@media(max-width:700px){
+ .lgr-wrap{width:calc(100% - 28px)}
+ .lgr-hero{grid-template-columns:1fr;grid-template-areas:"art" "copy" "cards"}
+ .lgr-art{min-height:240px;border-radius:24px}
+ .lgr-cards{grid-template-columns:1fr 1fr;gap:12px}
+ .lgr-cards a{padding:14px}
+ .lgr-card{padding:24px 20px;border-radius:24px}
+ .lgr-strip{grid-template-columns:1fr}
+ .lgr-strip>div{justify-content:flex-start}
+ .lgr-strip>div+div{border-left:0;border-top:1px solid #f1e3e7;padding-top:12px}
+}
+
+/* =====================================================================
+   Versi ringkas (mockup terbaru): teks | ilustrasi berbingkai | kotak login proporsional
+   ===================================================================== */
+.lgr--v2{padding:40px 0 190px!important}
+/* Di halaman login, tombol "Portal Warga" di header tidak perlu (sudah di halaman masuk). */
+.citizen-shell-body .lgr--v2 ~ * .dwh-portal,body:has(.lgr--v2) .dwh-portal{display:none}
+.lgr-layout{display:grid;grid-template-columns:minmax(260px,.82fr) minmax(0,1.18fr) minmax(440px,520px);gap:28px;align-items:center}
+.lgr--v2 .lgr-copy{padding:0}
+.lgr--v2 .lgr-copy h1{font-size:clamp(34px,3.2vw,56px)}
+.lgr--v2 .lgr-copy p{font-size:clamp(15px,1.1vw,18px)}
+.lgr-rule{display:block;width:84px;height:4px;margin-top:26px;border-radius:4px;background:var(--lr-red)}
+/* Ilustrasi dalam bingkai membulat (blob) dengan gelombang merah di bawah */
+.lgr-blob{position:relative;margin:0;aspect-ratio:1.18/1;max-height:560px;border-radius:44% 56% 18% 30% / 38% 34% 22% 28%;overflow:hidden;box-shadow:0 22px 44px #5a002324;background:#fff}
+.lgr-blob img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% 40%}
+.lgr-blob-wave{position:absolute;left:-2%;right:-2%;bottom:-1px;width:104%;height:22%}
+/* Kotak login: lebih lebar & lega */
+.lgr--v2 .lgr-card{padding:40px 40px 34px;border-radius:32px}
+.lgr--v2 .lgr-card-head{align-items:flex-start;margin:0 0 24px}
+.lgr--v2 .lgr-card-head h2{font-size:clamp(30px,2.3vw,40px)}
+.lgr--v2 .lgr-intro{margin:12px 0 0;font-size:17px}
+.lgr--v2 .lgr-card-head img{width:clamp(100px,8.5vw,140px)}
+.lgr--v2 .lgr-field{margin-bottom:18px}
+.lgr--v2 .lgr-input input{height:62px;font-size:17px;border-radius:18px}
+.lgr--v2 .lgr-submit{height:64px;font-size:22px}
+.lgr--v2 .lgr-submit svg{order:-1}
+@media(max-width:1280px){.lgr-layout{grid-template-columns:minmax(0,1fr) minmax(400px,480px)}.lgr-blob{grid-column:1;grid-row:2;max-height:420px}.lgr--v2 .lgr-card{grid-column:2;grid-row:1/span 2}}
+@media(max-width:900px){.lgr-layout{grid-template-columns:1fr}.lgr-blob,.lgr--v2 .lgr-card{grid-column:auto;grid-row:auto}.lgr--v2 .lgr-card{max-width:560px;width:100%;margin-inline:auto}.lgr-blob{max-height:340px;aspect-ratio:16/10}}
+@media(max-width:600px){.lgr--v2{padding-top:20px!important}.lgr--v2 .lgr-card{padding:26px 20px}}
+.lgr--v2 .lgr-copy,.lgr--v2 .lgr-card,.lgr--v2 .lgr-blob{grid-area:auto}
+.lgr-blob img{object-position:72% 70%}
+.lgr-blob{aspect-ratio:1.42/1}
+.lgr-blob img{object-position:88% 60%}
+.lgr-blob{aspect-ratio:1.62/1}
+.lgr-blob img{object-position:86% 60%}
+.lgr-blob img{object-position:74% 60%}
+
+/* Ilustrasi login (perbaikan): kartu membulat rapi berasio 3:2 seperti gambar → tidak ada bagian yang terpotong;
+   langit biru lembut di belakang ilustrasi berlatar transparan; gelombang merah tipis di bawah. */
+.lgr-blob{aspect-ratio:3/2;max-height:none;border-radius:36px;border:6px solid #fff;background:linear-gradient(180deg,#bfe3ff 0%,#e3f2ff 45%,#fff3f6 100%);box-shadow:0 24px 48px #5a002326}
+.lgr-blob img{object-fit:cover;object-position:50% 0}
+.lgr-blob-wave{height:11%}
+@media(max-width:1280px){.lgr-blob{max-height:none}}
+@media(max-width:900px){.lgr-blob{aspect-ratio:3/2;max-height:none;max-width:620px;width:100%;margin-inline:auto}}
+@media(max-width:600px){.lgr-blob{border-radius:26px;border-width:4px}}
+
+/* =====================================================================
+   v3 — persis mockup terbaru
+   ===================================================================== */
+/* Header: baris menu putih, teks gelap, pil merah untuk menu aktif; tombol Portal Warga & lonceng tampil */
+body:has(.lgr--v3) .dwh-portal{display:inline-flex!important}
+body:has(.lgr--v3) .dwh-nav{background:#fff;border-top:0;box-shadow:0 6px 16px #5a002314}
+body:has(.lgr--v3) .dwh-nav a{color:var(--dw-navy,#091c55)}
+body:has(.lgr--v3) .dwh-nav a .dui-line{color:var(--dw-red,#d9002c)}
+body:has(.lgr--v3) .dwh-nav a:hover{background:#fff1f4}
+body:has(.lgr--v3) .dwh-nav a+a:before{background:#f1d9df}
+body:has(.lgr--v3) .dwh-nav a.on{background:linear-gradient(95deg,#c8102e,#e3062f);color:#fff;box-shadow:0 6px 14px #c8102e3d}
+body:has(.lgr--v3) .dwh-nav a.on .dui-line{color:#fff}
+/* Latar halaman: gelombang merah muda lembut */
+.lgr--v3{background:radial-gradient(60% 50% at 0 10%,#ffe4ea,transparent 70%),radial-gradient(70% 40% at 100% 100%,#ffe4ea,transparent 70%),linear-gradient(180deg,#fff6f8,#fff 60%,#fff6f8)!important}
+.lgr--v3:before{content:"";position:absolute;left:-10%;right:-10%;top:42%;height:260px;background:radial-gradient(60% 60% at 30% 60%,#ffd9e2aa,transparent 70%);pointer-events:none}
+.lgr-leaf{position:absolute;z-index:0;width:clamp(70px,6vw,110px);height:auto;pointer-events:none;filter:saturate(1.1)}
+.lgr-leaf--tr{top:-6px;right:0;transform:scaleX(-1) rotate(-8deg)}
+.lgr-leaf--bl{left:0;top:62%;transform:rotate(12deg)}
+/* Teks kiri: miring seperti mockup */
+.lgr--v3 .lgr-copy h1{font-style:italic;letter-spacing:-.01em}
+.lgr--v3 .lgr-copy h1 b{position:relative;display:inline-block}
+.lgr-spark{fill:none;stroke:#ffc21a;stroke-width:4;stroke-linecap:round}
+.lgr-spark--title{position:absolute;right:-56px;bottom:6px;width:48px;height:30px}
+/* Ilustrasi: blob organik besar + sapuan merah + kilau kuning + daun */
+.lgr-visual{position:relative;padding:4% 2% 9%}
+.lgr--v3 .lgr-blob{position:relative;z-index:1;aspect-ratio:1.22/1;border:0;border-radius:46% 54% 48% 52% / 52% 50% 50% 48%;background:linear-gradient(180deg,#bfe3ff 0%,#e3f2ff 45%,#fff3f6 100%);box-shadow:0 26px 50px #5a002324;overflow:hidden}
+.lgr--v3 .lgr-blob img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 8%;-webkit-mask-image:none;mask-image:none}
+.lgr-swoosh{position:absolute;z-index:2;left:-18%;right:-2%;bottom:2%;width:120%;height:30%;filter:drop-shadow(0 8px 14px #b0001f33)}
+.lgr-spark--blob{position:absolute;z-index:3;left:12%;top:2%;width:64px;height:64px;transform:rotate(-24deg)}
+.lgr-stage-leaf{position:absolute;z-index:3;left:4%;bottom:12%;width:clamp(56px,5vw,84px);height:auto;transform:rotate(-38deg)}
+/* Kartu login: latar lembut, judul dua warna */
+.lgr--v3 .lgr-card{background:linear-gradient(180deg,#fff 0%,#fff 55%,#fff7f9 100%);border-color:#f6dbe2}
+.lgr--v3 .lgr-card-head h2 b{display:block;color:var(--lr-red)}
+.lgr--v3 .lgr-card-head{margin-bottom:22px}
+@media(max-width:1280px){.lgr-visual{grid-column:1;grid-row:2}.lgr--v3 .lgr-card{grid-column:2;grid-row:1/span 2}}
+@media(max-width:900px){.lgr-visual{grid-column:auto;grid-row:auto;max-width:640px;width:100%;margin-inline:auto}.lgr-spark--title{display:none}.lgr-leaf{display:none}}
+.lgr-leaf{width:clamp(80px,6.5vw,120px);filter:drop-shadow(0 6px 10px #2e7d3226)}
+.lgr-leaf--tr{top:0;right:-10px;transform:rotate(200deg)}
+.lgr-leaf--bl{left:-14px;top:60%;transform:rotate(20deg)}
+.lgr-stage-leaf{left:2%;bottom:14%;width:clamp(60px,5vw,90px);transform:rotate(-12deg);filter:drop-shadow(0 6px 10px #2e7d3226)}
+.lgr-swoosh{left:-14%;width:116%;bottom:3%;height:28%}
+@media(max-width:900px){.lgr--v3 .lgr-card,.lgr--v3 .lgr-visual{grid-column:auto;grid-row:auto}.lgr-pill{white-space:nowrap}}
+
+/* =====================================================================
+   Login mandiri (lgr--solo): hanya logo + kartu login, di tengah layar, tanpa scroll.
+   ===================================================================== */
+body:has(.lgr--solo) .dwb-shell,body:has(.lgr--solo) .site-header,body:has(.lgr--solo) .citizen-back-bar,
+body:has(.lgr--solo) .mbx-nav,body:has(.lgr--solo) .mbx-sheet,body:has(.lgr--solo) .mbx-backdrop,
+body:has(.lgr--solo) .wa-float,body:has(.lgr--solo) .live-chat-float,body:has(.lgr--solo) .live-chat-widget{display:none!important}
+body:has(.lgr--solo){padding:0!important;margin:0;overflow-x:hidden}
+.lgr.lgr--solo{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:20px 16px!important;box-sizing:border-box;background:radial-gradient(70% 50% at 0 0,#ffd9e2,transparent 70%),radial-gradient(70% 50% at 100% 100%,#ffd9e2,transparent 70%),linear-gradient(180deg,#fff6f8,#fff)!important}
+.lgr--solo:before,.lgr--solo .lgr-leaf,.lgr--solo .lgr-copy,.lgr--solo .lgr-visual,.lgr--solo .crd-deco{display:none!important}
+.lgr--solo .lgr-layout{display:flex!important;flex-direction:column;align-items:center;gap:18px!important;width:100%;max-width:440px;margin:0 auto}
+.lgr-solo-brand{display:flex;align-items:center;gap:12px;color:var(--dw-navy,#091c55)!important;text-decoration:none}
+.lgr-solo-brand img{width:52px;height:52px;object-fit:contain;padding:4px;border-radius:14px;background:#fff;box-shadow:0 6px 14px #5a00231f}
+.lgr-solo-brand span{display:grid;line-height:1.15}
+.lgr-solo-brand b{font-size:19px;font-weight:900}
+.lgr-solo-brand small{color:#c8102e;font-size:13px;font-weight:800}
+.lgr--solo .lgr-card{width:100%;margin:0;padding:26px 24px 22px!important;border-radius:24px!important}
+.lgr--solo .lgr-card-head{margin:0 0 16px!important}
+.lgr--solo .lgr-card-head h2{font-size:26px!important}
+.lgr--solo .lgr-card-head img{width:68px!important}
+.lgr--solo .lgr-intro{font-size:14px!important;margin:6px 0 0!important}
+.lgr--solo .lgr-field{margin-bottom:12px!important}
+.lgr .lgr--solo .lgr-sr,.lgr--solo .lgr-field .lgr-sr{position:static;width:auto;height:auto;clip:auto;display:block;margin:0 0 5px 4px;color:#33405e;font-size:13.5px;font-weight:800}
+.lgr--solo .lgr-input input{height:52px!important;font-size:16px!important}
+.lgr--solo .lgr-options{margin:2px 0 16px!important;font-size:14.5px!important}
+.lgr--solo .lgr-submit{height:54px!important;font-size:19px!important}
+.lgr--solo .lgr-switch{margin-top:16px!important;padding-top:14px!important;font-size:14.5px!important}
+@media(max-height:700px){.lgr--solo .lgr-card-head img,.lgr--solo .lgr-intro{display:none!important}.lgr--solo .lgr-layout{gap:12px!important}}
+/* Login HP: header merah dan form bergelombang. Desktop tetap memakai desain semula. */
+.lgr-mobile-neighborhood,.lgr-switch-mobile{display:none}
+@media(max-width:600px){
+ .lgr.lgr--solo{display:block;min-height:100dvh;padding:0!important;background:radial-gradient(ellipse at 0 0,#ff4f65,transparent 50%),linear-gradient(145deg,#ed0829,#b40021 65%,#ff2647)!important}
+ .lgr--solo .lgr-layout{position:relative;gap:0!important;max-width:none;width:100%;isolation:isolate}
+ .lgr--solo .lgr-solo-brand{display:flex;flex-direction:column;gap:12px;width:100%;padding:22px 24px 0;color:#fff!important;text-align:center}
+ .lgr--solo .lgr-solo-brand img{width:66px;height:66px;padding:6px;border-radius:17px;background:#fff;box-shadow:0 7px 18px #8e001d25}
+ .lgr--solo .lgr-solo-brand span{display:flex;flex-direction:column;align-items:center;gap:6px;max-width:340px}
+ .lgr--solo .lgr-solo-brand b{font-size:23px;line-height:1.15;font-weight:900;text-transform:uppercase;max-width:310px}
+ .lgr--solo .lgr-solo-brand small{font-size:14px;line-height:1.4;font-weight:500;color:#fff}
+ .lgr--solo .lgr-mobile-neighborhood{display:block;position:relative;width:100%;height:auto;margin:2px 0 -12px;aspect-ratio:4/1;object-fit:cover;z-index:-1}
+ .lgr--solo .lgr-card{position:relative;width:100%;border:0;border-radius:48px 48px 0 0!important;padding:24px 28px 92px!important;background:radial-gradient(ellipse at 100% 0,#ffedf2,transparent 48%),#fff;box-shadow:0 -4px 0 #ffffffa0;overflow:hidden}
+ .lgr--solo .lgr-card:after{content:'';position:absolute;left:-12%;bottom:-46px;width:124%;height:90px;border-radius:50% 50% 0 0;background:linear-gradient(145deg,#ffcad5,#ffe7ed 45%,#ffb8ca);transform:rotate(-4deg);pointer-events:none}
+ .lgr--solo .lgr-card:before{content:'';position:absolute;right:-18%;bottom:-38px;width:90%;height:80px;border-radius:50%;background:#ffd8e2;transform:rotate(-12deg);pointer-events:none}
+ .lgr--solo .lgr-card-head{margin:0 0 18px!important;display:block}
+ .lgr--solo .lgr-card-head img{display:none!important}
+ .lgr--solo .lgr-card-head h2{font-size:30px!important;line-height:1.1;font-weight:900}
+ .lgr--solo .lgr-intro{display:block!important;font-size:15px!important;line-height:1.5;margin:8px 0 0!important;color:#566071}
+ .lgr--solo .lgr-field{margin-bottom:12px!important}
+ .lgr--solo .lgr-field .lgr-sr{font-size:14px;margin:0 0 6px;color:#091c45;font-weight:800}
+ .lgr--solo .lgr-input input{height:46px!important;font-size:16px!important;border-radius:17px;border:1px solid #dcd8df;padding-left:45px;background:#ffffffb3}
+ .lgr--solo .lgr-input>svg{left:15px;width:21px;height:21px;color:#697585}
+ .lgr--solo .lgr-eye{width:44px;height:44px;right:4px}
+ .lgr--solo .lgr-options{margin:6px 0 18px!important;font-size:13px!important;gap:10px}
+ .lgr--solo .lgr-options input{width:20px;height:20px}
+ .lgr--solo .lgr-submit{height:50px!important;font-size:20px!important;border:1px solid #fff;border-radius:999px;background:linear-gradient(100deg,#df0023,#f90933);box-shadow:0 10px 20px #df12352e}
+ .lgr--solo .lgr-switch{display:flex;flex-direction:column;gap:14px;margin-top:16px!important;padding-top:0!important;border-top:0}
+ .lgr--solo .lgr-switch-desktop{display:none}
+ .lgr--solo .lgr-switch-mobile{display:flex;align-items:center;justify-content:center;gap:10px}
+ .lgr--solo .lgr-or{width:100%;color:#6b7484;font-size:14px;font-weight:500}
+ .lgr--solo .lgr-or:before,.lgr--solo .lgr-or:after{content:'';height:1px;flex:1;background:#e1dce4}
+ .lgr--solo .lgr-switch>a{display:flex;justify-content:center;align-items:center;width:100%;min-height:46px;border:1.5px solid #ed002b;border-radius:18px;color:#df0026;font-size:16px;font-weight:800}
+ .lgr--solo .lgr-switch-mobile svg{width:25px;height:25px}
+ .lgr--solo :is(a,button,input):focus-visible{outline:3px solid #2364d2;outline-offset:3px}
+}
+@media(max-width:360px){.lgr--solo .lgr-solo-brand b{font-size:21px}.lgr--solo .lgr-card{padding-left:22px!important;padding-right:22px!important}.lgr--solo .lgr-card-head h2{font-size:28px!important}.lgr--solo .lgr-options{font-size:12px!important}}
+@media(max-width:600px){.lgr--solo .lgr-solo-brand b{max-width:270px}}

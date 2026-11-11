@@ -1,0 +1,63 @@
+/* Login Portal Warga v4 — sesuai mockup (oranye, latar ilustrasi penuh, kartu di tengah) */
+:root{--lw-navy:#0c214b;--lw-orange:#ff7a00;--lw-orange-2:#ff9b1f;--lw-line:#d9dfea}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body.lw4{font-family:Nunito,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--lw-navy);background:#fff3e3}
+.lw4-bg{position:fixed;inset:0;background-size:cover;background-position:center;z-index:0}
+.lw4-bg::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,#ffffff22 0,#00000000 55%,#00000014 100%)}
+.lw4-main{position:relative;z-index:1;min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:28px 16px}
+.lw4-stack{width:min(548px,100%);display:flex;flex-direction:column;align-items:center}
+/* Tab identitas di atas kartu */
+.lw4-brand{position:relative;display:flex;align-items:center;gap:16px;width:min(460px,86%);padding:22px 28px 26px;margin-bottom:-14px;border-radius:40px 40px 0 0;background:#fff;color:var(--lw-navy);text-decoration:none;box-shadow:0 -6px 24px #0000001a;z-index:2}
+.lw4-brand::after{content:"";position:absolute;left:8%;right:8%;bottom:6px;height:4px;border-radius:4px;background:linear-gradient(90deg,transparent,var(--lw-orange) 20%,var(--lw-orange) 80%,transparent)}
+.lw4-brand img{width:84px;height:68px;object-fit:contain;flex-shrink:0}
+.lw4-brand span{display:flex;flex-direction:column;line-height:1.08;min-width:0}
+.lw4-brand b{font-size:clamp(17px,2.4vw,25px);font-weight:900;letter-spacing:.01em;overflow-wrap:anywhere}
+.lw4-brand small{margin-top:4px;color:#e85d00;font-size:15px;font-weight:800}
+/* Kartu */
+.lw4-card{position:relative;width:100%;padding:36px 46px 0;border-radius:36px;background:#fff;box-shadow:0 22px 60px #1b2a4a33;overflow:hidden;z-index:1}
+.lw4-head{display:flex;justify-content:space-between;gap:12px}
+.lw4-head h1{margin:0;font-size:clamp(28px,4vw,36px);line-height:1.12;font-weight:900;color:var(--lw-navy)}
+.lw4-head h1 span{position:relative;display:block;color:var(--lw-orange)}
+.lw4-spark{position:absolute;top:-10px;margin-left:4px;width:30px;height:22px;stroke:var(--lw-orange-2);stroke-width:3;stroke-linecap:round;fill:none}
+.lw4-head p{margin:12px 0 0;font-size:16px;line-height:1.55;color:#3b4a6b;max-width:360px}
+.lw4-leaf{width:66px;height:66px;flex-shrink:0;margin-top:2px}
+.lw4-alert{margin:16px 0 0;padding:11px 14px;border-radius:12px;font-weight:700;font-size:14px}
+.lw4-alert.bad{background:#fff0ee;color:#b42318;border:1px solid #f8c8c2}
+.lw4-alert.good{background:#ecfbef;color:#166534;border:1px solid #bce8c6}
+.lw4-form{margin-top:20px}
+.lw4-form>label{display:flex;align-items:center;gap:10px;margin:16px 0 8px;font-weight:800;font-size:17px}
+.lw4-form>label svg{width:20px;height:20px;fill:var(--lw-navy);stroke:var(--lw-navy);stroke-width:0}
+.lw4-input{position:relative;display:flex;align-items:center}
+.lw4-input>svg{position:absolute;left:20px;width:22px;height:22px;fill:none;stroke:#3b4a6b;stroke-width:1.8;stroke-linecap:round;pointer-events:none}
+.lw4-input input{width:100%;height:56px;padding:0 54px 0 58px;border:1.5px solid var(--lw-line);border-radius:14px;background:#fff;font:inherit;font-size:17px;font-weight:600;color:var(--lw-navy)}
+.lw4-input input::placeholder{color:#7b869c;font-weight:600}
+.lw4-input input:focus{outline:0;border-color:var(--lw-orange-2);box-shadow:0 0 0 4px #ff8a0026}
+.lw4-eye{position:absolute;right:12px;display:grid;place-items:center;width:38px;height:38px;border:0;border-radius:10px;background:none;color:#3b4a6b;cursor:pointer}
+.lw4-eye svg{width:24px;height:24px}
+.lw4-eye:focus-visible{outline:3px solid #1e64d1}
+.lw4-options{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:20px 0 22px}
+.lw4-options label{display:flex;align-items:center;gap:12px;font-size:16px;font-weight:600;cursor:pointer}
+.lw4-options input{width:24px;height:24px;margin:0;accent-color:var(--lw-orange)}
+.lw4-options a{color:#e85d00;font-weight:800;font-size:16px;text-decoration:none}
+.lw4-options a:hover{text-decoration:underline}
+.lw4-submit{display:flex;align-items:center;justify-content:center;gap:14px;width:100%;height:60px;border:0;border-radius:999px;background:linear-gradient(100deg,#ff7a00,#ff8f1a 55%,#ff7a00);color:#fff;font:inherit;font-size:21px;font-weight:900;cursor:pointer;box-shadow:0 10px 24px #ff7a0055;transition:transform .15s,filter .15s}
+.lw4-submit svg{width:28px;height:28px;fill:none;stroke:#fff;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.lw4-submit:hover{filter:brightness(1.05);transform:translateY(-1px)}
+.lw4-submit:focus-visible{outline:3px solid #1e64d1;outline-offset:3px}
+.lw4-switch{margin:24px 0 0;padding-top:24px;border-top:1px solid #edf0f5;text-align:center;font-size:16px;font-weight:600}
+.lw4-switch a{margin-left:6px;color:#e85d00;font-weight:800;text-decoration:none}
+.lw4-switch a:hover{text-decoration:underline}
+.lw4-deco{display:block;width:calc(100% + 92px);height:110px;margin:14px -46px 0}
+@media(max-width:560px){
+ .lw4-main{padding:20px 12px;align-items:start}
+ .lw4-brand{width:92%;padding:16px 18px 22px;gap:12px;border-radius:28px 28px 0 0}
+ .lw4-brand img{width:60px;height:50px}.lw4-brand small{font-size:13px}
+ .lw4-card{padding:28px 22px 0;border-radius:28px}
+ .lw4-leaf{width:48px;height:48px}
+ .lw4-head p{font-size:15px}
+ .lw4-input input{height:52px;font-size:16px}
+ .lw4-options label,.lw4-options a{font-size:15px}
+ .lw4-deco{width:calc(100% + 44px);margin:12px -22px 0;height:90px}
+}
+@media(prefers-reduced-motion:reduce){.lw4-submit{transition:none}}

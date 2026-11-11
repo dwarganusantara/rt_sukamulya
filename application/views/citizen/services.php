@@ -1,0 +1,21 @@
+<?php
+$title='Layanan Surat Warga | '.($settings['site_name']??'Sukamulya');
+$citizen_letter_layout=TRUE; $citizen_shell=TRUE; $shell_active='letters';
+$this->load->view('site/header',compact('title','settings','menu','citizen_letter_layout','citizen_shell','shell_active'));
+$this->load->helper('official_icons');
+$tabs=array(array('all','Semua Layanan','grid','orange'),array('Kependudukan','Kependudukan','person','red'),array('Keterangan','Keterangan','doc','green'),array('Kegiatan','Kegiatan','calendar','blue'),array('Lainnya','Lainnya','mail','blue'));
+?>
+<link rel="stylesheet" href="<?= base_url('assets/citizen-dues-v3.css') ?>?v=<?= filemtime(FCPATH.'assets/citizen-dues-v3.css') ?>">
+<link rel="stylesheet" href="<?= base_url('assets/citizen-pages-v3.css') ?>?v=<?= filemtime(FCPATH.'assets/citizen-pages-v3.css') ?>">
+<link rel="stylesheet" href="<?= base_url('assets/citizen-red.css') ?>?v=<?= filemtime(FCPATH.'assets/citizen-red.css') ?>">
+<main class="letter-page cdx-page cpx-services crd-page"><div class="cdx-wrap">
+ <header class="cdx-top"><a class="cdx-back" href="<?= site_url('warga') ?>"><?= official_svg('back') ?>Kembali</a></header>
+ <section class="cdx-hero cpx-warm"><img src="<?= base_url('assets/mockup/citizen-services-hero.png') ?>" alt=""><span class="cdx-hero-icon soft"><?= official_svg('list') ?></span><div><h1>Layanan <b>Surat Warga</b></h1><p>Ajukan berbagai jenis surat secara online, mudah dan cepat.</p></div></section>
+ <div class="cpx-notice"><span><?= official_svg('alert') ?></span><div><strong>Ajukan surat sesuai kebutuhan Anda</strong><p>Pilih jenis surat, lengkapi formulir dan dokumen pendukung. Pengajuan akan diperiksa oleh pengurus RT.</p></div><a href="<?= site_url('kontak') ?>">Butuh bantuan? <?= official_svg('arrow-right') ?></a></div>
+ <?php if($this->session->flashdata('notice')): ?><div class="portal-success cdx-flash"><?= html_escape($this->session->flashdata('notice')) ?></div><?php endif; ?>
+ <div class="cpx-tools"><div class="letter-filters cpx-tabs"><?php foreach($tabs as $n=>$tab): ?><button type="button" class="<?= $n?'':'active' ?> tone-<?= $tab[3] ?>" data-category="<?= $tab[0] ?>"><span><?= official_svg($tab[2]) ?></span><?= $tab[1] ?></button><?php endforeach; ?></div><label class="cpx-search"><?= official_svg('search') ?><input id="letter-search" type="search" placeholder="Cari jenis surat..." aria-label="Cari jenis surat"></label></div>
+ <div class="letter-grid" id="letter-grid"><?php foreach($catalog as $key=>$letter): ?><article class="letter-card" data-category="<?= html_escape($letter[1]) ?>" data-search="<?= html_escape(mb_strtolower($letter[0].' '.$letter[2])) ?>"><div class="letter-card-body"><?php if(!empty($letter[4])): ?><img class="letter-icon letter-icon-custom" src="<?= base_url(html_escape($letter[4])) ?>" alt="" aria-hidden="true"><?php else: ?><span class="letter-icon letter-icon-<?= html_escape($key) ?>" role="img" aria-label="Ikon <?= html_escape($letter[0]) ?>"></span><?php endif; ?><div><span class="letter-category <?= strtolower($letter[1]) ?>"><?= html_escape($letter[1]) ?></span><h2><?= html_escape($letter[0]) ?></h2><p><?= html_escape($letter[2]) ?></p></div></div><a href="<?= site_url('warga/ajukan') ?>?jenis=<?= rawurlencode($key) ?>">Ajukan Pengajuan <span>&rarr;</span></a></article><?php endforeach; ?></div>
+ <p id="letter-no-results" class="citizen-empty" hidden>Tidak ada jenis surat yang cocok.</p>
+</div><?php $this->load->view('citizen/red_deco'); ?></main>
+<script>const filters=document.querySelectorAll('.letter-filters button'),cards=document.querySelectorAll('.letter-card'),search=document.getElementById('letter-search');let active='all';function filterLetters(){let q=search.value.trim().toLocaleLowerCase('id');let shown=0;cards.forEach(c=>{let yes=(active==='all'||c.dataset.category===active)&&c.dataset.search.includes(q);c.hidden=!yes;if(yes)shown++});document.getElementById('letter-no-results').hidden=shown>0}filters.forEach(b=>b.addEventListener('click',()=>{active=b.dataset.category;filters.forEach(x=>x.classList.toggle('active',x===b));filterLetters()}));search.addEventListener('input',filterLetters);</script>
+<?php $this->load->view('site/footer',array('settings'=>$settings,'citizen_shell'=>FALSE)); ?>

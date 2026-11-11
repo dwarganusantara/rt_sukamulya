@@ -1,0 +1,305 @@
+/* Dashboard Warga — RT Digital (header dua tingkat, banner, Menu Favorit, sarang lebah heksagon, footer ilustrasi).
+   Dipakai halaman warga/ (mandiri) dan pratinjau di Admin → Manajemen Fitur & Menu → Dashboard.
+   Semua teks/ikon dinamis (HTML/SVG); gambar banner & footer dapat diganti di Admin → Gambar Halaman. */
+:root{--dw-maroon:#8d0022;--dw-maroon-deep:#800019;--dw-red:#d9002c;--dw-red-2:#f41532;--dw-navy:#091c55;--dw-muted:#52617a;--dw-page:#fffcfd;--dw-font:"Nunito Sans","Nunito","Plus Jakarta Sans","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;--dw-script:"Segoe Script","Brush Script MT","Lucida Handwriting",cursive}
+
+/* ---------- Halaman ---------- */
+body.dwb{margin:0;min-height:100vh;display:flex;flex-direction:column;background:radial-gradient(60% 40% at 0 30%,#fff0f4 0,transparent 70%),radial-gradient(50% 40% at 100% 45%,#fff3f6 0,transparent 70%),var(--dw-page);color:var(--dw-navy);font:16px/1.45 var(--dw-font);overflow-x:hidden}
+.dwb *,.dwb *:before,.dwb *:after,.dwi-preview *{box-sizing:border-box}
+.dwb a{color:inherit;text-decoration:none}
+.dwb-wrap{width:min(1480px,calc(100% - 48px));margin-inline:auto}
+.dwb-skip{position:absolute;left:12px;top:-60px;z-index:50;padding:10px 14px;border-radius:10px;background:#fff;color:var(--dw-maroon);font-weight:800}.dwb-skip:focus{top:12px}
+.dwb-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.dwb :focus-visible{outline:3px solid #ffb703;outline-offset:3px;border-radius:8px}
+.dwb-notice{margin:14px 0 0;padding:12px 16px;border:1px solid #bfe8cf;border-radius:14px;background:#effaf3;color:#0a5c33;font-weight:700}
+.dui-line{flex:none;display:block}
+
+/* ---------- Header: baris identitas ---------- */
+.dwh{position:relative;z-index:5;color:#fff;background:linear-gradient(110deg,#92001e 0%,#b9002b 48%,#87001d 100%);box-shadow:0 6px 18px #5a002333;isolation:isolate}
+.dwh:after{content:"";position:absolute;inset:0 0 auto;height:76px;z-index:-1;background:linear-gradient(180deg,#ffffff1c,transparent 60%);pointer-events:none}
+.dwh-ribbon{position:absolute;right:0;top:0;width:min(60vw,900px);height:76px;z-index:-1;pointer-events:none}
+.dwh-top{position:relative;min-height:76px;display:flex;align-items:center;gap:0}
+.dwh-brand{display:flex;align-items:center;gap:12px;min-width:0}
+.dwh-brand img{width:52px;height:52px;flex:none;object-fit:contain;padding:4px;border-radius:14px;background:linear-gradient(160deg,#fff,#ffeef2);box-shadow:0 4px 12px #0003,inset 0 -2px 0 #0000000d}
+.dwh-brand span{display:grid;line-height:1.05}.dwh-brand b{font-size:23px;font-weight:800;letter-spacing:.1px;white-space:nowrap;text-shadow:0 1px 2px #00000033}
+.dwh-vsep{width:2px;height:45px;flex:none;border-radius:2px;background:#ffffffa6}
+.dwh-vsep-brand{margin:0 28px}
+/* Identitas RT: chip lokasi kaca (tidak kaku) */
+.dwh-loc{display:flex;align-items:center;gap:12px;margin:0;padding:6px 18px 6px 6px;border:1px solid #ffffff47;border-radius:18px;background:linear-gradient(135deg,#ffffff2b,#ffffff0d);box-shadow:inset 0 1px 0 #ffffff40,0 6px 16px #4a00122e;backdrop-filter:blur(3px)}
+.dwh-loc-ic{width:40px;height:40px;flex:none;display:grid;place-items:center;border-radius:12px;background:linear-gradient(150deg,#fff,#ffe1e8);color:var(--dw-red);box-shadow:0 3px 8px #0000002e}
+.dwh-loc-tx{display:grid;line-height:1.1}
+.dwh-loc-tx b{font-size:21px;font-weight:900;letter-spacing:.4px;white-space:nowrap}
+.dwh-loc-tx span{display:flex;align-items:center;gap:6px;color:#ffe3ea;font-size:15px;font-weight:700;white-space:nowrap}
+.dwh-loc-tx span:before{content:"";width:6px;height:6px;flex:none;border-radius:50%;background:#7dff9a;box-shadow:0 0 0 3px #7dff9a33}
+.dwh-actions{margin-left:auto;display:flex;align-items:center;gap:18px}
+.dwh-bell{position:relative;display:grid;place-items:center;width:48px;height:48px;border-radius:50%;color:#fff;transition:background .15s}.dwh-bell:hover{background:#ffffff1f}
+.dwh-bell b{position:absolute;right:3px;top:3px;min-width:22px;height:22px;display:grid;place-items:center;padding:0 6px;border:2px solid #fff;border-radius:99px;background:#f41532;color:#fff;font-size:12px;font-weight:900;line-height:1}
+.dwh-actions .dwh-vsep{height:40px;background:#ffffff73}
+.dwh-user{position:relative}
+.dwh-user>summary{display:flex;align-items:center;gap:12px;min-height:56px;padding:2px 8px 2px 2px;border-radius:99px;cursor:pointer;list-style:none}.dwh-user>summary::-webkit-details-marker{display:none}
+.dwh-user>summary:hover{background:#ffffff1a}
+.dwh-user img{width:52px;height:52px;flex:none;border:3px solid #fff;border-radius:50%;object-fit:cover;background:#fff;box-shadow:0 3px 8px #0000003d}
+.dwh-user summary span{display:grid;line-height:1.2}.dwh-user summary b{font-size:20px;font-weight:800;white-space:nowrap}.dwh-user summary small{color:#ffe4ea;font-size:13px;font-weight:600;white-space:nowrap}
+.dwh-user[open] summary .dui-line{transform:rotate(180deg)}
+.dwh-menu{position:absolute;right:0;top:calc(100% + 8px);z-index:30;min-width:220px;padding:8px;border-radius:16px;background:#fff;color:var(--dw-navy);box-shadow:0 18px 40px #3a001740}
+.dwh-menu a{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 12px;border-radius:10px;font-weight:800}.dwh-menu a:hover{background:#fff1f4;color:var(--dw-maroon)}.dwh-menu a.out{color:#c8102e}
+.dwh-portal{display:inline-flex;align-items:center;gap:8px;min-height:46px;padding:0 22px;border-radius:999px;background:#fff;color:var(--dw-red)!important;font-size:16px;font-weight:800;box-shadow:0 6px 14px #4a00122e;white-space:nowrap}.dwh-portal:hover{background:#fff1f4}
+@media(max-width:767px){.dwh-portal{min-height:40px;padding:0 14px;font-size:14px}}
+.dwh-guest-bell{position:relative;width:48px;height:48px;flex:none;display:grid;place-items:center;border-radius:50%;background:#fff;color:var(--dw-red)!important;box-shadow:0 6px 14px #4a00122e}
+.dwh-guest-bell:after{content:"";position:absolute;top:9px;right:10px;width:9px;height:9px;border:2px solid #fff;border-radius:50%;background:#f41532}
+.dwh-guest-bell:hover{background:#fff1f4}
+@media(max-width:767px){.dwh-guest-bell{width:40px;height:40px}}
+.dwh-burger{display:none;width:46px;height:46px;place-items:center;padding:0;border:0;border-radius:12px;background:#ffffff26;color:#fff;cursor:pointer}
+
+/* ---------- Header: baris navigasi ---------- */
+.dwh-nav{position:relative;border-top:1px solid #ffffff38;background:linear-gradient(90deg,#a3002a,#c4002e 50%,#a8002b);box-shadow:inset 0 1px 0 #ffffff1f}
+.dwh-nav .dwb-wrap{display:flex;align-items:center;justify-content:space-between;gap:6px;min-height:56px}
+.dwh-nav a{position:relative;flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;gap:10px;min-height:44px;padding:0 12px;border-radius:999px;color:#fff;font-size:16px;font-weight:800;white-space:nowrap;transition:background .15s}
+.dwh-nav a+a:before{content:"";position:absolute;left:-4px;top:12px;bottom:12px;width:2px;border-radius:2px;background:#ffffff4d}
+.dwh-nav a:hover{background:#ffffff1f}
+.dwh-nav a.on{flex:0 0 auto;padding:10px 22px;background:#fff;color:var(--dw-red);box-shadow:0 4px 12px #4a001233}.dwh-nav a.on+a:before{display:none}
+.dwh-nav .dui-line{width:24px;height:24px}
+
+/* ---------- Banner ---------- */
+.dwb-main{flex:1;padding:12px 0 8px}
+.dwhero{position:relative;height:clamp(245px,17.5vw,272px);margin:0 0 16px;border-radius:30px;background:#fff;box-shadow:0 12px 26px #5a002324;overflow:hidden;isolation:isolate}
+.dwhero-art{position:absolute;inset:0 0 0 auto;width:72%;height:100%;object-fit:cover;object-position:60% 40%;z-index:-2}
+.dwhero-art.custom{width:100%}
+.dwhero:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#fff 0,#fff 26%,#ffffffd9 34%,#ffffff00 46%)}
+.dwhero-copy{position:relative;height:100%;max-width:540px;display:flex;flex-direction:column;justify-content:center;padding:10px 0 28px 5.5%}
+.dwhero-hi{margin:0;color:#e0102f;font:700 clamp(24px,2.2vw,36px)/1.1 var(--dw-script);transform:rotate(-2deg);transform-origin:left}
+.dwhero h1{margin:4px 0 0;color:var(--dw-navy);font-size:clamp(30px,3vw,48px);font-weight:900;line-height:1.02;letter-spacing:-.5px;overflow-wrap:anywhere}
+.dwhero-sub{margin:4px 0 10px;color:var(--dw-navy);font-size:clamp(16px,1.4vw,22px);font-weight:800}
+.dwhero-chip{align-self:flex-start;margin:0 0 10px;padding:6px 22px;border:2px solid #ffffffb3;border-radius:99px;background:linear-gradient(90deg,#d5002b,#f0183a);color:#fff;font-size:clamp(15px,1.3vw,21px);font-weight:900;box-shadow:0 5px 12px #c8102e47}
+.dwhero-slogan{margin:0;color:#173a8c;font-size:clamp(13px,1.05vw,17px);font-style:italic;font-weight:800;line-height:1.3}
+.dwhero-wave{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:16%;min-height:30px}
+
+/* ---------- Menu Favorit ---------- */
+.dwf{display:flex;align-items:center;gap:26px;width:min(1240px,100%);min-height:96px;margin:0 auto 14px;padding:10px 32px;border:2px solid #f3c3d0;border-radius:26px;background:linear-gradient(180deg,#fff 0,#fff5f8 100%);box-shadow:0 8px 22px #5d001e17}
+.dwf-title{display:flex;align-items:center;gap:10px;flex:none;margin:0;color:var(--dw-navy);font-size:24px;font-weight:900;white-space:nowrap}
+.dwf-star{color:#e0102f;font-size:30px;line-height:1}
+.dwf-sep{width:2px;align-self:stretch;flex:none;margin:6px 0;background:#ecd0da}
+.dwf-list{flex:1;min-width:0;display:flex;justify-content:center;gap:clamp(12px,3.4vw,64px)}
+.dwf-item{display:grid;justify-items:center;gap:4px;min-width:84px;max-width:120px;text-align:center;transition:transform .15s}
+.dwf-item:hover{transform:translateY(-3px)}
+.dwf-hex{position:relative;width:62px;height:70px;display:grid;place-items:center;filter:drop-shadow(0 6px 7px #2a0b2433)}
+.dwf-hex .dwf-bg{position:absolute;inset:0;width:100%;height:100%}
+.dwf-hex.fav-teal .dwf-bg path{fill:#00b9bc}.dwf-hex.fav-orange .dwf-bg path{fill:#ff941a}.dwf-hex.fav-purple .dwf-bg path{fill:#8236e6}
+.dwf-hex>.off-svg{position:relative;width:30px;height:30px;color:#fff;fill:#fff}
+.dwf-item b{color:var(--dw-navy);font-size:16px;font-weight:900;line-height:1.1}
+.dwf-empty{margin:0;color:var(--dw-muted);font-weight:700}
+.dwb .dwf-edit,.dwf-dialog .dwf-edit{display:inline-flex;align-items:center;gap:10px;flex:none;min-height:50px;padding:0 28px;border:0;border-radius:99px;background:linear-gradient(90deg,#a9002a,#e3062f);color:#fff;font:900 18px/1 var(--dw-font);cursor:pointer;box-shadow:0 8px 16px #c8102e40;transition:filter .15s,transform .15s}
+.dwf-edit:hover{filter:brightness(1.07);transform:translateY(-1px)}
+.dwf-dialog{width:min(560px,calc(100% - 24px));max-height:calc(100vh - 32px);padding:0;border:0;border-radius:22px;color:var(--dw-navy);font-family:var(--dw-font);box-shadow:0 30px 60px #3a001750}
+.dwf-dialog::backdrop{background:#2a00102e;backdrop-filter:blur(2px)}
+.dwf-dialog form{display:flex;flex-direction:column;max-height:calc(100vh - 32px)}
+.dwf-dialog header{display:flex;justify-content:space-between;gap:12px;padding:18px 20px 10px;background:linear-gradient(90deg,#fff1f4,#fff)}
+.dwf-dialog h2{margin:0;font-size:21px;font-weight:900}.dwf-dialog header p{margin:3px 0 0;color:var(--dw-muted);font-size:14px}
+.dwf-x{width:40px;height:40px;display:grid;place-items:center;flex:none;padding:0;border:0;border-radius:12px;background:#fff;color:var(--dw-navy);cursor:pointer}
+.dwf-count{margin:0;padding:6px 20px;color:var(--dw-maroon);font-weight:800}
+.dwi-picker-list{flex:1;overflow:auto;padding:4px 14px 10px}
+.dwi-picker-row{display:flex;align-items:center;gap:8px;padding:6px;border-bottom:1px solid #f4e1e8}
+.dwi-picker-row label{flex:1;display:flex;align-items:center;gap:10px;min-height:44px;cursor:pointer;font-weight:800}
+.dwi-picker-row input{width:20px;height:20px;accent-color:#c8102e}
+.dwi-picker-row button{width:38px;height:38px;flex:none;border:1px solid #ecd3dc;border-radius:10px;background:#fff;color:var(--dw-navy);font-size:16px;cursor:pointer}
+.dwf-mini{width:34px;height:34px;flex:none;display:grid}
+.dwf-mini .dui-icon,.dwf-mini img{width:34px;height:34px}
+.dwf-dialog footer{display:flex;justify-content:flex-end;gap:10px;padding:14px 20px;border-top:1px solid #f4e1e8}
+.dwf-cancel{min-height:50px;padding:0 22px;border:1px solid #e4cbd4;border-radius:99px;background:#fff;color:var(--dw-navy);font:800 16px var(--dw-font);cursor:pointer}
+
+/* ---------- Heksagon (tegak, ukuran sama) ---------- */
+.dwi-defs{position:absolute;width:0;height:0;overflow:hidden}
+.dwi-tile{position:relative;display:block;aspect-ratio:200/230;color:var(--dw-navy);text-align:center;filter:drop-shadow(0 9px 10px #44193924);transition:transform .18s,filter .18s}
+.dwi-tile:hover{transform:translateY(-5px) scale(1.035);filter:drop-shadow(0 16px 18px #44193938);z-index:2}
+.dwi-tile:focus-visible{outline:none;z-index:2}.dwi-tile:focus-visible .dwi-hex-edge{stroke:#ffb703;stroke-width:8}
+.dwi-hex{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.dwi-hex-edge{fill:#f2c6d4}.dwi-hex-ring{fill:#ffffffeb}.dwi-hex-gloss{fill:url(#dwi-gloss);opacity:.85}
+.dwi-icon{position:absolute;left:50%;top:19%;width:48%;height:40%;transform:translateX(-50%);display:grid;place-items:center}
+.dwi-icon .dui-icon,.dwi-icon img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 4px 4px #0000002e)}
+.dwi-tile strong{position:absolute;left:11%;right:11%;top:62%;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-size:clamp(13px,1.15vw,19px);font-weight:900;line-height:1.1;text-wrap:balance;overflow-wrap:anywhere}
+.tone-maroon .dwi-hex-face{fill:url(#dwi-g-maroon)}.tone-maroon .dwi-hex-edge{fill:#a80036}
+.tone-mint .dwi-hex-face{fill:url(#dwi-g-mint)}.tone-mint .dwi-hex-edge{fill:#8fe5dd}
+.tone-orange .dwi-hex-face{fill:url(#dwi-g-orange)}.tone-orange .dwi-hex-edge{fill:#ff9a1f}
+.tone-lavender .dwi-hex-face{fill:url(#dwi-g-lavender)}.tone-lavender .dwi-hex-edge{fill:#cdb6ff}
+.tone-navy .dwi-hex-face{fill:url(#dwi-g-navy)}.tone-navy .dwi-hex-edge{fill:#0b3f8f}
+.tone-cream .dwi-hex-face{fill:url(#dwi-g-cream)}.tone-cream .dwi-hex-edge{fill:#ffd4b3}
+.tone-cyan .dwi-hex-face{fill:url(#dwi-g-cyan)}.tone-cyan .dwi-hex-edge{fill:#84e1da}
+.tone-peach .dwi-hex-face{fill:url(#dwi-g-peach)}.tone-peach .dwi-hex-edge{fill:#ffc39a}
+.tone-sky .dwi-hex-face{fill:url(#dwi-g-sky)}.tone-sky .dwi-hex-edge{fill:#a9cdfa}
+.tone-rose .dwi-hex-face{fill:url(#dwi-g-rose)}.tone-rose .dwi-hex-edge{fill:#ffb3c7}
+.tone-lilac .dwi-hex-face{fill:url(#dwi-g-lilac)}.tone-lilac .dwi-hex-edge{fill:#cdb6ff}
+.tone-maroon strong,.tone-orange strong,.tone-navy strong{color:#fff;text-shadow:0 2px 3px #00000040}
+.dwi-empty{grid-column:1/-1;margin:10px 0;padding:18px;border-radius:16px;background:#fff;color:var(--dw-muted);font-weight:700;text-align:center}
+.dwi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;margin:0}
+
+/* Sarang lebah: semua heksagon sama besar; baris berselang-seling setengah heksagon dan saling mengunci.
+   Grid "setengah kolom": tiap heksagon = 2 kolom; baris genap bergeser 1 kolom.
+   margin-bottom negatif = 25% tinggi heksagon (tinggi = lebar × 1.15) → baris berikut masuk ke celah. */
+.dwi-honey{--g:10px;display:grid;column-gap:var(--g);row-gap:0;align-items:start;margin:26px auto 0;padding-bottom:calc(var(--g) + 4px)}
+.dwi-honey>.dwi-tile{grid-column-end:span 2;margin-bottom:calc(-28.87% + var(--g) * .87)}
+@media(min-width:1180px){
+ /* Lebar sama dengan bar Menu Favorit (1240px) agar sarang lebah sejajar & tepat di tengah. */
+ .dwi-honey{width:min(1240px,100%);margin-top:38px;grid-template-columns:repeat(13,minmax(0,1fr));padding-bottom:calc((min(1240px,100%) - 12 * var(--g)) / 6.5 * .2887 + 24px)}
+ .dwi-honey>.dwi-tile:nth-child(12n+1){grid-column-start:1}.dwi-honey>.dwi-tile:nth-child(12n+7){grid-column-start:2}
+}
+@media(min-width:768px) and (max-width:1179px){
+ .dwi-honey{grid-template-columns:repeat(9,minmax(0,1fr));padding-bottom:calc((100% - 8 * var(--g)) / 4.5 * .2887 + 16px)}
+ .dwi-honey>.dwi-tile:nth-child(8n+1){grid-column-start:1}.dwi-honey>.dwi-tile:nth-child(8n+5){grid-column-start:2}
+}
+@media(min-width:520px) and (max-width:767px){
+ .dwi-honey{--g:8px;grid-template-columns:repeat(7,minmax(0,1fr));padding-bottom:calc((100% - 6 * var(--g)) / 3.5 * .2887 + 14px)}
+ .dwi-honey>.dwi-tile:nth-child(6n+1){grid-column-start:1}.dwi-honey>.dwi-tile:nth-child(6n+4){grid-column-start:2}
+}
+@media(max-width:519px){
+ .dwi-honey{--g:8px;grid-template-columns:repeat(5,minmax(0,1fr));padding-bottom:calc((100% - 4 * var(--g)) / 2.5 * .2887 + 12px)}
+ .dwi-honey>.dwi-tile:nth-child(4n+1){grid-column-start:1}.dwi-honey>.dwi-tile:nth-child(4n+3){grid-column-start:2}
+ .dwi-honey .dwi-tile strong{font-size:13px}
+}
+
+/* ---------- Footer ilustrasi ---------- */
+.dwfoot{position:relative;margin-top:auto;min-height:172px;color:#fff;overflow:hidden;isolation:isolate}
+.dwfoot:before{content:"";position:absolute;inset:0;z-index:-3;background:linear-gradient(180deg,transparent 0,#fff3f6 55%)}
+.dwfoot-art{position:absolute;left:0;right:0;bottom:44px;width:100%;height:150px;z-index:-2;object-fit:cover;object-position:center bottom}
+.dwfoot-wave{position:absolute;left:0;right:0;bottom:0;width:100%;height:96px;z-index:-1}
+.dwfoot-inner{position:relative;min-height:172px;display:flex;align-items:flex-end;justify-content:center;gap:0;padding:0 0 13px;font-size:16px;text-shadow:0 1px 3px #3c000038}
+.dwfoot-inner>span{display:flex;align-items:center;gap:10px;padding:0 28px;line-height:1.3}
+.dwfoot-inner>span+span{border-left:2px solid #ffffff73}
+.dwfoot-brand img{width:34px;height:34px;object-fit:contain;padding:2px;border-radius:8px;background:#fff}
+.dwfoot-brand b{font-weight:800}.dwfoot-rt{font-weight:700}.dwfoot-slogan i{font-weight:600}
+
+/* ---------- Pratinjau admin ---------- */
+.dwi-preview{padding:12px;border-radius:16px;background:var(--dw-page)}
+.dwi-preview .dwi-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
+.dwi-preview .dwi-tile strong{font-size:13px}
+.dwi-preview.is-mobile{max-width:390px;margin-inline:auto}
+.dwi-preview.is-mobile .dwi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+
+/* ---------- Responsif ---------- */
+@media(max-width:1439px){.dwh-brand b{font-size:20px}.dwh-vsep-brand{margin:0 18px}.dwh-loc-tx b{font-size:18px}.dwh-loc-tx span{font-size:13.5px}.dwh-user summary b{font-size:18px}.dwh-nav a{font-size:15px;padding:0 8px;gap:8px}.dwh-nav a.on{padding:10px 18px}}
+@media(max-width:1180px){.dwh-nav .dui-line{width:20px;height:20px}.dwh-nav a{font-size:14px}.dwfoot-inner{font-size:14px}.dwfoot-inner>span{padding:0 16px}}
+@media(max-width:1023px){
+ .dwh-top{min-height:68px}
+ .dwh-vsep-brand,.dwh-actions .dwh-vsep{display:none}
+ .dwh-loc{margin-left:14px;padding:4px 12px 4px 4px;border-radius:14px}.dwh-loc-ic{width:32px;height:32px;border-radius:10px}
+ .dwh-user summary span{display:none}.dwh-user>summary{padding:2px}
+ .dwh-burger{display:grid}
+ .dwh-nav{display:none}.dwh-nav.open{display:block}
+ .dwh-nav .dwb-wrap{flex-direction:column;align-items:stretch;padding:8px 0 12px}
+ .dwh-nav a{justify-content:flex-start;flex:none;padding:0 16px;font-size:16px}.dwh-nav a+a:before{display:none}.dwh-nav a.on{padding:10px 16px}
+ .dwhero{height:auto;min-height:300px}
+ .dwhero-art{width:100%;object-position:70% center;opacity:.95}
+ .dwhero:before{background:linear-gradient(90deg,#fff 0,#ffffffeb 48%,#ffffff40 80%)}
+ .dwf{flex-wrap:wrap;justify-content:center;gap:14px;padding:16px}
+ .dwf-sep{display:none}.dwf-title{width:100%;justify-content:center}
+ .dwf-list{flex:1 1 100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));justify-items:center}
+ .dwfoot,.dwfoot-inner{min-height:230px}
+ .dwfoot-art{bottom:104px;height:110px}
+ .dwfoot-wave{height:170px}
+ .dwfoot-inner{flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;text-align:center;padding-bottom:14px}
+ .dwfoot-inner>span{padding:0}.dwfoot-inner>span+span{border:0}
+}
+@media(max-width:767px){
+ .dwb-wrap{width:calc(100% - 24px)}
+ .dwh-brand img{width:42px;height:42px;border-radius:12px}.dwh-brand b{font-size:15px}
+ .dwh-brand span{display:none}.dwh-loc{margin-left:10px;padding:4px 12px;min-width:0}.dwh-loc-ic{display:none}.dwh-loc-tx b{font-size:15px}.dwh-loc-tx span{font-size:12px}
+ .dwh-actions{gap:6px}.dwh-bell{width:44px;height:44px}.dwh-bell .dui-line{width:24px;height:24px}.dwh-user img{width:44px;height:44px;border-width:2px}.dwh-user>summary{min-height:44px}.dwh-user>summary>.dui-line{display:none}
+ .dwhero{min-height:0;border-radius:22px}
+ .dwhero-art{position:relative;display:block;width:100%;height:auto;aspect-ratio:16/8;object-position:62% center}
+ .dwhero:before{display:none}
+ .dwhero-copy{max-width:none;padding:16px 18px 34px}
+ .dwhero-chip{font-size:15px;padding:5px 16px}
+ .dwf-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 10px}
+ .dwb .dwf-edit{width:100%;justify-content:center}
+ .dwfoot-inner{font-size:13px}
+}
+@media(prefers-reduced-motion:reduce){.dwi-tile,.dwf-item,.dwf-edit{transition:none}.dwi-tile:hover,.dwf-item:hover{transform:none}}
+
+@media(max-width:767px){.dwfoot-art{object-position:left bottom}}
+
+/* ---------- Banner "scene" (ilustrasi bawaan v2) ----------
+   Gambar 1403×430 tanpa tulisan; papan gapura & kartu kutipan diisi teks dari Pengaturan.
+   Posisi overlay dalam % terhadap .dwhero-stage (rasio gambar tetap), ukuran huruf dalam cqw. */
+.dwhero--scene .dwhero-scene{position:absolute;inset:0;z-index:-2;overflow:hidden}
+.dwhero-stage{position:absolute;top:0;right:0;height:100%;aspect-ratio:1403/430;container-type:inline-size;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14%);mask-image:linear-gradient(90deg,transparent 0,#000 14%)}
+.dwhero-stage-art{position:absolute;inset:0;display:block;width:100%;height:100%}
+.dwhero-gate{position:absolute;left:32.6%;top:20.9%;width:16.9%;height:14%;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.15cqw;color:#0b1f63;text-align:center;text-transform:uppercase;line-height:1.02}
+.dwhero-gate b,.dwhero-gate span{display:block;max-width:100%;overflow:hidden;white-space:nowrap;font-weight:900;letter-spacing:.02em}
+.dwhero-gate b{font-size:2.3cqw}.dwhero-gate span{font-size:2cqw}
+.dwhero-quote{position:absolute;left:73.3%;top:38%;width:22.7%;height:35%;margin:0;display:flex;align-items:center;padding:0 4.5% 0 2.5%;color:#0d2466;transform:rotate(-5deg)}
+.dwhero-quote p{margin:0;font-size:1.72cqw;font-weight:800;line-height:1.32;overflow-wrap:anywhere}
+
+/* ---------- Footer banner (ilustrasi bawaan v2) ---------- */
+.dwfoot2{margin-top:auto;color:#fff;background:#7a0010}
+/* Tinggi proporsional: hanya jendela y 250–660 dari gambar 2172×724 yang ditampilkan
+   (langit kosong & pola paling bawah dipotong) → ±19% lebar layar, rumah/masjid/gazebo & pita tetap utuh. */
+.dwfoot2-stage{position:relative;aspect-ratio:2172/410;container-type:inline-size;overflow:hidden}
+.dwfoot2-art{position:absolute;left:0;top:-60.98%;display:block;width:100%;height:auto}
+.dwb .dwfoot2-band{position:absolute;left:14.6%;right:11%;top:59.8%;height:35.4%;width:auto;margin:0;display:flex;justify-content:space-between;align-items:center;text-shadow:0 1px 3px #3c000059}
+.dwfoot2-band>span{flex:none;display:flex;align-items:center;gap:1.4cqw;min-width:0;padding:0 2.6cqw;white-space:nowrap}
+.dwfoot2-band>.dwfoot2-slogan{flex:0 1 auto;padding-right:0}
+.dwfoot2-band>span+span{border-left:2px solid #f5c55a99;height:62%}
+.dwfoot2-brand{padding-left:0!important}
+.dwfoot2-brand img{width:4.6cqw;height:4.6cqw;flex:none;object-fit:contain;padding:.35cqw;border-radius:1cqw;background:#fff;box-shadow:0 .3cqw .8cqw #0000004d}
+.dwfoot2-brand b{position:relative;font-size:1.85cqw;font-weight:800;line-height:1.12;padding-bottom:.7cqw}
+.dwfoot2-brand b:after{content:"";position:absolute;left:0;right:-6%;bottom:0;height:.22cqw;border-radius:99px;background:linear-gradient(90deg,#f6c14200,#f6c142 25%,#ffe08a 60%,#f6c14200)}
+.dwfoot2-band .dui-line{width:2.7cqw;height:2.7cqw;color:#f6c142;filter:drop-shadow(0 .15cqw .3cqw #0000004d)}
+.dwfoot2-rt b{font-size:1.66cqw;font-weight:800;line-height:1.2}
+.dwfoot2-slogan i{font-size:1.4cqw;font-weight:600;line-height:1.35}
+.dwfoot2-slogan em{color:#ffd43b;font-style:italic}
+@media(max-width:900px){
+ .dwfoot2-stage{aspect-ratio:auto;container-type:normal;overflow:visible}
+ .dwfoot2-art{position:relative;top:auto;height:auto;aspect-ratio:2172/470;object-fit:cover;object-position:center 30%}
+ .dwb .dwfoot2-band{position:static;height:auto;width:auto;display:flex;flex-direction:column;align-items:center;gap:10px;padding:14px 16px 18px;background:linear-gradient(180deg,#93011a,#7a0010);text-align:center}
+ .dwfoot2-band>span{gap:10px;padding:0!important;justify-content:center;white-space:normal}
+ .dwfoot2-band>span+span{border:0;height:auto}
+ .dwfoot2-brand img{width:38px;height:38px;padding:3px;border-radius:9px}
+ .dwfoot2-brand b{font-size:17px;padding-bottom:6px}.dwfoot2-brand b br,.dwfoot2-rt b br{display:none}
+ .dwfoot2-brand b:after{height:2px;right:0}
+ .dwfoot2-band .dui-line{width:20px;height:20px}
+ .dwfoot2-rt b{font-size:15px}
+ .dwfoot2-slogan i{font-size:14px}
+}
+/* Tombol Chat Admin/Petugas (site/chat_widget): ringkas berupa ikon bulat di layar kecil agar tidak menutupi menu. */
+.dwb .live-chat-float{width:auto;min-width:252px;white-space:nowrap}
+@media(max-width:600px){
+ .dwb .live-chat-float{min-width:0}
+ .dwb .live-chat-float{right:14px;bottom:14px;width:60px;height:60px;min-height:0;padding:0;display:grid;place-items:center;border-radius:50%;gap:0}
+ .dwb .live-chat-float>span:last-child{display:none}
+}
+@media(max-width:1023px){
+ .dwhero.dwhero--scene{height:auto;min-height:0}
+ .dwhero--scene:before{display:none}
+ .dwhero--scene .dwhero-scene{position:relative;inset:auto}
+ .dwhero--scene .dwhero-stage{position:relative;width:100%;height:auto;-webkit-mask-image:none;mask-image:none}
+ .dwhero--scene .dwhero-copy{max-width:none;padding:16px 24px 40px}
+}
+@media(max-width:767px){
+ .dwhero--scene .dwhero-scene{aspect-ratio:2/1}
+ .dwhero--scene .dwhero-stage{position:absolute;top:0;left:-1%;right:auto;width:auto;height:100%}
+ .dwhero--scene .dwhero-copy{padding:16px 18px 34px}
+}
+/* Layar kecil: tombol Portal Warga ringkas agar tidak terpotong */
+@media(max-width:480px){.dwh-portal{min-height:38px;padding:0 12px;font-size:13px;gap:6px}.dwh-portal .dui-line{width:16px;height:16px}.dwh-guest-bell{width:38px;height:38px}.dwh-actions{gap:6px}}
+@media(max-width:480px){.dwh-portal{width:38px;padding:0;justify-content:center;border-radius:50%}.dwh-portal span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.dwh-portal .dui-line{width:20px;height:20px}}
+
+/* ===== Dashboard warga — tampilan HP (≤600px): heksagon sejajar 3 kolom (tanpa zig-zag), tanpa ruang kosong. Web tetap sarang lebah. ===== */
+@media (max-width:600px){
+ .dwi-honey{--g:8px;width:100%;margin-top:18px;grid-template-columns:repeat(3,minmax(0,1fr))!important;column-gap:10px;row-gap:12px;padding-bottom:12px!important}
+ .dwi-honey>.dwi-tile{grid-column:auto!important;grid-column-end:auto!important;margin-bottom:0!important}
+ .dwi-honey .dwi-tile strong{font-size:12px!important}
+}
+/* HP: Menu Favorit tidak ditampilkan; heksagon 4 kolom (3 baris) agar tidak banyak scroll */
+@media (max-width:600px){
+ .dwf{display:none!important}
+ .dwi-honey{grid-template-columns:repeat(4,minmax(0,1fr))!important;column-gap:6px;row-gap:8px;margin-top:8px}
+ .dwi-honey .dwi-tile strong{font-size:10.5px!important;left:8%;right:8%}
+}
+/* Sambutan dashboard HP: seluruh teks dan identitas RT rata tengah. */
+@media(max-width:600px){
+ .dwb .dwhero .dwhero-copy{align-items:center;max-width:none;padding:20px 18px 42px;text-align:center;gap:0}
+ .dwb .dwhero-hi{align-self:center;transform:none;transform-origin:center;line-height:1.25}
+ .dwb .dwhero h1{max-width:100%;margin:8px 0 0;font-size:clamp(27px,7.7vw,36px);line-height:1.15;text-align:center}
+ .dwb .dwhero-sub{margin:4px 0 14px;line-height:1.4}
+ .dwb .dwhero-chip{align-self:center;max-width:100%;box-sizing:border-box;margin:0 0 14px;padding:7px 16px;white-space:normal;line-height:1.4;text-align:center}
+ .dwb .dwhero-slogan{max-width:100%;margin:0;text-align:center;line-height:1.5}
+}

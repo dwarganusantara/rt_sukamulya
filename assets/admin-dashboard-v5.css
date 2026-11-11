@@ -1,0 +1,47 @@
+/* Dashboard v5 — sesuai mockup terbaru. Foto header tidak pernah terpotong. */
+.dbh-hero.dbh-hero-v5{min-height:190px;height:190px;padding:22px 30px;background:linear-gradient(100deg,#fff6ec 0,#fff3e6 55%,#ffeedd 100%)!important;overflow:hidden}
+.dbh-hero.dbh-hero-v5:before,.dbh-hero.dbh-hero-v5:after{display:none}
+/* Gambar setinggi hero, lebar mengikuti rasio asli (tanpa crop), tepi kiri memudar ke krem. */
+.dbh-hero-img{position:absolute;top:0;right:0;height:100%;width:auto;max-width:none;object-fit:contain;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 18%);mask-image:linear-gradient(90deg,transparent 0,#000 18%);pointer-events:none;user-select:none}
+.dbh-hero-v5 .dbh-hero-copy{max-width:min(560px,52%)}
+.dbh-hero-v5 h1{font-size:32px;white-space:normal}
+/* Baris sesuai mockup */
+.dbh .dbh-row.dbh-row-a{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);gap:16px;align-items:stretch}
+.dbh .dbh-row.dbh-row-b{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.2fr);gap:16px;align-items:stretch}
+.dbh .dbh-row.dbh-row-a>:only-child,.dbh .dbh-row.dbh-row-b>:only-child{grid-column:1/-1}
+.dbh .dbh-row:empty{display:none}
+/* Iuran: donut + koin + legenda bertumpuk */
+.dbh-c-dues .dbh-dues{display:flex;align-items:center;gap:28px}
+.dbh-donut-wrap{position:relative;flex:0 0 auto;width:170px;height:170px}
+.dbh-donut-wrap .dbh-donut{width:170px;height:170px}
+.dbh-coins{position:absolute;left:-22px;bottom:-6px;width:78px;height:62px}
+.dbh-c-dues .dbh-dues ul{flex:1;min-width:0;list-style:none;margin:0;padding:0}
+.dbh-c-dues .dbh-dues li{display:flex;align-items:flex-start;gap:12px;padding:8px 0;border-bottom:1px solid #eef0f5}
+.dbh-c-dues .dbh-dues li:last-child{border-bottom:0}
+.dbh-c-dues .dbh-dues li .dot{margin-top:5px;flex-shrink:0}
+.dbh-c-dues .dbh-dues li span{display:flex;flex-direction:column;font-size:14px;color:#1f3557}
+.dbh-c-dues .dbh-dues li b{font-size:16px;color:#0c214b}
+/* Monitoring: 6 kartu sebaris */
+.dbh-c-ops .dbh-ops{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+/* Peringatan backup dengan tombol Backup Sekarang */
+.dbh-backup.dbh-backup-v5{display:flex;align-items:center;gap:14px;margin:14px 0 0;padding:10px 12px 10px 16px;border:1px solid #f6c2bd;border-radius:14px;background:#fff1ef;color:#c4231a;font-weight:700}
+.dbh-backup-v5>span:nth-of-type(2){flex:1}
+.dbh-backup-v5 button{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 18px;border:0;border-radius:10px;background:linear-gradient(110deg,#ff9b00,#ff6a00);color:#fff;font:inherit;font-weight:700;cursor:pointer;white-space:nowrap}
+.dbh-backup-v5 button svg{width:19px;height:19px}
+.dbh-backup-v5 button:focus-visible{outline:3px solid #1e64d1;outline-offset:2px}
+@media(max-width:1300px){.dbh-c-ops .dbh-ops{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media(max-width:1100px){.dbh .dbh-row.dbh-row-a,.dbh .dbh-row.dbh-row-b{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:760px){
+ .dbh-hero.dbh-hero-v5{height:auto;min-height:0;display:block;padding:20px 16px 0}
+ .dbh-hero-v5 .dbh-hero-copy{max-width:none}
+ .dbh-hero-v5 h1{font-size:24px}
+ /* Ponsel: gambar utuh di bawah teks, lebar penuh, tetap tanpa crop. */
+ .dbh-hero-img{position:static;display:block;width:calc(100% + 32px);height:auto;margin:14px -16px 0;-webkit-mask-image:none;mask-image:none}
+ .dbh-c-dues .dbh-dues{flex-direction:column;align-items:stretch}
+ .dbh-donut-wrap{margin:0 auto}
+ .dbh-c-ops .dbh-ops{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .dbh-backup.dbh-backup-v5{flex-wrap:wrap}.dbh-backup-v5 button{width:100%;justify-content:center}
+}
+.dbh-c-stat .dbh-chart svg{max-height:230px;width:100%}
+.dbh-c-ops .dbh-hic svg{width:22px;height:22px;display:block}
+.dbh .dbh-row.dbh-row-a>.dbh-card,.dbh .dbh-row.dbh-row-b>.dbh-card{height:auto}

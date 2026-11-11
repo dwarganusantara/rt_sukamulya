@@ -1,0 +1,98 @@
+/* Widget chat melayang admin (multi-chat). Gaya selaras widget chat warga: putih-krem, aksen oranye, teks navy. */
+.acw{--acw-accent:var(--theme-accent,#f0501a);--acw-navy:var(--theme-navy,#082654);--acw-line:#f1e2d8;font-family:inherit;color:var(--acw-navy)}
+.acw *,.acw *:before,.acw *:after{box-sizing:border-box}
+.acw button{font-family:inherit}
+.acw [hidden]{display:none!important}
+
+/* ---------- Tombol pembuka ---------- */
+.acw-launch{position:fixed;right:22px;bottom:22px;z-index:120;display:flex;align-items:center;gap:12px;min-width:252px;min-height:72px;padding:8px 22px 8px 8px;border:1px solid #f2ded1;border-radius:999px;background:linear-gradient(110deg,#fff,#fff7f1);color:var(--acw-navy);text-align:left;cursor:pointer;box-shadow:0 14px 34px #7542222e;transition:transform .18s,box-shadow .18s}
+.acw-launch:hover{transform:translateY(-2px);box-shadow:0 18px 38px #75422238}
+.acw-launch:focus-visible{outline:3px solid #ffb703;outline-offset:3px}
+.acw-launch-ic{position:relative;width:56px;height:56px;flex:none;display:grid;place-items:center;border:3px solid #fff;border-radius:50%;background:linear-gradient(145deg,#ff8a3d,var(--acw-accent));color:#fff;box-shadow:0 6px 14px #f0501a59}
+.acw-launch-ic b{position:absolute;top:-6px;right:-6px;min-width:24px;height:24px;display:grid;place-items:center;padding:0 6px;border:2px solid #fff;border-radius:99px;background:#e11d48;color:#fff;font-size:12px;font-weight:900;line-height:1}
+.acw-launch.has-unread .acw-launch-ic{animation:acw-pulse 1.8s ease-out infinite}
+@keyframes acw-pulse{0%{box-shadow:0 0 0 0 #f0501a80}70%{box-shadow:0 0 0 14px #f0501a00}100%{box-shadow:0 0 0 0 #f0501a00}}
+.acw-launch-tx{display:grid;gap:3px;line-height:1.15}
+.acw-launch-tx strong{font-size:16px;font-weight:800;white-space:nowrap}
+.acw-launch-tx small{display:flex;align-items:center;gap:6px;color:#56657d;font-size:12.5px;font-weight:700;white-space:nowrap}
+.acw-launch-tx i{width:10px;height:10px;border-radius:50%;background:#aab5c2}.acw-launch-tx i.on{background:#22c55e;box-shadow:0 0 0 3px #22c55e2e}
+
+/* ---------- Kotak masuk ---------- */
+.acw-inbox{position:fixed;right:22px;bottom:106px;z-index:121;width:370px;height:min(560px,calc(100vh - 130px));display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--acw-line);border-radius:24px;background:#fff;box-shadow:0 24px 60px #3d1c0c33}
+.acw-inbox[hidden]{display:none}
+.acw-inbox-head{display:flex;align-items:center;gap:12px;padding:16px 16px 12px;background:linear-gradient(135deg,#fff3ea,#fff)}
+.acw-inbox-ic{width:44px;height:44px;flex:none;display:grid;place-items:center;border-radius:14px;background:linear-gradient(145deg,#ff8a3d,var(--acw-accent));color:#fff}
+.acw-inbox-head div{flex:1;min-width:0;display:grid;line-height:1.2}
+.acw-inbox-head strong{font-size:18px;font-weight:900}.acw-inbox-head small{color:#5f708a;font-size:12.5px;font-weight:600}
+.acw-x,.acw-icon-btn{width:36px;height:36px;flex:none;display:grid;place-items:center;padding:0;border:0;border-radius:10px;background:transparent;color:#5f708a;cursor:pointer}
+.acw-x:hover,.acw-icon-btn:hover{background:#ffe9dd;color:var(--acw-accent)}
+.acw-search{display:flex;align-items:center;gap:8px;margin:4px 16px 10px;padding:0 12px;border:1px solid #e3e8ef;border-radius:12px;color:#7b8798;background:#fafbfc}
+.acw-search:focus-within{border-color:var(--acw-accent);box-shadow:0 0 0 3px #f0501a1f}
+.acw-search input{flex:1;min-width:0;height:42px;border:0;outline:0;background:transparent;color:var(--acw-navy);font:inherit;font-size:14px}
+.acw-filter{display:flex;gap:6px;padding:0 16px 10px;border-bottom:1px solid #f1f3f6}
+.acw-filter button{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;min-height:34px;padding:0 8px;border:1px solid #e6e9ef;border-radius:10px;background:#fff;color:var(--acw-navy);font-size:12.5px;font-weight:800;cursor:pointer;white-space:nowrap}
+.acw-filter button b{min-width:20px;padding:1px 6px;border-radius:99px;background:#eef1f5;font-size:11px}
+.acw-filter button.on{border-color:transparent;background:linear-gradient(95deg,#ff7a24,var(--acw-accent));color:#fff}.acw-filter button.on b{background:#ffffff38;color:#fff}
+.acw-list{flex:1;overflow-y:auto;padding:6px 8px 10px}
+.acw-row{width:100%;display:flex;align-items:center;gap:12px;padding:10px;border:0;border-radius:14px;background:transparent;color:inherit;text-align:left;cursor:pointer}
+.acw-row:hover{background:#fff4ec}.acw-row.is-open{background:#fff0e6;box-shadow:inset 3px 0 0 var(--acw-accent)}
+.acw-row-tx{flex:1;min-width:0;display:grid;gap:2px}
+.acw-row-tx strong{overflow:hidden;font-size:14.5px;font-weight:800;text-overflow:ellipsis;white-space:nowrap}
+.acw-row-tx small{overflow:hidden;color:#66768d;font-size:12.5px;text-overflow:ellipsis;white-space:nowrap}
+.acw-row.has-unread .acw-row-tx small{color:var(--acw-navy);font-weight:800}
+.acw-row-meta{display:grid;justify-items:end;gap:4px;flex:none}
+.acw-row-meta time{color:#8a96a8;font-size:11.5px;font-weight:700}
+.acw-row-meta b{min-width:20px;height:20px;display:grid;place-items:center;padding:0 6px;border-radius:99px;background:var(--acw-accent);color:#fff;font-size:11px;font-weight:900}
+.acw-empty{margin:24px 12px;color:#7b8798;font-size:13px;text-align:center}
+
+/* Avatar + titik status */
+.acw-av{position:relative;width:46px;height:46px;flex:none}
+.acw-av img{width:100%;height:100%;display:block;border:2px solid #fff;border-radius:50%;object-fit:cover;background:#ffe9dd;box-shadow:0 3px 8px #0000001f}
+.acw-av:after{content:"";position:absolute;right:0;bottom:1px;width:12px;height:12px;border:2px solid #fff;border-radius:50%;background:#aab5c2}
+.acw-av.on:after{background:#22c55e}
+
+/* ---------- Jendela percakapan (multi) ---------- */
+.acw-dock{position:fixed;right:290px;bottom:22px;z-index:119;display:flex;flex-direction:row-reverse;align-items:flex-end;gap:14px;pointer-events:none}
+.acw.inbox-open .acw-dock{right:408px}
+.acw-win{width:330px;height:min(470px,calc(100vh - 60px));display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--acw-line);border-radius:22px;background:#fff;box-shadow:0 22px 50px #3d1c0c33;pointer-events:auto;animation:acw-in .18s ease-out}
+@keyframes acw-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.acw-win-head{display:flex;align-items:center;gap:10px;padding:10px 8px 10px 12px;border-bottom:1px solid #f6e9e0;background:linear-gradient(135deg,#fff3ea,#fff);cursor:pointer}
+.acw-win-head .acw-av{width:40px;height:40px}
+.acw-win-tx{flex:1;min-width:0;display:grid;line-height:1.2}
+.acw-win-tx strong{overflow:hidden;font-size:15px;font-weight:900;text-overflow:ellipsis;white-space:nowrap}
+.acw-win-tx small{color:#16a34a;font-size:12px;font-weight:700}
+.acw-av:not(.on)+.acw-win-tx small{color:#7b8798}
+.acw-win-badge{min-width:22px;height:22px;display:grid;place-items:center;padding:0 6px;border-radius:99px;background:#e11d48;color:#fff;font-size:11px;font-weight:900}
+.acw-win.is-min{height:auto}.acw-win.is-min .acw-msgs,.acw-win.is-min .acw-form{display:none}.acw-win.is-min .acw-win-head{border-bottom:0}
+.acw-msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:14px 12px;background:#fbfcfd}
+.acw-bubble{max-width:82%;padding:8px 12px 6px;border-radius:16px;box-shadow:0 2px 6px #0f172a0d}
+.acw-bubble p{margin:0;font-size:14px;line-height:1.4;white-space:pre-wrap;overflow-wrap:anywhere}
+.acw-bubble time{display:block;margin-top:3px;color:#7b8798;font-size:10.5px;text-align:right}
+.acw-bubble.theirs{align-self:flex-start;border:1px solid #eef1f4;border-bottom-left-radius:5px;background:#fff}
+.acw-bubble.mine{align-self:flex-end;border-bottom-right-radius:5px;background:#dcf5e3}
+.acw-form{display:flex;align-items:flex-end;gap:8px;padding:10px;border-top:1px solid #f1f3f6;background:#fff}
+.acw-form textarea{flex:1;min-width:0;min-height:44px;max-height:110px;padding:11px 14px;border:1.5px solid #e1e6ed;border-radius:14px;outline:0;resize:none;color:var(--acw-navy);font:inherit;font-size:14px;line-height:1.4}
+.acw-form textarea:focus{border-color:var(--acw-accent);box-shadow:0 0 0 3px #f0501a1f}
+.acw-send{width:46px;height:46px;flex:none;display:grid;place-items:center;padding:0;border:0;border-radius:50%;background:linear-gradient(145deg,#ff8a3d,var(--acw-accent));color:#fff;cursor:pointer;box-shadow:0 6px 14px #f0501a4d}
+.acw-send:hover{filter:brightness(1.06)}
+
+/* ---------- Notifikasi pesan baru ---------- */
+.acw-toast{position:fixed;right:22px;bottom:106px;z-index:122;width:330px;display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--acw-line);border-left:4px solid var(--acw-accent);border-radius:16px;background:#fff;box-shadow:0 18px 40px #3d1c0c2e;cursor:pointer;animation:acw-in .2s ease-out}
+.acw-toast[hidden]{display:none}.acw.inbox-open .acw-toast{display:none}
+.acw-toast img{width:42px;height:42px;flex:none;border-radius:50%;object-fit:cover}
+.acw-toast span{min-width:0;display:grid;gap:2px}.acw-toast strong{font-size:14px;font-weight:800}
+.acw-toast small{overflow:hidden;color:#66768d;font-size:12.5px;text-overflow:ellipsis;white-space:nowrap}
+
+/* ---------- Layar kecil: satu jendela penuh, tombol bulat ---------- */
+@media(max-width:699px){
+ .acw-launch{right:14px;bottom:14px;min-width:0;min-height:0;padding:0;border:0;border-radius:50%;background:transparent;box-shadow:none}
+ .acw-launch-ic{width:62px;height:62px;box-shadow:0 10px 24px #f0501a66}
+ .acw-launch-tx{display:none}
+ .acw-inbox{inset:auto 0 0 0;width:100%;height:min(82vh,640px);border-radius:24px 24px 0 0}
+ .acw-dock,.acw.inbox-open .acw-dock{inset:0;right:0;bottom:0;align-items:stretch;gap:0}
+ .acw-win{width:100%;height:100%;border-radius:0}
+ .acw.inbox-open .acw-dock{display:none}
+ .acw-win.is-min{position:fixed;left:12px;right:90px;bottom:16px;height:auto;border-radius:16px}
+ .acw-toast{right:12px;left:12px;bottom:90px;width:auto}
+}
+@media(prefers-reduced-motion:reduce){.acw-launch.has-unread .acw-launch-ic,.acw-win,.acw-toast{animation:none}}

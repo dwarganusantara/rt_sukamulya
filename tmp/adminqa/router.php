@@ -1,0 +1,2 @@
+<?php
+$path=parse_url($_SERVER['REQUEST_URI'],PHP_URL_PATH);if(preg_match('#^/(application|system|tmp/adminqa)/#',$path)){http_response_code(403);exit;}$root=dirname(__DIR__,2);if(is_file($root.'/'.$path)&&$path!=='/')return FALSE;$_SERVER['SCRIPT_NAME']='/index.php';$_SERVER['PHP_SELF']='/index.php';$_SERVER['SCRIPT_FILENAME']=$root.'/index.php';$_SERVER['CI_ENV']='development';chdir($root);require __DIR__.'/index.php';

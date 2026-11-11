@@ -1,0 +1,59 @@
+<?php
+$extra=json_decode($item['extra_data']??'',TRUE)?:array();
+$asset=function($kind) use($item){return site_url('warga/aset-surat/'.$kind).'?id='.(int)$item['id'];};
+$letterTitle=$catalog[$item['type']][0]??$item['subject'];
+$bodyTemplate=trim((string)($catalog[$item['type']][5]??''));
+$today=new DateTime('now',new DateTimeZone('Asia/Jakarta'));
+$months=array(1=>'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember');
+$formatDate=function($value) use($months){if(!$value || !($date=DateTime::createFromFormat('!Y-m-d',substr($value,0,10)))) return $value?:'';return $date->format('d').' '.$months[(int)$date->format('n')].' '.$date->format('Y');};
+$region=trim($settings['letter_region']??'');
+$rtName=trim($settings['letter_rt_name']??'RUKUN TETANGGA 009 / RUKUN WARGA 008');
+preg_match_all('/\d+/', $rtName, $rtParts);
+$values=array(
+    'nomor_surat'=>$item['letter_number']??'', 'nama_ketua_rt'=>$settings['letter_signer_name']??'',
+    'jabatan_ketua_rt'=>$settings['letter_signer_title']??'Ketua RT 009 / RW 008',
+    'wilayah_rt'=>trim($settings['letter_environment']??''),
+    'nama_warga'=>$item['applicant_name']??'', 'nik_warga'=>$extra['applicant_nik']??'',
+    'tempat_tanggal_lahir'=>trim(($extra['applicant_birth_place']??'').', '.$formatDate($extra['applicant_birth_date']??''),', '),
+    'jenis_kelamin'=>$extra['applicant_gender']??'', 'agama'=>$extra['applicant_religion']??'',
+    'pekerjaan'=>$extra['applicant_occupation']??'', 'alamat_ktp'=>$extra['applicant_ktp_address']??'',
+    'alamat_domisili'=>$item['address']??'', 'keperluan_surat'=>$item['purpose']??'',
+    'kota_penerbitan'=>$region, 'tanggal_surat'=>$formatDate($today->format('Y-m-d')),
+    'nomor_rt'=>$rtParts[0][0]??'009', 'nomor_rw'=>$rtParts[0][1]??'008',
+    'nama'=>$item['applicant_name']??'', 'nik'=>$extra['applicant_nik']??'',
+    'alamat'=>$item['address']??'', 'keperluan'=>$item['purpose']??'', 'keterangan'=>$item['description']??'',
+    'nama_almarhum'=>$extra['deceased_name']??'', 'tanggal_wafat'=>$formatDate($extra['death_date']??''),
+    'tempat_wafat'=>$extra['death_place']??'', 'sebab_wafat'=>$extra['death_cause']??''
+);
+foreach($this->Letter_model->fields($item['type']) as $definition){
+    $value=$extra[$definition[0]]??'';
+    $values[$definition[0]]=$definition[2]==='date' ? $formatDate($value) : $value;
+}
+if($bodyTemplate){
+    $bodyTemplate=preg_replace('/^\s*#\s+[^\r\n]+[\r\n]+/u','',$bodyTemplate);
+    $bodyTemplate=preg_replace('/^\s*\*\*?Nomor\s*:\s*{{nomor_surat}}\*\*?\s*[\r\n]+/iu','',$bodyTemplate);
+    $bodyTemplate=preg_split('/{{kota_penerbitan}}|{{tanda_tangan_rt}}|{{stempel_rt}}/u',$bodyTemplate,2)[0];
+    $bodyTemplate=str_replace(array('**','\\' . "\n"),array('','' . "\n"),$bodyTemplate);
+    $renderedTemplate=preg_replace_callback('/{{([a-z_]+)}}/u',function($match) use($values){return (string)(($values[$match[1]]??'') ?: '—');},trim($bodyTemplate));
+}
+?>
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title><?= html_escape($letterTitle) ?></title><style>body{font:15px/1.55 Arial,sans-serif;color:#111;max-width:780px;margin:24px auto;padding:0 28px}.print-button{position:fixed;right:20px;top:20px;background:#ff4c0a;color:#fff;border:0;border-radius:7px;padding:10px 20px;cursor:pointer}.letter-head{display:flex;align-items:center;justify-content:center;gap:20px;text-align:center;border-bottom:4px double #111;padding-bottom:12px}.letter-head img{width:90px;height:100px;object-fit:contain}.letter-head div{flex:1}.letter-head h1,.letter-head h2,.letter-head p{margin:0}.letter-head h1{font-size:17px}.letter-head h2{font-size:15px}.letter-head p{font-size:12px}.letter-title{text-align:center;margin:30px 0}.letter-title h2{font-size:19px;text-decoration:underline;margin:0}.letter-body{min-height:300px}.letter-body table{border-collapse:collapse;margin:18px 0}.letter-body td{padding:3px 5px;vertical-align:top}.letter-body td:first-child{width:165px}.letter-sign{text-align:center;width:282px;margin:40px 0 0 auto}.letter-sign p{margin:0}.letter-sign-images{height:128px;position:relative}.letter-sign-images img{position:absolute;display:block;object-fit:contain;max-width:none}.letter-sign-images .stamp{width:140px;height:118px;left:2px;top:5px;z-index:1}.letter-sign-images .signature{width:220px;height:118px;right:-8px;top:8px;z-index:2}.letter-sign strong{display:block;width:170px;margin-left:auto;border-bottom:1px solid #111;text-decoration:none;text-align:center}.letter-notice{font-size:11px;color:#555;margin-top:30px}@media print{body{margin:0 auto;padding:0}.print-button{display:none}}.letter-head{gap:12px;padding:12px 0 10px;align-items:center}.letter-head img{width:112px;height:112px;flex:0 0 112px;object-fit:contain}.letter-head .letter-head-text{flex:1;min-width:0;line-height:1.15}.letter-head .letter-head-region,.letter-head .letter-head-rt,.letter-head .letter-head-environment,.letter-head .letter-head-address{display:block;margin:0}.letter-head .letter-head-region{font-size:16px;font-weight:500}.letter-head .letter-head-rt,.letter-head .letter-head-environment{font-size:17px;font-weight:700}.letter-head .letter-head-address{font-size:14px;margin-top:5px}@media(max-width:600px){.letter-head img{width:72px;height:82px;flex-basis:72px}.letter-head .letter-head-region{font-size:11px}.letter-head .letter-head-rt,.letter-head .letter-head-environment{font-size:12px}.letter-head .letter-head-address{font-size:10px}}body{font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.38;font-weight:400;color:#171717}.letter-head{font-family:Arial,Helvetica,sans-serif}.letter-head .letter-head-region{font-size:16px;line-height:1.13;font-weight:400}.letter-head .letter-head-rt,.letter-head .letter-head-environment{font-size:17px;line-height:1.13;font-weight:700}.letter-head .letter-head-address{font-size:14px;line-height:1.2;font-weight:400}.letter-title{margin:18px 0 25px;line-height:1.25}.letter-title h2{font-family:Arial,Helvetica,sans-serif;font-size:20px;font-weight:700;text-decoration:underline;text-underline-offset:3px;margin:0 0 4px}.letter-title span{font-size:14px;font-weight:400}.letter-body{font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.38}.letter-body p{margin:0 0 16px}.letter-body table{width:100%;border-collapse:collapse;margin:0 0 17px}.letter-body td{padding:2px 0;vertical-align:top;line-height:1.38}.letter-body td:first-child{width:33%;padding-right:12px}.letter-sign{font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.35}.letter-sign strong{font-size:14px}@media(max-width:600px){.letter-head .letter-head-region{font-size:11px}.letter-head .letter-head-rt,.letter-head .letter-head-environment{font-size:12px}.letter-head .letter-head-address{font-size:10px}}.letter-head{justify-content:center;gap:8px}.letter-head .letter-head-text{flex:0 1 auto;width:max-content;max-width:calc(100% - 120px)}@media(max-width:600px){.letter-head .letter-head-text{max-width:calc(100% - 80px)}}.letter-sign-images{height:104px}.letter-sign-images .stamp{width:132px;height:105px;top:0}.letter-sign-images .signature{width:205px;height:105px;top:0;clip-path:inset(0 0 22% 0)}.letter-sign strong{margin-top:-7px}.letter-body .letter-fields{width:100%;margin:0 0 17px;border-collapse:collapse}.letter-body .letter-fields td{padding:2px 0;vertical-align:top}.letter-body .letter-fields td:first-child{width:33%;padding-right:8px}.letter-body .letter-fields td:nth-child(2){width:18px}@page{size:A4 portrait;margin:18mm 16mm}@media print{html,body{width:100%!important;max-width:none!important;min-width:0!important;margin:0!important;padding:0!important;box-sizing:border-box!important;font-size:10.5pt;line-height:1.35;-webkit-print-color-adjust:exact;print-color-adjust:exact}.letter-head{width:100%;box-sizing:border-box;gap:3mm;padding:0 0 3mm}.letter-head img{width:27mm;height:28mm;flex:0 0 27mm}.letter-head .letter-head-text{max-width:calc(100% - 30mm)}.letter-head .letter-head-region{font-size:11.5pt}.letter-head .letter-head-rt,.letter-head .letter-head-environment{font-size:12pt}.letter-head .letter-head-address{font-size:10pt}.letter-title{margin:5mm 0 7mm}.letter-title h2{font-size:14pt}.letter-title span,.letter-body,.letter-sign{font-size:10.5pt}.letter-body{min-height:0}.letter-body p{margin-bottom:4mm}.letter-body table,.letter-body .letter-fields{margin-bottom:4mm;page-break-inside:auto}.letter-body tr{break-inside:avoid;page-break-inside:avoid}.letter-sign{margin:9mm 0 0 auto;break-inside:avoid;page-break-inside:avoid}.letter-sign-images{break-inside:avoid}.letter-notice{break-inside:avoid}.print-button{display:none!important}}</style></head><body><?php if(empty($preview)): ?><button class="print-button" onclick="window.print()">Cetak / Simpan PDF</button><?php endif; ?><?php $this->load->view('shared/letter_head', array('settings'=>$settings, 'headClass'=>'letter-head', 'logoUrl'=>$asset('logo'))); ?><div class="letter-title"><h2><?= html_escape(strtoupper($letterTitle)) ?></h2><span>Nomor: <?= html_escape($item['letter_number']?:'Menunggu persetujuan RT') ?></span></div><div class="letter-body">
+<?php if($bodyTemplate): ?>
+<?php $this->load->view('shared/letter_template_body',array('renderedTemplate'=>$renderedTemplate)); ?>
+<?php else: ?>
+<p>Yang bertanda tangan di bawah ini <?= html_escape($settings['letter_signer_title']??'Ketua RT 009 / RW 008') ?> <?= html_escape($settings['letter_environment']??'Suka Mulya IV') ?>, menerangkan bahwa:</p>
+<table>
+<?php foreach(array('Nama Lengkap'=>$values['nama_warga'],'NIK'=>$values['nik_warga'],'Tempat, Tanggal Lahir'=>$values['tempat_tanggal_lahir'],'Jenis Kelamin'=>$values['jenis_kelamin'],'Agama'=>$values['agama'],'Pekerjaan'=>$values['pekerjaan'],'Alamat Sesuai KTP'=>$values['alamat_ktp'],'Alamat Domisili'=>$values['alamat_domisili']) as $label=>$value): ?>
+<tr><td><?= html_escape($label) ?></td><td>: <?= html_escape($value?:'-') ?></td></tr>
+<?php endforeach; ?>
+</table>
+<?php if($item['type']==='kematian'&&!empty($extra['deceased_name'])): ?>
+<p>Pengajuan ini berkaitan dengan warga yang meninggal dunia:</p><table>
+<?php foreach(array('Nama Almarhum'=>$extra['deceased_name']??'','NIK Almarhum'=>$extra['deceased_nik']??'','Tanggal Wafat'=>$formatDate($extra['death_date']??''),'Tempat Wafat'=>$extra['death_place']??'','Sebab Wafat'=>$extra['death_cause']??'') as $label=>$value): ?><tr><td><?= html_escape($label) ?></td><td>: <?= html_escape($value?:'-') ?></td></tr><?php endforeach; ?>
+</table><?php endif; ?>
+<p>Adalah benar warga yang berdomisili di lingkungan <?= html_escape($values['wilayah_rt']) ?> berdasarkan data dan keterangan yang tersedia pada pengurus RT.</p>
+<?php if($item['purpose']): ?><p>Surat ini dibuat untuk keperluan: <strong><?= html_escape($item['purpose']) ?></strong>.</p><?php endif; ?>
+<?php if($item['description']): ?><p><?= nl2br(html_escape($item['description'])) ?></p><?php endif; ?>
+<p>Demikian surat ini dibuat dengan sebenarnya untuk dipergunakan sebagaimana mestinya.</p>
+<?php endif; ?>
+</div><div class="letter-sign"><?php $this->load->view('shared/letter_sign_heading', array('settings'=>$settings)); ?><div class="letter-sign-images"><?php if(!empty($settings['letter_stamp'])): ?><img class="stamp" src="<?= $asset('stamp') ?>" alt="Stempel RT"><?php endif; ?><?php if(!empty($settings['letter_signature'])): ?><img class="signature" src="<?= $asset('signature') ?>" alt="Tanda tangan"><?php endif; ?></div><strong><?= html_escape($settings['letter_signer_name']??'________________________') ?></strong></div><?php if(empty($settings['letter_signature'])||empty($settings['letter_stamp'])): ?><p class="letter-notice">Dokumen ini memerlukan tanda tangan dan/atau stempel resmi pengurus RT sebelum digunakan sebagai surat sah.</p><?php endif; ?></body></html>

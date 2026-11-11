@@ -1,0 +1,5 @@
+<div class="admin-title"><h1>Notifikasi</h1></div><div class="ad-notice-grid">
+<section class="panel"><h2>Pembayaran iuran</h2><?php foreach($due_payments as $item): ?><p><a href="<?= site_url('admin/dues') ?>"><?= html_escape($item['display_name']) ?> · Rp <?= number_format($item['amount'],0,',','.') ?></a></p><?php endforeach; ?><?php if(!$due_payments): ?><p>Tidak ada pembayaran yang menunggu verifikasi.</p><?php endif; ?></section>
+<section class="panel"><h2>Pengajuan warga</h2><?php foreach($requests as $item): ?><p><a href="<?= site_url('admin/request_detail/'.$item['id']) ?>"><?= html_escape($item['subject']) ?></a><br><small><?= html_escape($item['display_name']) ?></small></p><?php endforeach; ?><?php if(!$requests): ?><p>Tidak ada pengajuan baru.</p><?php endif; ?></section>
+<section class="panel"><h2>Konten menunggu persetujuan</h2><?php foreach($posts as $item): ?><p><a href="<?= site_url('admin/post/'.$item['type'].'/'.$item['id']) ?>"><?= html_escape($item['title']) ?></a></p><?php endforeach; ?><?php if(!$posts): ?><p>Tidak ada konten tertunda.</p><?php endif; ?></section>
+</div>
