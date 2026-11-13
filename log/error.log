@@ -5,3 +5,17 @@
 [Fri Nov 13 20:32:16.962576 2026] [authz_core:error] [pid 405664:tid 405831] [client 104.22.24.229:10511] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.htpasswd
 [Fri Nov 13 21:45:09.403209 2026] [authz_core:error] [pid 405663:tid 405783] [client 162.158.172.100:10120] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.htpasswd
 [Fri Nov 13 21:45:11.057475 2026] [authz_core:error] [pid 405664:tid 405836] [client 172.64.198.29:10530] AH01630: client denied by server configuration: /usr/share/phpMyAdmin/
+[Fri Nov 13 23:18:51.864280 2026] [ssl:warn] [pid 447814:tid 447814] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
+[Fri Nov 13 23:18:51.880226 2026] [ssl:warn] [pid 447814:tid 447814] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
+[Fri Nov 13 23:35:06.890610 2026] [ssl:warn] [pid 451531:tid 451531] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
+[Fri Nov 13 23:35:06.905953 2026] [ssl:warn] [pid 451531:tid 451531] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
+[Fri Nov 13 23:46:07.910391 2026] [ssl:warn] [pid 454175:tid 454175] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
+[Fri Nov 13 23:46:07.945491 2026] [ssl:warn] [pid 454175:tid 454175] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
+[Fri Nov 13 23:55:15.912974 2026] [ssl:warn] [pid 456403:tid 456403] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
+[Fri Nov 13 23:55:15.928391 2026] [ssl:warn] [pid 456403:tid 456403] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Nov 14 02:48:18.225650 2026] [core:error] [pid 456408:tid 456579] [client 80.94.95.211:30325] AH10244: invalid URI path (/../.env)
+[Sat Nov 14 02:48:37.700253 2026] [authz_core:error] [pid 456717:tid 456751] [client 80.94.95.211:14479] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/application/.env
+[Sat Nov 14 02:48:55.833025 2026] [authz_core:error] [pid 456717:tid 456748] [client 80.94.95.211:14479] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/system/.env
+[Sat Nov 14 02:50:06.490445 2026] [cgid:error] [pid 456408:tid 456570] [client 80.94.95.211:5893] AH01264: stderr from /var/www/cgi-bin/.env: script not found or unable to stat
+[Sat Nov 14 07:31:35.188415 2026] [ssl:warn] [pid 557242:tid 557242] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Nov 14 07:31:35.202431 2026] [ssl:warn] [pid 557242:tid 557242] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
