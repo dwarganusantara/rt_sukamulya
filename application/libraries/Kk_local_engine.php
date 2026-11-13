@@ -9,7 +9,7 @@ class Kk_local_engine
         try {
             if($mime==='application/pdf') {
                 if(!$pdf || !is_file($pdf)) throw new RuntimeException('Pembaca PDF belum tersedia. Hubungi pengelola.');
-                try {$info=$this->run(array(dirname($pdf).'/usr/bin/pdfinfo',$source));}
+                try {$info=$this->run(array('/usr/bin/pdfinfo',$source));}
                 catch(RuntimeException $e) {throw new RuntimeException('PDF rusak atau terkunci. Unggah PDF yang dapat dibuka tanpa password.');}
                 if(preg_match('/^Encrypted:\s*yes/mi',$info)) throw new RuntimeException('PDF terkunci. Unggah salinan tanpa password atau enkripsi.');
                 if(!preg_match('/^Pages:\s*(\d+)/m',$info,$match)) throw new RuntimeException('Jumlah halaman PDF tidak dapat diperiksa.');
@@ -54,7 +54,7 @@ class Kk_local_engine
                     if(is_file($straight.'.png') && filesize($straight.'.png')>0)$pages[$k]=$straight.'.png';
                 }
             }
-            $lang=is_file(dirname($exe).'/tessdata/ind.traineddata')?'ind+eng':'eng';
+            $lang=is_file('/usr/share/tesseract/tessdata/ind.traineddata')?'ind+eng':'eng';
             require_once __DIR__.'/Kk_tsv_parser.php';
             $result=array('keluarga'=>array(),'anggota'=>array());$seen=array();
             foreach($pages as $page) {
