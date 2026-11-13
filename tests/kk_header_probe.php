@@ -1,7 +1,8 @@
 <?php
 if(PHP_SAPI!=='cli')exit;
-$magick= FCPATH.'plugin/ImageMagick-7.1.2-Q16-HDRI/magick.exe';$exe= FCPATH.'plugin/Tesseract-OCR/tesseract.exe';
-function probe_run($args){$p=proc_open($args,array(0=>array('pipe','r'),1=>array('pipe','w'),2=>array('file','NUL','w')),$pipes);fclose($pipes[0]);$s=stream_get_contents($pipes[1]);fclose($pipes[1]);proc_close($p);return $s;}
+$magick= '/usr/bin/convert'; $exe= '/usr/bin/tesseract'; 
+function probe_run($args){
+$p=proc_open($args,array(0=>array('pipe','r'),1=>array('pipe','w'),2=>array('file','/dev/null','w')),$pipes);fclose($pipes[0]);$s=stream_get_contents($pipes[1]);fclose($pipes[1]);proc_close($p);return $s;}
 $f=tempnam(sys_get_temp_dir(),'kk_header_');$seen=array();
 try{
 foreach(array('normal','threshold','erode')as $variant){$args=array($magick,$argv[1],'-crop',$argv[2],'+repage','-background','white','-alpha','remove','-alpha','off','-resize','300%','-colorspace','Gray');if($variant==='threshold')array_push($args,'-threshold','60%');if($variant==='erode')array_push($args,'-negate','-morphology','Dilate','Disk:1','-negate');array_push($args,'-bordercolor','white','-border','30','PNG:'.$f);probe_run($args);
