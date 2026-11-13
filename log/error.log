@@ -1,0 +1,5 @@
+[Fri Nov 13 20:27:34.454558 2026] [ssl:warn] [pid 404109:tid 404109] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
+[Fri Nov 13 20:27:34.547421 2026] [ssl:warn] [pid 404109:tid 404109] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
+[Fri Nov 13 20:28:30.166630 2026] [ssl:warn] [pid 405658:tid 405658] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
+[Fri Nov 13 20:28:30.182789 2026] [ssl:warn] [pid 405658:tid 405658] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
+[Fri Nov 13 20:32:16.962576 2026] [authz_core:error] [pid 405664:tid 405831] [client 104.22.24.229:10511] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.htpasswd
