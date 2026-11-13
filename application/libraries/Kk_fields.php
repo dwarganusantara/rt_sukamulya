@@ -23,47 +23,187 @@ class Kk_fields
         return '';
     }
 
+    
     public function normalize($input)
     {
-        if (!is_array($input)) throw new InvalidArgumentException('Data KK tidak valid.');
-        $out = array('keluarga'=>array(), 'anggota'=>array());
-        foreach ($this->family_fields as $key) $out['keluarga'][$key] = $this->clean($input['keluarga'][$key] ?? '');
+        if (!is_array($input)) {
+            throw new InvalidArgumentException('Data KK tidak valid.');
+        }
+
+        $out = array(
+            'keluarga' => array(),
+            'anggota' => array()
+        );
+
+        // Alias untuk membaca berbagai format hasil OCR.
+        $family_aliases = array(
+            'nomor_kk' => array('nomor_kk', 'no_kk', 'NIK_KK'),
+            'alamat' => array('alamat', 'address'),
+            'rt' => array('rt', 'RT'),
+            'rw' => array('rw', 'RW'),
+            'kelurahan' => array('kelurahan', 'desa', 'kelurahan_desa'),
+            'kecamatan' => array('kecamatan'),
+            'kota' => array('kota', 'kabupaten', 'kabupaten_kota'),
+            'provinsi' => array('provinsi'),
+            'kode_pos' => array('kode_pos', 'kodepos')
+        );
+
+        $member_aliases = array(
+            'nama_lengkap' => array('nama_lengkap', 'nama', 'NAMA'),
+            'nik' => array('nik', 'NIK'),
+            'jenis_kelamin' => array('jenis_kelamin', 'jk', 'jenis_kelamin'),
+            'tempat_lahir' => array('tempat_lahir', 'tempat'),
+            'tanggal_lahir' => array('tanggal_lahir', 'tgl_lahir', 'tanggal'),
+            'agama' => array('agama'),
+            'pendidikan' => array('pendidikan', 'pendidikan_terakhir'),
+            'pekerjaan' => array('pekerjaan'),
+            'golongan_darah' => array('golongan_darah', 'gol_darah'),
+            'hubungan_keluarga' => array('hubungan_keluarga', 'hubungan', 'shdk', 'status_hubungan')
+        );
+
+        // Normalisasi data keluarga.
+        $family = $input['keluarga'] ?? $input['family'] ?? array();
+
+        if (!is_array($family)) {
+            $family = array();
+        }
+
+        foreach ($this->family_fields as $key) {
+            $value = '';
+
+            foreach ($family_aliases[$key] ?? array($key) as $alias) {
+                if (isset($family[$alias]) && is_scalar($family[$alias])) {
+                    $value = $family[$alias];
+                    break;
+                }
+
+                // Mendukung OCR yang meletakkan field keluarga di root JSON.
+                if (isset($input[$alias]) && is_scalar($input[$alias])) {
+                    $value = $input[$alias];
+                    break;
+                }
+            }
+
+            $out['keluarga'][$key] = $this->clean($value);
+        }
+
         $out['keluarga']['fields_need_review'] = array();
+
         if (!preg_match('/^\d{16}$/D', $out['keluarga']['nomor_kk'])) {
             $out['keluarga']['nomor_kk'] = '';
             $out['keluarga']['fields_need_review'][] = 'nomor_kk';
         }
-        foreach (array('rt','rw') as $key) {
-            if ($out['keluarga'][$key] !== '' && !preg_match('/^\d{1,3}$/D', $out['keluarga'][$key])) {
+
+        foreach (array('rt', 'rw') as $key) {
+            if (
+                $out['keluarga'][$key] !== '' &&
+                !preg_match('/^\d{1,3}$/D', $out['keluarga'][$key])
+            ) {
                 $out['keluarga'][$key] = '';
                 $out['keluarga']['fields_need_review'][] = $key;
             }
         }
-        $rows = $input['anggota'] ?? array();
-        if (!is_array($rows) || count($rows) > 100) throw new InvalidArgumentException('Daftar anggota tidak valid (maksimal 100).');
-        foreach ($rows as $row) {
-            if (!is_array($row)) continue;
-            $m = array();
-            foreach ($this->member_fields as $key) $m[$key] = $this->clean($row[$key] ?? '');
-            if ($m['nama_lengkap'] === '' && $m['nik'] === '') continue;
-            $review = array();
-            if (!preg_match('/^\d{16}$/D', $m['nik'])) {$m['nik']=''; $review[]='nik';}
-            $m['jenis_kelamin'] = $this->gender($m['jenis_kelamin']);
-            $m['hubungan_keluarga'] = $this->relationship($m['hubungan_keluarga']);
-            if ($m['tanggal_lahir'] !== '') {
-                $value = str_replace('/','-',$m['tanggal_lahir']);
-                $format = preg_match('/^\d{4}-/', $value) ? '!Y-m-d' : '!d-m-Y';
-                $date = DateTime::createFromFormat($format,$value);
-                $m['tanggal_lahir'] = $date && $date->format(substr($format,1)) === $value ? $date->format('Y-m-d') : '';
-            }
-            foreach ($this->member_fields as $key) if ($m[$key] === '') $review[]=$key;
-            // OCR confidence flags are advisory, limited to known field names.
-            $m['fields_need_review'] = array_values(array_unique(array_merge($review,array_intersect($this->member_fields,(array)($row['fields_need_review'] ?? array())))));
-            $out['anggota'][]=$m;
+
+        // Membaca daftar anggota.
+        $rows = $input['anggota']
+            ?? $input['members']
+            ?? $input['data_anggota']
+            ?? array();
+
+        // Jika OCR hanya menghasilkan satu objek anggota.
+        if (isset($rows['nama']) || isset($rows['nama_lengkap']) || isset($rows['nik'])) {
+            $rows = array($rows);
         }
-        $out['jumlah_anggota']=count($out['anggota']);
+
+        if (!is_array($rows) || count($rows) > 100) {
+            throw new InvalidArgumentException(
+                'Daftar anggota tidak valid (maksimal 100).'
+            );
+        }
+
+        foreach ($rows as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+
+            $m = array();
+
+            foreach ($this->member_fields as $key) {
+                $value = '';
+
+                foreach ($member_aliases[$key] ?? array($key) as $alias) {
+                    if (isset($row[$alias]) && is_scalar($row[$alias])) {
+                        $value = $row[$alias];
+                        break;
+                    }
+                }
+
+                $m[$key] = $this->clean($value);
+            }
+
+            // Abaikan baris kosong.
+            if ($m['nama_lengkap'] === '' && $m['nik'] === '') {
+                continue;
+            }
+
+            $review = array();
+
+            // Validasi NIK.
+            if (!preg_match('/^\d{16}$/D', $m['nik'])) {
+                $m['nik'] = '';
+                $review[] = 'nik';
+            }
+
+            // Normalisasi jenis kelamin dan hubungan keluarga.
+            $m['jenis_kelamin'] = $this->gender($m['jenis_kelamin']);
+
+            $m['hubungan_keluarga'] = $this->relationship(
+                $m['hubungan_keluarga']
+            );
+
+            // Normalisasi tanggal lahir.
+            if ($m['tanggal_lahir'] !== '') {
+                $value = str_replace('/', '-', $m['tanggal_lahir']);
+
+                $format = preg_match('/^\d{4}-/', $value)
+                    ? '!Y-m-d'
+                    : '!d-m-Y';
+
+                $date = DateTime::createFromFormat($format, $value);
+
+                $m['tanggal_lahir'] = (
+                    $date &&
+                    $date->format(substr($format, 1)) === $value
+                ) ? $date->format('Y-m-d') : '';
+            }
+
+            // Tandai field yang perlu diperiksa pengguna.
+            foreach ($this->member_fields as $key) {
+                if ($m[$key] === '') {
+                    $review[] = $key;
+                }
+            }
+
+            $existing_review = isset($row['fields_need_review'])
+                && is_array($row['fields_need_review'])
+                ? array_intersect(
+                    $this->member_fields,
+                    $row['fields_need_review']
+                )
+                : array();
+
+            $m['fields_need_review'] = array_values(
+                array_unique(array_merge($review, $existing_review))
+            );
+
+            $out['anggota'][] = $m;
+        }
+
+        $out['jumlah_anggota'] = count($out['anggota']);
+
         return $out;
     }
+
 
     public function gender($value)
     {
