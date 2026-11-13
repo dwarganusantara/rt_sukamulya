@@ -52,7 +52,7 @@ class Kk_local_engine
                     $straight=tempnam(sys_get_temp_dir(),'kk_dsk_');$temp[]=$straight;$temp[]=$straight.'.png';
                     $this->run(array($magick,$page,'-background','white','-deskew','40%','+repage','-colorspace','sRGB','PNG:'.$straight.'.png'));
                     if(is_file($straight.'.png') && filesize($straight.'.png')>0)$pages[$k]=$straight.'.png';
-                }
+                } 
             }
             $lang=is_file('/usr/share/tesseract/tessdata/ind.traineddata')?'ind+eng':'eng';
             require_once __DIR__.'/Kk_tsv_parser.php';
