@@ -26,7 +26,7 @@ class Kk_local_engine
                 if(!$coder) throw new RuntimeException('Format foto tidak didukung.');
                 $input=$coder.':'.$source;
                 $limits=array('-limit','memory','256MiB','-limit','map','256MiB','-limit','disk','512MiB','-limit','thread','2');
-                $info=$this->run(array_merge(array($magick,'identify'),$limits,array('-ping','-format',"%w %h\n",$input)));
+                $info=$this->run(array_merge(array('/usr/bin/identify'),$limits,array('-ping','-format',"%w %h\n",$input)));
                 $frames=preg_split('/\r?\n/',trim($info));
                 // Animated images use their first frame; multi-page TIFF reads all pages.
                 $count=$coder==='TIFF'?count($frames):1;
@@ -277,23 +277,85 @@ class Kk_local_engine
         return array_map(function($g){return (int)round(array_sum($g)/count($g));},$groups);
     }
 
+    
     private function run($args)
     {
-        $pipes=array();
-        // Array commands bypass the shell and safely handle Windows paths.
-        $process=proc_open($args,array(0=>array('pipe','r'),1=>array('pipe','w'),2=>array('file',PHP_OS_FAMILY==='Windows'?'NUL':'/dev/null','w')),$pipes,NULL,NULL,array('bypass_shell'=>TRUE));
-        if(!is_resource($process)) throw new RuntimeException('Mesin OCR tidak dapat dijalankan.');
-        fclose($pipes[0]);stream_set_blocking($pipes[1],FALSE);$text='';$start=microtime(TRUE);
+        $pipes = array();
+
+        $process = proc_open(
+            $args,
+            array(
+                0 => array('pipe', 'r'),
+                1 => array('pipe', 'w'),
+                2 => array('pipe', 'w')
+            ),
+            $pipes,
+            NULL,
+            NULL,
+            array('bypass_shell' => TRUE)
+        );
+
+        if (!is_resource($process)) {
+            throw new RuntimeException('Mesin OCR tidak dapat dijalankan.');
+        }
+
+        fclose($pipes[0]);
+
+        stream_set_blocking($pipes[1], FALSE);
+        stream_set_blocking($pipes[2], FALSE);
+
+        $stdout = '';
+        $stderr = '';
+        $start = microtime(TRUE);
+        $exitCode = -1;
+
         try {
             do {
-                $text.=stream_get_contents($pipes[1]);
-                if(strlen($text)>4194304 || microtime(TRUE)-$start>40 || microtime(TRUE)-$this->started>150) {proc_terminate($process);throw new RuntimeException('Pembacaan terlalu lama. Gunakan foto yang lebih jelas atau pisahkan halaman.');}
-                $status=proc_get_status($process);
-                if($status['running']) usleep(20000);
-            } while($status['running']);
-            $text.=stream_get_contents($pipes[1]);
-            if($status['exitcode']!==0) throw new RuntimeException('Foto belum dapat dibaca. Coba foto ulang.');
-            return $text;
-        } finally {fclose($pipes[1]);proc_close($process);}
+                $stdout .= stream_get_contents($pipes[1]);
+                $stderr .= stream_get_contents($pipes[2]);
+
+                if (
+                    strlen($stdout) > 4194304 ||
+                    strlen($stderr) > 1048576 ||
+                    microtime(TRUE) - $start > 40 ||
+                    microtime(TRUE) - $this->started > 150
+                ) {
+                    proc_terminate($process);
+                    throw new RuntimeException(
+                        'Pembacaan terlalu lama. Gunakan foto yang lebih jelas atau pisahkan halaman.'
+                    );
+                }
+
+                $status = proc_get_status($process);
+
+                if (!$status['running']) {
+                    $exitCode = $status['exitcode'];
+                    break;
+                }
+
+                usleep(20000);
+
+            } while (TRUE);
+
+            $stdout .= stream_get_contents($pipes[1]);
+            $stderr .= stream_get_contents($pipes[2]);
+
+            if ($exitCode !== 0) {
+                throw new RuntimeException(
+                'OCR ERROR | ExitCode: ' . $exitCode .
+                ' | Command: ' . implode(' ', $args) .
+                ' | STDERR: ' . trim($stderr) .
+                ' | STDOUT: ' . trim($stdout)
+            );
+        }
+
+        return $stdout;
+
+    } finally {
+        fclose($pipes[1]);
+        fclose($pipes[2]);
+        proc_close($process);
     }
+}
+
 }
