@@ -1,6 +1,6 @@
 <?php
 if(PHP_SAPI!=='cli') {http_response_code(404);exit;}
-$db=new mysqli('localhost','root','','sukamulya');
+$db=new mysqli('localhost','root','Barlok15@1234','rt_sukamulya');
 $name='kk_smoke_'.bin2hex(random_bytes(8)); $password=bin2hex(random_bytes(24));
 $stmt=$db->prepare('INSERT INTO citizens (username,display_name,password_hash,is_active) VALUES (?,?,?,1)');
 $hash=password_hash($password,PASSWORD_DEFAULT); $stmt->bind_param('sss',$name,$name,$hash); $stmt->execute(); $id=$db->insert_id;
@@ -8,12 +8,12 @@ $curl=curl_init();
 curl_setopt_array($curl,array(CURLOPT_RETURNTRANSFER=>TRUE,CURLOPT_COOKIEFILE=>'',CURLOPT_TIMEOUT=>15,CURLOPT_PROXY=>''));
 $results=array();
 try {
- curl_setopt($curl,CURLOPT_URL,'http://localhost/sukamulya/warga/login'); $login=curl_exec($curl);
+ curl_setopt($curl,CURLOPT_URL,'https://dev.rifhandi.com/warga/login'); $login=curl_exec($curl);
  if(!preg_match('/name="(csrf_[^"]+)"\s+value="([^"]+)"/',$login,$csrf)) throw new RuntimeException('CSRF token not found.');
  curl_setopt_array($curl,array(CURLOPT_POST=>TRUE,CURLOPT_POSTFIELDS=>http_build_query(array('username'=>$name,'password'=>$password,$csrf[1]=>$csrf[2])))); curl_exec($curl);
  curl_setopt($curl,CURLOPT_HTTPGET,TRUE);
  foreach(array('warga/keluarga'=>'Data Kartu Keluarga Saya','warga/keluarga/scan'=>'Scan Kartu Keluarga (KK)') as $path=>$expected) {
-  curl_setopt($curl,CURLOPT_URL,'http://localhost/sukamulya/'.$path); $body=curl_exec($curl); $status=curl_getinfo($curl,CURLINFO_HTTP_CODE);
+  curl_setopt($curl,CURLOPT_URL,'https://dev.rifhandi.com/'.$path); $body=curl_exec($curl); $status=curl_getinfo($curl,CURLINFO_HTTP_CODE);
   if($status!==200 || strpos($body,$expected)===FALSE || preg_match('/A PHP Error|Fatal error|Severity:|Database Error/i',$body)) throw new RuntimeException('Failed '.$path.' HTTP '.$status);
   $results[]='PASS '.$path.' HTTP 200, expected content, no PHP errors';
  }
@@ -49,7 +49,7 @@ try {
   } finally {if(isset($upload) && $upload!==$image && is_file($upload))unlink($upload);if(is_file($image))unlink($image);curl_setopt($curl,CURLOPT_HTTPGET,TRUE);}
  }
 } finally {
- curl_setopt($curl,CURLOPT_URL,'http://localhost/sukamulya/warga/logout');curl_exec($curl);curl_close($curl);
+ curl_setopt($curl,CURLOPT_URL,'https://dev.rifhandi.com/warga/logout');curl_exec($curl);curl_close($curl);
  if($db->query("SHOW TABLES LIKE 'chat_presence'")->num_rows) $db->query('DELETE FROM chat_presence WHERE user_type="citizen" AND user_id='.(int)$id);
  $db->query('DELETE FROM citizens WHERE id='.(int)$id);
 }

@@ -6,7 +6,7 @@ require __DIR__.'/../application/libraries/Kk_fields.php';
 function kk_synthetic_image($path,$count) {
     $im=imagecreatetruecolor(2100,300+$count*75);
     $white=imagecolorallocate($im,255,255,255);$black=imagecolorallocate($im,0,0,0);
-    imagefill($im,0,0,$white);$font='C:/Windows/Fonts/arial.ttf';
+    imagefill($im,0,0,$white);$font= FCPATH . 'assets/fonts/arial.ttf';
     $write=function($x,$y,$s)use($im,$black,$font){imagettftext($im,24,0,$x,$y,$black,$font,$s);};
     $write(80,60,'KARTU KELUARGA');$write(80,115,'No. 9900000000009999');
     $write(80,170,'Alamat : JALAN SINTETIS');
@@ -22,7 +22,7 @@ if(realpath($_SERVER['SCRIPT_FILENAME'])===__FILE__) {
     try {
         foreach(array(3,6) as $n) {
             kk_synthetic_image($path,$n);
-            $raw=(new Kk_local_engine())->scan($path,'image/png','C:/Program Files/Tesseract-OCR/tesseract.exe');
+            $raw=(new Kk_local_engine())->scan($path,'image/png','/usr/bin/tesseract');
             $data=(new Kk_fields())->normalize($raw);
             if($data['jumlah_anggota']!==$n) throw new RuntimeException('Actual OCR member count failed: expected '.$n.', got '.$data['jumlah_anggota']);
             foreach($data['anggota'] as $i=>$m) if($m['nik']!=='990000000000'.str_pad($i+1,4,'0',STR_PAD_LEFT)) throw new RuntimeException('Actual OCR NIK mismatch');
