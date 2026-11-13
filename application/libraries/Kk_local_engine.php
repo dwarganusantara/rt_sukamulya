@@ -54,7 +54,14 @@ class Kk_local_engine
                     if(is_file($straight.'.png') && filesize($straight.'.png')>0)$pages[$k]=$straight.'.png';
                 } 
             }
-            $lang=is_file('/usr/share/tesseract/tessdata/ind.traineddata')?'ind+eng':'eng';
+            $indPaths=array(
+                '/usr/share/tesseract/tessdata/ind.traineddata',
+                '/usr/share/tesseract-ocr/4.00/tessdata/ind.traineddata',
+                '/usr/share/tesseract-ocr/5/tessdata/ind.traineddata'
+            );
+            $hasInd=FALSE;
+            foreach($indPaths as $indPath)if(is_file($indPath)){$hasInd=TRUE;break;}
+            $lang=$hasInd?'ind+eng':'eng';
             require_once __DIR__.'/Kk_tsv_parser.php';
             $result=array('keluarga'=>array(),'anggota'=>array());$seen=array();
             foreach($pages as $page) {
@@ -76,17 +83,23 @@ class Kk_local_engine
                 if(!$data['anggota'] && count($grid['x'] ?? array())===11 && count($grid['y'] ?? array())>3) {
                     $columns=array('nama_lengkap','nik','jenis_kelamin','tempat_lahir','tanggal_lahir','agama','pendidikan','pekerjaan','golongan_darah');$bounds=array();
                     foreach($columns as $i=>$field)$bounds[$field]=array($grid['x'][$i+1],$grid['x'][$i+2]);
-                    $header=$this->cell($page,$bounds['nik'],$grid['y'][0],$grid['y'][1],$magick,$exe,$lang,$temp);
-                    if(strtoupper(trim($header['value']))==='NIK') {
-                        for($r=1;$r<count($grid['y'])-1;$r++) {
-                            $name=$this->cell($page,$bounds['nama_lengkap'],$grid['y'][$r],$grid['y'][$r+1],$magick,$exe,$lang,$temp);
-                            if(!preg_match('/[a-z]{2}/i',$name['value']))continue;
-                            $nik=$this->cell($page,$bounds['nik'],$grid['y'][$r],$grid['y'][$r+1],$magick,$exe,$lang,$temp);
-                            $i=count($data['anggota']);$m=array('nama_lengkap'=>$name['value'],'nik'=>'','fields_need_review'=>array());
-                            if($nik['confidence']>=80 && preg_match('/^\d{16}$/D',$nik['value']))$m['nik']=$nik['value'];
-                            if($name['confidence']<80)$m['fields_need_review'][]='nama_lengkap';
-                            $data['anggota'][]=$m;$geometry[$i]=array('bounds'=>$bounds,'top'=>$grid['y'][$r],'bottom'=>$grid['y'][$r+1]);
-                        }
+                    // Jangan menggantungkan pembacaan anggota pada hasil OCR header "NIK".
+                    // Header sering terbaca keliru (mis. NlK), padahal sel nama dan baris data masih terbaca.
+                    for($r=1;$r<count($grid['y'])-1;$r++) {
+                        $name=$this->cell($page,$bounds['nama_lengkap'],$grid['y'][$r],$grid['y'][$r+1],$magick,$exe,$lang,$temp);
+                        $nameValue=trim(preg_replace('/\s+/u',' ',$name['value']));
+                        // Abaikan sel kosong, teks header, dan teks yang terlalu pendek.
+                        if(!preg_match('/^.{3,}$/us',$nameValue))continue;
+                        if(preg_match('/^(NAMA(?:\s+LENGKAP)?|NIK|NO\.?|NOMOR)$/iu',$nameValue))continue;
+                        if(!preg_match('/[a-z]{2}/i',$nameValue))continue;
+
+                        $nik=$this->cell($page,$bounds['nik'],$grid['y'][$r],$grid['y'][$r+1],$magick,$exe,$lang,$temp);
+                        $i=count($data['anggota']);
+                        $m=array('nama_lengkap'=>$nameValue,'nik'=>'','fields_need_review'=>array());
+                        if($nik['confidence']>=80 && preg_match('/^\d{16}$/D',$nik['value']))$m['nik']=$nik['value'];
+                        if($name['confidence']<80)$m['fields_need_review'][]='nama_lengkap';
+                        $data['anggota'][]=$m;
+                        $geometry[$i]=array('bounds'=>$bounds,'top'=>$grid['y'][$r],'bottom'=>$grid['y'][$r+1]);
                     }
                 }
                 foreach($data['anggota'] as $i=>&$m) {
