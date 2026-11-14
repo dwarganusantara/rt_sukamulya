@@ -5,6 +5,7 @@ class Kk_local_engine
     public function scan($source,$mime,$exe,$pdf='',$magick='')
     {
         if(!is_file($exe) || !is_callable('proc_open')) throw new RuntimeException('Mesin OCR lokal belum tersedia. Hubungi pengelola.');
+        $magick=$this->converter($magick);$identify=$this->imageInfo($magick);
         $temp=array(); $pages=array(); $this->started=microtime(TRUE);
         try {
             if($mime==='application/pdf') {
@@ -26,7 +27,7 @@ class Kk_local_engine
                 if(!$coder) throw new RuntimeException('Format foto tidak didukung.');
                 $input=$coder.':'.$source;
                 $limits=array('-limit','memory','256MiB','-limit','map','256MiB','-limit','disk','512MiB','-limit','thread','2');
-                $info=$this->run(array_merge(array('/usr/bin/identify'),$limits,array('-ping','-format',"%w %h\n",$input)));
+                $info=$this->run(array_merge($identify,$limits,array('-ping','-format',"%w %h\n",$input)));
                 $frames=preg_split('/\r?\n/',trim($info));
                 // Animated images use their first frame; multi-page TIFF reads all pages.
                 $count=$coder==='TIFF'?count($frames):1;
@@ -147,11 +148,31 @@ class Kk_local_engine
                     $result['anggota'][]=$member;
                 }
             }
+            // Tanpa ImageMagick, foto tidak diperjelas/deskew dan garis tabel tidak terbaca:
+            // beri pesan penyebab yang sebenarnya, bukan seolah foto pengguna yang salah.
+            if(!$result['anggota'] && $magick==='') throw new RuntimeException('Belum ada anggota terbaca. Konverter gambar (ImageMagick) belum terpasang di server sehingga foto tidak dapat diperjelas sebelum dibaca. Hubungi pengelola.');
             return $result;
         } finally {foreach($temp as $path) if(is_file($path)) @unlink($path);}
     }
 
     private $started;
+
+    /** Paket ImageMagick menyediakan `convert` (IM6) atau `magick` (IM7); path contoh di config bisa berbeda. */
+    private function converter($configured)
+    {
+        foreach(array($configured,'/usr/bin/magick','/usr/bin/convert','/usr/local/bin/magick','/usr/local/bin/convert') as $path)
+            if($path && is_file($path)) return $path;
+        return '';
+    }
+
+    /** IM7 memakai `magick identify` bila executable `identify` terpisah tidak ada. */
+    private function imageInfo($magick)
+    {
+        if($magick==='') return array('/usr/bin/identify');
+        foreach(array(dirname($magick).'/identify','/usr/bin/identify','/usr/local/bin/identify') as $path)
+            if(is_file($path)) return array($path);
+        return array($magick,'identify');
+    }
 
     private function cell($page,$bounds,$top,$bottom,$magick,$exe,$lang,&$temp,$psm=7)
     {
