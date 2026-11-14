@@ -19,3 +19,13 @@
 [Sat Nov 14 02:50:06.490445 2026] [cgid:error] [pid 456408:tid 456570] [client 80.94.95.211:5893] AH01264: stderr from /var/www/cgi-bin/.env: script not found or unable to stat
 [Sat Nov 14 07:31:35.188415 2026] [ssl:warn] [pid 557242:tid 557242] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
 [Sat Nov 14 07:31:35.202431 2026] [ssl:warn] [pid 557242:tid 557242] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Nov 14 07:49:58.781638 2026] [ssl:warn] [pid 561551:tid 561551] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Nov 14 07:49:58.799087 2026] [ssl:warn] [pid 561551:tid 561551] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Nov 14 12:11:45.223823 2026] [cgid:error] [pid 561811:tid 561861] [client 216.180.246.15:51712] AH01264: stderr from /var/www/cgi-bin/login.cgi: script not found or unable to stat
+[Sat Nov 14 14:13:41.686331 2026] [authz_core:error] [pid 561556:tid 561644] [client 104.23.166.128:10887] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.htaccess
+[Sat Nov 14 14:43:10.387743 2026] [proxy_fcgi:error] [pid 561811:tid 561846] (70007)The timeout specified has expired: [client 172.69.165.57:12159] AH01075: Error dispatching request to : (polling), referer: https://dev.rifhandi.com/warga/keluarga/scan
+[Sat Nov 14 14:43:10.423747 2026] [proxy_fcgi:error] [pid 561811:tid 561842] (70007)The timeout specified has expired: [client 172.69.165.56:14131] AH01075: Error dispatching request to : (polling), referer: https://dev.rifhandi.com/warga/keluarga/scan
+[Sat Nov 14 14:43:22.646929 2026] [proxy_fcgi:error] [pid 561554:tid 561706] (70007)The timeout specified has expired: [client 172.69.165.57:14027] AH01075: Error dispatching request to : (polling), referer: https://dev.rifhandi.com/warga/keluarga/scan
+[Sat Nov 14 14:43:32.655742 2026] [proxy_fcgi:error] [pid 561554:tid 561720] (70007)The timeout specified has expired: [client 172.69.165.56:9619] AH01075: Error dispatching request to : (polling), referer: https://dev.rifhandi.com/warga/keluarga/scan
+[Sat Nov 14 14:44:01.598182 2026] [ssl:warn] [pid 654347:tid 654347] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sat Nov 14 14:44:01.619346 2026] [ssl:warn] [pid 654347:tid 654347] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
