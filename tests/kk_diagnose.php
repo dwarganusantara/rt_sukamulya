@@ -10,8 +10,8 @@ register_shutdown_function(function()use($page){if(is_file($page))@unlink($page)
 $p=proc_open(array($magick,$argv[1],'-auto-orient','-resize','3500x3500','-background','white','-alpha','remove','-alpha','off','-colorspace','sRGB','-strip','PNG:'.$page),array(0=>array('pipe','r'),1=>array('file','/dev/null','w'),2=>array('file','/dev/null','w')),$pipes);
 fclose($pipes[0]);if(proc_close($p)!==0||!is_file($page))exit('Gagal menyiapkan gambar dengan ImageMagick.'.PHP_EOL);
 $size=getimagesize($page);
-$engine=new Kk_local_engine();$started=new ReflectionProperty($engine,'started');$started->setValue($engine,microtime(TRUE));
-$call=function($name)use($engine){$args=func_get_args();$m=new ReflectionMethod($engine,array_shift($args));return $m->invokeArgs($engine,$args);};
+$engine=new Kk_local_engine();$started=new ReflectionProperty($engine,'started');$started->setAccessible(TRUE);$started->setValue($engine,microtime(TRUE));
+$call=function($name)use($engine){$args=func_get_args();$m=new ReflectionMethod($engine,array_shift($args));$m->setAccessible(TRUE);return $m->invokeArgs($engine,$args);};
 $rows=$call('projection',$page,$magick,'1x'.$size[1].'!',TRUE);
 $tables=$call('tables',$page,$magick,$size,$rows);
 $summary=array();
