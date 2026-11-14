@@ -36,24 +36,28 @@ class Kk_local_engine
                     $dimensions=explode(' ',trim($frames[$i]));
                     if(count($dimensions)!==2 || (float)$dimensions[0]*(float)$dimensions[1]>40000000) throw new RuntimeException('Foto melebihi 40 megapiksel. Perkecil foto terlebih dahulu.');
                     $base=tempnam(sys_get_temp_dir(),'kk_');$temp[]=$base;$temp[]=$base.'.png';
-                    $this->run(array_merge(array($magick),$limits,array($input.'['.$i.']','-auto-orient','-resize','3500x3500','-background','white','-alpha','remove','-alpha','off','-colorspace','sRGB','-strip','PNG:'.$base.'.png')));
+                    // Foto ponsel sering tidak rata terangnya (vignette/bayangan). Membagi citra terhadap versi
+                    // blur-nya (koreksi pencahayaan) membuat goresan huruf dan garis tabel kontras merata
+                    // sehingga OCR dan deteksi garis bekerja jauh lebih andal.
+                    $this->run(array_merge(array($magick),$limits,array($input.'['.$i.']','-auto-orient','-resize','3500x3500','-background','white','-alpha','remove','-alpha','off','-colorspace','sRGB','-colorspace','Gray','(','+clone','-blur','0x60',')','-compose','Divide','-composite','-normalize','-colorspace','sRGB','-strip','PNG:'.$base.'.png')));
                     $pages[]=$base.'.png';
                 }
             } else {
                 if(!in_array($mime,array('image/jpeg','image/png'),TRUE)) throw new RuntimeException('Konverter foto belum tersedia. Hubungi pengelola.');
                 $pages[]=$source;
             }
-            // Foto/scan dari ponsel hampir selalu sedikit miring; luruskan dulu agar garis tabel KK terdeteksi lurus
-            // (deteksi kolom & baris memakai proyeksi garis horizontal/vertikal).
+            // Foto/scan dari ponsel kadang sedikit miring. Namun memutar gambar menambah interpolasi yang
+            // menghaluskan goresan huruf tipis, sehingga OCR justru memburuk: pada uji langsung, NIK 16 digit
+            // hilang TOTAL setelah deskew meski kemiringannya hanya ~0,6 derajat. Tesseract masih sanggup membaca
+            // teks dengan kemiringan kecil, jadi gambar hanya diputar bila kemiringannya benar-benar besar.
             if($magick && is_file($magick)) {
                 foreach($pages as $k=>$page) {
-                    // Hanya bila benar-benar miring: resampling gambar yang sudah lurus menurunkan ketajaman huruf.
                     $angle=(float)trim($this->run(array($magick,$page,'-deskew','40%','-format','%[deskew:angle]','info:')));
-                    if(abs($angle)<0.15)continue;
+                    if(abs($angle)<1.2)continue;
                     $straight=tempnam(sys_get_temp_dir(),'kk_dsk_');$temp[]=$straight;$temp[]=$straight.'.png';
-                    $this->run(array($magick,$page,'-background','white','-deskew','40%','+repage','-colorspace','sRGB','PNG:'.$straight.'.png'));
+                    $this->run(array($magick,$page,'-background','white','-filter','Lanczos','-deskew','40%','+repage','-unsharp','0x1.5+1.0+0.02','-colorspace','sRGB','PNG:'.$straight.'.png'));
                     if(is_file($straight.'.png') && filesize($straight.'.png')>0)$pages[$k]=$straight.'.png';
-                } 
+                }
             }
             $indPaths=array(
                 '/usr/share/tesseract/tessdata/ind.traineddata',
