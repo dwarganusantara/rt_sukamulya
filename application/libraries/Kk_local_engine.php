@@ -4,13 +4,15 @@ class Kk_local_engine
 {
     public function scan($source,$mime,$exe,$pdf='',$magick='')
     {
-        if(!is_file($exe) || !is_callable('proc_open')) throw new RuntimeException('Mesin OCR lokal belum tersedia. Hubungi pengelola.');
+        $this->started=microtime(TRUE);
+        if(!$this->executable($exe) || !is_callable('proc_open')) throw new RuntimeException('Mesin OCR lokal belum tersedia. Hubungi pengelola.');
         $magick=$this->converter($magick);$identify=$this->imageInfo($magick);
-        $temp=array(); $pages=array(); $this->started=microtime(TRUE);
+        if($magick==='' && function_exists('log_message')) log_message('error','KK OCR: ImageMagick tidak ditemukan. KK_MAGICK='.getenv('KK_MAGICK').' PATH='.getenv('PATH'));
+        $temp=array(); $pages=array();
         try {
             if($mime==='application/pdf') {
-                if(!$pdf || !is_file($pdf)) throw new RuntimeException('Pembaca PDF belum tersedia. Hubungi pengelola.');
-                try {$info=$this->run(array('/usr/bin/pdfinfo',$source));}
+                if(!$pdf || !$this->executable($pdf)) throw new RuntimeException('Pembaca PDF belum tersedia. Hubungi pengelola.');
+                try {$info=$this->run(array($this->companion($pdf,'pdfinfo'),$source));}
                 catch(RuntimeException $e) {throw new RuntimeException('PDF rusak atau terkunci. Unggah PDF yang dapat dibuka tanpa password.');}
                 if(preg_match('/^Encrypted:\s*yes/mi',$info)) throw new RuntimeException('PDF terkunci. Unggah salinan tanpa password atau enkripsi.');
                 if(!preg_match('/^Pages:\s*(\d+)/m',$info,$match)) throw new RuntimeException('Jumlah halaman PDF tidak dapat diperiksa.');
@@ -154,28 +156,80 @@ class Kk_local_engine
             }
             // Tanpa ImageMagick, foto tidak diperjelas/deskew dan garis tabel tidak terbaca:
             // beri pesan penyebab yang sebenarnya, bukan seolah foto pengguna yang salah.
-            if(!$result['anggota'] && $magick==='') throw new RuntimeException('Belum ada anggota terbaca. Konverter gambar (ImageMagick) belum terpasang di server sehingga foto tidak dapat diperjelas sebelum dibaca. Hubungi pengelola.');
+            if(!$result['anggota'] && $magick==='') throw new RuntimeException('Belum ada anggota terbaca. Konverter gambar (ImageMagick) tidak ditemukan di server sehingga foto tidak dapat diperjelas sebelum dibaca. Pasang ImageMagick atau set variabel KK_MAGICK ke path executable yang benar (mis. /usr/bin/magick), lalu hubungi pengelola.');
             return $result;
         } finally {foreach($temp as $path) if(is_file($path)) @unlink($path);}
     }
 
     private $started;
 
-    /** Paket ImageMagick menyediakan `convert` (IM6) atau `magick` (IM7); path contoh di config bisa berbeda. */
+    /**
+     * Paket ImageMagick menyediakan `convert` (IM6) atau `magick` (IM7). Lokasi tidak selalu
+     * /usr/bin: distro, snap, conda, atau build source bisa menaruhnya di path lain. Selain
+     * daftar path umum, cari juga melalui $PATH (dan open_basedir tetap dihormati PHP).
+     */
     private function converter($configured)
     {
-        foreach(array($configured,'/usr/bin/magick','/usr/bin/convert','/usr/local/bin/magick','/usr/local/bin/convert') as $path)
-            if($path && is_file($path)) return $path;
+        $candidates=array();
+        if(is_string($configured) && $configured!=='') $candidates[]=$configured;
+        $dirs=array('/usr/bin','/usr/local/bin','/bin','/snap/bin');
+        foreach(array(getenv('PATH'),$_SERVER['PATH'] ?? '') as $envPath) {
+            if(!is_string($envPath) || $envPath==='') continue;
+            foreach(explode(PATH_SEPARATOR,$envPath) as $dir) if($dir!=='') $dirs[]=$dir;
+        }
+        foreach($dirs as $dir) {
+            $dir=rtrim(str_replace('\\','/',$dir),'/');
+            $candidates[]=$dir.'/magick';
+            $candidates[]=$dir.'/convert';
+        }
+        foreach(array('/opt/*/bin/magick','/opt/*/bin/convert','/usr/local/ImageMagick*/bin/magick','/usr/local/ImageMagick*/bin/convert') as $pattern)
+            foreach((array)@glob($pattern) as $match) $candidates[]=$match;
+        foreach($candidates as $path) {
+            $resolved=$this->resolve($path);
+            if($resolved!=='') return $resolved;
+        }
         return '';
     }
 
-    /** IM7 memakai `magick identify` bila executable `identify` terpisah tidak ada. */
+    /** IM7 memakai `magick identify` bila executable `identify` terpisah tidak ada; IM6 `convert` bisa langsung info:. */
     private function imageInfo($magick)
     {
         if($magick==='') return array('/usr/bin/identify');
-        foreach(array(dirname($magick).'/identify','/usr/bin/identify','/usr/local/bin/identify') as $path)
-            if(is_file($path)) return array($path);
-        return array($magick,'identify');
+        $dir=str_replace('\\','/',dirname($magick));
+        foreach(array($dir.'/identify','/usr/bin/identify','/usr/local/bin/identify') as $path) {
+            $resolved=$this->resolve($path);
+            if($resolved!=='') return array($resolved);
+        }
+        return strtolower(pathinfo($magick,PATHINFO_FILENAME))==='magick'?array($magick,'identify'):array($magick);
+    }
+
+    /** Binary harus ada dan executable; di Windows is_executable kurang konsisten, ekstensi .exe dicoba otomatis. */
+    private function executable($path)
+    {
+        return $this->resolve($path)!=='';
+    }
+
+    private function resolve($path)
+    {
+        if(!is_string($path) || $path==='') return '';
+        $candidates=array($path);
+        if(DIRECTORY_SEPARATOR==='\\' && strtolower(pathinfo($path,PATHINFO_EXTENSION))!=='exe') $candidates[]=$path.'.exe';
+        foreach($candidates as $candidate) {
+            if(!is_file($candidate)) continue;
+            if(DIRECTORY_SEPARATOR==='\\' || is_executable($candidate)) return $candidate;
+        }
+        return '';
+    }
+
+    /** Cari executable pendamping (mis. pdfinfo di folder yang sama dengan pdftoppm). */
+    private function companion($path,$name)
+    {
+        $dir=str_replace('\\','/',dirname($path));
+        foreach(array($dir.'/'.$name,'/usr/bin/'.$name,'/usr/local/bin/'.$name) as $candidate) {
+            $resolved=$this->resolve($candidate);
+            if($resolved!=='') return $resolved;
+        }
+        return $name;
     }
 
     private function cell($page,$bounds,$top,$bottom,$magick,$exe,$lang,&$temp,$psm=7)

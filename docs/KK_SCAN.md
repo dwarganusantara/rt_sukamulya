@@ -24,6 +24,20 @@ Format unggahan: PDF, JPG/JPEG, PNG, WEBP, HEIC/HEIF, AVIF, BMP, TIFF, GIF, JP2,
 
 Tesseract telah dipasang di `C:/Program Files/Tesseract-OCR/tesseract.exe`. Bila `KK_OCR_ENDPOINT` kosong, aplikasi memakai executable lokal tersebut secara langsung lewat `Kk_local_engine`, sehingga worker terpisah dan restart Apache tidak diperlukan. `KK_TESSERACT` dapat mengganti path. Bahasa `ind+eng` digunakan bila model Indonesia tersedia; jika tidak, menggunakan model `eng` untuk teks Latin. Worker pada panduan di bawah adalah alternatif deployment, bukan persyaratan untuk mode lokal langsung.
 
+## Produksi Linux (CentOS 9 Stream + httpd/PHP-FPM)
+
+`Kk_local_engine` mencari `magick`/`convert` pada path yang dikonfigurasi, daftar path umum (`/usr/bin`, `/usr/local/bin`, `/bin`, `/snap/bin`), folder pada `$PATH`, dan pola `/opt/*/bin`, `/usr/local/ImageMagick*/bin`. Binary harus dapat dieksekusi oleh user web; `is_file()` saja tidak cukup. Jika binary berada di lokasi tidak lazim, set `KK_MAGICK` ke path absolut.
+
+1. Pasang dependensi: `sudo dnf install -y ImageMagick poppler-utils tesseract tesseract-langpack-ind` (Tesseract ada di repo EPEL pada CentOS Stream 9; aktifkan EPEL lebih dulu).
+2. Verifikasi sebagai user web, bukan hanya root:
+   `sudo -u apache /usr/bin/magick -version`, `sudo -u apache /usr/bin/tesseract --version`, `sudo -u apache /usr/bin/pdftoppm -v`.
+3. Jalankan diagnosa aplikasi: `sudo -u apache php tools/kk-check.php`. Output JSON menampilkan path yang terdeteksi, versi, `proc_open`, `open_basedir`, folder temporary, dan ketersediaan model `ind`.
+4. Konfigurasi environment. Untuk PHP-FPM tambahkan ke `/etc/php-fpm.d/www.conf` lalu restart `php-fpm`:
+   `env[KK_MAGICK] = /usr/bin/magick`, `env[KK_TESSERACT] = /usr/bin/tesseract`, `env[KK_PDFTOPPM] = /usr/bin/pdftoppm`. Untuk `mod_php`, gunakan `SetEnv KK_MAGICK /usr/bin/magick` pada konfigurasi VirtualHost.
+5. Jika `open_basedir` aktif, sertakan `/usr/bin` dan folder temporary PHP; bila `proc_open` ada di `disable_functions`, aktifkan kembali untuk VirtualHost aplikasi.
+6. SELinux enforcing biasanya mengizinkan eksekusi dari `/usr/bin`. Bila masih gagal, periksa `sudo ausearch -m avc -ts recent` dan jangan mematikan SELinux secara permanen.
+7. Pesan "ImageMagick tidak ditemukan" berarti `converter()` tidak menemukan binary executable. Jalankan `command -v magick convert` di shell user web dan cocokkan hasilnya dengan `tools/kk-check.php`.
+
 Pengujian nyata mesin OCR pada PNG sintetis 3 dan 6 anggota berhasil, termasuk NIK setiap anggota. Pengujian HTTP melalui login dan upload PNG juga berhasil mengisi enam anggota pada formulir. Jalankan dengan `php -d extension=gd tests/kk_ocr_image_test.php` dan `php -d extension=gd tests/kk_http_smoke.php` pada instalasi XAMPP ini. GD hanya diperlukan untuk menghasilkan gambar uji, bukan untuk OCR aplikasi.
 
 Poppler sudah tersedia pada instalasi ini. Foto nyata yang buram, terpotong atau memiliki layout berbeda tetap perlu review manual.
