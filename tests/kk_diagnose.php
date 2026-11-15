@@ -8,7 +8,7 @@ $magick='/usr/bin/convert';$exe='/usr/bin/tesseract';
 // lalu perbesar bila citra lebih kecil dari 3500 px.
 $page=tempnam(sys_get_temp_dir(),'kkdiag_').'.png';
 register_shutdown_function(function()use($page){if(is_file($page))@unlink($page);});
-$p=proc_open(array($magick,$argv[1],'-auto-orient','-resize','3500x3500','-background','white','-alpha','remove','-alpha','off','-colorspace','sRGB','-colorspace','Gray','(','+clone','-blur','0x60',')','-compose','Divide','-composite','-normalize','-colorspace','sRGB','-strip','PNG:'.$page),array(0=>array('pipe','r'),1=>array('file','/dev/null','w'),2=>array('file','/dev/null','w')),$pipes);
+$p=proc_open(array($magick,$argv[1],'-auto-orient','-resize','3500x3500','-background','white','-alpha','remove','-alpha','off','-colorspace','sRGB','-colorspace','Gray','(','+clone','-blur','0x60',')','+swap','-compose','Divide','-composite','-normalize','-colorspace','sRGB','-strip','PNG:'.$page),array(0=>array('pipe','r'),1=>array('file','/dev/null','w'),2=>array('file','/dev/null','w')),$pipes);
 fclose($pipes[0]);if(proc_close($p)!==0||!is_file($page))exit('Gagal menyiapkan gambar dengan ImageMagick.'.PHP_EOL);
 $size=getimagesize($page);
 $engine=new Kk_local_engine();$started=new ReflectionProperty($engine,'started');$started->setAccessible(TRUE);$started->setValue($engine,microtime(TRUE));

@@ -41,7 +41,7 @@ class Kk_local_engine
                     // Foto ponsel sering tidak rata terangnya (vignette/bayangan). Membagi citra terhadap versi
                     // blur-nya (koreksi pencahayaan) membuat goresan huruf dan garis tabel kontras merata
                     // sehingga OCR dan deteksi garis bekerja jauh lebih andal.
-                    $this->run(array_merge(array($magick),$limits,array($input.'['.$i.']','-auto-orient','-resize','3500x3500','-background','white','-alpha','remove','-alpha','off','-colorspace','sRGB','-colorspace','Gray','(','+clone','-blur','0x60',')','-compose','Divide','-composite','-normalize','-colorspace','sRGB','-strip','PNG:'.$base.'.png')));
+                    $this->run(array_merge(array($magick),$limits,array($input.'['.$i.']','-auto-orient','-resize','3500x3500','-background','white','-alpha','remove','-alpha','off','-colorspace','sRGB','-colorspace','Gray','(','+clone','-blur','0x60',')','+swap','-compose','Divide','-composite','-normalize','-colorspace','sRGB','-strip','PNG:'.$base.'.png')));
                     $pages[]=$base.'.png';
                 }
             } else {
