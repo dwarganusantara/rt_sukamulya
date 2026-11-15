@@ -70,12 +70,12 @@ class Kk_local_engine
             foreach($indPaths as $indPath)if(is_file($indPath)){$hasInd=TRUE;break;}
             $lang=$hasInd?'ind+eng':'eng';
             require_once __DIR__.'/Kk_tsv_parser.php';
-            $result=array('keluarga'=>array(),'anggota'=>array());$seen=array();
+            $result=array('keluarga'=>array(),'anggota'=>array());$seen=array();$lastGrid=array();
             foreach($pages as $page) {
                 $size=@getimagesize($page);
                 if(!$size || $size[0]*$size[1]>40000000) throw new RuntimeException('Foto tidak valid atau terlalu besar.');
                 require_once __DIR__.'/Kk_fields.php';
-                $grid=$magick && is_file($magick)?$this->grid($page,$magick,$size):array();
+                $grid=$magick && is_file($magick)?$this->grid($page,$magick,$size):array();$lastGrid=$grid;
                 $data=array('keluarga'=>array(),'anggota'=>array());$best=-1;$geometry=array();
                 // Sparse text mode recognizes ruled tables that block mode skips.
                 foreach(array(6,11) as $mode) {
@@ -157,6 +157,7 @@ class Kk_local_engine
             // Tanpa ImageMagick, foto tidak diperjelas/deskew dan garis tabel tidak terbaca:
             // beri pesan penyebab yang sebenarnya, bukan seolah foto pengguna yang salah.
             if(!$result['anggota'] && $magick==='') throw new RuntimeException('Belum ada anggota terbaca. Konverter gambar (ImageMagick) tidak ditemukan di server sehingga foto tidak dapat diperjelas sebelum dibaca. Pasang ImageMagick atau set variabel KK_MAGICK ke path executable yang benar (mis. /usr/bin/magick), lalu hubungi pengelola.');
+            if(!$result['anggota'] && function_exists('log_message')) log_message('error','KK OCR tidak menemukan anggota. tesseract='.$exe.' magick='.$magick.' lang='.$lang.' grid_x='.count($lastGrid['x'] ?? array()).' grid_y='.count($lastGrid['y'] ?? array()));
             return $result;
         } finally {foreach($temp as $path) if(is_file($path)) @unlink($path);}
     }
