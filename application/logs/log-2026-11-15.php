@@ -7788,3 +7788,90 @@ ERROR - 2026-11-15 10:06:45 --> 404 Page Not Found: Asset-manifestjson/index
 ERROR - 2026-11-15 10:06:45 --> 404 Page Not Found: Webpackjson/index
 ERROR - 2026-11-15 10:06:45 --> 404 Page Not Found: Statsjson/index
 ERROR - 2026-11-15 10:16:03 --> 404 Page Not Found: Faviconico/index
+ERROR - 2026-11-15 10:19:50 --> 404 Page Not Found: Faviconico/index
+ERROR - 2026-11-15 10:21:35 --> 404 Page Not Found: Api/session
+ERROR - 2026-11-15 10:21:36 --> 404 Page Not Found: Api/session
+ERROR - 2026-11-15 10:26:01 --> 404 Page Not Found: Robotstxt/index
+ERROR - 2026-11-15 10:45:49 --> 404 Page Not Found: Kmonbaseqted697671/index
+ERROR - 2026-11-15 10:46:24 --> 404 Page Not Found: Kmonbasezd74f7ec53/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Config/database.yml
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Packagejson/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Configjs/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Settingspy/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Configjson/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Docker-composeyml/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Applicationproperties/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Google-servicesjson/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Airflowcfg/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Envjs/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Configpy/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Secretspy/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Jenkinsfile/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Secretsjson/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Package-lockjson/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Applicationyml/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Credentialsjson/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Terraformtfstatebackup/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Application-prodproperties/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Local_settingspy/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Sites/default
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Superset_configpy/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Credentialspy/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Appsettingsproductionjson/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: WEB-INF/web.xml
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Wp-configphptxt/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: App/etc
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Secretsyaml/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Actuator/env
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Backupzip/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Actuator/heapdump
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Docker-composeyaml/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Ecosystemconfigjs/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Gunicornconfpy/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Dockerfile/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Dbsqlgz/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Wwwzip/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Nextconfigjs/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Config/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Phpinfo/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Credentialsyml/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Terraformtfstate/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Config/secrets.yml
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Webconfig/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Backuptargz/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Databaseyml/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Deploymentyaml/index
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Config/master.key
+ERROR - 2026-11-15 10:46:47 --> 404 Page Not Found: Application-prodyml/index
+ERROR - 2026-11-15 11:23:08 --> 404 Page Not Found: Faviconico/index
+ERROR - 2026-11-15 11:27:04 --> 404 Page Not Found: Ai/site-profile.json
+ERROR - 2026-11-15 11:30:17 --> 404 Page Not Found: Robotstxt/index
+ERROR - 2026-11-15 11:30:28 --> 404 Page Not Found: Faviconico/index
+ERROR - 2026-11-15 11:30:33 --> 404 Page Not Found: Faviconico/index
+ERROR - 2026-11-15 11:36:13 --> 404 Page Not Found: Sitemapxml/index
+ERROR - 2026-11-15 11:48:22 --> 404 Page Not Found: Faviconico/index
+ERROR - 2026-11-15 11:50:37 --> OCR RAW RESULT: Array
+(
+    [keluarga] => Array
+        (
+        )
+
+    [anggota] => Array
+        (
+        )
+
+)
+
+ERROR - 2026-11-15 12:16:59 --> KK OCR tidak menemukan anggota. tesseract=/usr/bin/tesseract magick=/usr/bin/convert lang=ind+eng grid_x=0 grid_y=0
+ERROR - 2026-11-15 12:16:59 --> OCR RAW RESULT: Array
+(
+    [keluarga] => Array
+        (
+        )
+
+    [anggota] => Array
+        (
+        )
+
+)
+

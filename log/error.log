@@ -64,3 +64,66 @@
 [Sun Nov 15 11:06:44.639380 2026] [rewrite:error] [pid 940187:tid 940321] [client 162.159.113.95:11028] AH10508: Unsafe URL with %3f URL rewritten without UnsafeAllow3F
 [Sun Nov 15 11:06:44.833455 2026] [rewrite:error] [pid 940188:tid 940250] [client 162.159.113.95:11031] AH10508: Unsafe URL with %3f URL rewritten without UnsafeAllow3F
 [Sun Nov 15 11:06:45.849111 2026] [authz_core:error] [pid 940188:tid 940253] [client 172.71.102.215:13141] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.vite
+[Sun Nov 15 11:46:47.237013 2026] [authz_core:error] [pid 940189:tid 940355] [client 93.152.209.6:34616] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.old
+[Sun Nov 15 11:46:47.237911 2026] [authz_core:error] [pid 940188:tid 940261] [client 93.152.209.6:34620] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.bak
+[Sun Nov 15 11:46:47.239507 2026] [authz_core:error] [pid 940188:tid 940224] [client 93.152.209.6:35148] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/wp-config.php.bak
+[Sun Nov 15 11:46:47.240493 2026] [authz_core:error] [pid 940188:tid 940217] [client 93.152.209.6:35034] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.local
+[Sun Nov 15 11:46:47.240923 2026] [authz_core:error] [pid 940188:tid 940267] [client 93.152.209.6:34648] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.example
+[Sun Nov 15 11:46:47.244519 2026] [authz_core:error] [pid 940387:tid 940419] [client 93.152.209.6:34954] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/db.sql
+[Sun Nov 15 11:46:47.245510 2026] [authz_core:error] [pid 940189:tid 940363] [client 93.152.209.6:34978] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/database.sql
+[Sun Nov 15 11:46:47.245958 2026] [authz_core:error] [pid 940187:tid 940327] [client 93.152.209.6:34768] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.git-credentials
+[Sun Nov 15 11:46:47.246664 2026] [authz_core:error] [pid 940387:tid 940422] [client 93.152.209.6:34988] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/backup.sql
+[Sun Nov 15 11:46:47.248114 2026] [authz_core:error] [pid 940188:tid 940220] [client 93.152.209.6:34902] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.staging
+[Sun Nov 15 11:46:47.249395 2026] [authz_core:error] [pid 940188:tid 940249] [client 93.152.209.6:35310] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.aws
+[Sun Nov 15 11:46:47.251001 2026] [authz_core:error] [pid 940387:tid 940420] [client 93.152.209.6:34946] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.backup
+[Sun Nov 15 11:46:47.251468 2026] [authz_core:error] [pid 940187:tid 940312] [client 93.152.209.6:35000] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/dump.sql
+[Sun Nov 15 11:46:47.253074 2026] [authz_core:error] [pid 940187:tid 940315] [client 93.152.209.6:35256] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.hg
+[Sun Nov 15 11:46:47.253981 2026] [authz_core:error] [pid 940187:tid 940322] [client 93.152.209.6:34566] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env
+[Sun Nov 15 11:46:47.255830 2026] [authz_core:error] [pid 940187:tid 940320] [client 93.152.209.6:35226] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.gitconfig
+[Sun Nov 15 11:46:47.256243 2026] [authz_core:error] [pid 940188:tid 940262] [client 93.152.209.6:35354] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/application.properties.bak
+[Sun Nov 15 11:46:47.258201 2026] [authz_core:error] [pid 940189:tid 940339] [client 93.152.209.6:35216] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.yarnrc
+[Sun Nov 15 11:46:47.260101 2026] [authz_core:error] [pid 940387:tid 940425] [client 93.152.209.6:35410] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.yarnrc.yml
+[Sun Nov 15 11:46:47.260354 2026] [authz_core:error] [pid 940189:tid 940340] [client 93.152.209.6:35322] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.ssh
+[Sun Nov 15 11:46:47.262618 2026] [authz_core:error] [pid 940387:tid 940423] [client 93.152.209.6:35440] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.local.backup
+[Sun Nov 15 11:46:47.262998 2026] [authz_core:error] [pid 940189:tid 940348] [client 93.152.209.6:35320] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.ssh
+[Sun Nov 15 11:46:47.263915 2026] [authz_core:error] [pid 940387:tid 940428] [client 93.152.209.6:35458] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/error.log
+[Sun Nov 15 11:46:47.264318 2026] [authz_core:error] [pid 940189:tid 940344] [client 93.152.209.6:35414] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.production.local
+[Sun Nov 15 11:46:47.264318 2026] [authz_core:error] [pid 940187:tid 940328] [client 93.152.209.6:35600] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.docker
+[Sun Nov 15 11:46:47.266597 2026] [authz_core:error] [pid 940187:tid 940325] [client 93.152.209.6:35640] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.staging.local
+[Sun Nov 15 11:46:47.267041 2026] [authz_core:error] [pid 940187:tid 940330] [client 93.152.209.6:35614] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.stage
+[Sun Nov 15 11:46:47.267055 2026] [authz_core:error] [pid 940188:tid 940248] [client 93.152.209.6:35048] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.ssh
+[Sun Nov 15 11:46:47.267571 2026] [authz_core:error] [pid 940187:tid 940329] [client 93.152.209.6:35562] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.txt
+[Sun Nov 15 11:46:47.268364 2026] [authz_core:error] [pid 940387:tid 940433] [client 93.152.209.6:35490] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/debug.log
+[Sun Nov 15 11:46:47.269020 2026] [authz_core:error] [pid 940187:tid 940335] [client 93.152.209.6:35626] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.development.local
+[Sun Nov 15 11:46:47.269831 2026] [authz_core:error] [pid 940387:tid 940434] [client 93.152.209.6:35584] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.test.local
+[Sun Nov 15 11:46:47.269943 2026] [authz_core:error] [pid 940187:tid 940331] [client 93.152.209.6:35376] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.npmrc._default
+[Sun Nov 15 11:46:47.271782 2026] [authz_core:error] [pid 940188:tid 940258] [client 93.152.209.6:35668] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/adminer.sql
+[Sun Nov 15 11:46:47.272182 2026] [authz_core:error] [pid 940188:tid 940256] [client 93.152.209.6:35558] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.docker
+[Sun Nov 15 11:46:47.272535 2026] [authz_core:error] [pid 940188:tid 940255] [client 93.152.209.6:35504] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/laravel.log
+[Sun Nov 15 11:46:47.273159 2026] [authz_core:error] [pid 940188:tid 940242] [client 93.152.209.6:35252] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.svn
+[Sun Nov 15 11:46:47.273670 2026] [authz_core:error] [pid 940188:tid 940266] [client 93.152.209.6:35276] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.htaccess
+[Sun Nov 15 11:46:47.274460 2026] [proxy_fcgi:error] [pid 940387:tid 940426] [client 93.152.209.6:35390] AH01071: Got error 'Primary script unknown'
+[Sun Nov 15 11:46:47.275265 2026] [authz_core:error] [pid 940187:tid 940334] [client 93.152.209.6:35524] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.npmrc
+[Sun Nov 15 11:46:47.277603 2026] [authz_core:error] [pid 940189:tid 940349] [client 93.152.209.6:35230] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.svn
+[Sun Nov 15 11:46:47.311738 2026] [authz_core:error] [pid 940387:tid 940439] [client 93.152.209.6:34622] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.save
+[Sun Nov 15 11:46:47.424688 2026] [authz_core:error] [pid 940188:tid 940224] [client 93.152.209.6:34902] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.production
+[Sun Nov 15 11:46:47.426574 2026] [authz_core:error] [pid 940187:tid 940318] [client 93.152.209.6:34680] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.gitlab-ci.yml
+[Sun Nov 15 11:46:47.431085 2026] [authz_core:error] [pid 940188:tid 940266] [client 93.152.209.6:35354] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/configuration.php.bak
+[Sun Nov 15 11:46:47.431790 2026] [authz_core:error] [pid 940187:tid 940315] [client 93.152.209.6:35226] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/yarn.lock
+[Sun Nov 15 11:46:47.432028 2026] [authz_core:error] [pid 940188:tid 940265] [client 93.152.209.6:35068] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/localsettings.php.bak
+[Sun Nov 15 11:46:47.432964 2026] [authz_core:error] [pid 940187:tid 940320] [client 93.152.209.6:34566] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.json
+[Sun Nov 15 11:46:47.433985 2026] [authz_core:error] [pid 940188:tid 940217] [client 93.152.209.6:35234] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env~
+[Sun Nov 15 11:46:47.435922 2026] [authz_core:error] [pid 940188:tid 940264] [client 93.152.209.6:35170] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.swp
+[Sun Nov 15 11:46:47.436416 2026] [authz_core:error] [pid 940189:tid 940349] [client 93.152.209.6:35216] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.prod
+[Sun Nov 15 11:46:47.436876 2026] [authz_core:error] [pid 940189:tid 940345] [client 93.152.209.6:35322] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.dist
+[Sun Nov 15 11:46:47.437048 2026] [authz_core:error] [pid 940387:tid 940436] [client 93.152.209.6:34690] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.ssh
+[Sun Nov 15 11:46:47.440914 2026] [authz_core:error] [pid 940189:tid 940357] [client 93.152.209.6:35414] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.dev
+[Sun Nov 15 11:46:47.440958 2026] [authz_core:error] [pid 940187:tid 940323] [client 93.152.209.6:35600] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.htpasswd
+[Sun Nov 15 11:46:47.446752 2026] [authz_core:error] [pid 940187:tid 940327] [client 93.152.209.6:35348] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env
+[Sun Nov 15 11:46:47.448366 2026] [authz_core:error] [pid 940188:tid 940249] [client 93.152.209.6:35334] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.development
+[Sun Nov 15 11:46:47.451278 2026] [authz_core:error] [pid 940188:tid 940258] [client 93.152.209.6:35252] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.production.backup
+[Sun Nov 15 11:46:47.452232 2026] [authz_core:error] [pid 940188:tid 940224] [client 93.152.209.6:35504] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.kube
+[Sun Nov 15 11:46:47.453852 2026] [authz_core:error] [pid 940387:tid 940426] [client 93.152.209.6:35742] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.test
+[Sun Nov 15 11:46:47.466916 2026] [authz_core:error] [pid 940189:tid 940340] [client 93.152.209.6:35100] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/wp-config.php.old
+[Sun Nov 15 13:15:17.138492 2026] [ssl:warn] [pid 976914:tid 976914] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sun Nov 15 13:15:17.153447 2026] [ssl:warn] [pid 976914:tid 976914] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
