@@ -110,6 +110,12 @@ if (!function_exists('dui_icon')) {
                 $s = $g('sd', '#5ec8ff', '#0b5ed7') . $g('sh2', '#ffffff', '#ffffff');
                 $b = $shadow . '<path d="M32 4l22 8v15c0 15-9 25-22 30C19 52 10 42 10 27V12z" fill="' . $f('sd') . '"/><path d="M32 8l18 6.5V27c0 12-7 20.5-18 25" fill="#fff" opacity=".18"/><path d="M21 30l8 8 14-15" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>';
                 break;
+            case 'briefcase':
+                $s = $g('bc', '#ffb347', '#f06400') . $g('bp', '#fff3d9', '#ffd28a');
+                $b = $shadow . '<path d="M23 13V9c0-3 2-5 5-5h8c3 0 5 2 5 5v4" fill="none" stroke="#b94a00" stroke-width="5" stroke-linecap="round"/>'
+                    . '<rect x="7" y="13" width="50" height="42" rx="7" fill="' . $f('bc') . '"/><path d="M7 29h50v8H7z" fill="#b94a00" opacity=".28"/>'
+                    . '<path d="M7 28c9 5 17 7 25 7s16-2 25-7v-8a7 7 0 0 0-7-7H14a7 7 0 0 0-7 7z" fill="' . $f('bp') . '" opacity=".9"/><rect x="27" y="30" width="10" height="10" rx="2" fill="#fff" stroke="#d85b00" stroke-width="2"/>';
+                break;
             case 'alert':
                 $s = $g('al', '#ffc94d', '#ff7a00');
                 $b = $shadow . '<path d="M28 8.5a4.6 4.6 0 0 1 8 0l21 37A4.6 4.6 0 0 1 53 52H11a4.6 4.6 0 0 1-4-6.5z" fill="' . $f('al') . '"/><path d="M29 10.5 9 46" stroke="#fff" stroke-width="2" opacity=".4"/><rect x="29" y="20" width="6" height="18" rx="3" fill="#fff"/><circle cx="32" cy="44" r="3.6" fill="#fff"/>';

@@ -53,11 +53,12 @@ function citizen_notice_items($citizen_id)
     }
 
     $rows = $CI->db->query("SELECT s.id,s.subject,s.status,s.admin_note,s.updated_at FROM service_requests s
-        WHERE s.citizen_id=? AND s.status IN ('disetujui','ditolak','selesai') AND s.updated_at>=?
+        WHERE s.citizen_id=? AND s.status IN ('diproses','disetujui','ditolak','selesai') AND s.updated_at>=?
         AND NOT EXISTS (SELECT 1 FROM citizen_notice_reads n WHERE n.citizen_id=s.citizen_id AND n.kind='sr' AND n.ref_id=s.id AND n.status COLLATE utf8mb4_unicode_ci = s.status COLLATE utf8mb4_unicode_ci)
         ORDER BY s.updated_at DESC LIMIT 10", array($citizen_id, $since));
     $rows = $rows ? $rows->result_array() : array();
     $map = array(
+        'diproses' => array('revision', 'Pengajuan Sedang Diproses', 'Pengajuan Anda sudah diterima dan sedang diperiksa oleh pengurus RT.', 'Lihat Pengajuan'),
         'disetujui' => array('approved', 'Surat Anda Disetujui!', 'Pengajuan surat Anda telah di-ACC oleh Admin RT dan siap digunakan.', 'Lihat Surat'),
         'selesai' => array('approved', 'Pengajuan Selesai!', 'Pengajuan Anda telah selesai diproses oleh Admin RT.', 'Lihat Pengajuan'),
         'ditolak' => array('rejected', 'Pengajuan Surat Ditolak', 'Pengajuan surat Anda tidak dapat disetujui oleh Admin RT. Baca alasannya di bawah ini.', 'Lihat Detail'),
@@ -103,6 +104,135 @@ function citizen_notice_items($citizen_id)
             $items[] = array('kind' => 'cp', 'id' => (int) $r['id'], 'status' => $r['status'], 'tone' => $m[0], 'title' => $m[1], 'message' => $m[2],
                 'type' => 'Pengaduan & Aspirasi', 'code' => (string) $r['ticket_no'], 'note' => (string) $r['resolution_note'],
                 'time' => $time($r['updated_at']), 'sort' => $r['updated_at'], 'action' => $m[3], 'url' => site_url('warga/pengaduan/' . (int) $r['id']));
+        }
+    }
+
+    // Modul 03 (lanjutan): tindak lanjut / tanggapan petugas pada tiket pengaduan.
+    // Hanya tanggapan publik (is_internal=0) dari petugas. Perubahan status yang sudah dikabarkan di atas
+    // (menunggu warga / selesai / ditolak) tidak diulang. Satu item per tiket = tanggapan terbaru; penanda
+    // dibaca memakai status "u<ID tanggapan>", jadi tanggapan berikutnya memunculkan pop-up lagi.
+    if ($CI->db->table_exists('complaints') && $CI->db->table_exists('complaint_updates')) {
+        $rows = $CI->db->query("SELECT t.* FROM (
+                SELECT c.id, c.ticket_no, c.title, c.status, MAX(u.id) AS last_id, COUNT(u.id) AS n
+                  FROM complaints c
+                  JOIN complaint_updates u ON u.complaint_id=c.id AND u.actor_type='admin' AND u.is_internal=0 AND u.created_at>=?
+                       AND (u.status_to IS NULL OR u.status_to NOT IN ('waiting_resident','resolved','rejected'))
+                 WHERE c.citizen_id=?
+                 GROUP BY c.id, c.ticket_no, c.title, c.status) t
+            WHERE NOT EXISTS (SELECT 1 FROM citizen_notice_reads n WHERE n.citizen_id=? AND n.kind='cf' AND n.ref_id=t.id
+                  AND n.status COLLATE utf8mb4_unicode_ci = CONCAT('u', t.last_id) COLLATE utf8mb4_unicode_ci)
+            ORDER BY t.last_id DESC LIMIT 5", array($since, $citizen_id, $citizen_id));
+        $rows = $rows ? $rows->result_array() : array();
+        $cf_labels = array('submitted' => 'Diterima', 'triaged' => 'Ditelaah', 'assigned' => 'Ditugaskan', 'in_progress' => 'Diproses', 'reopened' => 'Dibuka Kembali',
+            'closed' => 'Ditutup', 'waiting_resident' => 'Menunggu Tanggapan Anda', 'resolved' => 'Selesai Ditangani', 'rejected' => 'Ditolak');
+        $latest = array();
+        if ($rows) foreach ($CI->db->select('id,message,created_at')->where_in('id', array_map(function ($r) {return (int) $r['last_id'];}, $rows))->get('complaint_updates')->result_array() as $u) $latest[(int) $u['id']] = $u;
+        foreach ($rows as $r) {
+            $u = $latest[(int) $r['last_id']] ?? array('message' => '', 'created_at' => NULL);
+            $items[] = array('kind' => 'cf', 'id' => (int) $r['id'], 'status' => 'u' . (int) $r['last_id'], 'status_label' => ($cf_labels[$r['status']] ?? 'Ditindaklanjuti'), 'tone' => 'approved', 'kicker' => 'Tindak Lanjut Pengaduan',
+                'title' => 'Ada Tanggapan dari Pengurus', 'message' => 'Pengurus RT menindaklanjuti pengaduan "' . $r['title'] . '".' . ((int) $r['n'] > 1 ? ' Ada ' . (int) $r['n'] . ' tanggapan baru.' : ''),
+                'type' => 'Pengaduan & Aspirasi', 'code' => (string) $r['ticket_no'], 'note' => (string) $u['message'],
+                'time' => $time($u['created_at']), 'sort' => (string) $u['created_at'], 'action' => 'Lihat Tindak Lanjut', 'url' => site_url('warga/pengaduan/' . (int) $r['id']), 'labels' => array('type' => 'Jenis', 'code' => 'No. Tiket', 'time' => 'Ditanggapi'));
+        }
+    }
+
+    // Modul 13: tahapan bantuan sosial — diusulkan, lolos verifikasi (layak), disetujui, tidak layak, atau ditolak.
+    // Diusulkan & layak hanya untuk program yang masih berjalan; keputusan akhir tetap dikabarkan walau program sudah ditutup.
+    if ($CI->db->table_exists('aid_recipients') && $CI->db->table_exists('aid_programs')) {
+        $when = "(CASE r.status WHEN 'usulan' THEN r.created_at WHEN 'layak' THEN r.verified_at WHEN 'tidak_layak' THEN r.verified_at ELSE r.approved_at END)";
+        $rows = $CI->db->query("SELECT r.id,r.status,r.decision_note,r.amount,p.name,p.aid_type,p.period,p.unit_value, $when decided_at
+            FROM aid_recipients r JOIN aid_programs p ON p.id=r.program_id
+            WHERE r.citizen_id=?
+            AND (r.status IN ('disetujui','tidak_layak','ditolak') OR (r.status IN ('usulan','layak') AND p.status<>'selesai'))
+            AND $when>=?
+            AND NOT EXISTS (SELECT 1 FROM citizen_notice_reads n WHERE n.citizen_id=r.citizen_id AND n.kind='bs' AND n.ref_id=r.id AND n.status COLLATE utf8mb4_unicode_ci = r.status COLLATE utf8mb4_unicode_ci)
+            ORDER BY decided_at DESC LIMIT 5", array($citizen_id, $since));
+        foreach (($rows ? $rows->result_array() : array()) as $r) {
+            $detail = trim($r['aid_type'] . ($r['period'] !== '' ? ' · ' . ucfirst($r['period']) : ''));
+            $prog = '"' . $r['name'] . '"';
+            // Nominal = "Nilai per Penerima" program saat ini (data program bisa diubah admin setelah warga diusulkan).
+            $value = (float) $r['unit_value'] > 0 ? (float) $r['unit_value'] : (float) $r['amount'];
+            $rupiah = $value > 0 ? 'Rp ' . number_format($value, 0, ',', '.') : '';
+            $amount = $rupiah !== '' ? ' senilai ' . $rupiah : '';
+            $kick = '';
+            if ($r['status'] === 'usulan') {
+                $m = array('approved', 'Anda Diusulkan Menerima Bantuan', 'Anda diusulkan sebagai calon penerima bantuan ' . $prog . $amount . '. Pengurus RT akan memverifikasi kelayakan terlebih dahulu; hasilnya akan dikabarkan di sini.');
+                $kick = 'Kabar dari Admin RT';
+            } elseif ($r['status'] === 'layak') {
+                $m = array('approved', 'Lolos Verifikasi Bantuan', 'Anda dinyatakan layak sebagai calon penerima bantuan ' . $prog . $amount . '. Saat ini menunggu persetujuan akhir dari pengurus RT.');
+                $kick = 'Kabar baik dari Admin RT';
+            } elseif ($r['status'] === 'disetujui') {
+                $m = array('approved', 'Bantuan Sosial Disetujui!', 'Selamat, Anda ditetapkan sebagai penerima bantuan ' . $prog . $amount . '. Pengurus RT akan menginformasikan jadwal penyalurannya.');
+            } elseif ($r['status'] === 'tidak_layak') {
+                $m = array('rejected', 'Belum Memenuhi Kriteria', 'Setelah diverifikasi, Anda belum memenuhi kriteria penerima bantuan ' . $prog . '. Baca alasannya di bawah ini. Hubungi pengurus RT bila ada data yang perlu diperbarui.');
+            } else {
+                $m = array('rejected', 'Usulan Bantuan Ditolak', 'Usulan Anda sebagai penerima bantuan ' . $prog . ' tidak disetujui oleh pengurus RT. Baca alasannya di bawah ini.');
+            }
+            // Catatan verifikasi (kriteria kelayakan) tidak ditampilkan saat diusulkan/layak; alasan tetap tampil saat tidak layak/ditolak/disetujui.
+            $note = in_array($r['status'], array('usulan', 'layak'), TRUE) ? '' : (string) $r['decision_note'];
+            $items[] = array('kind' => 'bs', 'id' => (int) $r['id'], 'status' => $r['status'], 'tone' => $m[0], 'kicker' => $kick, 'title' => $m[1], 'message' => $m[2],
+                'program' => (string) $r['name'], 'amount' => in_array($r['status'], array('tidak_layak', 'ditolak'), TRUE) ? '' : $rupiah,
+                'type' => 'Bantuan Sosial' . ($detail !== '' ? ' — ' . $detail : ''), 'code' => 'BNS-' . str_pad($r['id'], 6, '0', STR_PAD_LEFT), 'note' => $note,
+                'time' => $time($r['decided_at']), 'sort' => $r['decided_at'], 'action' => 'Mengerti', 'url' => site_url('warga'));
+        }
+    }
+
+    // Jadwal ronda baru untuk warga ini (jadwal yang dihubungkan ke akunnya, belum lewat). Muncul sekali per jadwal.
+    if ($CI->db->table_exists('patrol_schedules')) {
+        if (!isset($CI->feature_gate)) $CI->load->library('Feature_gate');
+        if ($CI->feature_gate->link_ok('warga/ronda', 'warga')) {
+            $shifts = array('shift_1' => 'Shift 1 (22.00–01.00)', 'shift_2' => 'Shift 2 (01.00–04.00)', 'penuh' => 'Semalam (22.00–04.00)');
+            $hari = array('Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu');
+            $rows = $CI->db->query("SELECT s.id,s.patrol_date,s.shift,s.post_location,s.created_at FROM patrol_schedules s
+                WHERE s.citizen_id=? AND s.patrol_date>=CURDATE() AND s.created_at>=?
+                AND NOT EXISTS (SELECT 1 FROM citizen_notice_reads n WHERE n.citizen_id=s.citizen_id AND n.kind='rd' AND n.ref_id=s.id AND n.status='jadwal')
+                ORDER BY s.patrol_date ASC, s.id ASC LIMIT 5", array($citizen_id, $since));
+            foreach (($rows ? $rows->result_array() : array()) as $r) {
+                $ts = strtotime($r['patrol_date']);
+                $when = $hari[(int) date('w', $ts)] . ', ' . date('j M Y', $ts);
+                $shift = $shifts[$r['shift']] ?? $r['shift'];
+                $items[] = array('kind' => 'rd', 'id' => (int) $r['id'], 'status' => 'jadwal', 'status_label' => 'Terjadwal', 'tone' => 'approved', 'kicker' => 'Jadwal Ronda dari Pengurus RT',
+                    'title' => 'Anda Dijadwalkan Ronda', 'message' => 'Anda dijadwalkan ronda pada ' . $when . ', ' . $shift . ' di ' . ($r['post_location'] ?: 'Pos Ronda') . '. Jangan lupa check-in saat bertugas.',
+                    'type' => 'Jadwal Ronda — ' . $shift, 'code' => 'RND-' . str_pad($r['id'], 5, '0', STR_PAD_LEFT), 'note' => '',
+                    'time' => $time($r['created_at']), 'sort' => $r['created_at'], 'action' => 'Lihat Jadwal Ronda', 'url' => site_url('warga/ronda'), 'labels' => array('type' => 'Jadwal', 'code' => 'No. Jadwal', 'time' => 'Dijadwalkan'));
+            }
+        }
+    }
+
+    // Pengumuman baru dari pengurus (berstatus terbit). Muncul sekali per warga per pengumuman.
+    if ($CI->db->table_exists('posts')) {
+        if (!isset($CI->feature_gate)) $CI->load->library('Feature_gate');
+        if ($CI->feature_gate->link_ok('pengumuman', 'warga')) {
+            $rows = $CI->db->query("SELECT p.id,p.title,p.body,p.created_at FROM posts p
+                WHERE p.type='pengumuman' AND p.status='published' AND p.created_at>=?
+                AND NOT EXISTS (SELECT 1 FROM citizen_notice_reads n WHERE n.citizen_id=? AND n.kind='an' AND n.ref_id=p.id AND n.status='pub')
+                ORDER BY p.created_at DESC LIMIT 3", array($since, $citizen_id));
+            foreach (($rows ? $rows->result_array() : array()) as $r) {
+                $text = trim(preg_replace('/\s+/u', ' ', html_entity_decode(strip_tags((string) $r['body']), ENT_QUOTES, 'UTF-8')));
+                if (mb_strlen($text) > 180) $text = mb_substr($text, 0, 177) . '…';
+                $items[] = array('kind' => 'an', 'id' => (int) $r['id'], 'status' => 'pub', 'status_label' => 'Pengumuman Baru', 'tone' => 'approved', 'kicker' => 'Pengumuman dari Pengurus RT',
+                    'title' => (string) $r['title'], 'message' => $text, 'type' => 'Pengumuman', 'code' => 'PNG-' . str_pad($r['id'], 5, '0', STR_PAD_LEFT), 'note' => '',
+                    'time' => $time($r['created_at']), 'sort' => $r['created_at'], 'action' => 'Baca Pengumuman', 'url' => site_url('pengumuman/' . (int) $r['id']), 'labels' => array('type' => 'Jenis', 'code' => 'No. Pengumuman', 'time' => 'Diterbitkan'));
+            }
+        }
+
+        // Agenda yang baru diterbitkan. Hanya agenda hari ini/mendatang dan muncul sekali per warga.
+        if ($CI->feature_gate->link_ok('agenda', 'warga')) {
+            $rows = $CI->db->query("SELECT p.id,p.title,p.body,p.event_date,p.event_time,p.event_location,p.created_at FROM posts p
+                WHERE p.type='agenda' AND p.status='published' AND p.event_date>=? AND p.created_at>=?
+                AND NOT EXISTS (SELECT 1 FROM citizen_notice_reads n WHERE n.citizen_id=? AND n.kind='ag' AND n.ref_id=p.id AND n.status='pub')
+                ORDER BY p.created_at DESC LIMIT 3", array(date('Y-m-d'), $since, $citizen_id));
+            foreach (($rows ? $rows->result_array() : array()) as $r) {
+                $text = trim(preg_replace('/\s+/u', ' ', html_entity_decode(strip_tags((string) $r['body']), ENT_QUOTES, 'UTF-8')));
+                if (mb_strlen($text) > 120) $text = mb_substr($text, 0, 117) . '…';
+                $schedule = date('d M Y', strtotime($r['event_date']));
+                if (!empty($r['event_time'])) $schedule .= ', pukul ' . substr($r['event_time'], 0, 5) . ' WIB';
+                if (trim((string) $r['event_location']) !== '') $schedule .= ' di ' . trim((string) $r['event_location']);
+                $message = 'Akan dilaksanakan pada ' . $schedule . '.' . ($text !== '' ? ' ' . $text : '');
+                $items[] = array('kind' => 'ag', 'id' => (int) $r['id'], 'status' => 'pub', 'status_label' => 'Agenda Baru', 'tone' => 'approved', 'kicker' => 'Agenda dari Pengurus RT',
+                    'title' => (string) $r['title'], 'message' => $message, 'type' => 'Agenda Kegiatan', 'code' => 'AGD-' . str_pad($r['id'], 5, '0', STR_PAD_LEFT), 'note' => '',
+                    'time' => $time($r['created_at']), 'sort' => $r['created_at'], 'action' => 'Lihat Agenda', 'url' => site_url('agenda/' . (int) $r['id']));
+            }
         }
     }
 

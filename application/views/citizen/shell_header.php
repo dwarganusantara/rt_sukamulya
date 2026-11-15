@@ -23,7 +23,7 @@ $sh_icon = function ($key, $s = 24) use ($sh_icons, $sh_extra, $sh_svg) { $n = $
 ?>
 <header class="dwh"><svg class="dwh-ribbon" viewBox="0 0 900 90" preserveAspectRatio="none" aria-hidden="true"><path d="M260 0C430 60 640 82 900 30V0Z" fill="#ffffff" opacity=".10"/><path d="M380 0C540 44 700 58 900 14V0Z" fill="#ff3150" opacity=".35"/><path d="M470 0C600 30 740 40 900 6" fill="none" stroke="#fff" stroke-width="3" opacity=".55"/><path d="M330 0C500 52 690 70 900 22" fill="none" stroke="#fff" stroke-width="1.5" opacity=".35"/></svg>
  <div class="dwh-top dwb-wrap">
-  <a class="dwh-brand" href="<?= site_url('warga') ?>"><img src="<?= base_url(html_escape($sh['logo'])) ?>" alt="Logo <?= html_escape($sh['app']) ?>"><span><b><?= html_escape($sh['app_l1']) ?></b><?php if ($sh['app_l2'] !== ''): ?><b><?= html_escape($sh['app_l2']) ?></b><?php endif; ?></span></a>
+  <a class="dwh-brand" href="<?= site_url('warga') ?>"><i class="dwh-logo"><img src="<?= base_url(html_escape($sh['logo_icon'])) ?>" alt="Logo <?= html_escape($sh['app']) ?>"></i><span><b><?= html_escape($sh['app_l1']) ?></b><?php if ($sh['app_l2'] !== ''): ?><b><?= html_escape($sh['app_l2']) ?></b><?php endif; ?></span></a>
   <?php /* Kotak lokasi RT di header dihapus (permintaan desain) — identitas RT tetap tampil di konten halaman. */ ?>
   <div class="dwh-actions">
    <?php if ($sh_guest): ?>
@@ -38,7 +38,7 @@ $sh_icon = function ($key, $s = 24) use ($sh_icons, $sh_extra, $sh_svg) { $n = $
     <div class="dwh-menu" role="menu">
      <a role="menuitem" href="<?= site_url('warga/profil') ?>"><?= dui_line('profile', 18) ?>Profil Saya</a>
      <a role="menuitem" href="<?= site_url('warga/password') ?>"><?= dui_line('key', 18) ?>Ubah Password</a>
-     <a role="menuitem" class="out" href="<?= site_url('warga/logout') ?>"><?= dui_line('logout', 18) ?>Keluar</a>
+     <a role="menuitem" class="out" href="<?= logout_url('warga/logout') ?>"><?= dui_line('logout', 18) ?>Keluar</a>
     </div>
    </details>
    <button type="button" class="dwh-burger" id="dwh-burger" aria-controls="dwh-nav" aria-expanded="false" aria-label="Buka menu"><?= dui_line('menu', 26) ?></button>

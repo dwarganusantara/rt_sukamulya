@@ -17,7 +17,7 @@
   const acknowledge = (ms = SNOOZE_MS) => store.set({ sig: data.signature, until: Date.now() + ms });
 
   const render = (fresh = {}) => {
-    ['kk', 'letters'].forEach(type => {
+    ['kk', 'letters', 'complaints', 'dues'].forEach(type => {
       const box = dialog.querySelector(`[data-aal="${type}"]`);
       const info = data[type] || { count: 0, items: [] };
       box.hidden = !info.count;
@@ -35,14 +35,19 @@
       }));
       if (info.count > (info.items || []).length) {
         const more = document.createElement('li'); more.className = 'aal-more';
-        more.textContent = `+${info.count - info.items.length} pengajuan lainnya`;
+        const noun = type === 'complaints' ? 'pengaduan' : (type === 'dues' ? 'pembayaran' : 'pengajuan');
+        more.textContent = `+${info.count - info.items.length} ${noun} lainnya`;
         list.append(more);
       }
     });
     const parts = [];
     if (data.kk?.count) parts.push(`${data.kk.count} verifikasi KK`);
     if (data.letters?.count) parts.push(`${data.letters.count} pengajuan surat`);
-    document.getElementById('aal-title').textContent = fresh.kk || fresh.letters ? 'Ada Pengajuan Baru Masuk!' : 'Pengajuan Menunggu Verifikasi';
+    if (data.complaints?.count) parts.push(`${data.complaints.count} pengaduan warga`);
+    if (data.dues?.count) parts.push(`${data.dues.count} pembayaran iuran`);
+    const hasFresh = fresh.kk || fresh.letters || fresh.complaints || fresh.dues;
+    const onlyFreshDue = fresh.dues && !fresh.kk && !fresh.letters && !fresh.complaints;
+    document.getElementById('aal-title').textContent = hasFresh ? (onlyFreshDue ? 'Ada Pembayaran Iuran Baru!' : 'Ada Layanan Baru Masuk!') : 'Layanan Warga Menunggu Tindakan';
     document.getElementById('aal-sub').textContent = `${parts.join(' dan ')} menunggu tindakan Anda.`;
     dialog.querySelector('.aal-grid').classList.toggle('is-single', parts.length === 1);
     document.title = data.total ? `(${data.total}) ${baseTitle}` : baseTitle;
@@ -85,7 +90,7 @@
   });
 
   // First paint: on the review pages themselves the list is already visible, so just record it.
-  const onReviewPage = /^admin\/(kk\/pengajuan|requests|request_detail)(\/|$)/.test(page);
+  const onReviewPage = /^admin\/(kk\/pengajuan|requests|request_detail|pengaduan|dues)(\/|$)/.test(page);
   render();
   if (onReviewPage) { if (store.get().sig !== data.signature) acknowledge(); }
   else if (shouldShow()) show({}, false);
@@ -100,9 +105,11 @@
       const fresh = {
         kk: (next.kk?.latest_id || 0) > (data.kk?.latest_id || 0),
         letters: (next.letters?.latest_id || 0) > (data.letters?.latest_id || 0),
+        complaints: (next.complaints?.latest_id || 0) > (data.complaints?.latest_id || 0),
+        dues: (next.dues?.latest_id || 0) > (data.dues?.latest_id || 0),
       };
       data = next;
-      if (fresh.kk || fresh.letters) show(fresh, true);
+      if (fresh.kk || fresh.letters || fresh.complaints || fresh.dues) show(fresh, true);
       else if (dialog.open) show({}, false); // keep the open popup current
       else render();
     } catch { /* offline: try again next tick */ }

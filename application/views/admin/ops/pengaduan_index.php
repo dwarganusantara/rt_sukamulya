@@ -16,7 +16,8 @@ $url = function ($extra = array()) use ($status, $category, $q) {
 $filtered = $q !== '' || $category !== '' || $status !== 'open';
 $offset = ($page - 1) * 15;
 ?>
-<div class="pg">
+<link rel="stylesheet" href="<?= base_url('assets/admin-complaints-orange.css') ?>?v=<?= filemtime(FCPATH . 'assets/admin-complaints-orange.css') ?>">
+<div class="pg pg-complaints">
  <?= pg_crumb(array(array('Layanan Warga', NULL), array('Pengaduan & Aspirasi', NULL))) ?>
  <section class="pg-hero pg-hero-care pg-hero-note"><span class="pg-hero-ic"><?= official_svg('megaphone') ?></span><div class="pg-hero-tx"><span class="pg-kicker">Layanan Warga</span><h1>Pengaduan &amp; Aspirasi</h1><p>Tiket laporan, keluhan, atau usulan warga terkait lingkungan, fasilitas, maupun pelayanan. Tentukan prioritas dan PIC, lalu tanggapi hingga selesai.</p></div><span class="pg-note-art chat" aria-hidden="true"></span></section>
  <?= ops_flash() ?>

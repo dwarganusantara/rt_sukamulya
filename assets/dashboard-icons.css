@@ -20,8 +20,9 @@ body.dwb{margin:0;min-height:100vh;display:flex;flex-direction:column;background
 .dwh-ribbon{position:absolute;right:0;top:0;width:min(60vw,900px);height:76px;z-index:-1;pointer-events:none}
 .dwh-top{position:relative;min-height:76px;display:flex;align-items:center;gap:0}
 .dwh-brand{display:flex;align-items:center;gap:12px;min-width:0}
-.dwh-brand img{width:52px;height:52px;flex:none;object-fit:contain;padding:4px;border-radius:14px;background:linear-gradient(160deg,#fff,#ffeef2);box-shadow:0 4px 12px #0003,inset 0 -2px 0 #0000000d}
-.dwh-brand span{display:grid;line-height:1.05}.dwh-brand b{font-size:23px;font-weight:800;letter-spacing:.1px;white-space:nowrap;text-shadow:0 1px 2px #00000033}
+.dwh-brand .dwh-logo{width:64px;height:64px;flex:none;display:block}
+.dwh-brand .dwh-logo img,:root .dwh-brand .dwh-logo img{display:block;width:100%;height:100%;max-width:none;object-fit:contain;padding:0;border-radius:0;background:none;box-shadow:none;filter:drop-shadow(0 2px 3px #0000004d)}
+.dwh-brand span{display:flex;align-items:baseline;gap:.3em;line-height:1.05;white-space:nowrap}.dwh-brand b{font-size:23px;font-weight:800;letter-spacing:.1px;white-space:nowrap;text-shadow:0 1px 2px #00000033}
 .dwh-vsep{width:2px;height:45px;flex:none;border-radius:2px;background:#ffffffa6}
 .dwh-vsep-brand{margin:0 28px}
 /* Identitas RT: chip lokasi kaca (tidak kaku) */
@@ -200,7 +201,7 @@ body.dwb{margin:0;min-height:100vh;display:flex;flex-direction:column;background
 }
 @media(max-width:767px){
  .dwb-wrap{width:calc(100% - 24px)}
- .dwh-brand img{width:42px;height:42px;border-radius:12px}.dwh-brand b{font-size:15px}
+ .dwh-brand .dwh-logo{width:44px;height:44px;border-radius:12px}.dwh-brand b{font-size:15px}
  .dwh-brand span{display:none}.dwh-loc{margin-left:10px;padding:4px 12px;min-width:0}.dwh-loc-ic{display:none}.dwh-loc-tx b{font-size:15px}.dwh-loc-tx span{font-size:12px}
  .dwh-actions{gap:6px}.dwh-bell{width:44px;height:44px}.dwh-bell .dui-line{width:24px;height:24px}.dwh-user img{width:44px;height:44px;border-width:2px}.dwh-user>summary{min-height:44px}.dwh-user>summary>.dui-line{display:none}
  .dwhero{min-height:0;border-radius:22px}

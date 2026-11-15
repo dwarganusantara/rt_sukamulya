@@ -2,6 +2,16 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
+| SEC-04: header keamanan dasar untuk semua respons (lihat application/hooks/Security_headers.php).
+*/
+$hook['pre_controller'][] = array(
+    'class'    => '',
+    'function' => 'security_headers_hook',
+    'filename' => 'Security_headers.php',
+    'filepath' => 'hooks',
+);
+
+/*
 | Manajemen Fitur & Menu: gerbang server untuk semua route fitur (halaman, AJAX, ekspor, unduhan).
 | Fitur nonaktif ditolak walau URL dibuka langsung (BR-09).
 */

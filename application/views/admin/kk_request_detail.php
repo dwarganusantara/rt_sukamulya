@@ -3,7 +3,7 @@ $this->load->helper('family_ui');
 $code='KK-'.str_pad($request['id'],6,'0',STR_PAD_LEFT);
 $status_info=array('pending'=>array('Menunggu Verifikasi','hourglass','is-pending'),'approved'=>array('Disetujui','check','is-approved'),'rejected'=>array('Ditolak','close','is-rejected'),'revision_requested'=>array('Perlu Perbaikan','edit','is-revision'));
 $si=$status_info[$request['status']]??array($request['status'],'info','');
-$labels=array('nomor_kk'=>'Nomor KK','alamat'=>'Alamat','rt'=>'RT','rw'=>'RW','kelurahan'=>'Kelurahan / Desa','kecamatan'=>'Kecamatan','kota'=>'Kabupaten / Kota','provinsi'=>'Provinsi','kode_pos'=>'Kode Pos','nama_lengkap'=>'Nama Lengkap','nik'=>'NIK','jenis_kelamin'=>'JK','tempat_lahir'=>'Tempat Lahir','tanggal_lahir'=>'Tanggal Lahir','agama'=>'Agama','pendidikan'=>'Pendidikan','pekerjaan'=>'Pekerjaan','golongan_darah'=>'Gol. Darah','hubungan_keluarga'=>'Hubungan');
+$labels=array('nomor_kk'=>'Nomor KK','alamat'=>'Alamat sesuai KK','rt'=>'RT','rw'=>'RW','kelurahan'=>'Kelurahan / Desa','kecamatan'=>'Kecamatan','kota'=>'Kabupaten / Kota','provinsi'=>'Provinsi','kode_pos'=>'Kode Pos','nama_lengkap'=>'Nama Lengkap','nik'=>'NIK','jenis_kelamin'=>'JK','tempat_lahir'=>'Tempat Lahir','tanggal_lahir'=>'Tanggal Lahir','agama'=>'Agama','pendidikan'=>'Pendidikan','pekerjaan'=>'Pekerjaan','golongan_darah'=>'Gol. Darah','hubungan_keluarga'=>'Hubungan');
 $family_icons=array('nomor_kk'=>'card','alamat'=>'home','rt'=>'home','rw'=>'hash','kelurahan'=>'building','kecamatan'=>'pin','kota'=>'building','provinsi'=>'map','kode_pos'=>'mail');
 $v=function($x){$x=trim((string)$x);return $x!==''?$x:'-';};
 $show=function($key,$value) use($v){ if($key==='tanggal_lahir'&&$value&&strtotime($value)) return date('d-m-Y',strtotime($value)); if($key==='jenis_kelamin') return $value?:'-'; return $v($value); };
@@ -22,7 +22,7 @@ $done=$request['status']!=='pending';
 ?>
 <link rel="stylesheet" href="<?= base_url('assets/admin-kk.css') ?>?v=<?= filemtime(FCPATH.'assets/admin-kk.css') ?>">
 <div class="akk akk-detail">
-<nav class="akk-crumb" aria-label="Breadcrumb"><a href="<?= site_url('admin') ?>"><?= family_icon('home') ?>Beranda</a><?= family_icon('chevron-right') ?><a href="<?= site_url('admin/kk/pengajuan') ?>">Verifikasi KK</a><?= family_icon('chevron-right') ?><span aria-current="page"><?= $code ?></span></nav>
+<nav class="akk-crumb" aria-label="Breadcrumb"><a href="<?= site_url('admin') ?>"><?= family_icon('home') ?>Beranda</a><?= family_icon('chevron-right') ?><a href="<?= site_url('admin/kk/pengajuan') ?>">Pengajuan &amp; Verifikasi KK</a><?= family_icon('chevron-right') ?><span aria-current="page"><?= $code ?></span></nav>
 <?php if($msg=$this->session->flashdata('kk_notice')): ?><div class="akk-flash is-ok" role="status"><?= family_icon('check') ?><span><?= html_escape($msg) ?></span></div><?php endif; ?>
 <?php if($msg=$this->session->flashdata('kk_error')): ?><div class="akk-flash is-err" role="alert"><?= family_icon('info') ?><span><?= html_escape($msg) ?></span></div><?php endif; ?>
 

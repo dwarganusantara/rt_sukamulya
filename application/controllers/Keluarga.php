@@ -107,7 +107,7 @@ class Keluarga extends CI_Controller
                 $this->load->helper('rt_audit');
                 rt_audit('kk_'.$status,'kk_request:'.(int)$id,$notes);
                 $owner=$this->db->select('citizen_id')->get_where('kk_scan_requests',array('id'=>(int)$id))->row_array();
-                if($owner) {
+                if($owner && $owner['citizen_id']!==NULL) {
                     $this->load->library('Notifier');
                     $this->notifier->enqueue_citizen((int)$owner['citizen_id'],'Pengajuan data KK '.$labels[$status],
                         'Pengajuan data Kartu Keluarga Anda (KK-'.str_pad((int)$id,6,'0',STR_PAD_LEFT).') telah '.$labels[$status].'.'.($status!=='approved'&&$notes!==''?"\nCatatan pengurus: ".$notes:''),
@@ -131,16 +131,22 @@ class Keluarga extends CI_Controller
         $page=max(1,(int)$this->input->get('hal'));
 
         $counts=array('pending'=>0,'approved'=>0,'rejected'=>0,'revision_requested'=>0);
-        foreach($this->db->select('status,COUNT(*) n')->group_by('status')->get('kk_scan_requests')->result_array() as $row) $counts[$row['status']]=(int)$row['n'];
+        foreach($this->db->select('status,COUNT(*) n')->group_by('status')->get('kk_scan_requests')->result_array() as $row) if(isset($counts[$row['status']])) $counts[$row['status']]=(int)$row['n'];
         $counts['all']=array_sum($counts);
 
         $filter=function() use($status,$period,$q) {
-            $this->db->from('kk_scan_requests r')->join('citizens c','c.id=r.citizen_id');
-            if($status!=='all') $this->db->where('r.status',$status);
+            // LEFT JOIN: pengajuan input admin (Master KK) tidak memiliki akun warga.
+            $this->db->from('kk_scan_requests r')->join('citizens c','c.id=r.citizen_id','left');
+            if($status!=='all') $this->db->where('r.status',$status); else $this->db->where('r.status <>','draft');
             if($period==='today') $this->db->where('r.created_at >=',date('Y-m-d 00:00:00'));
             elseif($period!=='all') $this->db->where('r.created_at >=',date('Y-m-d H:i:s',strtotime('-'.$period.' days')));
             // proposed_data_json holds nama, NIK and nomor KK, so one LIKE covers all three.
-            if($q!=='') $this->db->group_start()->like('c.display_name',$q)->or_like('c.full_name',$q)->or_like('r.proposed_data_json',$q)->group_end();
+            if($q!=='') {
+                $this->db->group_start()->like('c.display_name',$q)->or_like('c.full_name',$q)->or_like('r.proposed_data_json',$q);
+                // No. Pengajuan "KK-000012" / "kk12" -> cocokkan ke id pengajuan.
+                if(preg_match('/^kk-?0*(\d{1,9})$/i',$q,$m)) $this->db->or_where('r.id',(int)$m[1]);
+                $this->db->group_end();
+            }
         };
         $filter(); $total=(int)$this->db->count_all_results();
         $pages=max(1,(int)ceil($total/$per)); $page=min($page,$pages);
@@ -154,7 +160,7 @@ class Keluarga extends CI_Controller
             foreach(($data['anggota']??array()) as $m) $members[]=array('nama'=>$m['nama_lengkap']??'','nik'=>$m['nik']??'','hubungan'=>$m['hubungan_keluarga']??'','jk'=>$m['jenis_kelamin']??'');
             $head=''; foreach($members as $m) if(strcasecmp($m['hubungan'],'Kepala Keluarga')===0) {$head=$m['nama'];break;}
             $items[]=array('id'=>(int)$row['id'],'code'=>'KK-'.str_pad($row['id'],6,'0',STR_PAD_LEFT),'status'=>$row['status'],
-                'name'=>($row['full_name']?:$row['display_name']),'nomor_kk'=>$data['keluarga']['nomor_kk']??'','alamat'=>$data['keluarga']['alamat']??'',
+                'name'=>$row['citizen_id']===NULL?'Input Admin RT'.($head?' · '.$head:''):($row['full_name']?:$row['display_name']),'nomor_kk'=>$data['keluarga']['nomor_kk']??'','alamat'=>$data['keluarga']['alamat']??'',
                 'rt_rw'=>trim(($data['keluarga']['rt']??'').' / '.($data['keluarga']['rw']??''),' /'),'kepala'=>$head,'members'=>$members,
                 'created_at'=>$row['created_at'],'review_notes'=>(string)$row['review_notes'],'reviewed_at'=>$row['reviewed_at']);
         }
@@ -166,10 +172,18 @@ class Keluarga extends CI_Controller
 
     private function admin_detail($id)
     {
-        $request=$this->db->select('r.*,c.display_name,c.full_name,c.phone,c.username')->from('kk_scan_requests r')->join('citizens c','c.id=r.citizen_id')->where('r.id',$id)->get()->row_array();
+        $request=$this->db->select('r.*,c.display_name,c.full_name,c.phone,c.username')->from('kk_scan_requests r')->join('citizens c','c.id=r.citizen_id','left')->where('r.id',$id)->get()->row_array();
         if(!$request) show_404();
         $fields=$this->kk_fields->normalize(json_decode($request['proposed_data_json'],TRUE)?:array());
-        $existing=$this->Kk_model->family($request['citizen_id']);
+        if($request['citizen_id']===NULL) {
+            // Input admin: pemohon = petugas penginput; data lama dicari dari nomor KK yang sama.
+            $by=!empty($request['created_by_admin'])?$this->db->select('username')->get_where('admins',array('id'=>(int)$request['created_by_admin']))->row_array():NULL;
+            $request['full_name']='Input Admin RT'; $request['display_name']='Input Admin RT';
+            $request['username']=$by['username']??'admin'; $request['phone']='';
+            $existing=$this->Kk_model->family_by_kk($fields['keluarga']['nomor_kk']);
+        } else {
+            $existing=$this->Kk_model->family($request['citizen_id']);
+        }
         $reviewer=$request['reviewed_by']?$this->db->select('username')->get_where('admins',array('id'=>(int)$request['reviewed_by']))->row_array():NULL;
         $this->load->view('admin/header');
         $this->load->view('admin/kk_request_detail',array('request'=>$request,'fields'=>$fields,'existing'=>$existing,'reviewer'=>$reviewer['username']??'',

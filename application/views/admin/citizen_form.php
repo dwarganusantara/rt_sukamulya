@@ -1,10 +1,10 @@
 <?php $label=$editing?'Edit':'Tambah'; ?>
 <div class="acf-page">
- <nav class="acf-breadcrumb"><a href="<?= site_url('admin/citizens') ?>">Data Warga</a><span>›</span><a href="<?= site_url('admin/citizens') ?>">Akun Warga</a><span>›</span><b><?= $label ?> Akun</b></nav>
+ <nav class="acf-breadcrumb"><a href="<?= site_url('admin/citizens') ?>">Kependudukan</a><span>›</span><a href="<?= site_url('admin/citizens') ?>">Akun Portal Warga</a><span>›</span><b><?= $label ?> Akun</b></nav>
  <header class="acf-hero"><span class="acf-hero-icon">♟<i>+</i></span><div><h1><?= $label ?> Akun Warga</h1><p><?= $editing?'Perbarui informasi akun warga yang terdaftar.':'Buat akun untuk warga agar dapat mengakses layanan dan informasi RT secara online.' ?></p></div></header>
  <?php if($error): ?><div class="error acf-error"><?= html_escape($error) ?></div><?php endif; ?>
- <form class="acf-layout" method="post" enctype="multipart/form-data" id="citizen-account-form">
-  <section class="acf-card acf-main-card">
+ <form class="acf-layout" method="post" enctype="multipart/form-data" id="citizen-account-form" data-rsp-tabs>
+  <section class="acf-card acf-main-card" data-rsp-tab="Data Akun">
    <header class="acf-card-head"><span>▣</span><div><h2>Informasi Akun</h2><p>Lengkapi data berikut untuk <?= $editing?'memperbarui':'membuat' ?> akun warga.</p></div></header>
    <div class="acf-grid">
     <label><strong>Nama lengkap</strong><span class="acf-control"><i>♙</i><input name="full_name" maxlength="140" placeholder="Masukkan nama lengkap warga" value="<?= html_escape($item['full_name']??$item['display_name']??'') ?>" required></span></label>
@@ -21,7 +21,7 @@
    </div>
    <div class="acf-actions"><button class="acf-submit" type="submit">➤ &nbsp; Simpan akun</button><button class="acf-reset" type="reset">↻ &nbsp; Reset</button></div>
   </section>
-  <aside class="acf-side">
+  <aside class="acf-side" data-rsp-tab="Foto &amp; Informasi">
    <section class="acf-card acf-photo-card"><h2><span>▣</span> Foto Profil <small>(opsional)</small></h2><label class="acf-photo-drop" for="acf-photo"><span class="acf-photo-preview"><?php if($profile_photo): ?><img id="acf-preview" src="<?= base_url(html_escape($profile_photo)) ?>" alt="Foto profil"><?php else: ?><img id="acf-preview" alt="" hidden><b id="acf-placeholder">♟</b><?php endif; ?><i>▣</i></span><strong>Klik untuk upload foto</strong><small>JPG, PNG, WebP, GIF, BMP, AVIF (Maks. 2MB)</small></label><input id="acf-photo" type="file" name="profile_photo" accept="<?= image_accept() ?>"></section>
    <section class="acf-card acf-info-card"><h2><span>i</span> Informasi</h2><ul><li><i class="blue">♟</i>Akun warga digunakan untuk login ke website RT.</li><li><i class="green">♟</i>Pastikan password yang diberikan aman.</li><li><i class="orange">♟</i>Warga dengan akun aktif dapat mengajukan surat dan melihat informasi.</li><li><i class="purple">✉</i>Email dan WhatsApp bersifat opsional namun sangat membantu.</li><li><i class="red">◆</i>Data warga akan disimpan dengan aman.</li></ul></section>
   </aside>

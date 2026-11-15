@@ -1,0 +1,7 @@
+<?php
+if(PHP_SAPI!=='cli'){http_response_code(404);exit;}
+$db=new mysqli('localhost','root','','sukamulya');
+if(($argv[1]??'')==='cleanup'){$id=(int)($argv[2]??0);$s=$db->prepare("DELETE FROM admins WHERE id=? AND username LIKE 'ui_live_%'");$s->bind_param('i',$id);$s->execute();exit;}
+$name='ui_live_'.bin2hex(random_bytes(8));$password=bin2hex(random_bytes(24));$hash=password_hash($password,PASSWORD_DEFAULT);$role='admin';$s=$db->prepare('INSERT INTO admins(username,password_hash,role,is_active) VALUES(?,?,?,1)');$s->bind_param('sss',$name,$hash,$role);$s->execute();$id=$db->insert_id;
+$c=curl_init();curl_setopt_array($c,array(CURLOPT_RETURNTRANSFER=>TRUE,CURLOPT_COOKIEFILE=>'',CURLOPT_TIMEOUT=>20,CURLOPT_PROXY=>''));
+try{curl_setopt($c,CURLOPT_URL,'http://localhost/sukamulya/admin/login');$html=curl_exec($c);if(!preg_match('/name="(csrf_[^"]+)"\s+value="([^"]+)"/',$html,$csrf))throw new RuntimeException('Login token missing');curl_setopt_array($c,array(CURLOPT_POST=>TRUE,CURLOPT_POSTFIELDS=>http_build_query(array('username'=>$name,'password'=>$password,$csrf[1]=>$csrf[2]))));curl_exec($c);$cookies=array();foreach(curl_getinfo($c,CURLINFO_COOKIELIST) as $cookie){$p=explode("\t",$cookie);$cookies[]=array('name'=>$p[5],'value'=>$p[6],'url'=>'http://localhost','httpOnly'=>strpos($p[0],'#HttpOnly_')===0);}echo json_encode(array('id'=>$id,'cookies'=>$cookies));}catch(Throwable $e){$db->query('DELETE FROM admins WHERE id='.(int)$id);throw $e;}finally{curl_close($c);}

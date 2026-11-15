@@ -19,6 +19,36 @@ if (!function_exists('pg_crumb')) {
     }
 }
 
+if (!function_exists('pg_back_url')) {
+    /**
+     * URL kembali: halaman asal (Referer) bila masih di situs ini dan bukan halaman yang sama,
+     * selain itu $fallback (URI admin). Hanya URL internal yang dipakai.
+     */
+    function pg_back_url($fallback)
+    {
+        $ref = isset($_SERVER['HTTP_REFERER']) ? parse_url((string) $_SERVER['HTTP_REFERER']) : FALSE;
+        $host = isset($_SERVER['HTTP_HOST']) ? strtolower((string) $_SERVER['HTTP_HOST']) : '';
+        if ($ref && !empty($ref['host']) && !empty($ref['path'])) {
+            $ref_host = strtolower($ref['host']) . (isset($ref['port']) ? ':' . $ref['port'] : '');
+            $here = (string) parse_url(current_url(), PHP_URL_PATH);
+            // Hanya jalur internal (tanpa host) yang dikembalikan, jadi tidak bisa jadi open redirect.
+            if ($ref_host === $host && rtrim($ref['path'], '/') !== rtrim($here, '/') && !preg_match('#/(login|logout)\b#', $ref['path'])) {
+                return $ref['path'] . (isset($ref['query']) ? '?' . $ref['query'] : '');
+            }
+        }
+        return site_url($fallback);
+    }
+}
+
+if (!function_exists('pg_crumb_back')) {
+    /** Breadcrumb + tombol "Kembali" di kiri. $back = URI admin atau URL lengkap internal. */
+    function pg_crumb_back(array $items, $back, $label = 'Kembali')
+    {
+        $url = preg_match('#^(https?://|/)#', $back) ? $back : site_url($back);
+        return '<div class="pg-crumb-row"><a class="pg-back" href="' . html_escape($url) . '">' . official_svg('back') . '<span>' . html_escape($label) . '</span></a>' . pg_crumb($items) . '</div>';
+    }
+}
+
 if (!function_exists('pg_pager')) {
     /**
      * Pager « 1 2 3 » dengan jendela halaman.

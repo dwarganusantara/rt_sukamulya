@@ -13,9 +13,11 @@ $config['admin_menu_groups'] = array(
         array('admin', 'home', 'Dashboard', array('admin', 'operator', 'ketua', 'sekretaris', 'keamanan', 'inventaris', 'sosial', 'auditor')),
     )),
     'Kependudukan' => array('green', array(
-        array('admin/citizens', 'users', 'Data Warga', array('admin', 'operator', 'ketua')),
+        // Satu halaman per keluarga (KK), satu halaman per individu (NIK). Akun login ada di admin/citizens (Akun Portal Warga).
+        array('admin/keluarga', 'users', 'Data Keluarga / KK', 'perm:kk.read'),
+        array('admin/rumah', 'home', 'Rumah & Domisili', 'perm:rumah.read'),
         array('admin/penduduk', 'idcard', 'Data Penduduk', 'perm:penduduk.read'),
-        array('admin/kk/pengajuan', 'idcard', 'Verifikasi KK', array('admin', 'operator', 'ketua')),
+        array('admin/kk/pengajuan', 'idcard', 'Pengajuan & Verifikasi KK', array('admin', 'operator', 'ketua')),
         array('admin/mutasi', 'swap', 'Mutasi Warga', 'perm:mutasi.read'),
         array('admin/bansos', 'heart', 'Bantuan Sosial', 'perm:bansos.read'),
     )),
@@ -34,7 +36,6 @@ $config['admin_menu_groups'] = array(
         array('admin/dues', 'wallet', 'Iuran Warga', array('admin', 'bendahara', 'ketua')),
         array('admin/tunggakan', 'clock', 'Tunggakan Iuran Warga', 'perm:iuran.report'),
         array('admin/transactions', 'chart', 'Kas RT', array('admin', 'bendahara', 'ketua')),
-        array('admin/rekonsiliasi', 'scale', 'Rekonsiliasi Kas', 'perm:kas.report'),
     )),
     'Kegiatan & Keamanan' => array('orange', array(
         array('admin/program', 'briefcase', 'Program Kerja', 'perm:program.read'),
@@ -42,8 +43,6 @@ $config['admin_menu_groups'] = array(
         array('admin/ronda', 'shield', 'Jadwal Ronda', 'perm:ronda.read'),
     )),
     'Operasional RT' => array('blue', array(
-        array('admin/inventaris', 'box', 'Aset & Inventaris', 'perm:aset.read'),
-        array('admin/belanja', 'cart', 'Belanja & Penerimaan', 'perm:belanja.read'),
         array('admin/kontak', 'phone', 'Kontak Penting', 'perm:kontak.read'),
         array('admin/arsip', 'archive', 'Arsip Dokumen', 'perm:arsip.read'),
     )),
@@ -57,7 +56,8 @@ $config['admin_menu_groups'] = array(
         array('admin/letter_settings', 'mail', 'Pengaturan Surat RT', array('admin', 'ketua')),
         array('admin/quick_links', 'grid', 'Menu & Ikon', array('admin', 'ketua')),
         array('admin/akun', 'key', 'Akun & Hak Akses', 'perm:akun.manage'),
-        array('admin/field-tambahan', 'grid', 'Field Tambahan Warga', 'perm:pengaturan.fields'),
+        // Field Tambahan Warga disembunyikan dari sidebar (permintaan pemilik, 14 Nov 2026). Halaman tetap ada di
+        // admin/field-tambahan (izin pengaturan.fields dicek di controller) dan dibuka dari Tema & Tampilan.
         array('admin/antrean-email', 'mail', 'Antrean Email', 'perm:notifikasi.manage'),
         array('admin/serah-terima', 'org', 'Serah Terima Pengurus', 'perm:serahterima.read'),
         array('admin/audit', 'shield', 'Audit Aktivitas', 'perm:audit.read'),

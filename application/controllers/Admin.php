@@ -79,19 +79,31 @@ class Admin extends CI_Controller
                 if($data['error']==='')redirect('admin');
                 $this->load->view('admin/login',$data);return;
             }
-            $user = $this->db->get_where('admins', array('username' => $username))->row_array();
-            if ($user && isset($user['is_active']) && !(int) $user['is_active']) {
-                $data['error'] = 'Akun ini sudah dinonaktifkan. Hubungi Administrator.';
+            // SEC-02: brute-force protection (failed attempts only; platform owner has its own limiter above).
+            $this->load->library('Login_throttle');
+            if ($this->login_throttle->blocked('admin', $username)) {
+                $data['error'] = Login_throttle::MESSAGE;
                 $this->load->view('admin/login', $data);
                 return;
             }
+            $user = $this->db->get_where('admins', array('username' => $username))->row_array();
+            if (!$user) Login_throttle::dummy_verify($password);
             if ($user && password_verify($password, $user['password_hash'])) {
+                // SEC-09: the "deactivated" notice is only shown to someone who knows the password,
+                // so it no longer reveals which usernames exist.
+                if (isset($user['is_active']) && !(int) $user['is_active']) {
+                    $data['error'] = 'Akun ini sudah dinonaktifkan. Hubungi Administrator.';
+                    $this->load->view('admin/login', $data);
+                    return;
+                }
+                $this->login_throttle->succeed('admin', $username);
                 $this->session->sess_regenerate(TRUE);
                 $this->session->unset_userdata(array('platform_owner_name','platform_owner_fingerprint','platform_authenticated_at','platform_admin_id'));
                 $this->session->set_userdata('admin_id', $user['id']);
                 $this->session->set_userdata('admin_role', $user['role']);
                 redirect('admin');
             }
+            $this->login_throttle->fail('admin', $username);
             $data['error'] = 'Username atau password salah.';
         }
         $this->load->view('admin/login', $data);
@@ -99,6 +111,8 @@ class Admin extends CI_Controller
 
     public function logout()
     {
+        // SEC-08: only a POST (CSRF-checked) or the per-session logout link may end the session.
+        if (!logout_request_ok()) {logout_confirm_page('admin/logout', 'admin'); return;}
         $this->session->sess_destroy();
         redirect('admin/login');
     }
@@ -123,6 +137,10 @@ class Admin extends CI_Controller
             'agendas' => $this->db->where('type', 'agenda')->where('event_date >=', date('Y-m-d'))->order_by('event_date', 'ASC')->limit(4)->get('posts')->result_array(),
             'gallery' => $this->db->where('type', 'galeri')->where('image IS NOT NULL', NULL, FALSE)->order_by('created_at', 'DESC')->limit(4)->get('posts')->result_array(),
             'waiting_requests' => $this->db->where('status', 'diajukan')->count_all_results('service_requests'),
+            // Pembayaran iuran dari warga yang menunggu verifikasi (banner di beranda; hanya untuk peran yang boleh memverifikasi).
+            'waiting_payments' => in_array($this->session->userdata('admin_role'), array('admin', 'bendahara', 'ketua'), TRUE)
+                ? $this->db->select('COUNT(*) n, COALESCE(SUM(amount),0) total, MAX(created_at) latest', FALSE)->where('status', 'pending')->get('due_payments')->row_array()
+                : array('n' => 0, 'total' => 0, 'latest' => NULL),
             'dues_summary' => $dues,
             'pending_count' => $this->db->where('status', 'diajukan')->count_all_results('service_requests') + $this->db->where('status', 'pending')->count_all_results('posts') + $this->db->where('status', 'pending')->count_all_results('due_payments'),
         );
@@ -176,6 +194,75 @@ class Admin extends CI_Controller
                 ->where('service_requests.status !=', 'draft')->order_by('service_requests.id', 'DESC')->limit(3)->get('service_requests')->result_array() : NULL;
         $data['show_dues'] = in_array($role, array('admin', 'bendahara', 'ketua'), TRUE) && $on('dues');
         $data['show_cash'] = $can('kas.report') && $on('cash_report');
+
+        // Data ringkas dashboard baru. Seluruh nilai berasal dari data operasional,
+        // bukan angka contoh pada desain referensi.
+        $data['cash_month'] = array('income' => 0, 'expense' => 0, 'balance' => !empty($data['ops']) ? (float) $data['ops']['cash_balance'] : 0, 'trend' => array());
+        $data['cash_span'] = (int) $this->input->get('kas') === 12 ? 12 : 6;
+        if ($data['show_cash'] && $this->db->table_exists('transactions')) {
+            $cash_now = $this->db->select("COALESCE(SUM(CASE WHEN type='masuk' THEN amount ELSE 0 END),0) income, COALESCE(SUM(CASE WHEN type='keluar' THEN amount ELSE 0 END),0) expense", FALSE)
+                ->where('status', 'verified')->where('period', $month)->get('transactions')->row_array();
+            $data['cash_month']['income'] = (float) ($cash_now['income'] ?? 0);
+            $data['cash_month']['expense'] = (float) ($cash_now['expense'] ?? 0);
+            // Satu query GROUP BY untuk seluruh rentang (hanya transaksi terverifikasi, sama dengan modul Kas RT).
+            $first_period = date('Y-m', strtotime(date('Y-m-01') . ' -' . ($data['cash_span'] - 1) . ' month'));
+            $by_period = array();
+            foreach ($this->db->select("period, COALESCE(SUM(CASE WHEN type='masuk' THEN amount ELSE 0 END),0) income, COALESCE(SUM(CASE WHEN type='keluar' THEN amount ELSE 0 END),0) expense", FALSE)
+                ->where('status', 'verified')->where('period >=', $first_period)->where('period <=', $month)->group_by('period')->get('transactions')->result_array() as $row) $by_period[$row['period']] = $row;
+            for ($i = $data['cash_span'] - 1; $i >= 0; $i--) {
+                $period = date('Y-m', strtotime(date('Y-m-01') . " -$i month"));
+                $data['cash_month']['trend'][] = array('period' => $period, 'income' => (float) ($by_period[$period]['income'] ?? 0), 'expense' => (float) ($by_period[$period]['expense'] ?? 0));
+            }
+        }
+        $data['gender_stats'] = array('male' => 0, 'female' => 0);
+        if (!$data['citizens_locked'] && $this->db->field_exists('gender', 'citizens')) {
+            foreach ($this->db->select('gender,COUNT(*) total', FALSE)->where('is_active', 1)->group_by('gender')->get('citizens')->result_array() as $g) {
+                if (isset($data['gender_stats'][$g['gender']])) $data['gender_stats'][$g['gender']] = (int) $g['total'];
+            }
+        }
+        $data['letters_processing'] = $this->db->where_in('status', array('diajukan', 'diproses'))->count_all_results('service_requests');
+        $data['complaints_high'] = ($on('complaints') && $this->db->table_exists('complaints'))
+            ? $this->db->where('priority', 'high')->where_in('status', array('submitted', 'triaged', 'assigned', 'in_progress', 'waiting_resident', 'reopened'))->count_all_results('complaints') : 0;
+        $data['complaints_closed'] = ($on('complaints') && $this->db->table_exists('complaints'))
+            ? $this->db->where_in('status', array('resolved', 'closed'))->count_all_results('complaints') : 0;
+
+        // ---- Dashboard v7 (redesign desktop). Semua blok di bawah hanya MEMBACA data. ----
+        // Kartu/tautan hanya tampil bila menu tersebut diizinkan untuk peran ini DAN aktif secara langganan.
+        $menu_ok = function ($path) use ($role) {return $this->menu_access->allowed($role, $path) && $this->menu_access->commercial($path) === 'ALLOW';};
+        $data['menu_ok'] = array();
+        foreach (array('admin/keluarga', 'admin/penduduk', 'admin/rumah', 'admin/kk/pengajuan', 'admin/requests', 'admin/pengaduan', 'admin/transactions', 'admin/dues', 'admin/tunggakan', 'admin/posts/agenda', 'admin/mutasi') as $p) $data['menu_ok'][$p] = $menu_ok($p);
+        $data['house_count'] = ($data['menu_ok']['admin/rumah'] && $this->db->table_exists('rt_houses')) ? (int) $this->db->where('tenant_id', 1)->count_all_results('rt_houses') : NULL;
+        $data['kk_pending'] = ($data['menu_ok']['admin/kk/pengajuan'] && $this->db->table_exists('kk_scan_requests')) ? (int) $this->db->where('status', 'pending')->count_all_results('kk_scan_requests') : NULL;
+        $data['complaints_new'] = ($on('complaints') && $data['menu_ok']['admin/pengaduan'] && $this->db->table_exists('complaints')) ? (int) $this->db->where('status', 'submitted')->count_all_results('complaints') : 0;
+        $data['mutations_pending'] = ($data['menu_ok']['admin/mutasi'] && $can('mutasi.review')) ? (int) ($data['ops']['mutations_pending'] ?? 0) : 0;
+
+        // Rekap iuran: tagihan dibuat per AKUN WARGA (dues.citizen_id), bisa lebih dari satu kategori per periode.
+        // Lunas = total dibayar >= total tagihan warga tersebut pada periode itu.
+        $data['iuran'] = NULL;
+        if ($data['show_dues']) {
+            $periods = array_column($this->db->query('SELECT DISTINCT period FROM dues WHERE period <= ? ORDER BY period DESC LIMIT 12', array($month))->result_array(), 'period');
+            if (!in_array($month, $periods, TRUE)) array_unshift($periods, $month);
+            $pick = (string) $this->input->get('iuran', TRUE);
+            $period = in_array($pick, $periods, TRUE) ? $pick : $month;
+            $row = $this->db->query('SELECT COUNT(*) billed, COALESCE(SUM(paid >= due),0) lunas FROM (SELECT citizen_id, SUM(amount_due) due, SUM(amount_paid) paid FROM dues WHERE period=? GROUP BY citizen_id HAVING SUM(amount_due) > 0) x', array($period))->row_array();
+            $data['iuran'] = array('period' => $period, 'periods' => $periods, 'billed' => (int) $row['billed'], 'lunas' => (int) $row['lunas']);
+        }
+
+        // Agenda terdekat: hanya yang dipublikasikan dan belum lewat.
+        $data['agenda_next'] = $data['menu_ok']['admin/posts/agenda']
+            ? $this->db->select('id,title,event_date,event_time,event_location')->where(array('type' => 'agenda', 'status' => 'published'))->where('event_date >=', date('Y-m-d'))
+                ->order_by('event_date', 'ASC')->order_by('event_time', 'ASC')->limit(3)->get('posts')->result_array() : array();
+
+        // Aktivitas terbaru lintas modul (nama tampilan saja; tanpa NIK/isi dokumen).
+        $feed = array();
+        foreach ((array) $data['letters_latest'] as $r) $feed[] = array('kind' => 'letter', 'at' => $r['created_at'], 'title' => 'Pengajuan ' . ($r['letter_title'] ?: 'surat') . ' oleh ' . ($r['display_name'] ?: 'warga'), 'url' => 'admin/request_detail/' . (int) $r['id']);
+        if ($data['menu_ok']['admin/pengaduan']) foreach ((array) $data['complaints_latest'] as $r) $feed[] = array('kind' => 'complaint', 'at' => $r['created_at'], 'title' => 'Pengaduan ' . ($r['ticket_no'] ?: '#' . (int) $r['id']) . ' · ' . ($r['category'] ?: 'umum'), 'url' => 'admin/pengaduan/' . (int) $r['id']);
+        if ($data['show_dues'] && $data['menu_ok']['admin/dues']) foreach ($this->db->select('p.created_at, p.status, c.display_name')->from('due_payments p')->join('citizens c', 'c.id=p.citizen_id', 'left')->order_by('p.id', 'DESC')->limit(3)->get()->result_array() as $r)
+            $feed[] = array('kind' => 'payment', 'at' => $r['created_at'], 'title' => 'Pembayaran iuran oleh ' . ($r['display_name'] ?: 'warga') . ($r['status'] === 'pending' ? ' (menunggu verifikasi)' : ''), 'url' => 'admin/dues#pembayaran');
+        if ($data['kk_pending'] !== NULL) foreach ($this->db->select('r.id, r.created_at, r.citizen_id, c.display_name')->from('kk_scan_requests r')->join('citizens c', 'c.id=r.citizen_id', 'left')->where('r.status !=', 'draft')->order_by('r.id', 'DESC')->limit(3)->get()->result_array() as $r)
+            $feed[] = array('kind' => 'kk', 'at' => $r['created_at'], 'title' => 'Pengajuan data KK ' . ($r['citizen_id'] ? 'oleh ' . ($r['display_name'] ?: 'warga') : 'input pengurus'), 'url' => 'admin/kk/pengajuan/' . (int) $r['id']);
+        usort($feed, function ($a, $b) {return strcmp((string) $b['at'], (string) $a['at']);});
+        $data['activity'] = array_slice($feed, 0, 4);
         $this->render('dashboard', $data);
     }
 
@@ -292,10 +379,9 @@ class Admin extends CI_Controller
         $error = '';
         if ($this->input->method(TRUE) === 'POST') {
             $values = array();
-            foreach (array('site_name', 'brand_label', 'brand_subtitle', 'tagline', 'hero_kicker', 'hero_title', 'hero_accent', 'hero_text', 'about_title', 'about_text', 'value1_title', 'value1_text', 'value2_title', 'value2_text', 'value3_title', 'value3_text', 'slogan', 'citizen_hero_quote', 'address', 'email', 'phone', 'footer_text', 'map_url', 'emergency_contact', 'households', 'residents', 'female_residents', 'male_residents', 'whatsapp', 'instagram_url', 'youtube_url', 'facebook_url') as $key) {
+            foreach (array('site_name', 'brand_label', 'brand_subtitle', 'tagline', 'hero_kicker', 'hero_title', 'hero_accent', 'hero_text', 'about_title', 'about_text', 'value1_title', 'value1_text', 'value2_title', 'value2_text', 'value3_title', 'value3_text', 'slogan', 'citizen_hero_quote', 'address', 'email', 'phone', 'footer_text', 'map_url', 'emergency_contact', 'whatsapp', 'instagram_url', 'youtube_url', 'facebook_url') as $key) {
                 $values[$key] = trim((string) $this->input->post($key, TRUE));
             }
-            foreach (array('households', 'residents', 'female_residents', 'male_residents') as $key) $values[$key] = (string) max(0, (int) $values[$key]);
             // Modul 06: tema warna (hanya #rrggbb + cek kontras) dan sakelar fitur opsional.
             $this->load->helper('theme');
             if ($this->input->post('theme_reset')) {
@@ -308,10 +394,22 @@ class Admin extends CI_Controller
             }
             $values['complaint_anonymous'] = $this->input->post('complaint_anonymous') ? '1' : '0';
             $values['notify_email'] = $this->input->post('notify_email') ? '1' : '0';
+            // Admin cukup mengisi nama pengguna/handle. URL publik dibentuk saat ditampilkan.
+            $social_name = static function ($value) {
+                $value = trim((string) $value);
+                if (preg_match('#^https?://#i', $value)) {
+                    $path = trim((string) parse_url($value, PHP_URL_PATH), '/');
+                    $parts = $path === '' ? array() : explode('/', $path);
+                    $value = $parts ? end($parts) : '';
+                }
+                return ltrim(trim($value, "/ \t\n\r\0\x0B"), '@');
+            };
+            $values['instagram_url'] = $social_name($values['instagram_url']);
+            $values['youtube_url'] = $social_name($values['youtube_url']);
             if ($values['map_url'] && (!filter_var($values['map_url'], FILTER_VALIDATE_URL) || !in_array(strtolower((string) parse_url($values['map_url'], PHP_URL_SCHEME)), array('http','https'), TRUE))) $error = 'URL peta tidak valid.';
-            foreach (array('instagram_url' => 'Instagram', 'youtube_url' => 'YouTube', 'facebook_url' => 'Facebook') as $key => $label) {
-                if ($values[$key] && (!filter_var($values[$key], FILTER_VALIDATE_URL) || !in_array(strtolower((string) parse_url($values[$key], PHP_URL_SCHEME)), array('http','https'), TRUE))) $error = 'URL '.$label.' tidak valid.';
-            }
+            if ($values['instagram_url'] && !preg_match('/^[A-Za-z0-9._]{1,30}$/', $values['instagram_url'])) $error = 'Nama Instagram hanya boleh berisi huruf, angka, titik, atau garis bawah.';
+            if ($values['youtube_url'] && !preg_match('/^[\p{L}\p{N}._-]{1,100}$/u', $values['youtube_url'])) $error = 'Nama YouTube hanya boleh berisi huruf, angka, titik, garis bawah, atau tanda hubung.';
+            if ($values['facebook_url'] && (!filter_var($values['facebook_url'], FILTER_VALIDATE_URL) || !in_array(strtolower((string) parse_url($values['facebook_url'], PHP_URL_SCHEME)), array('http','https'), TRUE))) $error = 'URL Facebook tidak valid.';
             if (!empty($_FILES['home_banner_jpg']['name'])) {
                 $path = $this->upload_image('home_banner_jpg', $error);
                 if ($path) $values['home_banner_jpg'] = $path;
@@ -323,6 +421,13 @@ class Admin extends CI_Controller
             if (!empty($_FILES['logo']['name'])) {
                 $path = $this->upload_image('logo', $error);
                 if ($path) $values['logo'] = $path;
+            }
+            // Ikon logo kecil untuk header portal warga (opsional; kosong = pakai Logo RT).
+            if (!empty($_FILES['logo_icon']['name'])) {
+                $path = $this->upload_image('logo_icon', $error);
+                if ($path) $values['logo_icon'] = $path;
+            } elseif ($this->input->post('logo_icon_reset')) {
+                $values['logo_icon'] = '';
             }
             if (!empty($_FILES['about_image']['name'])) {
                 $path = $this->upload_image('about_image', $error);
@@ -492,12 +597,14 @@ class Admin extends CI_Controller
             $status = $this->input->post('status', TRUE);
             if (!in_array($status, array('draft', 'pending', 'published'), TRUE)) $status = 'draft';
             if ($status === 'published' && !in_array($this->session->userdata('admin_role'), array('admin', 'ketua'), TRUE)) $status = 'pending';
+            $became_published = $id && $status === 'published' && ($post['status'] ?? '') !== 'published';
             $data = array('type' => $type, 'title' => $title,
                 'body' => trim((string) $this->input->post('body', TRUE)),
                 'event_date' => $this->input->post('event_date', TRUE) ?: NULL,
                 'event_time' => $type === 'agenda' && $this->input->post('event_time', TRUE) ? $this->input->post('event_time', TRUE) : NULL,
                 'event_location' => $type === 'agenda' ? trim((string) $this->input->post('event_location', TRUE)) : '',
                 'status' => $status);
+            if ($became_published) $data['created_at'] = date('Y-m-d H:i:s');
             if ($type === 'agenda' && !$this->valid_date($data['event_date'])) $error = 'Tanggal acara wajib diisi.';
             if ($type === 'galeri' && !$id && empty($_FILES['image']['name'])) $error = 'Pilih foto kegiatan yang akan diunggah.';
             if ($type === 'galeri' && !empty($_FILES['image']['name']) && !$this->input->post('photo_consent')) $error = 'Pastikan izin publikasi foto sebelum mengunggah.';
@@ -508,6 +615,10 @@ class Admin extends CI_Controller
             if (!$error) {
                 if ($id) $this->db->where('id', $id)->update('posts', $data);
                 else $this->db->insert('posts', $data);
+                if ($became_published && $this->db->table_exists('citizen_notice_reads')) {
+                    $notice_kind = $type === 'pengumuman' ? 'an' : ($type === 'agenda' ? 'ag' : '');
+                    if ($notice_kind !== '') $this->db->where(array('kind' => $notice_kind, 'ref_id' => $id, 'status' => 'pub'))->delete('citizen_notice_reads');
+                }
                 $this->log_action($id ? 'update' : 'create', $type . ':' . ($id ?: $this->db->insert_id()));
                 $this->session->set_flashdata('notice', 'Konten disimpan.');
                 redirect('admin/posts/' . $type);
@@ -516,6 +627,30 @@ class Admin extends CI_Controller
         }
         $this->load->helper(array('official_icons', 'content_form'));
         $this->render('post_form', array('type' => $type, 'post' => $post, 'error' => $error));
+    }
+
+    public function post_delete($type = 'pengumuman', $id = 0)
+    {
+        $this->guard(array('admin', 'ketua'));
+        if ($this->input->method(TRUE) !== 'POST' || !in_array($type, array('pengumuman', 'agenda', 'galeri'), TRUE)) show_404();
+
+        $id = (int) $id;
+        $post = $id ? $this->db->get_where('posts', array('id' => $id, 'type' => $type))->row_array() : NULL;
+        if (!$post) show_404();
+
+        $this->db->where(array('id' => $id, 'type' => $type))->delete('posts');
+        $label = $type === 'galeri' ? 'Foto galeri' : ($type === 'agenda' ? 'Agenda kegiatan' : 'Pengumuman');
+        if ($this->db->affected_rows() !== 1) show_error($label . ' gagal dihapus. Silakan coba kembali.', 500);
+        // Agenda bisa tertaut ke Program Kerja dan notifikasi warga; jangan tinggalkan rujukan ke agenda yang sudah dihapus.
+        if ($type === 'agenda') {
+            if ($this->db->table_exists('program_agendas')) $this->db->where('post_id', $id)->delete('program_agendas');
+            if ($this->db->table_exists('citizen_notice_reads')) $this->db->where(array('kind' => 'ag', 'ref_id' => $id))->delete('citizen_notice_reads');
+        }
+
+        if (!empty($post['image'])) $this->remove_post_image($post['image']);
+        $this->log_action('delete', $type . ':' . $id);
+        $this->session->set_flashdata('notice', $label . ' berhasil dihapus.');
+        redirect('admin/posts/' . $type);
     }
 
     public function officials()
@@ -611,13 +746,29 @@ class Admin extends CI_Controller
         $this->db->where('period', $period)->where('status', 'verified');
         if ($type !== '') $this->db->where('type', $type);
         if ($q !== '') $this->db->group_start()->like('description', $q)->or_like('category', $q)->or_like('counterparty', $q)->group_end();
-        $items = $this->db->order_by('tx_date', 'DESC')->order_by('id', 'DESC')->get('transactions')->result_array();
+        // Urutan kolom tabel (Tanggal / Jenis / Jumlah), default tanggal terbaru.
+        $sorts = array('tanggal' => 'tx_date', 'jenis' => 'type', 'jumlah' => 'amount');
+        $sort = (string) $this->input->get('urut', TRUE);
+        if (!isset($sorts[$sort])) $sort = 'tanggal';
+        $dir = strtolower((string) $this->input->get('arah', TRUE)) === 'asc' ? 'ASC' : 'DESC';
+        $this->db->order_by($sorts[$sort], $dir);
+        if ($sort !== 'tanggal') $this->db->order_by('tx_date', 'DESC');
+        $items = $this->db->order_by('id', 'DESC')->get('transactions')->result_array();
 
-        $summary = $this->db->select("COALESCE(SUM(CASE WHEN type='masuk' THEN amount ELSE 0 END),0) AS income, COALESCE(SUM(CASE WHEN type='keluar' THEN amount ELSE 0 END),0) AS expense, SUM(type='masuk') AS income_count, SUM(type='keluar') AS expense_count", FALSE)
+        // Data grafik: total harian pemasukan & pengeluaran pada periode (transaksi terverifikasi).
+        $days_in_month = (int) date('t', strtotime($period . '-01'));
+        $daily = array('masuk' => array_fill(1, $days_in_month, 0.0), 'keluar' => array_fill(1, $days_in_month, 0.0));
+        foreach ($this->db->select('DAY(tx_date) d, type, SUM(amount) total', FALSE)->where('period', $period)->where('status', 'verified')
+            ->group_by(array('DAY(tx_date)', 'type'))->get('transactions')->result_array() as $r) {
+            if (isset($daily[$r['type']][(int) $r['d']])) $daily[$r['type']][(int) $r['d']] = (float) $r['total'];
+        }
+
+        $summary =$this->db->select("COALESCE(SUM(CASE WHEN type='masuk' THEN amount ELSE 0 END),0) AS income, COALESCE(SUM(CASE WHEN type='keluar' THEN amount ELSE 0 END),0) AS expense, SUM(type='masuk') AS income_count, SUM(type='keluar') AS expense_count", FALSE)
             ->where('period', $period)->where('status', 'verified')->get('transactions')->row_array();
         $balance = $this->db->select("COALESCE(SUM(CASE WHEN type='masuk' THEN amount ELSE -amount END),0) AS total", FALSE)
             ->where('status', 'verified')->where('period <=', $period)->get('transactions')->row_array();
-        $this->render('transactions', array('items'=>$items,'period'=>$period,'type'=>$type,'q'=>$q,'summary'=>$summary,'balance'=>(float)$balance['total']));
+        $this->render('transactions', array('items'=>$items,'period'=>$period,'type'=>$type,'q'=>$q,'summary'=>$summary,'balance'=>(float)$balance['total'],
+            'daily'=>$daily,'sort'=>$sort,'dir'=>$dir));
     }
 
     public function transaction($type = 'masuk')
@@ -643,8 +794,10 @@ class Admin extends CI_Controller
                     'period' => substr($date, 0, 7),
                     'counterparty' => trim((string) $this->input->post('counterparty', TRUE)),
                     'proof' => $proof, 'status' => 'verified',
-                    'created_by' => $this->session->userdata('admin_id'),
-                    'verified_by' => $this->session->userdata('admin_id'),
+                    // Sesi Superadmin (pengelola platform) tidak punya admin_id; 0 = dicatat Superadmin,
+                    // sama dengan verifikasi pembayaran iuran & belanja RT. Sebelumnya NULL ditolak DB (created_by NOT NULL).
+                    'created_by' => (int) $this->session->userdata('admin_id'),
+                    'verified_by' => (int) $this->session->userdata('admin_id'),
                     'verified_at' => date('Y-m-d H:i:s'),
                     'reverses_id' => $reversal ? $reversal['id'] : NULL);
                 $this->db->insert('transactions', $data);
@@ -771,9 +924,14 @@ class Admin extends CI_Controller
         if(!in_array($status,array('','active','inactive'),TRUE))$status='';
         $sort=(string)$this->input->get('sort',TRUE);
         if(!in_array($sort,array('newest','oldest','name'),TRUE))$sort='newest';
-        $filter=function()use($q,$status){
+        $has_kk=$this->db->table_exists('kk_families');
+        $kk=(string)$this->input->get('kk',TRUE);
+        if(!$has_kk||!in_array($kk,array('','belum','terhubung'),TRUE))$kk='';
+        $owned='(SELECT owner_citizen_id FROM kk_families WHERE owner_citizen_id IS NOT NULL)';
+        $filter=function()use($q,$status,$kk,$owned){
             if($q!=='')$this->db->group_start()->like('display_name',$q)->or_like('username',$q)->group_end();
             if($status==='active')$this->db->where('is_active',1);elseif($status==='inactive')$this->db->where('is_active',0);
+            if($kk==='belum')$this->db->where('id NOT IN '.$owned,NULL,FALSE);elseif($kk==='terhubung')$this->db->where('id IN '.$owned,NULL,FALSE);
         };
         $filter();$matched=$this->db->count_all_results('citizens');
         $per_page=20;$pages=max(1,(int)ceil($matched/$per_page));$page=min($pages,max(1,(int)$this->input->get('hal')));
@@ -781,11 +939,52 @@ class Admin extends CI_Controller
         if($sort==='oldest')$this->db->order_by('created_at','ASC');elseif($sort==='name')$this->db->order_by('display_name','ASC');else $this->db->order_by('created_at','DESC');
         $items=$this->db->select('id,username,display_name,is_active,created_at,gender')->order_by('id','DESC')->limit($per_page,($page-1)*$per_page)->get('citizens')->result_array();
         $counts=array('total'=>$this->db->count_all('citizens'),'active'=>$this->db->where('is_active',1)->count_all_results('citizens'),'inactive'=>$this->db->where('is_active',0)->count_all_results('citizens'));
-        $family_of=array();
-        if($items&&$this->db->table_exists('kk_families'))foreach($this->db->select('id,owner_citizen_id')->where_in('owner_citizen_id',array_column($items,'id'))->get('kk_families')->result_array() as $f)$family_of[(int)$f['owner_citizen_id']]=(int)$f['id'];
+        $family_of=array();$pending_of=array();$member_of=array();
+        $ids=array_column($items,'id');
+        if($items&&$has_kk){
+            foreach($this->db->select('id,owner_citizen_id')->where_in('owner_citizen_id',$ids)->get('kk_families')->result_array() as $f)$family_of[(int)$f['owner_citizen_id']]=(int)$f['id'];
+            if($this->db->table_exists('kk_scan_requests'))foreach($this->db->select('citizen_id')->where_in('citizen_id',$ids)->where_in('status',array('pending','revision_requested'))->get('kk_scan_requests')->result_array() as $r)$pending_of[(int)$r['citizen_id']]=1;
+            if($this->db->table_exists('citizen_resident_links'))foreach($this->db->select('citizen_id,member_id')->where_in('citizen_id',$ids)->get('citizen_resident_links')->result_array() as $r)$member_of[(int)$r['citizen_id']]=(int)$r['member_id'];
+        }
+        $counts['no_kk']=$has_kk?(int)$this->db->query('SELECT COUNT(*) n FROM citizens WHERE is_active=1 AND id NOT IN '.$owned)->row()->n:0;
+        $duplicates=$this->citizen_duplicate_groups($has_kk);
+        $show_dupes=$this->input->get('tampil',TRUE)==='duplikat';
         $this->config->load('rt_access',TRUE);$perm=(array)$this->config->item('rt_permissions','rt_access');
         $can_family=in_array($this->session->userdata('admin_role'),$perm['penduduk.read']??array(),TRUE);
-        $this->render('citizens',array('family_of'=>$family_of,'can_family'=>$can_family,'items'=>$items,'counts'=>$counts,'q'=>$q,'status'=>$status,'sort'=>$sort,'matched'=>$matched,'page'=>$page,'pages'=>$pages,'per_page'=>$per_page));
+        $this->render('citizens',array('family_of'=>$family_of,'pending_of'=>$pending_of,'member_of'=>$member_of,'has_kk'=>$has_kk,'kk'=>$kk,'duplicates'=>$duplicates,'show_dupes'=>$show_dupes,'can_family'=>$can_family,'items'=>$items,'counts'=>$counts,'q'=>$q,'status'=>$status,'sort'=>$sort,'matched'=>$matched,'page'=>$page,'pages'=>$pages,'per_page'=>$per_page));
+    }
+
+    /**
+     * Deteksi kemungkinan akun ganda: nama sama, nomor telepon sama, atau email sama.
+     * Hanya MENDETEKSI. Kesamaan nama tidak cukup untuk menyatakan duplikat, jadi tidak ada penggabungan/penghapusan
+     * otomatis; pengurus memverifikasi username, telepon, dan identitas pemilik lalu menonaktifkan akun yang salah.
+     */
+    private function citizen_duplicate_groups($has_kk)
+    {
+        $rows=$this->db->select('id,username,display_name,full_name,phone,email,is_active,created_at')->get('citizens')->result_array();
+        $owners=array();
+        if($has_kk)foreach($this->db->select('owner_citizen_id')->where('owner_citizen_id IS NOT NULL',NULL,FALSE)->get('kk_families')->result_array() as $f)$owners[(int)$f['owner_citizen_id']]=1;
+        $parent=array();
+        $find=function($x)use(&$parent,&$find){return $parent[$x]===$x?$x:($parent[$x]=$find($parent[$x]));};
+        $keys=array();
+        foreach($rows as $r){
+            $id=(int)$r['id'];$parent[$id]=$id;
+            foreach(array_unique(array_filter(array($r['display_name'],$r['full_name']))) as $n){$n=trim(preg_replace('/\s+/u',' ',mb_strtolower((string)$n,'UTF-8')));if(mb_strlen($n,'UTF-8')>=3)$keys['n:'.$n][$id]='nama';}
+            $p=preg_replace('/\D+/','',(string)$r['phone']);if(strpos($p,'62')===0)$p='0'.substr($p,2);if(strlen($p)>=8)$keys['p:'.$p][$id]='telepon';
+            $e=mb_strtolower(trim((string)$r['email']),'UTF-8');if($e!=='')$keys['e:'.$e][$id]='email';
+        }
+        $reasons=array();
+        foreach($keys as $k=>$ids){
+            if(count($ids)<2)continue;
+            $list=array_keys($ids);
+            foreach($list as $id){$reasons[$id][$ids[$id]]=1;$a=$find($list[0]);$b=$find($id);if($a!==$b)$parent[$b]=$a;}
+        }
+        $groups=array();
+        foreach($rows as $r){$id=(int)$r['id'];if(!isset($reasons[$id]))continue;
+            $mask=function($v,$keep){$v=(string)$v;return $v===''?'':(mb_strlen($v)>$keep+2?mb_substr($v,0,$keep).str_repeat('•',max(3,mb_strlen($v)-$keep-2)).mb_substr($v,-2):$v);};
+            $groups[$find($id)][]=array('id'=>$id,'username'=>$r['username'],'name'=>$r['display_name'],'phone'=>$mask($r['phone'],4),'email'=>$mask($r['email'],3),
+                'active'=>(int)$r['is_active']===1,'has_kk'=>isset($owners[$id]),'created_at'=>$r['created_at'],'reasons'=>array_keys($reasons[$id]));}
+        return array_values(array_filter($groups,function($g){return count($g)>1;}));
     }
 
     public function citizen($id = 0)
@@ -854,15 +1053,17 @@ class Admin extends CI_Controller
     {
         $this->guard(array('admin', 'operator', 'ketua'));
         $this->load->model('Letter_model');
+        // Tab default = "Perlu Ditinjau": pengajuan yang sudah di-ACC/ditolak/selesai pindah ke tabnya sendiri.
+        $statuses=array('diajukan','diproses','disetujui','selesai','ditolak');
         $filter=(string)$this->input->get('status',TRUE);
-        if (!in_array($filter,array('diajukan','diproses','disetujui','ditolak'),TRUE)) $filter='';
+        if ($filter!=='semua' && !in_array($filter,$statuses,TRUE)) $filter='diajukan';
         $q=mb_substr(trim((string)$this->input->get('q',TRUE)),0,80);
-        $counts=array('all'=>$this->db->where('status !=','draft')->count_all_results('service_requests'));
-        foreach(array('diajukan','diproses','disetujui','ditolak') as $status) $counts[$status]=$this->db->where('status',$status)->count_all_results('service_requests');
+        $counts=array('semua'=>$this->db->where('status !=','draft')->count_all_results('service_requests'));
+        foreach($statuses as $status) $counts[$status]=$this->db->where('status',$status)->count_all_results('service_requests');
         $this->db->select('service_requests.*,citizens.display_name,service_request_details.purpose,service_request_details.extra_data')
             ->join('citizens', 'citizens.id=service_requests.citizen_id')
             ->join('service_request_details','service_request_details.request_id=service_requests.id','left')->where('service_requests.status !=','draft');
-        if ($filter) $this->db->where('service_requests.status',$filter);
+        if ($filter!=='semua') $this->db->where('service_requests.status',$filter);
         if ($q) $this->db->group_start()->like('citizens.display_name',$q)->or_like('service_requests.subject',$q)->or_like('service_request_details.extra_data',$q)->group_end();
         $items=$this->db->order_by('service_requests.created_at','DESC')->limit(100)->get('service_requests')->result_array();
         $this->render('requests', array('items'=>$items,'catalog'=>$this->Letter_model->catalog(),'counts'=>$counts,'filter'=>$filter,'q'=>$q));
@@ -981,6 +1182,7 @@ class Admin extends CI_Controller
             $number = trim((string)$this->input->post('letter_number', TRUE));
             if ($status === 'disetujui' && $item['type'] !== 'aduan' && !$number) show_error('Nomor surat wajib diisi sebelum persetujuan.', 400);
             if (mb_strlen($number) > 100) show_error('Nomor surat terlalu panjang.', 400);
+            $status_changed = $status !== $item['status'];
             $this->db->trans_start();
             $this->db->where('id', $id)->update('service_requests', array('status' => $status,
                 'admin_note' => trim((string) $this->input->post('admin_note', TRUE)),
@@ -988,9 +1190,16 @@ class Admin extends CI_Controller
             $detail_update = array('letter_number'=>$number ?: NULL,'approved_at'=>$status === 'disetujui' ? ($item['approved_at'] ?: date('Y-m-d H:i:s')) : NULL,'approved_by'=>$status === 'disetujui' ? (int)$this->session->userdata('admin_id') : NULL);
             if ($item['applicant_name'] !== NULL) $this->db->where('request_id',$id)->update('service_request_details', $detail_update);
             else $this->db->insert('service_request_details', $detail_update + array('request_id'=>$id,'applicant_name'=>$item['display_name'],'address'=>'-','purpose'=>$item['subject']));
+            // A status may return to one the resident has seen before. Clear only
+            // that exact acknowledgement so every real admin status change is shown.
+            if ($status_changed && $this->db->table_exists('citizen_notice_reads')) {
+                $this->db->where(array('citizen_id' => (int) $item['citizen_id'], 'kind' => 'sr', 'ref_id' => $id, 'status' => $status))->delete('citizen_notice_reads');
+            }
             $this->db->trans_complete();
             $this->log_action('review', 'request:' . $id);
-            $this->session->set_flashdata('notice', 'Status pengajuan diperbarui.');
+            $this->session->set_flashdata('notice', $status_changed
+                ? 'Status pengajuan diperbarui. Warga akan menerima popup pemberitahuan saat membuka portal.'
+                : 'Catatan pengajuan diperbarui.');
             redirect('admin/requests');
         }
         $this->load->model('Letter_model');
@@ -1002,8 +1211,9 @@ class Admin extends CI_Controller
     {
         $this->guard(array('admin', 'bendahara', 'ketua'));
         $this->load->helper(array('official_icons', 'content_form'));
+        // Periode terbaru dulu; dalam satu periode tagihan yang terakhir dibuat tampil paling atas.
         $items = $this->db->select('dues.*,citizens.display_name')->join('citizens', 'citizens.id=dues.citizen_id')
-            ->order_by('dues.period', 'DESC')->order_by('citizens.display_name')->get('dues')->result_array();
+            ->order_by('dues.period', 'DESC')->order_by('dues.id', 'DESC')->get('dues')->result_array();
         // Pembayaran yang perlu ditinjau selalu tampil paling atas.
         $payments = $this->db->select('due_payments.*,dues.category,dues.period,citizens.display_name')
             ->join('dues','dues.id=due_payments.due_id')->join('citizens','citizens.id=due_payments.citizen_id')
@@ -1038,35 +1248,89 @@ class Admin extends CI_Controller
         }
         $summary['unpaid_citizens'] = count($unpaid_citizens);
         $paid_due_ids = array_flip(array_map('intval', array_column($payments, 'due_id')));
+
+        // Daftar Tagihan: filter kategori (tab), periode & nama warga di server + halaman. Ringkasan di atas tetap dari seluruh data.
+        $tperiod = (string) $this->input->get('tperiod', TRUE);
+        if (!in_array($tperiod, $periods, TRUE)) $tperiod = '';
+        $q = mb_substr(trim((string) $this->input->get('q', TRUE)), 0, 60);
+        $base = array_values(array_filter($items, function ($d) use ($tperiod, $q) {
+            return ($tperiod === '' || $d['period'] === $tperiod) && ($q === '' || mb_stripos($d['display_name'], $q) !== FALSE);
+        }));
+        $cats = array();
+        foreach ($base as $d) $cats[$d['category']] = ($cats[$d['category']] ?? 0) + 1;
+        ksort($cats, SORT_NATURAL | SORT_FLAG_CASE);
+        $kat = (string) $this->input->get('kat', TRUE);
+        if ($kat !== '' && !isset($cats[$kat])) $kat = '';
+        $due_rows = $kat === '' ? $base : array_values(array_filter($base, function ($d) use ($kat) {return $d['category'] === $kat;}));
+        // Filter status pembayaran: lunas / sebagian / belum.
+        $status_opts = array('lunas' => 'Lunas', 'sebagian' => 'Sebagian', 'belum' => 'Belum dibayar');
+        $tstatus = (string) $this->input->get('status', TRUE);
+        if (!isset($status_opts[$tstatus])) $tstatus = '';
+        if ($tstatus !== '') $due_rows = array_values(array_filter($due_rows, function ($d) use ($tstatus) {
+            $due = (float) $d['amount_due']; $paid = (float) $d['amount_paid'];
+            return $tstatus === 'lunas' ? $paid >= $due : ($tstatus === 'sebagian' ? $paid > 0 && $paid < $due : $paid <= 0 && $due > 0);
+        }));
+        // Urutan daftar.
+        $sort_opts = array('terbaru' => 'Tanggal Terbaru', 'terlama' => 'Tanggal Terlama', 'nama' => 'Nama Warga (A–Z)', 'nominal' => 'Nominal Tertinggi', 'sisa' => 'Sisa Terbesar');
+        $sort = (string) $this->input->get('urut', TRUE);
+        if (!isset($sort_opts[$sort])) $sort = 'terbaru';
+        if ($sort !== 'terbaru') usort($due_rows, function ($a, $b) use ($sort) {
+            if ($sort === 'terlama') return strcmp($a['period'], $b['period']) ?: ((int) $a['id'] <=> (int) $b['id']);
+            if ($sort === 'nama') return strcasecmp($a['display_name'], $b['display_name']) ?: strcmp($b['period'], $a['period']);
+            if ($sort === 'nominal') return ((float) $b['amount_due'] <=> (float) $a['amount_due']) ?: strcmp($b['period'], $a['period']);
+            return (((float) $b['amount_due'] - (float) $b['amount_paid']) <=> ((float) $a['amount_due'] - (float) $a['amount_paid'])) ?: strcmp($b['period'], $a['period']);
+        });
+        $per_opts = array(10, 15, 25, 50);
+        $due_per = (int) $this->input->get('per');
+        if (!in_array($due_per, $per_opts, TRUE)) $due_per = 10;
+        $due_total = count($due_rows);
+        $due_pages = max(1, (int) ceil($due_total / $due_per));
+        $due_page = min($due_pages, max(1, (int) $this->input->get('hal')));
+        $due_rows = array_slice($due_rows, ($due_page - 1) * $due_per, $due_per);
+
+        // Pembayaran Masuk: tab kategori + halaman; yang menunggu verifikasi tetap paling atas.
+        $pcats = array();
+        foreach ($payments as $p) $pcats[$p['category']] = ($pcats[$p['category']] ?? 0) + 1;
+        ksort($pcats, SORT_NATURAL | SORT_FLAG_CASE);
+        $pkat = (string) $this->input->get('pkat', TRUE);
+        if ($pkat !== '' && !isset($pcats[$pkat])) $pkat = '';
+        $pay_rows = $pkat === '' ? $payments : array_values(array_filter($payments, function ($p) use ($pkat) {return $p['category'] === $pkat;}));
+        $pay_per = 10;
+        $pay_total = count($pay_rows);
+        $pay_pages = max(1, (int) ceil($pay_total / $pay_per));
+        $pay_page = min($pay_pages, max(1, (int) $this->input->get('phal')));
+        $pay_rows = array_slice($pay_rows, ($pay_page - 1) * $pay_per, $pay_per);
+
         $this->render('dues', array('items' => $items, 'payments'=>$payments, 'periods'=>$periods, 'period'=>$period,
-            'summary'=>$summary, 'legacy_paid'=>max(0, $paid_recorded - $paid_verified), 'paid_due_ids'=>$paid_due_ids));
+            'summary'=>$summary, 'legacy_paid'=>max(0, $paid_recorded - $paid_verified), 'paid_due_ids'=>$paid_due_ids,
+            'due_rows'=>$due_rows, 'due_total'=>$due_total, 'due_page'=>$due_page, 'due_pages'=>$due_pages, 'due_per'=>$due_per,
+            'cats'=>$cats, 'kat'=>$kat, 'tperiod'=>$tperiod, 'q'=>$q, 'cats_total'=>count($base), 'baru'=>(int)$this->input->get('baru'),
+            'tstatus'=>$tstatus, 'status_opts'=>$status_opts, 'sort'=>$sort, 'sort_opts'=>$sort_opts, 'per_opts'=>$per_opts,
+            'pay_rows'=>$pay_rows, 'pay_total'=>$pay_total, 'pay_page'=>$pay_page, 'pay_pages'=>$pay_pages, 'pay_per'=>$pay_per,
+            'pcats'=>$pcats, 'pkat'=>$pkat));
     }
 
     public function dues_export()
     {
         $this->guard(array('admin', 'bendahara', 'ketua'));
         $period = (string) $this->input->get('period', TRUE);
+        $format = strtolower((string) $this->input->get('format', TRUE));
+        if (!in_array($format, array('xls', 'xlsx'), TRUE)) $format = 'xlsx';
         $this->db->select('dues.*,citizens.display_name')->join('citizens', 'citizens.id=dues.citizen_id');
         if (preg_match('/^\d{4}-(0[1-9]|1[0-2])$/', $period)) $this->db->where('dues.period', $period);
         else $period = 'semua';
         $items = $this->db->order_by('dues.period', 'DESC')->order_by('citizens.display_name')->get('dues')->result_array();
-        $this->log_action('export', 'dues:' . $period);
-        // Awalan kutip mencegah isi kolom dijalankan sebagai rumus saat dibuka di Excel.
-        $safe = function ($value) { $value = (string) $value; return preg_match('/^[=+\-@\t\r]/', $value) ? "'" . $value : $value; };
-        header('Content-Type: text/csv; charset=UTF-8');
-        header('Content-Disposition: attachment; filename="iuran-warga-' . $period . '.csv"');
-        header('X-Content-Type-Options: nosniff');
-        $out = fopen('php://output', 'w');
-        fwrite($out, "\xEF\xBB\xBF");
-        fputcsv($out, array('Periode', 'Warga', 'Jenis', 'Kategori', 'Tagihan', 'Dibayar', 'Sisa', 'Status', 'Catatan'), ';');
+        $this->log_action('export', 'dues:' . $period . ':' . $format);
+        $headers = array('Periode', 'Warga', 'Jenis', 'Kategori', 'Tagihan', 'Dibayar', 'Sisa', 'Status', 'Catatan');
+        $rows = array();
         $types = array('rutin'=>'Rutin','non_rutin'=>'Nonrutin','sosial'=>'Sosial');
         foreach ($items as $item) {
             $due = (float) $item['amount_due'];$paid = (float) $item['amount_paid'];
-            fputcsv($out, array($item['period'], $safe($item['display_name']), $types[$item['due_type']] ?? 'Rutin', $safe($item['category']),
-                (int) $due, (int) $paid, (int) max(0, $due - $paid), $paid >= $due ? 'Lunas' : ($paid > 0 ? 'Sebagian' : 'Belum dibayar'), $safe($item['note'])), ';');
+            $rows[] = array($item['period'], (string) $item['display_name'], $types[$item['due_type']] ?? 'Rutin', (string) $item['category'],
+                (int) $due, (int) $paid, (int) max(0, $due - $paid), $paid >= $due ? 'Lunas' : ($paid > 0 ? 'Sebagian' : 'Belum dibayar'), (string) $item['note']);
         }
-        fclose($out);
-        exit;
+        $this->load->library('spreadsheet_export');
+        $this->spreadsheet_export->send($format, 'iuran-warga-' . $period, 'Iuran Warga', $headers, $rows);
     }
 
     public function due_payment_record($due_id = 0)
@@ -1154,6 +1418,8 @@ class Admin extends CI_Controller
             $title = trim((string)$this->input->post('title', TRUE));
             $type = (string)$this->input->post('due_type', TRUE);
             $category = trim((string)$this->input->post('category', TRUE));
+            // REVISI: kategori "Lainnya (tulis sendiri)" — nama kategori diketik admin (maks. 100 karakter, sesuai kolom dues.category).
+            if ($category === '__custom') $category = mb_substr(trim(preg_replace('/\s+/u', ' ', (string)$this->input->post('category_custom', TRUE))), 0, 100);
             $period = (string)$this->input->post('period', TRUE);
             $amount = (int)$this->input->post('amount');
             $target = (string)$this->input->post('target', TRUE);
@@ -1185,9 +1451,10 @@ class Admin extends CI_Controller
                     'created_by'=>(int)$this->session->userdata('admin_id')));
                 $campaignId = (int)$this->db->insert_id();
                 $created = 0;
+                $skipped = array(); // REVISI: catat warga yang dilewati karena sudah punya tagihan kategori & periode yang sama
                 foreach ($citizens as $citizen) {
                     $exists = $this->db->get_where('dues',array('citizen_id'=>(int)$citizen['id'],'period'=>$period,'category'=>$category))->row_array();
-                    if ($exists) continue;
+                    if ($exists) { $skipped[] = $exists; continue; }
                     $this->db->insert('dues',array('citizen_id'=>(int)$citizen['id'],'period'=>$period,'category'=>$category,
                         'due_type'=>$type,'campaign_id'=>$campaignId,'amount_due'=>$amount,'amount_paid'=>0,
                         'note'=>trim((string)$this->input->post('note',TRUE))));
@@ -1195,20 +1462,38 @@ class Admin extends CI_Controller
                 }
                 if ($created === 0) {
                     $this->db->trans_rollback();
-                    $error = 'Semua warga yang dipilih sudah memiliki tagihan untuk kategori dan periode ini.';
+                    // REVISI: pesan jelas — sebut warga, kategori, periode, dan nama tagihan yang sudah ada.
+                    $bulan = array(1=>'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember');
+                    $periodLabel = $bulan[(int)substr($period,5,2)].' '.substr($period,0,4);
+                    if ($target === 'warga' && $skipped) {
+                        $who = $this->db->select('display_name')->get_where('citizens',array('id'=>$citizenId))->row_array();
+                        $old = !empty($skipped[0]['campaign_id']) ? $this->db->select('title')->get_where('billing_campaigns',array('id'=>(int)$skipped[0]['campaign_id']))->row_array() : NULL;
+                        $error = ($who['display_name'] ?? 'Warga ini').' sudah punya tagihan kategori "'.$category.'" untuk periode '.$periodLabel
+                            .($old ? ' (tagihan "'.$old['title'].'")' : '').'. Satu warga hanya boleh punya satu tagihan per kategori per periode. '
+                            .'Pilih kategori lain, pilih "Lainnya (tulis sendiri)" untuk kategori baru, atau ubah tagihan yang sudah ada lewat tombol Edit di Daftar Tagihan.';
+                    } else {
+                        $error = 'Semua warga yang dipilih sudah punya tagihan kategori "'.$category.'" untuk periode '.$periodLabel.'. Pilih kategori lain atau "Lainnya (tulis sendiri)".';
+                    }
                 } elseif ($this->db->trans_status() === FALSE) {
                     $this->db->trans_rollback();
                     $error = 'Tagihan gagal dibuat.';
                 } else {
                     $this->db->trans_commit();
                     $this->log_action('create','billing_campaign:'.$campaignId);
-                    $this->session->set_flashdata('notice',$created.' tagihan warga berhasil dibuat.');
-                    redirect('admin/dues');
+                    $this->session->set_flashdata('notice',$created.' tagihan warga berhasil dibuat.'.($skipped ? ' '.count($skipped).' warga dilewati karena sudah punya tagihan kategori "'.$category.'" di periode ini.' : ''));
+                    // Langsung tampilkan tab Daftar Tagihan, tersaring ke periode & kategori tagihan baru, dengan baris baru ditandai.
+                    redirect('admin/dues?'.http_build_query(array('tperiod'=>$period,'kat'=>$category,'baru'=>$campaignId)).'#tagihan');
                 }
             }
         }
         $citizens = $this->db->select('id,display_name')->where('is_active',1)->order_by('display_name')->get('citizens')->result_array();
-        $this->render('billing_campaign',array('citizens'=>$citizens,'error'=>$error));
+        // REVISI: kategori yang sudah dipakai per warga per periode (12 bulan terakhir s.d. 12 bulan ke depan) untuk menandai "(sudah ada)" di form.
+        $used = array();
+        $from = date('Y-m', strtotime('-12 months')); $to = date('Y-m', strtotime('+12 months'));
+        foreach ($this->db->select('citizen_id,period,category')->where('period >=',$from)->where('period <=',$to)->get('dues')->result_array() as $d) {
+            $used[(int)$d['citizen_id']][$d['period']][] = $d['category'];
+        }
+        $this->render('billing_campaign',array('citizens'=>$citizens,'error'=>$error,'used'=>$used));
     }
 
     public function review_due_payment($id = 0)
@@ -1309,7 +1594,19 @@ class Admin extends CI_Controller
         $this->load->library('upload', $config);
         $this->upload->initialize($config);
         if (!$this->upload->do_upload('proof')) {
-            $error = strip_tags($this->upload->display_errors('', ''));
+            // REVISI: pesan unggah bukti dalam Bahasa Indonesia + petunjuk (sebelumnya pesan bawaan CodeIgniter berbahasa Inggris).
+            $raw = strip_tags($this->upload->display_errors('', ''));
+            $code = (int) ($_FILES['proof']['error'] ?? 0);
+            if (stripos($raw, 'filetype') !== FALSE) {
+                $error = 'Transaksi belum disimpan: format file bukti tidak didukung. Gunakan JPG, PNG, WebP, atau PDF. Foto HEIC dari iPhone perlu diubah ke JPG terlebih dahulu.';
+            } elseif (stripos($raw, 'larger') !== FALSE || in_array($code, array(UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE), TRUE)) {
+                $error = 'Transaksi belum disimpan: ukuran file bukti lebih dari 5 MB. Kecilkan/kompres foto atau pilih file lain.';
+            } elseif (stripos($raw, 'upload path') !== FALSE || stripos($raw, 'writable') !== FALSE) {
+                $error = 'Transaksi belum disimpan: folder penyimpanan bukti tidak bisa ditulis. Hubungi pengelola sistem.';
+            } else {
+                $error = 'Transaksi belum disimpan: bukti gagal diunggah. Coba pilih file lain atau simpan tanpa bukti.';
+            }
+            log_message('error', 'upload_proof: ' . $raw);
             return NULL;
         }
         return $this->upload->data('file_name');
@@ -1364,5 +1661,15 @@ class Admin extends CI_Controller
         $path = realpath(FCPATH . $relative_path);
         $directory = realpath(FCPATH . $prefix);
         if ($path && $directory && strpos($path, $directory . DIRECTORY_SEPARATOR) === 0 && is_file($path)) @unlink($path);
+    }
+
+    private function remove_post_image($relative_path)
+    {
+        $relative_path = str_replace('\\', '/', (string) $relative_path);
+        if (strpos($relative_path, 'uploads/') !== 0 || substr($relative_path, 8) !== basename($relative_path)) return;
+
+        $path = realpath(FCPATH . $relative_path);
+        $directory = realpath(FCPATH . 'uploads/');
+        if ($path && $directory && dirname($path) === $directory && is_file($path)) @unlink($path);
     }
 }

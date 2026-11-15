@@ -26,6 +26,19 @@ $config['rt_permissions'] = array(
     'penduduk.export' => array('admin', 'ketua', 'sekretaris'),
     'penduduk.export_full' => array('admin', 'ketua'),
 
+    // Master KK (satu sumber data keluarga, warga berakun maupun tidak).
+    'kk.read' => array('admin', 'ketua', 'sekretaris', 'operator', 'auditor'),
+    'kk.create' => array('admin', 'ketua', 'sekretaris', 'operator'),
+    // Sama dengan peran yang sudah dapat menyetujui di Verifikasi KK (admin/operator/ketua).
+    'kk.verify' => array('admin', 'ketua', 'operator'),
+    'akun.invite' => array('admin', 'ketua', 'operator'),
+
+    // Master rumah dan domisili: auditor hanya membaca, verifikasi dibatasi pada petugas berwenang.
+    'rumah.read' => array('admin', 'ketua', 'sekretaris', 'operator', 'auditor'),
+    'rumah.write' => array('admin', 'ketua', 'sekretaris', 'operator'),
+    'domisili.link' => array('admin', 'ketua', 'sekretaris', 'operator'),
+    'domisili.verify' => array('admin', 'ketua', 'sekretaris'),
+
     'mutasi.read' => array('admin', 'ketua', 'sekretaris', 'operator', 'auditor'),
     'mutasi.review' => array('admin', 'ketua', 'sekretaris', 'operator'),
     'mutasi.approve' => array('admin', 'ketua', 'sekretaris'),

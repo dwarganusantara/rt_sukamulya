@@ -369,7 +369,7 @@ class CI_Encryption {
 	 * @param	array	$params	Input parameters
 	 * @return	string
 	 */
-	public function encrypt($data, array $params = NULL)
+	public function encrypt($data, ?array $params = NULL) // PHP 8.4 compat: explicit nullable
 	{
 		if (($params = $this->_get_params($params)) === FALSE)
 		{
@@ -504,7 +504,7 @@ class CI_Encryption {
 	 * @param	array	$params	Input parameters
 	 * @return	string
 	 */
-	public function decrypt($data, array $params = NULL)
+	public function decrypt($data, ?array $params = NULL) // PHP 8.4 compat: explicit nullable
 	{
 		if (($params = $this->_get_params($params)) === FALSE)
 		{

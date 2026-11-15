@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * Modul 04 (lanjutan) — Data Penduduk terverifikasi.
  * Satu tampilan baca untuk KK & anggota hasil verifikasi KK / mutasi:
- * daftar anggota & keluarga, detail keluarga + riwayat mutasi, rekap agregat, ekspor CSV.
+ * daftar anggota & keluarga, detail keluarga + riwayat mutasi, rekap agregat, ekspor Excel.
  *
  * Aturan:
  * - Modul ini read-only. Perubahan data master tetap lewat Verifikasi KK atau Mutasi (no silent overwrite).
@@ -55,7 +55,12 @@ class Penduduk extends Ops_Controller
         $this->guard_admin('penduduk.read');
         $family = $this->Ops_model->family_by_id((int) $id);
         if (!$family) show_404();
-        $owner = $this->db->select('id,display_name,username,is_active')->get_where('citizens', array('id' => (int) $family['owner_citizen_id']))->row_array();
+        $owner = $family['owner_citizen_id'] !== NULL ? $this->db->select('id,display_name,username,is_active')->get_where('citizens', array('id' => (int) $family['owner_citizen_id']))->row_array() : NULL;
+        // Status akun terpisah dari status verifikasi KK (KK boleh tanpa akun; undangan aktivasi opsional).
+        $invite = NULL;
+        $invites_ready = $this->db->table_exists('account_invitations');
+        if (!$owner && $invites_ready) $invite = $this->db->where(array('family_id' => (int) $family['id'], 'used_at' => NULL, 'revoked_at' => NULL))
+            ->where('expires_at >', date('Y-m-d H:i:s'))->order_by('id', 'DESC')->get('account_invitations')->row_array();
         $review = array();
         foreach ($family['members'] as &$m) {
             $m['age'] = $this->age($m['fields']['tanggal_lahir'] ?? '');
@@ -70,15 +75,68 @@ class Penduduk extends Ops_Controller
             $mutations = $this->db->select('id,mutation_type,member_id,status,effective_date,created_at,applied_at')
                 ->order_by('id', 'DESC')->get_where('resident_mutations', array('family_id' => (int) $family['id']))->result_array();
         }
+        // Akun -> anggota penduduk (citizen_resident_links): satu akun = satu penduduk.
+        $links_ready = $this->db->table_exists('citizen_resident_links');
+        $account_of = array();
+        if ($links_ready && $family['members']) foreach ($this->db->select('l.member_id, l.verification_source, l.verified_at, c.id citizen_id, c.username, c.display_name')
+            ->from('citizen_resident_links l')->join('citizens c', 'c.id=l.citizen_id')->where_in('l.member_id', array_column($family['members'], 'id'))->get()->result_array() as $l) $account_of[(int) $l['member_id']] = $l;
+        $owner_member = 0;
+        if ($owner) foreach ($account_of as $mid => $l) if ((int) $l['citizen_id'] === (int) $owner['id']) $owner_member = $mid;
+        $owner_linked_elsewhere = $owner && !$owner_member && $links_ready && $this->db->where('citizen_id', (int) $owner['id'])->count_all_results('citizen_resident_links') > 0;
         $this->audit('view', 'family:' . (int) $family['id']);
         $this->render('penduduk_keluarga', array(
+            'links_ready' => $links_ready, 'account_of' => $account_of, 'owner_member' => $owner_member, 'owner_linked_elsewhere' => $owner_linked_elsewhere,
+            'can_link' => $links_ready && $owner && $this->can('akun.invite'),
             'family' => $family, 'owner' => $owner, 'review' => $review, 'mutations' => $mutations,
             'mut_types' => class_exists('Mutasi', FALSE) ? Mutasi::$types : array(),
             'mut_labels' => class_exists('Mutasi', FALSE) ? Mutasi::$labels : array(),
             'mut_tones' => class_exists('Mutasi', FALSE) ? Mutasi::$tones : array(),
             'status_labels' => self::$status_labels, 'status_tones' => self::$status_tones, 'domicile' => self::$domicile,
             'can_view_account' => in_array($this->role, array('admin', 'operator', 'ketua'), TRUE),
+            'invite' => $invite, 'can_invite' => $invites_ready && $this->can('akun.invite'),
+            'invite_link' => $this->session->flashdata('kk_invite'),
         ));
+    }
+
+    /**
+     * Tautkan akun pemilik KK ke salah satu anggota (atau lepas tautannya).
+     * Bukan perubahan data master penduduk; hanya menyatakan akun ini milik anggota yang mana.
+     * Pengurus wajib sudah memeriksa identitas pemilik akun (dicentang di form).
+     */
+    public function tautkan_akun($id = 0)
+    {
+        $this->guard_admin('penduduk.read');
+        $this->need('akun.invite');
+        if ($this->input->method(TRUE) !== 'POST') show_404();
+        $back = 'admin/penduduk/keluarga/' . (int) $id;
+        if (!$this->db->table_exists('citizen_resident_links')) $this->back($back, '', 'Tabel tautan akun belum tersedia. Jalankan data_integrity_upgrade.sql.');
+        $family = $this->db->get_where('kk_families', array('id' => (int) $id))->row_array();
+        if (!$family) show_404();
+        if ($family['owner_citizen_id'] === NULL) $this->back($back, '', 'KK ini belum memiliki akun portal warga.');
+        $cid = (int) $family['owner_citizen_id'];
+
+        if ($this->input->post('act') === 'lepas') {
+            $this->db->where('citizen_id', $cid)->delete('citizen_resident_links');
+            $this->audit('account_unlink', 'family:' . (int) $family['id'], 'warga#' . $cid);
+            $this->back($back, 'Tautan akun ke anggota dilepas.');
+        }
+
+        if (!$this->input->post('identity_checked')) $this->back($back, '', 'Centang konfirmasi bahwa identitas pemilik akun sudah diperiksa.');
+        $mid = (int) $this->input->post('member_id');
+        $member = $this->db->get_where('kk_members', array('id' => $mid, 'family_id' => (int) $family['id']))->row_array();
+        if (!$member) $this->back($back, '', 'Pilih anggota keluarga yang memiliki akun ini.');
+        $f = json_decode($member['fields_json'], TRUE) ?: array();
+        $age = $this->age($f['tanggal_lahir'] ?? '');
+        if (($member['status'] ?: 'aktif') !== 'aktif') $this->back($back, '', 'Hanya anggota berstatus aktif yang dapat ditautkan ke akun.');
+        if ($age !== NULL && $age < 17) $this->back($back, '', 'Anggota di bawah 17 tahun tidak dapat menjadi pemilik akun.');
+
+        $debug = $this->db->db_debug; $this->db->db_debug = FALSE;
+        $ok = $this->db->insert('citizen_resident_links', array('citizen_id' => $cid, 'member_id' => $mid, 'verified_at' => date('Y-m-d H:i:s'),
+            'verification_source' => 'admin', 'verified_by' => $this->admin_id ?: NULL));
+        $err = $this->db->error(); $this->db->db_debug = $debug;
+        if (!$ok) $this->back($back, '', (int) $err['code'] === 1062 ? 'Akun ini atau anggota tersebut sudah tertaut. Lepas tautan lama terlebih dahulu.' : 'Tautan belum tersimpan.');
+        $this->audit('account_link', 'family:' . (int) $family['id'], 'warga#' . $cid . ' anggota#' . $mid);
+        $this->back($back, 'Akun berhasil ditautkan ke ' . ($f['nama_lengkap'] ?? 'anggota') . '.');
     }
 
     public function rekap()
@@ -124,7 +182,7 @@ class Penduduk extends Ops_Controller
     }
 
     /**
-     * Ekspor CSV anggota sesuai filter.
+     * Ekspor XLS/XLSX anggota sesuai filter.
      * GET  = NIK & nomor KK dimasking (penduduk.export).
      * POST full=1 = NIK lengkap (penduduk.export_full) + alasan wajib, dicatat di audit.
      */
@@ -133,6 +191,8 @@ class Penduduk extends Ops_Controller
         $this->guard_admin('penduduk.export');
         $full = $this->input->method(TRUE) === 'POST' && $this->input->post('full') === '1';
         $source = $full ? 'post' : 'get';
+        $format = strtolower((string) ($full ? $this->input->post('format', TRUE) : $this->input->get('format', TRUE)));
+        if (!in_array($format, array('xls', 'xlsx'), TRUE)) $format = 'xlsx';
         $reason = '';
         if ($full) {
             $this->need('penduduk.export_full');
@@ -143,22 +203,16 @@ class Penduduk extends Ops_Controller
         $rows = array_values(array_filter($this->members(), function ($m) use ($filters) {return $this->match($m, $filters);}));
         $this->audit($full ? 'export_full' : 'export', 'penduduk', trim('baris=' . count($rows) . ' filter=' . $this->query_string($filters) . ($full ? ' alasan=' . $reason : '')));
 
-        $safe = function ($value) {$value = (string) $value; return preg_match('/^[=+\-@\t\r]/', $value) ? "'" . $value : $value;};
-        // Tab di depan angka 16 digit menjaga Excel membaca sebagai teks (tidak jadi notasi ilmiah / 0 di belakang).
-        $id = function ($value) use ($full) {return $full ? "\t" . $value : rt_mask_id($value);};
-        header('Content-Type: text/csv; charset=UTF-8');
-        header('Content-Disposition: attachment; filename="data-penduduk-' . ($full ? 'lengkap-' : '') . date('Ymd') . '.csv"');
-        header('X-Content-Type-Options: nosniff');
-        $out = fopen('php://output', 'w');
-        fwrite($out, "\xEF\xBB\xBF");
-        fputcsv($out, array('No KK', 'Alamat', 'RT', 'RW', 'NIK', 'Nama', 'L/P', 'Tempat Lahir', 'Tanggal Lahir', 'Umur', 'Hubungan', 'Pendidikan', 'Pekerjaan', 'Status', 'Domisili', 'Menetap Sejak'), ';');
+        $id = function ($value) use ($full) {return (string) ($full ? $value : rt_mask_id($value));};
+        $headers = array('No KK', 'Alamat sesuai KK', 'RT', 'RW', 'NIK', 'Nama', 'L/P', 'Tempat Lahir', 'Tanggal Lahir', 'Umur', 'Hubungan', 'Pendidikan', 'Pekerjaan', 'Status', 'Domisili', 'Menetap Sejak');
+        $cells = array();
         foreach ($rows as $m) {
-            fputcsv($out, array($id($m['nomor_kk']), $safe($m['alamat']), $safe($m['rt']), $safe($m['rw']), $id($m['nik']), $safe($m['nama']), $m['jk'],
-                $safe($m['tempat_lahir']), $m['tanggal_lahir'], $m['age'] === NULL ? '' : $m['age'], $safe($m['hubungan']), $safe($m['pendidikan']), $safe($m['pekerjaan']),
-                self::$status_labels[$m['status']] ?? $m['status'], self::$domicile[$m['domicile_status']] ?? '', $m['resident_since'] ?: ''), ';');
+            $cells[] = array($id($m['nomor_kk']), (string) $m['alamat'], (string) $m['rt'], (string) $m['rw'], $id($m['nik']), (string) $m['nama'], $m['jk'],
+                (string) $m['tempat_lahir'], $m['tanggal_lahir'], $m['age'] === NULL ? '' : (int) $m['age'], (string) $m['hubungan'], (string) $m['pendidikan'], (string) $m['pekerjaan'],
+                self::$status_labels[$m['status']] ?? $m['status'], self::$domicile[$m['domicile_status']] ?? '', $m['resident_since'] ?: '');
         }
-        fclose($out);
-        exit;
+        $this->load->library('spreadsheet_export');
+        $this->spreadsheet_export->send($format, 'data-penduduk-' . ($full ? 'lengkap-' : '') . date('Ymd'), 'Data Penduduk', $headers, $cells);
     }
 
     /* ---------- Data ---------- */

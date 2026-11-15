@@ -8,7 +8,30 @@ class Content_model extends CI_Model
         $rows = $this->db->get('settings')->result_array();
         $result = array();
         foreach ($rows as $row) $result[$row['setting_key']] = $row['setting_value'];
+        // Statistik publik selalu mengikuti master KK yang sudah terverifikasi.
+        foreach ($this->population_stats() as $key => $value) $result[$key] = (string) $value;
         return $result;
+    }
+
+    public function population_stats()
+    {
+        $stats = array('households' => 0, 'residents' => 0, 'female_residents' => 0, 'male_residents' => 0);
+        if (!$this->db->table_exists('kk_families') || !$this->db->table_exists('kk_members')) return $stats;
+
+        // kk_families/kk_members merupakan master hasil verifikasi. Penduduk
+        // pindah atau meninggal tetap menjadi histori, tetapi tidak dihitung.
+        $stats['households'] = (int) $this->db->count_all('kk_families');
+        $has_status = $this->db->field_exists('status', 'kk_members');
+        $this->db->select('fields_json')->from('kk_members');
+        if ($has_status) $this->db->where('status', 'aktif');
+        foreach ($this->db->get()->result_array() as $row) {
+            $stats['residents']++;
+            $fields = json_decode((string) $row['fields_json'], TRUE);
+            $gender = is_array($fields) ? strtoupper(trim((string) ($fields['jenis_kelamin'] ?? ''))) : '';
+            if ($gender === 'L') $stats['male_residents']++;
+            if ($gender === 'P') $stats['female_residents']++;
+        }
+        return $stats;
     }
 
     public function save_settings($values, $note = '')

@@ -1,0 +1,194 @@
+/*
+ * Scan / Upload KK — desain krem-oranye versi HP (<=600px), mockup 14 Nov 2026.
+ * Desktop/tablet tidak berubah: elemen tambahan (ilustrasi, ikon langkah, estimasi waktu) disembunyikan di luar HP.
+ * Fungsi tetap dari assets/kk-scan.js (ID & struktur form tidak diubah).
+ */
+.kks-leaf,.kks-cloud,.kks-doc,.kks-load-doc,.kks-slash,.kks-ls,.kks-est,.kks-town,.kks-fmt>svg,.fui-formats>summary>svg{display:none}
+/* Teks format dibungkus span; aturan lama ".fui-format>span" (garis pemisah 1px) tidak boleh mengenainya di ukuran mana pun. */
+.fui-format>.kks-fmt{width:auto;height:auto;background:none}
+.kks-fmt-lbl{font-style:normal}
+@media(max-width:600px){
+ .fui-scan-page.mw-page{--or:#f05a14;--or2:#ff8a2a;--ink:#2b1a12;--tx:#4a4f5c;padding:0 12px 100px!important;background:linear-gradient(180deg,#fdf8f4,#fdf3ea 70%)!important;color:var(--ink);overflow-x:hidden}
+ .fui-scan-page .mw-header{margin:0 -12px;padding-bottom:6px}
+ .fui-scan-page>.fui-hero,.fui-scan-page .fui-steps,.fui-scan-page .fui-deco,.fui-scan-page .fui-upload-aside{display:none!important}
+ .kks-back{display:inline-flex!important;align-items:center;gap:8px;min-height:44px;margin:4px 0 0;padding:8px 18px;border:1px solid #fff;border-radius:999px;background:linear-gradient(180deg,#fff6ee,#ffe9d8);color:var(--or)!important;font-size:15px;font-weight:800;text-decoration:none;box-shadow:0 6px 16px #c2551a24}
+ .kks-back svg{width:20px;height:20px}
+ .fui-scan-page .fui-scan-shell{margin:0!important;padding:0!important;max-width:none!important;min-width:0}
+ .fui-scan-page .fui-upload-card{display:block!important;margin:0!important;padding:0!important;border:0!important;background:none!important;box-shadow:none!important}
+ .fui-scan-page .fui-upload-main{display:block!important;margin:0!important;padding:0!important;border:0!important;background:none!important;box-shadow:none!important}
+ .fui-scan-page .fui-upload-main:before,.fui-scan-page .fui-dropzone:before,.fui-scan-page .fui-dropzone:after{display:none!important}
+ .fui-scan-page .fui-dropzone{display:block!important}
+ .fui-scan-page .fui-dropzone>*{max-width:100%}
+ .fui-scan-page .fui-format{width:100%;flex-wrap:nowrap}
+ .kks-fmt{white-space:nowrap}
+ .fui-scan-page .fui-manual-text{flex:1;min-width:0}
+
+ /* Kartu unggah: bukit hijau, daun, awan, judul dua warna */
+ .fui-scan-page .fui-dropzone{position:relative;margin:58px 0 0!important;padding:58px 16px 18px!important;border:1px solid #fff!important;border-radius:30px!important;background:radial-gradient(130% 34% at 50% 22%,#e3f3cf 0,#eef8e2 45%,transparent 46%) no-repeat,linear-gradient(180deg,#fffaf6,#fdf6ef)!important;box-shadow:0 12px 28px #c2551a17!important;text-align:center;overflow:visible}
+ .fui-scan-page .fui-dropzone.is-dragging{outline:3px dashed var(--or);outline-offset:-8px}
+ .fui-scan-page .fui-dropzone>.fui-cloud,.fui-scan-page .fui-dropzone>p,.fui-scan-page .fui-scan-document{display:none!important}
+ .kks-cloud{display:block;position:absolute;left:50%;top:-58px;width:150px;height:auto;transform:translateX(-46%);mix-blend-mode:multiply}
+ .kks-leaf{display:block;position:absolute;width:70px;height:auto;mix-blend-mode:multiply;pointer-events:none}
+ .kks-leaf-l{left:-2px;top:62px}.kks-leaf-r{right:-2px;top:68px;width:62px}
+ .fui-scan-page .fui-dropzone h2{position:relative;z-index:1;margin:0 0 14px!important;color:var(--ink)!important;font-size:27px!important;line-height:1.12!important}
+ .kks-or{display:none}.kks-slash{display:inline}
+ .kks-h-b{display:block;color:var(--or)}
+ .fui-scan-page .fui-dropzone h2:after{content:"";display:block;width:120px;height:4px;margin:10px auto 0;border-radius:9px;background:linear-gradient(90deg,transparent,#5cb82e 15%,#5cb82e 85%,transparent)}
+ .kks-doc{display:block;width:100%;max-width:320px;height:auto;margin:4px auto 16px;-webkit-mask-image:radial-gradient(ellipse 75% 75% at 50% 50%,#000 78%,transparent 100%);mask-image:radial-gradient(ellipse 75% 75% at 50% 50%,#000 78%,transparent 100%)}
+ /* Tombol kamera / unggah */
+ .fui-scan-page .fui-upload-actions{display:grid!important;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 14px}
+ .fui-scan-page .fui-upload-actions .fui-btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:54px;padding:8px 10px;border-radius:18px;font-size:15px;line-height:1.15;font-weight:900;text-align:left}
+ .fui-scan-page .fui-upload-actions .fui-btn svg{width:26px;height:26px;flex:none}
+ .fui-scan-page .fui-upload-actions .fui-btn-primary{border:0!important;background:linear-gradient(100deg,var(--or2),#f26a12 55%,#ee5a0a)!important;color:#fff!important;box-shadow:0 8px 18px #f05a1440!important}
+ .fui-scan-page .fui-upload-actions .fui-btn-outline{border:1.5px solid #f6a57a!important;background:#fff!important;color:var(--ink)!important}
+ .fui-scan-page .fui-upload-actions .fui-btn-outline svg{color:var(--or)}
+ /* Berkas terpilih + tombol baca */
+ .fui-scan-page .fui-selected-file{display:flex;align-items:center;gap:8px;margin:0 0 10px;padding:10px 12px;border:1px solid #cfe9c0;border-radius:14px;background:#effae6;color:#1f6b2c;font-size:13.5px;text-align:left}
+ .fui-scan-page .fui-selected-file[hidden]{display:none}
+ .fui-scan-page .fui-selected-file span{flex:1;min-width:0;overflow-wrap:anywhere}
+ .fui-scan-page .fui-read-file{width:100%;min-height:52px;margin:0 0 12px;border:0!important;border-radius:999px!important;background:linear-gradient(100deg,#4cc23a,#22a33a)!important;color:#fff!important;font-size:16px;font-weight:900;box-shadow:0 8px 18px #22a33a40!important}
+ .fui-scan-page .fui-read-file[hidden]{display:none}
+ .fui-scan-page #kk-progress{margin:0 0 6px;color:#b42318;font-size:13px}
+ .fui-scan-page #kk-progress:empty{display:none}
+ /* Format & tips */
+ .fui-scan-page .fui-format{display:flex!important;align-items:center;justify-content:center;gap:14px;margin:0 0 10px!important;color:var(--ink)!important;font-size:13.5px!important;font-weight:800}
+ .fui-scan-page .fui-format>span:not(.kks-fmt){width:1.5px;height:22px;background:#d9d2cb}
+ .kks-fmt{display:inline-flex;align-items:center;gap:7px}
+ .kks-fmt>svg{display:block;width:22px;height:22px;color:#5b6170}
+ .kks-fmt-lbl{display:none}
+ .fui-scan-page .fui-formats{margin:0 0 12px;text-align:center}
+ .fui-scan-page .fui-formats>summary{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 18px;border-radius:999px;background:#e7f6dc;color:#1f8a35;font-size:14px;font-weight:800;list-style:none;cursor:pointer}
+ .fui-scan-page .fui-formats>summary::-webkit-details-marker{display:none}
+ .fui-scan-page .fui-formats>summary>svg{display:block;width:20px;height:20px}
+ .fui-scan-page .fui-formats[open]>summary{margin-bottom:8px}
+ .fui-scan-page .fui-formats>p{margin:0;padding:10px 12px;border-radius:14px;background:#f3fbec;color:var(--tx);font-size:13px;line-height:1.5;text-align:left}
+ /* ATAU + isi manual */
+ .fui-scan-page .fui-or{margin:10px 0 12px!important;color:#7a7f8c!important}
+ .fui-scan-page .fui-or span{text-transform:uppercase;font-weight:800;letter-spacing:.06em;background:#fdf7f1!important}
+ .fui-scan-page .fui-manual-btn{position:relative;display:flex!important;align-items:center;gap:12px;padding:12px!important;border:1px solid #fff!important;border-radius:22px!important;background:linear-gradient(100deg,#fff1ec,#ffeae2)!important;box-shadow:0 6px 16px #c2551a14!important;text-align:left}
+ .fui-scan-page .fui-manual-icon{width:52px!important;height:52px!important;flex:none;border-radius:50%!important;background:linear-gradient(140deg,#ff5a6e,#e8213b)!important;color:#fff!important}
+ .fui-scan-page .fui-manual-text strong{color:var(--ink)!important;font-size:16.5px!important}
+ .fui-scan-page .fui-manual-text small{color:var(--tx)!important;font-size:13px!important}
+ .fui-scan-page .fui-manual-arrow{width:42px!important;height:42px!important;flex:none;display:grid;place-items:center;border-radius:50%!important;background:linear-gradient(140deg,var(--or2),var(--or))!important;color:#fff!important}
+ .fui-scan-page .fui-manual-arrow svg{width:22px;height:22px}
+ .fui-scan-page .fui-upload-main:after{content:"";display:block;height:30px;margin:-14px -4px 0;background:url("mockup/mobile-card-leaf.png") left bottom/52px no-repeat,url("mockup/mobile-card-leaf.png") right bottom/52px no-repeat;pointer-events:none}
+ .fui-scan-page .fui-notice{margin:12px 0 0;border-radius:14px}
+
+ /* Tahap periksa hasil: tidak boleh melebar ke samping (tabel anggota scroll di dalam kartu) */
+ .fui-scan-page #kk-review,.fui-scan-page #kk-review .fui-card,.fui-scan-page #kk-review .fui-card-body{min-width:0!important;max-width:100%!important;box-sizing:border-box}
+ .fui-scan-page #kk-review .fui-table-wrap{max-width:100%;overflow-x:auto!important;-webkit-overflow-scrolling:touch}
+ .fui-scan-page #kk-review .fui-card{margin-top:14px;border:1px solid #fff!important;border-radius:22px!important;background:#fffaf6!important;box-shadow:0 10px 24px #c2551a14!important}
+ .fui-scan-page #kk-review .fui-section-head{background:linear-gradient(100deg,#ff8a2a,#f05a14)!important}
+ .fui-scan-page #kk-review .fui-btn-primary{background:linear-gradient(100deg,var(--or2),#f26a12 55%,#ee5a0a)!important;border-color:transparent!important;color:#fff!important}
+ .fui-scan-page #kk-review .fui-btn-outline{border-color:#f6a57a!important;color:var(--ink)!important}
+
+ /* Layar proses (overlay) */
+ .fui-scan-page .fui-loading{background:#2b1a1266!important;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+ .fui-scan-page .fui-loading-card{position:relative;width:calc(100% - 28px)!important;max-width:420px;padding:18px 18px 0!important;border:1px solid #fff;border-radius:34px!important;background:linear-gradient(180deg,#fff,#fdf8f2)!important;box-shadow:0 24px 60px #2b1a1233!important;overflow:hidden;text-align:center}
+ .fui-scan-page .fui-loading-doc{position:relative;width:100%!important;height:auto!important;margin:0 0 6px!important;background:radial-gradient(ellipse 60% 55% at 50% 50%,#e3f1fd 0,#eef6fe 60%,transparent 61%)!important}
+ .fui-scan-page .fui-loading-doc>svg,.fui-scan-page .fui-loading-doc>.fui-document{display:none!important}
+ .kks-load-doc{display:block;position:relative;z-index:1;width:84%;height:auto;margin:0 auto;-webkit-mask-image:radial-gradient(ellipse 75% 75% at 50% 50%,#000 78%,transparent 100%);mask-image:radial-gradient(ellipse 75% 75% at 50% 50%,#000 78%,transparent 100%)}
+ .kks-load-leaf-l{left:2%;bottom:6%;top:auto;width:22%}.kks-load-leaf-r{right:2%;bottom:8%;top:auto;width:20%}
+ .fui-scan-page .fui-scan-line{z-index:2}
+ .fui-scan-page .fui-loading-spark{z-index:3;top:2%!important;right:8%!important;width:52px!important;height:52px!important;border-radius:50%!important;background:linear-gradient(140deg,#5bd04a,#22a33a)!important;color:#fff!important;box-shadow:0 6px 18px #22a33a55!important}
+ .fui-scan-page .fui-loading-card h2{margin:4px 0 4px!important;color:var(--ink)!important;font-size:clamp(17px,5.2vw,21px)!important;white-space:nowrap}
+ .fui-scan-page #kk-loading-text{margin:0 0 12px!important;color:#5b6170!important;font-size:13px!important}
+ .fui-scan-page .fui-loading-bar{height:12px!important;margin:0 4px 14px!important;border-radius:99px!important;background:#e3f2d8!important;overflow:hidden}
+ .fui-scan-page .fui-loading-bar>span{border-radius:99px!important;background:repeating-linear-gradient(-45deg,#4cc23a 0 10px,#3fb12f 10px 20px)!important}
+ .fui-scan-page .fui-loading-steps{display:grid!important;gap:8px;margin:0 0 14px!important;padding:0!important;list-style:none;text-align:left}
+ .fui-scan-page .fui-loading-steps li{display:grid!important;grid-template-columns:30px 34px minmax(0,1fr);align-items:center;gap:10px;margin:0!important;padding:0!important;color:#3d4559!important;font-size:15px!important;font-weight:600!important;opacity:1!important}
+ .fui-scan-page .fui-loading-steps li>span{display:flex;align-items:center;min-height:42px;margin-left:-44px;padding-left:54px;border-radius:999px;background:#f6f4f2}
+ .fui-scan-page .fui-loading-steps li>.kks-ls{position:relative;z-index:1}
+ .fui-scan-page .fui-loading-steps li>b{position:relative;width:28px!important;height:28px!important;border:2.5px solid #d4d4d8!important;border-radius:50%!important;background:#fff!important;box-shadow:none!important}
+ .fui-scan-page .fui-loading-steps li>b:after{display:none}
+ .fui-scan-page .fui-loading-steps li.is-done>b{border-color:#22a33a!important;background:#22a33a url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12 4 4 8-8'/%3E%3C/svg%3E") center/70% no-repeat!important}
+ .fui-scan-page .fui-loading-steps li.is-done>span{background:#e8f6de}
+ .fui-scan-page .fui-loading-steps li.is-active>b{border-color:#e3f2d8!important;border-top-color:#22a33a!important;border-right-color:#22a33a!important;animation:kks-spin .9s linear infinite}
+ .fui-scan-page .fui-loading-steps li.is-active>span{background:#fff1e4;color:var(--ink)!important;font-weight:900}
+ .kks-ls{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;color:#fff;font-style:normal;font-size:14px;font-weight:900}
+ .kks-ls svg{width:20px;height:20px}
+ .kks-ls-file{background:linear-gradient(140deg,#4cc23a,#22a33a)}.kks-ls-img{background:linear-gradient(140deg,#ffb347,#f7931e)}.kks-ls-ai{background:linear-gradient(140deg,#c16bff,#8b3ff0)}.kks-ls-people{background:none;color:#2b7de9}.kks-ls-people svg{width:30px;height:30px}
+ .fui-scan-page .fui-loading-time{display:inline-flex!important;align-items:center;gap:8px;margin:0 auto 8px!important;padding:8px 18px!important;border-radius:999px!important;background:#e7f6dc!important;color:#1f6b2c!important;font-size:15px!important}
+ .fui-scan-page .fui-loading-time svg{width:22px;height:22px;color:#22a33a}
+ .kks-est{display:inline;font-weight:900}
+ .kks-elapsed-lbl{display:none}
+ .fui-scan-page #kk-loading-time{margin-left:8px;color:#5b8a4c;font-size:12.5px;font-weight:700}
+ .fui-scan-page #kk-loading-time:before{content:"· "}
+ .fui-scan-page .fui-loading-card>small{display:block;margin:0 0 4px;color:#7a7f8c!important;font-size:12px!important;line-height:1.45}
+ .kks-town{display:block;width:calc(100% + 36px);height:92px;margin:4px -18px 0}
+}
+@keyframes kks-spin{to{transform:rotate(360deg)}}
+@media(max-width:360px){
+ .fui-scan-page .fui-dropzone h2{font-size:23px!important}
+ .fui-scan-page .fui-upload-actions .fui-btn{font-size:13px;padding:8px 6px}
+ .fui-scan-page .fui-format{gap:8px;font-size:12px!important}
+ .fui-scan-page .fui-loading-steps li{font-size:13.5px!important}
+}
+@media(prefers-reduced-motion:reduce){.fui-scan-page .fui-loading-steps li.is-active>b{animation:none}}
+
+/* ---- Form periksa / isi KK versi HP: akordeon sesuai mockup (aksen oranye) ---- */
+@media(max-width:600px){
+ .fui-scan-page #kk-review{padding-top:6px}
+ .kks-banner{display:block!important;width:100%;height:auto;aspect-ratio:941/424;object-fit:cover;margin:8px 0 12px;border-radius:24px;box-shadow:0 10px 24px #c2551a1f}
+ .fui-scan-page #kk-review .fui-section-head{display:none!important}
+ .fui-scan-page #kk-review .kks-acc{margin:0 0 12px!important;padding:0!important;border:1px solid #fff!important;border-radius:24px!important;background:#fffaf6!important;box-shadow:0 8px 20px #c2551a17!important;overflow:hidden}
+ .kks-acc-head{display:flex!important;align-items:center;gap:14px;width:100%;min-height:62px;padding:10px 18px;border:0;background:transparent;color:#2b1a12;font:inherit;font-size:18px;font-weight:900;text-align:left;cursor:pointer}
+ .kks-acc-ic{display:grid;place-items:center;flex:none;width:40px;height:40px;color:#f05a14}
+ .kks-acc-ic svg{width:32px;height:32px}
+ .kks-acc-ic.is-green{color:#2f9a3f}.kks-acc-ic.is-orange{color:#f05a14}
+ .kks-acc-title{flex:1;min-width:0}
+ .kks-acc-count{color:#6f7280;font-size:13px;font-weight:700}
+ .kks-chev{width:26px;height:26px;flex:none;color:#f05a14;transition:transform .2s}
+ .kks-acc.is-open>.kks-acc-head .kks-chev{transform:rotate(180deg)}
+ /* Bagian pertama terbuka: kepala berwarna penuh seperti mockup */
+ #kks-acc-kk.is-open>.kks-acc-head{background:linear-gradient(100deg,#ff8a2a,#f05a14);color:#fff;border-radius:0 0 22px 22px}
+ #kks-acc-kk.is-open>.kks-acc-head :is(.kks-acc-ic,.kks-chev){color:#fff}
+ .kks-acc:not(.is-open)>:not(.kks-acc-head):not(.fui-submit-actions):not(.fui-caption){display:none!important}
+ .kks-acc.is-open>:not(.kks-acc-head){animation:kks-fade .18s ease-out}
+ /* Kartu Keluarga: tombol foto/unggah + kolom */
+ .kks-rescan{display:grid!important;grid-template-columns:1fr 1fr;gap:12px;padding:16px 16px 4px}
+ .kks-rescan-btn{display:flex;align-items:center;justify-content:center;gap:9px;min-height:52px;border:1.5px solid #f6a57a;border-radius:16px;background:#fff;color:#2b1a12;font:inherit;font-size:15.5px;font-weight:900;cursor:pointer}
+ .kks-rescan-btn svg{width:24px;height:24px;color:#f05a14}
+ .kks-rescan-btn.is-primary{border:0;background:linear-gradient(100deg,#ff8a2a,#f26a12 55%,#ee5a0a);color:#fff;box-shadow:0 8px 18px #f05a1440}
+ .kks-rescan-btn.is-primary svg{color:#fff}
+ .fui-scan-page #kk-review .fui-family-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:4px 12px!important;padding:8px 16px 16px!important}
+ .fui-scan-page #kk-review .fui-field{grid-column:1/-1;min-width:0}
+ .fui-scan-page #kk-review :is(.fui-field-rt,.fui-field-rw,.fui-field-kelurahan,.fui-field-kecamatan,.fui-field-kota,.fui-field-provinsi){grid-column:auto}
+ .fui-scan-page #kk-review .fui-field>span:first-child{color:#2b1a12!important;font-size:15px!important;font-weight:900!important}
+ .fui-scan-page #kk-review .fui-input-wrap{border:1.5px solid #f1e3d6!important;border-radius:14px!important;background:#fff!important}
+ .fui-scan-page #kk-review .fui-input-wrap>svg{color:#f05a14!important}
+ .fui-scan-page #kk-review .fui-input-wrap.needs-review{border-color:#f7c88f!important;background:#fffbf1!important}
+ /* Anggota */
+ .fui-scan-page #kk-review #anggota .fui-card-body{padding:4px 14px 16px!important}
+ /* Riwayat */
+ .kks-acc-note{padding:0 18px 16px}
+ .kks-acc-note p{margin:0 0 10px;color:#4a4f5c;font-size:13.5px;line-height:1.5}
+ .kks-acc-link{display:flex;align-items:center;gap:8px;min-height:46px;padding:0 14px;border-radius:14px;background:#fff1e4;color:#c2410c;font-weight:800;text-decoration:none}
+ .kks-acc-link svg{width:20px;height:20px}.kks-acc-link svg:last-child{margin-left:auto}
+ /* Verifikasi & Simpan: tombol selalu terlihat di bawah akordeon */
+ .fui-scan-page #kk-review .fui-submit-card{overflow:visible!important}
+ .fui-scan-page #kk-review .fui-submit-card .fui-warning,.fui-scan-page #kk-review .fui-consent{margin:0 16px 12px!important}
+ .fui-scan-page #kk-review .fui-submit-actions{display:flex!important;flex-direction:column-reverse;gap:12px;margin:0!important;padding:4px 0 0}
+ .fui-scan-page #kk-review .fui-submit-card:not(.is-open) .fui-submit-actions{padding-top:14px}
+ .fui-scan-page #kk-review .fui-submit-actions .fui-btn{width:100%;min-height:56px;border-radius:999px!important;font-size:17px;font-weight:900}
+ .fui-scan-page #kk-review .fui-submit-actions .fui-btn-primary{background:linear-gradient(100deg,#ff8a2a,#f26a12 55%,#ee5a0a)!important;border:0!important;color:#fff!important;box-shadow:0 10px 22px #f05a1440!important}
+ .fui-scan-page #kk-review .fui-submit-actions .fui-btn-outline{border:1.5px solid #f6a57a!important;background:#fff!important;color:#f05a14!important}
+ .fui-scan-page #kk-review .fui-submit-card{background:none!important;border:0!important;box-shadow:none!important}
+ .fui-scan-page #kk-review .fui-submit-card>.kks-acc-head,.fui-scan-page #kk-review .fui-submit-card.is-open>:not(.fui-submit-actions):not(.fui-caption){background:#fffaf6}
+ .fui-scan-page #kk-review .fui-submit-card>.kks-acc-head{border-radius:24px;box-shadow:0 8px 20px #c2551a17}
+ .fui-scan-page #kk-review .fui-submit-card.is-open>.kks-acc-head{border-radius:24px 24px 0 0;box-shadow:none}
+ .fui-scan-page #kk-review .fui-submit-card .fui-caption{margin:8px 4px 0;text-align:center}
+}
+@keyframes kks-fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+@media(max-width:600px){
+ /* Mode isi/periksa: panel unggah besar disembunyikan; muncul lagi lewat tombol Ambil Foto / Upload File di form */
+ .fui-scan-page:has(#kk-review:not([hidden])) #fui-upload-panel:not(.kks-shown){display:none!important}
+ .kks-acc-head,.kks-rescan-btn{font-family:inherit!important;font-weight:900!important}
+ .kks-acc-head{font-size:18px!important}.kks-rescan-btn{font-size:15.5px!important}
+}
+@media(max-width:600px){
+ .fui-scan-page #kk-review,.fui-scan-page #kk-review>.fui-card,.fui-scan-page #fui-upload-panel{width:100%!important;max-width:none!important;margin-left:0!important;margin-right:0!important;grid-column:1/-1!important}
+ .fui-scan-page .fui-scan-shell{display:block!important;width:100%!important}
+ .kks-acc-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .kks-acc-count{font-size:12.5px}
+}

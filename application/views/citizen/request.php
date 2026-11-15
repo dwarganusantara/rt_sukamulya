@@ -57,8 +57,24 @@ $steps=array(array('Isi Formulir','Data warga dan keperluan'),array('Upload Doku
 $letter_name=$catalog[$selected][0]??'Surat Warga';
 ?>
 <link rel="stylesheet" href="<?= base_url('assets/letter-request.css') ?>?v=<?= filemtime(FCPATH.'assets/letter-request.css') ?>">
-<main class="lrq" id="lrq">
+<link rel="stylesheet" href="<?= base_url('assets/mobile-warm.css') ?>?v=<?= filemtime(FCPATH.'assets/mobile-warm.css') ?>">
+<link rel="stylesheet" href="<?= base_url('assets/letter-request-mobile.css') ?>?v=<?= filemtime(FCPATH.'assets/letter-request-mobile.css') ?>">
+<?php
+// Versi HP (desain 14 Nov 2026): lapisan tampilan saja; data, validasi, preview & pengiriman tetap oleh letter-request.js.
+$lrqm_img=function($f){return base_url('assets/img/letters/'.$f).'?v='.filemtime(FCPATH.'assets/img/letters/'.$f);};
+$lrqm_popular=array();foreach(array('surat_pengantar'=>'Pengantar','domisili'=>'Domisili','usaha'=>'Usaha','kematian'=>'Kematian') as $k=>$l)if(isset($catalog[$k]))$lrqm_popular[$k]=$l;
+?>
+<main class="lrq mw-page" id="lrq">
+<header class="mw-header mw-only"><?php $this->load->view('site/mobile_brand_header',array('settings'=>$settings)); ?></header>
 <form method="post" enctype="multipart/form-data" id="letter-request-form" novalidate>
+<div class="lrqm-top mw-only">
+ <section class="lrqm-title"><a class="lrqm-back" href="<?= site_url('warga/layanan') ?>" aria-label="Kembali ke Layanan Surat"><?= family_icon('back') ?></a><div><h1>Pengajuan Surat</h1><p>Pilih surat, cek data otomatis, lalu ajukan.</p></div><img src="<?= $lrqm_img('mw-req-scene.png') ?>" alt="" aria-hidden="true"></section>
+ <ol class="lrqm-steps" aria-label="Tahapan pengajuan"><li class="is-done"><a href="<?= site_url('warga/layanan') ?>"><b><?= family_icon('check') ?></b><span>Pilih Surat</span></a></li><li data-lrqm-step="1" class="is-current"><button type="button" data-lrqm-goto="1"><b>2</b><span>Lengkapi Data</span></button></li><li data-lrqm-step="3"><button type="button" data-lrqm-goto="3"><b>3</b><span>Preview &amp; Ajukan</span></button></li></ol>
+ <div class="lrqm-pick">
+  <div class="lrqm-pick-src"><p><?= family_icon('file') ?>Sumber Data Pemohon</p><div><button type="button" data-lrqm-src="kk" <?= $has_kk?'':'disabled' ?> aria-pressed="<?= $source==='kk'?'true':'false' ?>"><span class="ic is-kk" aria-hidden="true"><?= family_icon('people') ?></span><span>Pilih dari Data KK</span></button><button type="button" data-lrqm-src="manual" aria-pressed="<?= $source==='manual'?'true':'false' ?>"><span class="ic is-manual" aria-hidden="true"><?= family_icon('edit') ?></span><span>Isi Manual</span></button></div></div>
+  <?php if($lrqm_popular): ?><div class="lrqm-popular"><p><span aria-hidden="true">&#128293;</span>Surat Populer</p><div role="group" aria-label="Pilih surat populer"><?php foreach($lrqm_popular as $k=>$l): ?><button type="button" data-lrqm-type="<?= html_escape($k) ?>" aria-pressed="<?= $selected===$k?'true':'false' ?>"><?= $l ?></button><?php endforeach; ?></div></div><?php endif; ?>
+ </div>
+</div>
 <header class="lrq-hero">
  <img class="lrq-hero-art" src="<?= base_url('assets/mockup/citizen-services-hero.png') ?>" alt="">
  <div class="lrq-paper" aria-hidden="true"><span class="lrq-paper-name" id="lrq-paper-name"><?= html_escape(mb_strtoupper($letter_name)) ?></span><span class="lrq-paper-lines"><i></i><i></i><i></i><i></i></span><b><?= family_icon('check') ?></b></div>
@@ -85,14 +101,17 @@ $letter_name=$catalog[$selected][0]??'Surat Warga';
   <div class="lrq-step" data-step="1">
    <header class="lrq-head"><span class="lrq-head-ic"><?= family_icon('file') ?></span><div><h2>Data untuk Surat</h2><p>Pilih sumber data pemohon, lalu lengkapi isian sesuai kebutuhan.</p></div></header>
 
+   <section class="lrqm-card is-open" id="lrqm-c-type"><button type="button" class="lrqm-card-head mw-only" aria-expanded="true"><span class="lrqm-card-ic"><?= family_icon('file') ?></span><span>Jenis Surat</span><svg class="lrqm-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
    <label class="lrq-label" for="request-type">Jenis Surat <b>*</b></label>
    <div class="lrq-input"><?= family_icon('file') ?><select name="type" id="request-type" required data-label="Jenis surat"><?php foreach($catalog as $key=>$letter): ?><option value="<?= html_escape($key) ?>" <?= $selected===$key?'selected':'' ?>><?= html_escape($letter[0]) ?></option><?php endforeach; ?></select></div>
+   </section>
 
    <p class="lrq-label">Sumber Data Pemohon</p>
    <div class="lrq-source" role="radiogroup" aria-label="Sumber data pemohon">
     <label class="lrq-source-card <?= $has_kk?'':'is-disabled' ?>"><input type="radio" name="data_source" value="kk" <?= $source==='kk'?'checked':'' ?> <?= $has_kk?'':'disabled' ?>><span class="lrq-radio" aria-hidden="true"></span><span class="lrq-source-ic"><?= family_icon('people') ?></span><span><strong>Pilih dari Data KK</strong><small><?= $has_kk?'Gunakan data anggota keluarga yang sudah terdaftar.':'KK Anda belum diverifikasi Admin RT.' ?></small></span></label>
     <label class="lrq-source-card"><input type="radio" name="data_source" value="manual" <?= $source==='manual'?'checked':'' ?>><span class="lrq-radio" aria-hidden="true"></span><span class="lrq-source-ic is-grey"><?= family_icon('edit') ?></span><span><strong>Isi Manual</strong><small>Isi data pemohon secara manual (jika belum terdaftar di KK).</small></span></label>
    </div>
+   <section class="lrqm-card is-open" id="lrqm-c-person"><button type="button" class="lrqm-card-head mw-only" aria-expanded="true"><span class="lrqm-card-ic"><?= family_icon('people') ?></span><span class="lrqm-person-title" data-kk="Data Otomatis dari KK" data-manual="Data Pemohon"><?= $source==='kk'?'Data Otomatis dari KK':'Data Pemohon' ?></span><svg class="lrqm-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
    <?php if(!$has_kk): ?><p class="lrq-hint"><?= family_icon('info') ?><span>Ingin data terisi otomatis? <a href="<?= site_url('warga/keluarga') ?>">Daftarkan Kartu Keluarga</a> lalu tunggu verifikasi Admin RT.</span></p><?php endif; ?>
 
    <?php if($has_kk): ?>
@@ -109,11 +128,12 @@ $letter_name=$catalog[$selected][0]??'Surat Warga';
      </div>
     </div>
     <div class="lrq-kk-note"><?= family_icon('check') ?><p>Data otomatis diambil dari Kartu Keluarga dan sudah diverifikasi. Lengkapi hanya data yang belum tersedia, jika ada.</p></div>
+    <div class="lrqm-auto mw-only"><p class="lrqm-auto-note"><span aria-hidden="true"><?= family_icon('check') ?></span>Nama, NIK, alamat, TTL, agama, dan anggota keluarga terisi otomatis.</p><dl class="lrqm-sum" id="lrqm-sum"><div><dt>Nama</dt><dd data-sum="applicant_name">—</dd></div><div><dt>NIK</dt><dd data-sum="applicant_nik">—</dd></div><div><dt>Alamat</dt><dd data-sum="address">—</dd></div></dl><button type="button" class="lrqm-edit" id="lrqm-show-data" aria-expanded="false" aria-controls="lrqm-person"><?= family_icon('edit') ?>Ubah jika perlu</button></div>
    </div>
    <?php endif; ?>
 
-   <p class="lrq-section-title"><?= family_icon('person') ?>Data Pemohon</p>
-   <div class="lrq-fields">
+   <p class="lrq-section-title lrqm-person-part"><?= family_icon('person') ?>Data Pemohon</p>
+   <div class="lrq-fields lrqm-person-part" id="lrqm-person">
     <div class="lrq-field"><label for="f-name">Nama Lengkap <b>*</b></label><div class="lrq-input"><?= family_icon('person') ?><input id="f-name" name="applicant_name" maxlength="140" value="<?= $old('applicant_name') ?>" required data-label="Nama lengkap" data-kk-lock placeholder="Nama sesuai KTP"><span class="lrq-lock" title="Dari KK terverifikasi"><?= family_icon('check') ?></span></div></div>
     <div class="lrq-field"><label for="f-nik">NIK <b>*</b></label><div class="lrq-input"><?= family_icon('card') ?><input id="f-nik" name="applicant_nik" inputmode="numeric" pattern="[0-9]{16}" maxlength="16" value="<?= $old('applicant_nik') ?>" required data-label="NIK" data-pattern-message="NIK harus 16 digit angka." data-kk-lock placeholder="16 digit NIK"><span class="lrq-lock" title="Dari KK terverifikasi"><?= family_icon('check') ?></span></div></div>
     <div class="lrq-field"><label for="f-place">Tempat Lahir</label><div class="lrq-input"><?= family_icon('pin') ?><input id="f-place" name="applicant_birth_place" maxlength="100" value="<?= $old('applicant_birth_place') ?>" placeholder="Kota kelahiran"></div></div>
@@ -125,7 +145,9 @@ $letter_name=$catalog[$selected][0]??'Surat Warga';
     <div class="lrq-field is-wide"><label for="f-ktp">Alamat Sesuai KTP <b>*</b></label><div class="lrq-input"><?= family_icon('home') ?><input id="f-ktp" name="applicant_ktp_address" maxlength="255" value="<?= $old('applicant_ktp_address') ?>" list="lrq-addr" required data-label="Alamat sesuai KTP" placeholder="Alamat lengkap sesuai KTP"></div></div>
     <div class="lrq-field is-wide"><label for="f-dom">Alamat Domisili <b>*</b></label><div class="lrq-input"><?= family_icon('home') ?><input id="f-dom" name="address" maxlength="255" value="<?= $old('address') ?>" list="lrq-addr" required data-label="Alamat domisili" placeholder="Alamat tempat tinggal saat ini"></div></div>
    </div>
+   </section>
 
+   <section class="lrqm-card is-open" id="lrqm-c-extra"><button type="button" class="lrqm-card-head mw-only" aria-expanded="true"><span class="lrqm-card-ic"><?= family_icon('file') ?></span><span>Data Tambahan Surat</span><svg class="lrqm-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
    <?php foreach($type_fields as $typeKey=>$fields): if(!$fields || !isset($catalog[$typeKey]))continue; ?>
    <div class="lrq-extra" data-type-fields="<?= html_escape($typeKey) ?>" <?= $selected===$typeKey?'':'hidden' ?>>
     <p class="lrq-section-title"><?= family_icon('file') ?>Data Khusus <?= html_escape($catalog[$typeKey][0]) ?></p>
@@ -156,9 +178,16 @@ $letter_name=$catalog[$selected][0]??'Surat Warga';
 
    <p class="lrq-section-title is-purple"><?= family_icon('edit') ?>Keterangan Pengajuan</p>
    <div class="lrq-fields">
-    <div class="lrq-field is-wide"><label for="f-purpose">Keperluan Surat <b>*</b></label><div class="lrq-input"><?= family_icon('edit') ?><input id="f-purpose" name="purpose" maxlength="255" value="<?= $old('purpose') ?>" required data-label="Keperluan surat" placeholder="Contoh: Untuk keperluan pengurusan administrasi di kelurahan."></div></div>
-    <div class="lrq-field is-wide"><label for="f-desc">Keterangan Tambahan <small>(opsional)</small></label><div class="lrq-input is-plain"><textarea id="f-desc" name="description" rows="3" maxlength="500" placeholder="Tambahkan keterangan jika diperlukan..."><?= $old('description') ?></textarea></div><small class="lrq-count" id="lrq-desc-count">0 / 500</small></div>
+    <div class="lrqm-purpose mw-only" role="group" aria-label="Pilih keperluan surat"><p>Keperluan surat <b>*</b></p><div><?php foreach(array('Sekolah'=>array('Administrasi sekolah anak','school'),'Kerja'=>array('Melamar pekerjaan','briefcase'),'Administrasi'=>array('Pengurusan administrasi kependudukan','check'),'Lainnya'=>array('','more')) as $pl=>$pv): ?><button type="button" data-lrqm-purpose="<?= html_escape($pv[0]) ?>" aria-pressed="false"><?= $pv[1]==='more'?'<span class="lrqm-dots" aria-hidden="true">&bull;&bull;&bull;</span>':family_icon($pv[1]==='school'?'people':$pv[1]) ?><span><?= $pl ?></span></button><?php endforeach; ?></div></div>
+    <div class="lrq-field is-wide"><label for="f-purpose">Keperluan Surat <b>*</b></label><div class="lrq-input"><?= family_icon('edit') ?><input id="f-purpose" name="purpose" maxlength="255" value="<?= $old('purpose') ?>" required data-label="Keperluan surat" list="lrq-purposes" autocomplete="off" placeholder="Contoh: Untuk keperluan pengurusan administrasi di kelurahan."></div></div>
+    <label class="lrqm-toggle mw-only" for="lrqm-desc-on"><span class="lrqm-toggle-ic" aria-hidden="true"><?= family_icon('file') ?></span><span><b>Tambah Keterangan</b> (Opsional)</span><input type="checkbox" id="lrqm-desc-on" role="switch" aria-controls="lrqm-desc"<?= $raw('description')!==''?' checked':'' ?>><i aria-hidden="true"></i></label>
+    <div class="lrq-field is-wide" id="lrqm-desc"><label for="f-desc">Keterangan Tambahan <small>(opsional)</small></label><div class="lrq-input is-plain"><textarea id="f-desc" name="description" rows="3" maxlength="500" placeholder="Tambahkan keterangan jika diperlukan..."><?= $old('description') ?></textarea></div><small class="lrq-count" id="lrq-desc-count">0 / 500</small></div>
    </div>
+   <button type="button" class="lrqm-attach mw-only" data-lrqm-goto="2"><?= family_icon('upload') ?><span>Lampirkan dokumen pendukung <small>(opsional)</small></span><?= family_icon('arrow') ?></button>
+   </section>
+
+   <datalist id="lrq-purposes"><?php foreach(array('Administrasi sekolah anak','Melamar pekerjaan','Pengurusan KTP / KK','Pembukaan rekening bank','Pengajuan bantuan sosial','Pengurusan BPJS','Administrasi di kelurahan','Persyaratan menikah') as $j): ?><option value="<?= $j ?>"><?php endforeach; ?></datalist>
+   <div class="lrqm-preview mw-only"><span class="lrqm-card-ic" aria-hidden="true"><?= family_icon('search') ?></span><strong>Preview Surat</strong><img src="<?= $lrqm_img('mw-req-preview.png') ?>" alt="" aria-hidden="true"><button type="button" id="lrqm-preview-open" aria-controls="lrq-preview">Lihat Preview</button></div>
 
    <datalist id="lrq-jobs"><?php foreach(array('Belum/Tidak Bekerja','Mengurus Rumah Tangga','Pelajar/Mahasiswa','Karyawan Swasta','Pegawai Negeri Sipil','Wiraswasta','Buruh Harian Lepas','Pensiunan','Guru','Pedagang') as $j): ?><option value="<?= $j ?>"><?php endforeach; ?></datalist>
    <datalist id="lrq-relations"><?php foreach(array('Anak','Suami','Istri','Orang Tua','Saudara Kandung','Cucu','Menantu','Kerabat','Lainnya') as $j): ?><option value="<?= $j ?>"><?php endforeach; ?></datalist>
@@ -192,8 +221,9 @@ $letter_name=$catalog[$selected][0]??'Surat Warga';
 
  <aside class="lrq-side">
   <section class="lrq-card lrq-preview-card">
+   <button type="button" class="lrqm-preview-close mw-only" id="lrqm-preview-close" aria-label="Tutup preview"><?= family_icon('close') ?></button>
    <header class="lrq-head"><span class="lrq-head-ic is-purple"><?= family_icon('file') ?></span><div><h2>Preview Surat</h2><p>Tampilan surat akan mengikuti data yang Anda isi.</p></div></header>
-   <div class="request-preview" id="lrq-preview"><?php $this->load->view('shared/letter_head',array('settings'=>$settings,'headClass'=>'request-preview-head','logoUrl'=>site_url('warga/aset-surat/logo'))); ?><div class="request-preview-title"><b id="preview-letter-title"><?= html_escape($letter_name) ?></b><small>Nomor surat diberikan pengurus setelah diperiksa.</small></div><div class="request-preview-body" id="preview-letter-body"></div><div class="request-preview-sign"><?php $this->load->view('shared/letter_sign_heading',array('settings'=>$settings)); ?><div class="request-preview-sign-images"><?php if(!empty($settings['letter_stamp'])): ?><img class="stamp" src="<?= site_url('warga/aset-surat/stamp') ?>" alt="Stempel RT"><?php endif; ?><?php if(!empty($settings['letter_signature'])): ?><img class="signature" src="<?= site_url('warga/aset-surat/signature') ?>" alt="Tanda tangan RT"><?php endif; ?></div><strong><?= html_escape($settings['letter_signer_name']??'Nama Ketua RT') ?></strong></div></div>
+   <div class="request-preview" id="lrq-preview"><?php $this->load->view('shared/letter_head',array('settings'=>$settings,'headClass'=>'request-preview-head','logoUrl'=>site_url('warga/aset-surat/logo'))); ?><div class="request-preview-title"><b id="preview-letter-title"><?= html_escape($letter_name) ?></b><small>Nomor surat diberikan pengurus setelah diperiksa.</small></div><div class="request-preview-body" id="preview-letter-body"></div><div class="request-preview-sign"><?php $this->load->view('shared/letter_sign_heading',array('settings'=>$settings)); ?><div class="request-preview-sign-images"><?php /* SEC-07: stempel & tanda tangan asli hanya tampil pada surat yang sudah disetujui. */ if(!empty($settings['letter_stamp']) || !empty($settings['letter_signature'])): ?><span style="position:absolute;inset:8px 0;display:grid;place-items:center;border:1px dashed #9aa7b8;border-radius:8px;color:#5b6b80;font-size:12px;text-align:center;padding:4px">Stempel &amp; tanda tangan dibubuhkan setelah surat disetujui</span><?php endif; ?></div><strong><?= html_escape($settings['letter_signer_name']??'Nama Ketua RT') ?></strong></div></div>
    <div class="lrq-actions">
     <div data-actions="1"><button type="button" class="lrq-btn is-ghost" id="lrq-refresh"><?= family_icon('eye') ?>Perbarui Preview</button><button type="button" class="lrq-btn is-main" data-next="2"><?= family_icon('send') ?>Lanjut Upload Dokumen</button></div>
     <div data-actions="2" hidden><button type="button" class="lrq-btn is-ghost" data-prev="1"><?= family_icon('back') ?>Kembali</button><button type="button" class="lrq-btn is-main" data-next="3"><?= family_icon('check') ?>Lanjut Konfirmasi</button></div>
@@ -204,9 +234,11 @@ $letter_name=$catalog[$selected][0]??'Surat Warga';
  </aside>
 </div>
 </div>
+<div class="lrqm-bar mw-only"><button type="submit" name="action" value="draft" formnovalidate class="lrqm-draft"><?= family_icon('save') ?>Simpan Draft</button><button type="button" class="lrqm-submit" id="lrqm-submit"><?= family_icon('send') ?><span id="lrqm-submit-text">Ajukan Surat</span></button></div>
 <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
 </form>
 </main>
 <script type="application/json" id="lrq-data"><?= json_encode(array('templates'=>$previewTemplates,'master'=>$previewMaster,'members'=>$members),JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE) ?></script>
 <script src="<?= base_url('assets/letter-request.js') ?>?v=<?= filemtime(FCPATH.'assets/letter-request.js') ?>" defer></script>
+<script src="<?= base_url('assets/letter-request-mobile.js') ?>?v=<?= filemtime(FCPATH.'assets/letter-request-mobile.js') ?>" defer></script>
 <?php $this->load->view('site/footer',compact('settings')); ?>

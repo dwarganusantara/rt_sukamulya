@@ -33,7 +33,7 @@ $config['allow_get_array'] = TRUE;
 $config['controller_trigger'] = 'c';
 $config['function_trigger'] = 'm';
 $config['directory_trigger'] = 'd';
-$config['log_threshold'] = 4;
+$config['log_threshold'] = 1;
 $config['log_path'] = '';
 $config['log_file_extension'] = '';
 $config['log_file_permissions'] = 0644;
@@ -41,19 +41,27 @@ $config['log_date_format'] = 'Y-m-d H:i:s';
 $config['error_views_path'] = '';
 $config['cache_path'] = '';
 $config['cache_query_string'] = FALSE;
-$config['encryption_key'] = 'rlS+FaBm9JT2otE/RkH+SsDrMakUHZ4dBylTM9qLlWc=';
+// SEC-03: key comes from APP_ENCRYPTION_KEY, else application/config/secrets.php (git-ignored).
+// No key in source control. See application/config/secrets.example.php.
+$app_secrets = is_file(APPPATH.'config/secrets.php') ? (array) include(APPPATH.'config/secrets.php') : array();
+// Empty key = encryption and backups refuse to run (see Sistem::backup_key), never a weak default.
+$config['encryption_key'] = getenv('APP_ENCRYPTION_KEY') ?: (string) ($app_secrets['encryption_key'] ?? '');
 $config['sess_driver'] = 'files';
 $config['sess_cookie_name'] = 'sukamulya_session';
 $config['sess_expiration'] = 7200;
-$config['sess_save_path'] = sys_get_temp_dir();
+// SEC-10: dedicated, non-public session directory instead of the shared system temp dir.
+// SESSION_SAVE_PATH may override it (absolute path, writable by the web server).
+$config['sess_save_path'] = getenv('SESSION_SAVE_PATH') ?: APPPATH.'cache'.DIRECTORY_SEPARATOR.'sessions';
 $config['sess_match_ip'] = FALSE;
 $config['sess_time_to_update'] = 300;
 $config['sess_regenerate_destroy'] = FALSE;
 $config['cookie_prefix'] = '';
 $config['cookie_domain'] = '';
 $config['cookie_path'] = '/';
-$config['cookie_secure'] = FALSE;
+// SEC-05: mark cookies Secure automatically when the request arrives over HTTPS (HTTP on XAMPP keeps working).
+$config['cookie_secure'] = function_exists('is_https') && is_https();
 $config['cookie_httponly'] = TRUE;
+$config['sess_samesite'] = 'Lax';
 $config['standardize_newlines'] = FALSE;
 $config['global_xss_filtering'] = FALSE;
 $config['csrf_protection'] = TRUE;

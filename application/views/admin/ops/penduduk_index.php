@@ -7,8 +7,8 @@ $can_mut = $can('mutasi.review');
 $is_family = $view === 'keluarga';
 ?>
 <div class="pg">
- <?= pg_crumb(array(array('Kependudukan', NULL), array('Data Penduduk', NULL))) ?>
- <section class="pg-hero"><span class="pg-hero-ic"><?= official_svg('people') ?></span><div class="pg-hero-tx"><span class="pg-kicker">Kependudukan</span><h1>Data Penduduk</h1><p>Daftar KK dan anggota keluarga yang sudah diverifikasi. Perubahan data dilakukan lewat Verifikasi KK atau Mutasi Warga, bukan diedit langsung di sini.</p></div></section>
+ <?= pg_crumb_back(array(array('Kependudukan', NULL), array('Data Keluarga / KK', 'admin/keluarga'), array('Data Penduduk', NULL)), 'admin/keluarga', 'Kembali ke Data Keluarga / KK') ?>
+ <section class="pg-hero"><span class="pg-hero-ic"><?= official_svg('people') ?></span><div class="pg-hero-tx"><span class="pg-kicker">Kependudukan</span><h1>Data Penduduk</h1><p>Daftar KK dan anggota keluarga yang sudah diverifikasi. Perubahan data dilakukan lewat Pengajuan &amp; Verifikasi KK atau Mutasi Warga, bukan diedit langsung di sini.</p></div></section>
  <?= ops_flash() ?>
 
  <section class="pg-stats" aria-label="Ringkasan penduduk">
@@ -20,8 +20,8 @@ $is_family = $view === 'keluarga';
 
  <div class="pg-bar">
   <nav class="pg-tabs" aria-label="Tampilan data">
-   <a class="pg-tab" href="<?= site_url($base) ?>"<?= $is_family ? '' : ' aria-current="page"' ?>><?= official_svg('people') ?>Per Anggota</a>
    <a class="pg-tab" href="<?= site_url($base . '?tampil=keluarga') ?>"<?= $is_family ? ' aria-current="page"' : '' ?>><?= official_svg('home') ?>Per Keluarga</a>
+   <a class="pg-tab" href="<?= site_url($base) ?>"<?= $is_family ? '' : ' aria-current="page"' ?>><?= official_svg('people') ?>Per Anggota</a>
   </nav>
   <div class="pg-actions">
    <a class="pg-btn ghost" href="<?= site_url('admin/penduduk/rekap') ?>"><?= official_svg('chart') ?>Rekap Statistik</a>
@@ -40,13 +40,16 @@ $is_family = $view === 'keluarga';
    <label class="pg-sel"><?= official_svg('calendar') ?><span>Usia:</span><select name="usia" aria-label="Kelompok usia"><?= ops_options($age_groups, $filters['usia'], 'Semua Usia') ?></select></label>
    <?php endif; ?>
    <button class="pg-btn solid" type="submit"><?= official_svg('filter') ?>Filter</button>
-   <?php if (!$is_family && $can('penduduk.export')): ?><a class="pg-btn ghost" href="<?= site_url('admin/penduduk/ekspor') . '?' . ops_e($query) ?>" title="NIK dan nomor KK dimasking"><?= official_svg('download') ?>Ekspor CSV</a><?php endif; ?>
+   <?php if (!$is_family && $can('penduduk.export')): ?><details class="pg-menu pg-export-menu"><summary class="pg-btn ghost" title="NIK dan nomor KK dimasking"><?= official_svg('download') ?>Ekspor Excel</summary><div>
+    <a href="<?= site_url('admin/penduduk/ekspor') . '?' . ops_e($query . ($query ? '&' : '') . 'format=xlsx') ?>"><?= official_svg('download') ?>Excel (.xlsx)</a>
+    <a href="<?= site_url('admin/penduduk/ekspor') . '?' . ops_e($query . ($query ? '&' : '') . 'format=xls') ?>"><?= official_svg('download') ?>Excel 97-2003 (.xls)</a>
+   </div></details><?php endif; ?>
   </div>
  </form>
 
  <?php if ($is_family): ?>
  <section class="pg-card"><header><h2><?= official_svg('home') ?>Keluarga</h2><span class="pg-meta"><?= official_svg('people') ?><?= (int) $total ?> KK</span></header>
-  <table class="pg-table"><thead><tr><th>Kepala Keluarga / No. KK</th><th>Alamat</th><th class="num">Anggota Aktif</th><th>Akun Pengaju</th><th>Diperbarui</th><th>Aksi</th></tr></thead><tbody>
+  <table class="pg-table"><thead><tr><th>Kepala Keluarga / No. KK</th><th>Alamat sesuai KK</th><th class="num">Anggota Aktif</th><th>Akun Pengaju</th><th>Diperbarui</th><th>Aksi</th></tr></thead><tbody>
   <?php foreach ($rows as $r): ?>
    <tr>
     <td class="lead"><span class="pg-person"><span class="pg-av" aria-hidden="true"><?= ops_e(mb_strtoupper(mb_substr($r['head'] ?: 'K', 0, 1))) ?></span><span><strong><?= ops_e($r['head'] ?: '—') ?></strong><small class="pg-mono"><?= ops_e(rt_mask_id($r['nomor_kk'])) ?></small></span></span></td>    <td data-label="Alamat"><?= ops_e($r['alamat'] ?: '—') ?><?php if ($r['rt'] !== '' || $r['rw'] !== ''): ?><br><small class="pg-meta">RT <?= ops_e($r['rt'] ?: '-') ?> / RW <?= ops_e($r['rw'] ?: '-') ?></small><?php endif; ?></td>
@@ -59,7 +62,7 @@ $is_family = $view === 'keluarga';
       <a href="<?= site_url('admin/mutasi/baru?keluarga=' . (int) $r['id']) ?>"><?= official_svg('swap') ?>Catat mutasi lain</a>
      </div></details><?php endif; ?></div></td>
    </tr>
-  <?php endforeach; if (!$rows): ?><tr><td colspan="6" class="pg-empty">Belum ada KK terverifikasi<?= $filters['q'] !== '' ? ' yang cocok dengan pencarian' : '' ?>. KK masuk ke sini setelah pengajuan di Verifikasi KK disetujui.</td></tr><?php endif; ?>
+  <?php endforeach; if (!$rows): ?><tr><td colspan="6" class="pg-empty">Belum ada KK terverifikasi<?= $filters['q'] !== '' ? ' yang cocok dengan pencarian' : '' ?>. KK masuk ke sini setelah pengajuan di Pengajuan &amp; Verifikasi KK disetujui.</td></tr><?php endif; ?>
   </tbody></table>
  </section>
  <?php else: $offset = ($page - 1) * 50; ?>
@@ -101,7 +104,8 @@ $is_family = $view === 'keluarga';
    <input type="hidden" name="full" value="1">
    <?php foreach ($filters as $k => $v): ?><input type="hidden" name="<?= ops_e($k) ?>" value="<?= ops_e($v) ?>"><?php endforeach; ?>
    <?= ops_field('reason', 'Alasan ekspor', 'text', '', array('required' => TRUE, 'maxlength' => 200, 'placeholder' => 'Contoh: Rekap data penduduk untuk kelurahan, Nov 2026')) ?>
-   <button class="ops-btn red outline" type="submit" onclick="return confirm('Unduh data penduduk dengan NIK lengkap? Tindakan ini dicatat.')">Unduh CSV Lengkap</button>
+   <label class="ops-field"><span>Format Excel</span><select name="format"><option value="xlsx">Excel (.xlsx)</option><option value="xls">Excel 97-2003 (.xls)</option></select></label>
+   <button class="ops-btn red outline" type="submit" onclick="return confirm('Unduh data penduduk dengan NIK lengkap? Tindakan ini dicatat.')">Unduh Excel Lengkap</button>
   </form>
  </div></details>
  <?php endif; ?>

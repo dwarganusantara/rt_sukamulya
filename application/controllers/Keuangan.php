@@ -7,18 +7,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class Keuangan extends Ops_Controller
 {
-    private $buckets = array('0_30' => '1–30 hari', '31_60' => '31–60 hari', '61_90' => '61–90 hari', '90_plus' => '> 90 hari');
+    private $buckets = array('0_30' => '0–30 hari', '31_60' => '31–60 hari', '61_90' => '61–90 hari', '90_plus' => '> 90 hari');
 
-    /** Jatuh tempo = akhir bulan periode tagihan. */
+    /**
+     * Tagihan belum lunas sampai periode berjalan.
+     * Jatuh tempo tetap dihitung pada akhir bulan periode tagihan, sehingga
+     * tagihan bulan berjalan terlihat tetapi belum dianggap terlambat.
+     */
     private function arrears()
     {
         $rows = $this->db->select('d.*,c.display_name,c.full_name')->from('dues d')->join('citizens c', 'c.id=d.citizen_id')
-            ->where('d.amount_paid < d.amount_due', NULL, FALSE)->where('d.period <', date('Y-m'))->order_by('d.period')->get()->result_array();
+            ->where('d.amount_paid < d.amount_due', NULL, FALSE)->where('d.period <=', date('Y-m'))->order_by('d.period')->get()->result_array();
         $today = new DateTime('today');
         foreach ($rows as &$r) {
             $due = new DateTime(date('Y-m-t', strtotime($r['period'] . '-01')));
-            $days = (int) $due->diff($today)->format('%a');
+            $isOverdue = $today > $due;
+            $days = $isOverdue ? (int) $due->diff($today)->format('%a') : 0;
             $r['days'] = $days;
+            $r['is_overdue'] = $isOverdue;
             $r['remaining'] = (float) $r['amount_due'] - (float) $r['amount_paid'];
             $r['bucket'] = $days <= 30 ? '0_30' : ($days <= 60 ? '31_60' : ($days <= 90 ? '61_90' : '90_plus'));
         }
@@ -30,19 +36,14 @@ class Keuangan extends Ops_Controller
         $this->guard_admin('iuran.report');
         $rows = $this->arrears();
         $bucket = $this->choice('umur', $this->buckets, '', 'get');
-        if ($this->input->get('export') === 'csv') {
-            $this->audit('export', 'arrears', count($rows) . ' baris');
-            $safe = function ($v) {$v = (string) $v; return preg_match('/^[=+\-@\t\r]/', $v) ? "'" . $v : $v;};
-            while (ob_get_level()) ob_end_clean();
-            header('Content-Type: text/csv; charset=UTF-8');
-            header('Content-Disposition: attachment; filename="tunggakan-iuran-' . date('Ymd') . '.csv"');
-            header('X-Content-Type-Options: nosniff');
-            $out = fopen('php://output', 'w');
-            fwrite($out, "\xEF\xBB\xBF");
-            fputcsv($out, array('Warga', 'Periode', 'Kategori', 'Tagihan', 'Dibayar', 'Sisa', 'Hari lewat', 'Umur'), ';');
-            foreach ($rows as $r) fputcsv($out, array($safe($r['full_name'] ?: $r['display_name']), $r['period'], $safe($r['category']), (int) $r['amount_due'], (int) $r['amount_paid'], (int) $r['remaining'], $r['days'], $this->buckets[$r['bucket']]), ';');
-            fclose($out);
-            exit;
+        $format = strtolower((string) $this->input->get('export', TRUE));
+        if (in_array($format, array('xls', 'xlsx'), TRUE)) {
+            $this->audit('export', 'arrears', count($rows) . ' baris (' . $format . ')');
+            $cells = array();
+            foreach ($rows as $r) $cells[] = array((string) ($r['full_name'] ?: $r['display_name']), $r['period'], (string) $r['category'], (int) $r['amount_due'], (int) $r['amount_paid'], (int) $r['remaining'], (int) $r['days'], $this->buckets[$r['bucket']]);
+            $this->load->library('spreadsheet_export');
+            $this->spreadsheet_export->send($format, 'tunggakan-iuran-' . date('Ymd'), 'Tunggakan Iuran', array('Warga', 'Periode', 'Kategori', 'Tagihan', 'Dibayar', 'Sisa', 'Hari lewat', 'Umur'), $cells);
+            return;
         }
         $summary = array_fill_keys(array_keys($this->buckets), array('count' => 0, 'total' => 0));
         $per_citizen = array();
@@ -68,15 +69,49 @@ class Keuangan extends Ops_Controller
         $periods = array_values(array_unique(array_column($rows, 'period'))); rsort($periods);
         $period = (string) $this->input->get('periode', TRUE);
         if (!in_array($period, $periods, TRUE)) $period = '';
+        // Kartu Distribusi mengikuti filter periode (bila dipilih); kartu ringkasan di atas tetap seluruh data.
+        $dist_rows = $period === '' ? $rows : array_values(array_filter($rows, function ($r) use ($period) {return $r['period'] === $period;}));
+        $worst = array();
+        foreach ($dist_rows as $r) {
+            $c = (int) $r['citizen_id'];
+            if (!isset($worst[$c]) || array_search($r['bucket'], $order) > array_search($worst[$c], $order)) $worst[$c] = $r['bucket'];
+        }
+        $distribution = array_fill_keys($order, 0); foreach ($worst as $b) $distribution[$b]++;
+        // Tunggakan terbaru per warga: periode tunggakan terbaru tiap warga, jumlah sisa pada periode itu, tanggal tagihan dibuat.
+        $latest = array(); $campaign_ids = array();
+        foreach ($dist_rows as $r) {
+            $c = (int) $r['citizen_id'];
+            if (!isset($latest[$c]) || strcmp($r['period'], $latest[$c]['period']) > 0) {
+                $latest[$c] = array('name' => $r['full_name'] ?: $r['display_name'], 'period' => $r['period'], 'total' => 0, 'count' => 0, 'campaign_id' => 0, 'updated_at' => $r['updated_at']);
+            }
+            if ($r['period'] === $latest[$c]['period']) {
+                $latest[$c]['total'] += $r['remaining']; $latest[$c]['count']++;
+                if (!empty($r['campaign_id'])) {$latest[$c]['campaign_id'] = max($latest[$c]['campaign_id'], (int) $r['campaign_id']); $campaign_ids[(int) $r['campaign_id']] = TRUE;}
+            }
+        }
+        $created = array();
+        if ($campaign_ids && $this->db->table_exists('billing_campaigns')) foreach ($this->db->select('id,created_at')->where_in('id', array_keys($campaign_ids))->get('billing_campaigns')->result_array() as $bc) $created[(int) $bc['id']] = $bc['created_at'];
+        foreach ($latest as &$l) $l['date'] = $created[$l['campaign_id']] ?? $l['updated_at'];
+        unset($l);
+        uasort($latest, function ($a, $b) {return strcmp($b['period'], $a['period']) ?: strcmp((string) $b['date'], (string) $a['date']);});
+        $latest = array_slice($latest, 0, 5, TRUE);
         if ($bucket) $rows = array_values(array_filter($rows, function ($r) use ($bucket) {return $r['bucket'] === $bucket;}));
         if ($period !== '') $rows = array_values(array_filter($rows, function ($r) use ($period) {return $r['period'] === $period;}));
+        // Halaman daftar (ringkasan & distribusi di atas tetap dihitung dari seluruh data).
+        $per_page = 15;
+        $row_total = count($rows);
+        $pages = max(1, (int) ceil($row_total / $per_page));
+        $page = min($pages, max(1, (int) $this->input->get('hal')));
+        $offset = ($page - 1) * $per_page;
+        $rows = array_slice($rows, $offset, $per_page);
         $last = array();
         foreach ($this->db->select('due_id,MAX(created_at) at', FALSE)->group_by('due_id')->get('due_reminders')->result_array() as $x) $last[(int) $x['due_id']] = $x['at'];
         $kk = array();
         $cids = array_unique(array_map('intval', array_column($rows, 'citizen_id')));
         if ($cids && $this->db->table_exists('kk_families')) foreach ($this->db->select('owner_citizen_id,nomor_kk')->where_in('owner_citizen_id', $cids)->get('kk_families')->result_array() as $f) $kk[(int) $f['owner_citizen_id']] = $f['nomor_kk'];
         $this->render('tunggakan', array('rows' => $rows, 'summary' => $summary, 'per_citizen' => $per_citizen, 'buckets' => $this->buckets, 'bucket' => $bucket, 'last' => $last,
-            'distribution' => $distribution, 'debtors' => count($worst), 'periods' => $periods, 'period' => $period, 'kk' => $kk));
+            'distribution' => $distribution, 'debtors' => count($worst), 'periods' => $periods, 'period' => $period, 'kk' => $kk,
+            'latest' => $latest, 'row_total' => $row_total, 'page' => $page, 'pages' => $pages, 'per_page' => $per_page, 'offset' => $offset));
     }
 
     /** Pengingat manual in-app (muncul sebagai pemberitahuan di portal warga). Maks. 1x per 3 hari per tagihan. */

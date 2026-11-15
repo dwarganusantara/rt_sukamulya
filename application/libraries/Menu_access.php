@@ -429,7 +429,7 @@ class Menu_access
         $class = strtolower((string) $router->class);
         $method = strtolower((string) $router->method);
         if ($class === 'admin') {
-            if (in_array($method, array('posts', 'post'), TRUE)) {
+            if (in_array($method, array('posts', 'post', 'post_delete'), TRUE)) {
                 $type = strtolower((string) ($this->CI->uri->rsegment(3) ?: 'pengumuman'));
                 return isset($this->items()['admin/posts/' . $type]) ? 'admin/posts/' . $type : NULL;
             }

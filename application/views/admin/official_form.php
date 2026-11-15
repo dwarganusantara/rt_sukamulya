@@ -15,8 +15,8 @@ $head=function($icon,$tint,$title,$hint='')
 <link rel="stylesheet" href="<?= base_url('assets/admin-officials-v2.css') ?>?v=<?= filemtime(FCPATH.'assets/admin-officials-v2.css') ?>">
 <section class="off-hero off-hero-form"><div class="off-hero-copy"><nav class="off-crumb"><a href="<?= site_url('admin/officials') ?>">Manajemen Pengurus</a><i>›</i><a href="<?= site_url('admin/officials') ?>">Struktur Organisasi</a><i>›</i><b><?= $item?'Edit':'Tambah' ?> Posisi</b></nav><div class="off-hero-title"><span class="off-hero-icon"><?= official_svg('pencil') ?></span><div><h1><?= $item?'Edit':'Tambah' ?> Posisi Organisasi</h1><p><?= $item?'Ubah informasi jabatan pengurus RT sesuai kebutuhan.':'Tambahkan jabatan pengurus RT baru ke struktur organisasi.' ?></p></div></div></div><a class="off-back" href="<?= site_url('admin/officials') ?>"><?= official_svg('back') ?>Kembali</a></section>
 <?php if($error): ?><div class="error off-error"><?= html_escape($error) ?></div><?php endif; ?>
-<div class="off-form-layout">
-<form class="off-form-card" method="post" enctype="multipart/form-data">
+<div class="off-form-layout" data-rsp-tabs>
+<form class="off-form-card" method="post" enctype="multipart/form-data" data-rsp-tab="Data Posisi">
  <header class="off-card-head"><span class="off-tile off-tile-large tint-orange"><?= official_svg('person') ?></span><div><h2>Informasi Dasar</h2><p>Lengkapi data posisi organisasi sesuai dengan peran dan tanggung jawabnya.</p></div></header>
  <div class="off-form-row">
   <div class="off-field"><?= $head('person-gear','blue','Nama personel') ?><input id="official-name" name="name" required value="<?= html_escape($item['name']??'') ?>"></div>
@@ -38,7 +38,7 @@ $head=function($icon,$tint,$title,$hint='')
  <?= $csrf_field ?>
  <div class="off-form-actions"><button class="off-submit" type="submit"><?= official_svg('save') ?><?= $item?'Simpan Perubahan':'Simpan Posisi' ?></button><a class="off-cancel" href="<?= site_url('admin/officials') ?>"><?= official_svg('close') ?>Batal</a></div>
 </form>
-<aside class="off-form-side">
+<aside class="off-form-side" data-rsp-tab="Pratinjau &amp; Ikon">
  <section class="off-side-card"><header class="off-card-head"><span class="off-tile off-tile-large tint-blue"><?= official_svg('eye') ?></span><div><h2>Preview Kartu Posisi</h2><p>Tampilan yang akan muncul di struktur organisasi.</p></div></header><div class="off-preview"><span id="official-preview-icon" class="off-preview-badge tint-<?= $current_meta[2] ?>"><?= official_svg($current_meta[1]) ?></span><img id="official-photo-preview" src="<?= $photo_url ?>" alt="Preview foto"><h3 id="official-preview-position"><?= html_escape($item['position']??'Nama Jabatan') ?></h3><strong id="official-preview-name"><?= html_escape($item['name']??'Nama Personel') ?></strong><p id="official-preview-description"><?= html_escape($description?:'Deskripsi tugas akan tampil di sini.') ?></p></div></section>
  <section class="off-side-card"><header class="off-card-head"><span class="off-tile off-tile-large tint-red"><?= official_svg('star') ?></span><div><h2>Contoh Ikon Jabatan</h2><p>Pilih ikon yang paling sesuai dengan peran jabatan.</p></div></header><div class="off-icon-grid"><?php foreach($catalog as $value=>$meta): ?><button type="button" class="tint-<?= $meta[2] ?><?= $current_icon===$value?' selected':'' ?>" data-icon="<?= $value ?>" data-tint="<?= $meta[2] ?>" title="<?= html_escape($meta[0]) ?>" aria-label="<?= html_escape($meta[0]) ?>"><?= official_svg($meta[1]) ?></button><?php endforeach; ?></div><div class="off-tips"><span><?= official_svg('bulb') ?></span><div><b>Tips</b><p>Gunakan deskripsi yang jelas dan singkat agar warga memahami tugas dan peran dari posisi ini.</p></div></div></section>
 </aside>

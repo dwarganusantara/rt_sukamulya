@@ -14,3 +14,73 @@
 @media(max-width:1250px){.dux-layout{grid-template-columns:minmax(0,1fr)}.dux-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.dux-hero{flex-direction:column}.dux-hero:after{display:none}.dux-hero-actions{align-self:stretch;margin-top:0}.dux-hero-actions>*{flex:1;justify-content:center;text-align:center}.dux-metrics{grid-template-columns:minmax(0,1fr)}.dux-search,.admin-body .dux-card .dux-head select{flex:1 1 100%;width:100%}.dux-legacy{align-items:flex-start}.admin-body .dux-legacy a{white-space:normal}.dux-summary{flex-wrap:wrap}}
 @media(prefers-reduced-motion:reduce){.dux-quick a{transition:none}.dux-quick a:hover{transform:none}}
+
+/* Tab utama: satu tabel ditampilkan pada satu waktu agar halaman tidak terlalu panjang. */
+.dux-main-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:6px;border:1px solid #eadfd4;border-radius:15px;background:#fff;box-shadow:0 7px 20px #26344c0a}
+.admin-body .dux-main-tabs a{min-width:0;min-height:64px;display:flex;align-items:center;gap:12px;padding:9px 14px;border:1px solid transparent;border-radius:11px;background:#f7f9fc;color:#405675;text-decoration:none;transition:background .15s,border-color .15s,box-shadow .15s}
+.dux-main-tabs a>.off-svg{flex:none;font-size:26px;color:#6b7f9b}.dux-main-tabs a>span{min-width:0;flex:1;font-size:14px;font-weight:900;line-height:1.2}.dux-main-tabs a small{display:block;margin-top:4px;color:#788aa3;font-size:11px;font-weight:600}.dux-main-tabs a>b{min-width:30px;height:27px;display:grid;place-items:center;padding:0 7px;border-radius:999px;background:#e8edf4;color:#405675;font-size:12px}
+.admin-body .dux-main-tabs a[aria-selected="true"]{border-color:#ffd4bd;background:linear-gradient(105deg,#fff7f1,#fff1e7);color:var(--theme-accent,#f0501a);box-shadow:inset 3px 0 var(--theme-accent,#f0501a)}
+.dux-main-tabs a[aria-selected="true"]>.off-svg{color:var(--theme-accent,#f0501a)}.dux-main-tabs a[aria-selected="true"] small{color:#a45a37}.dux-main-tabs a[aria-selected="true"]>b{background:var(--theme-accent,#f0501a);color:#fff}
+.dux-main-tabs a:focus-visible{outline:3px solid #ffd2a8;outline-offset:1px}.dux-main [data-dux-panel][hidden]{display:none!important}
+
+/* Tab kategori + halaman untuk Daftar Tagihan & Pembayaran Masuk */
+.dux-filter{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0 0 0 auto}
+.dux-filter .dux-search{margin:0}
+.dux-cats{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 12px}
+.admin-body .dux-cats a{display:inline-flex;align-items:center;gap:7px;min-height:36px;padding:0 13px;border:1.5px solid #e3e8f0;border-radius:999px;background:#fff;color:#1f2f4d;font-size:13px;font-weight:800;text-decoration:none;white-space:nowrap}
+.admin-body .dux-cats a:hover{border-color:#ffc9a8;background:#fffaf6}
+.admin-body .dux-cats a[aria-current="page"]{border-color:transparent;background:linear-gradient(100deg,#ff7a2a,#f0540f);color:#fff;box-shadow:0 4px 10px rgba(240,84,15,.22)}
+.dux-cats a b{min-width:22px;height:20px;display:inline-grid;place-items:center;padding:0 6px;border-radius:999px;background:#eef2f7;color:#334e7d;font-size:11.5px}
+.dux-cats a[aria-current="page"] b{background:rgba(255,255,255,.25);color:#fff}
+.dux-cats a:focus-visible{outline:3px solid #ffd2a8;outline-offset:2px}
+.dux-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:12px 4px 2px;color:#5b6b82;font-size:13px}
+.dux-foot p{margin:0}.dux-foot b{color:#1f2f4d}
+.dux-foot a,.dux-empty a{color:#e8590c;font-weight:800}
+@media(max-width:720px){.dux-main-tabs{gap:5px;padding:5px}.admin-body .dux-main-tabs a{min-height:54px;padding:8px 10px;gap:8px}.dux-main-tabs a>.off-svg{font-size:21px}.dux-main-tabs a>span{font-size:12px}.dux-main-tabs a small{display:none}.dux-main-tabs a>b{min-width:25px;height:23px;padding:0 5px;font-size:10px}.dux-filter{width:100%;margin:6px 0 0}.dux-filter select,.dux-filter .dux-search{flex:1 1 100%}.dux-cats{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}.dux-foot{justify-content:center;text-align:center}}
+/* Tautan dari popup pembayaran langsung berhenti pada kartu/baris yang perlu ditinjau. */
+#pembayaran{scroll-margin-top:24px}
+#pembayaran:target{box-shadow:0 0 0 3px #f59e0b55,0 12px 30px #d9770624;animation:duxTarget 1.8s ease-out}
+@keyframes duxTarget{0%,35%{background:#fff0ca}100%{background:#fff}}
+
+/* Tagihan yang baru dibuat */
+.dux-table tr.dux-new td{background:#fff8ef}
+.dux-new-tag{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:999px;background:#ff6a1a;color:#fff;font-size:10.5px;font-weight:800;vertical-align:middle}
+
+/* ===== Panel filter Daftar Tagihan (sesuai mockup) ===== */
+.dux-fp{margin:-2px 0 14px;border:1px solid #e6ebf2;border-radius:18px;background:#fff;box-shadow:0 6px 18px rgba(15,37,80,.05)}
+.dux-fp-head{display:flex;align-items:center;gap:16px;padding:16px 20px;border-bottom:1px solid #edf1f6}
+.dux-fp-ic{width:56px;height:56px;flex:none;display:grid;place-items:center;border-radius:14px;background:#e6f0ff;color:#1d6fe0;font-size:28px}
+.dux-fp-title{flex:1;min-width:0}
+.dux-fp-title h2{margin:0;color:#0f2550;font-size:22px;font-weight:900}
+.dux-fp-title p{margin:3px 0 0;color:#4a5b78;font-size:14px}
+.dux-fp-fold{flex:none;width:40px;height:40px;display:grid;place-items:center;padding:0;border:0;border-radius:10px;background:transparent;color:#0f2550;cursor:pointer}
+.dux-fp-fold:hover{background:#f3f6fb}
+.dux-fp-fold:before{content:"";width:11px;height:11px;margin-top:6px;border-left:2.5px solid currentColor;border-top:2.5px solid currentColor;transform:rotate(45deg);transition:transform .2s,margin .2s}
+.dux-fp.is-collapsed .dux-fp-fold:before{margin-top:-6px;transform:rotate(225deg)}
+.dux-fp.is-collapsed .dux-fp-head{border-bottom:0}
+.dux-fp.is-collapsed .dux-fp-body{display:none}
+.dux-fp-fold:focus-visible,.dux-fp-go:focus-visible{outline:3px solid #ffd2a8;outline-offset:2px}
+.dux-fp-body{display:grid;grid-template-columns:repeat(4,minmax(0,1.15fr)) minmax(0,.9fr) auto;align-items:end;gap:14px 18px;padding:18px 20px 20px}
+.dux-fp-field{display:flex;flex-direction:column;gap:8px;min-width:0;margin:0}
+.dux-fp-field>span:first-child{color:#0f2550;font-size:14.5px;font-weight:800}
+.dux-fp-ctl{position:relative;display:flex;align-items:center;height:46px;border:1.5px solid #d7dfea;border-radius:12px;background:#fff;color:#1f2f4d}
+.dux-fp-ctl:focus-within{border-color:#ff6a1a;box-shadow:0 0 0 3px rgba(255,106,26,.14)}
+.dux-fp-ctl>.off-svg{position:absolute;left:14px;font-size:19px;color:#334e7d;pointer-events:none}
+.admin-body .dux-fp-ctl select,.admin-body .dux-fp-ctl input{width:100%;height:100%;margin:0!important;padding:0 36px 0 44px!important;border:0!important;border-radius:12px!important;background:transparent!important;color:#0f2550;font-family:inherit;font-size:14.5px;font-weight:600;box-shadow:none!important;outline:0;appearance:none;-webkit-appearance:none;min-width:0;text-overflow:ellipsis}
+.admin-body .dux-fp-ctl input{padding-right:14px!important}
+.dux-fp-ctl:has(select):after{content:"";position:absolute;right:15px;top:50%;width:7px;height:7px;margin-top:-6px;border-right:2px solid #0f2550;border-bottom:2px solid #0f2550;transform:rotate(45deg);pointer-events:none}
+.admin-body .dux-fp-go{height:46px;display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:0 22px;border:0;border-radius:12px;background:linear-gradient(100deg,#ff7a1a,#f2600c);color:#fff;font-family:inherit;font-size:15px;font-weight:800;white-space:nowrap;cursor:pointer;box-shadow:0 6px 14px rgba(242,96,12,.28)}
+.admin-body .dux-fp-go:hover{filter:brightness(1.05)}
+.dux-fp-go .off-svg{font-size:19px}
+.dux-fp-search{grid-column:1/3}
+.admin-body .dux-fp-reset{align-self:center;justify-self:start;color:#e8590c;font-size:13.5px;font-weight:800;text-decoration:none;grid-column:3/-1;padding-top:26px}
+.dux-fp-reset:hover{text-decoration:underline}
+@media(max-width:1400px){.dux-fp-body{grid-template-columns:repeat(3,minmax(0,1fr))}.dux-fp-go{grid-column:auto}.dux-fp-search{grid-column:1/3}.admin-body .dux-fp-reset{grid-column:3;padding-top:0}}
+@media(max-width:720px){.dux-fp-head{padding:14px}.dux-fp-ic{width:46px;height:46px;font-size:23px}.dux-fp-title h2{font-size:19px}.dux-fp-body{grid-template-columns:1fr;padding:14px}.dux-fp-search,.admin-body .dux-fp-reset{grid-column:auto}.admin-body .dux-fp-go{width:100%}}
+/* panel filter: menyesuaikan lebar kolom utama (ada kartu ringkasan di kanan) */
+.dux-fp .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.dux-fp-body{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.dux-fp-search{grid-column:1/3!important}
+.admin-body .dux-fp-reset{grid-column:3!important;padding-top:26px!important}
+.admin-body .dux-fp-go{width:100%}
+@media(max-width:720px){.dux-fp-body{grid-template-columns:1fr!important}.dux-fp-search,.admin-body .dux-fp-reset{grid-column:auto!important;padding-top:0!important}}

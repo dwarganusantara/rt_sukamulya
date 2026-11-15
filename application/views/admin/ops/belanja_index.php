@@ -1,6 +1,6 @@
 <?php $tabs = array('admin/inventaris' => 'Daftar Barang', 'admin/inventaris/pinjam' => 'Peminjaman', 'admin/belanja' => 'Belanja & Penerimaan'); ?>
 <div class="ops">
-<div class="ops-toolbar"><?= ops_tabs($tabs, 'admin/belanja') ?><?php if($can('belanja.write')): ?><div class="ops-toolbar-actions"><a class="ops-btn" href="<?= site_url('admin/belanja/baru') ?>">+ Permintaan Baru</a></div><?php endif; ?></div>
+<div class="ops-toolbar"><?= ops_tabs($tabs, 'admin/belanja') ?></div>
 <?= ops_hero('Operasional RT', 'Belanja & Penerimaan Barang', 'Permintaan → persetujuan (bukan oleh pemohon) → pemesanan → penerimaan → posting pengeluaran kas. Barang inventaris masuk stok hanya setelah diterima.', array(), 'briefcase') ?>
 <?= ops_flash() ?>
 <?= ops_stats(array(
@@ -16,6 +16,6 @@
   <td data-label="Permintaan"><?= ops_e($it['title']) ?><small><?= ops_e($it['program_title'] ?: '') ?><?= $it['is_donation'] ? ' · Donasi' : '' ?></small></td><td data-label="Pemohon"><?= ops_e($it['requester'] ?: '-') ?></td>
   <td data-label="Estimasi" class="num"><?= ops_money($it['estimated_total']) ?></td><td data-label="Realisasi" class="num"><?= $it['actual_total'] !== NULL ? ops_money($it['actual_total']) : '—' ?></td>
   <td data-label="Status"><?= ops_badge($it['status'], $labels, $tones) ?></td><td data-label=""><a href="<?= site_url('admin/belanja/' . (int) $it['id']) ?>">Buka</a></td></tr>
-<?php endforeach; if (!$items): ?><tr><td colspan="7" class="ops-empty"><?= ops_empty_state('Belum ada permintaan belanja','Tambahkan permintaan belanja untuk mulai mengelola pengeluaran barang.','cart',$can('belanja.write')?'admin/belanja/baru':NULL,'Permintaan Baru') ?></td></tr><?php endif; ?>
+<?php endforeach; if (!$items): ?><tr><td colspan="7" class="ops-empty"><?= ops_empty_state('Belum ada permintaan belanja','Belum ada riwayat permintaan belanja yang tersimpan.','cart') ?></td></tr><?php endif; ?>
 </tbody></table></div></section>
 </div>

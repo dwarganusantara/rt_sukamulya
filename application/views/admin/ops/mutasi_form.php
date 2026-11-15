@@ -4,7 +4,7 @@ $step = (!$family || !$type) ? 1 : 2;
 $steps = array(1 => 'Pilih Keluarga', 2 => 'Isi Data Mutasi', 3 => 'Konfirmasi');
 ?>
 <div class="pg">
- <?= pg_crumb(array(array('Mutasi Warga', 'admin/mutasi'), array('Catat Mutasi', NULL))) ?>
+ <?= pg_crumb_back(array(array('Mutasi Warga', 'admin/mutasi'), array('Catat Mutasi', NULL)), pg_back_url($family ? 'admin/penduduk/keluarga/' . (int) $family['id'] : 'admin/mutasi')) ?>
  <section class="pg-hero pg-hero-care pg-hero-note"><span class="pg-hero-ic"><?= official_svg('swap') ?></span><div class="pg-hero-tx"><span class="pg-kicker">Kependudukan</span><h1>Catat Mutasi oleh Pengurus</h1><p>Gunakan untuk mencatat perubahan data warga (masuk, pindah, meninggal, atau koreksi data) yang dilaporkan langsung ke pengurus. Mutasi tetap melalui persetujuan sebelum data KK berubah.</p></div><span class="pg-note-art" aria-hidden="true"></span></section>
 
  <ol class="pg-steps" aria-label="Langkah">
@@ -22,7 +22,7 @@ $steps = array(1 => 'Pilih Keluarga', 2 => 'Isi Data Mutasi', 3 => 'Konfirmasi')
     <?php else: ?><select id="f-fam" name="keluarga" required><option value="">Pilih keluarga</option><?php foreach ($families as $id => $label): ?><option value="<?= (int) $id ?>"><?= ops_e($label) ?></option><?php endforeach; ?></select><?php endif; ?></span></div>
    <div class="pg-field"><label for="f-type">Jenis Mutasi <b aria-hidden="true">*</b></label><span class="pg-input pg-input-sel"><?= official_svg('swap') ?><select id="f-type" name="jenis" required><option value="">Pilih jenis mutasi</option><?php foreach ($types as $k => $label): ?><option value="<?= ops_e($k) ?>"<?= $k === $type ? ' selected' : '' ?>><?= ops_e($label) ?></option><?php endforeach; ?></select></span></div>
   </div>
-  <?php if (!$families && !$family): ?><p class="ops-note">Belum ada keluarga terverifikasi. Verifikasi data KK warga terlebih dahulu di menu Verifikasi KK.</p><?php endif; ?>
+  <?php if (!$families && !$family): ?><p class="ops-note">Belum ada keluarga terverifikasi. Verifikasi data KK warga terlebih dahulu di menu Pengajuan &amp; Verifikasi KK.</p><?php endif; ?>
   <div class="pg-form-actions"><a class="pg-btn ghost" href="<?= site_url('admin/mutasi') ?>"><?= official_svg('close') ?>Batal</a><button class="pg-btn solid" type="submit"<?= (!$families && !$family) ? ' disabled' : '' ?>>Lanjutkan<?= official_svg('arrow-right') ?></button></div>
  </form>
 

@@ -1,0 +1,167 @@
+/* Dashboard admin v7 — redesign desktop "soft 3D". Seluruh aturan di-scope ke .db7. */
+.db7{--ivory:#fffcf7;--card:#fff;--green:#0f7a3a;--green-soft:#e8f6ea;--orange:#ff6a21;--orange-soft:#fff0e4;--ink:#142b44;--muted:#61728b;--line:#e8ebef;--red:#d94b4b;
+ display:flex;flex-direction:column;gap:14px;min-width:0;color:var(--ink);font-size:13.5px;container-type:inline-size;container-name:db7}
+.db7 *{box-sizing:border-box}
+.db7 .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.db7 a{color:inherit;text-decoration:none}
+.db7 h1,.db7 h2,.db7 p{margin:0}
+.db7-3d{display:block;width:100%;height:100%;filter:drop-shadow(0 4px 5px rgba(20,43,68,.16))}
+
+/* ---------- Banner ---------- */
+/* Banner ringkas: foto diskalakan ~setinggi banner (bukan cover) dan ditambatkan kanan-bawah, sehingga tokoh
+   tetap utuh walau banner pendek; sisi kiri diisi warna gading di belakang teks. */
+.db7-hero{position:relative;min-height:220px;border-radius:22px;overflow:hidden;padding:22px 32px 30px;
+ background:linear-gradient(90deg,#fffcf7,#f7f3ea);
+ box-shadow:0 10px 30px rgba(20,43,68,.06)}
+/* Lapisan foto: rasio 3:1 (ilustrasi banner), tinggi 118% banner, tepi kiri memudar agar tidak ada garis potong. */
+.db7-hero:before{content:"";position:absolute;right:0;bottom:0;height:118%;aspect-ratio:3/1;max-width:100%;background:var(--hero) right bottom/cover no-repeat;
+ -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 28%);mask-image:linear-gradient(90deg,transparent 0,#000 28%);pointer-events:none}
+.db7-hero-copy{position:relative;z-index:1;max-width:520px}
+.db7-hero h1{font-size:clamp(24px,2vw,34px);line-height:1.08;font-weight:900;letter-spacing:-.02em;color:#0d1f33}
+.db7-hero h1 span{color:#0d1f33}
+.db7-hero h1 i{font-style:normal;font-size:.8em}
+.db7-hero p{margin-top:7px;color:#2b415c;font-size:14.5px;font-weight:600}
+.db7-date{display:inline-flex;align-items:center;gap:9px;margin-top:12px;padding:7px 14px;border-radius:999px;background:rgba(255,255,255,.92);box-shadow:0 6px 18px rgba(20,43,68,.08);font-weight:800;font-size:13.5px}
+.db7-date .off-svg{font-size:18px;color:var(--ink)}
+
+/* ---------- KPI ---------- */
+.db7-kpis{display:grid;grid-template-columns:repeat(var(--n,6),minmax(0,1fr));gap:12px;margin:-22px 14px 0;position:relative;z-index:2}
+.db7-kpi{display:flex;align-items:center;gap:12px;min-width:0;padding:12px 14px;border-radius:18px;background:var(--card);border:1px solid rgba(255,255,255,.8);box-shadow:0 10px 26px rgba(20,43,68,.09);transition:transform .15s,box-shadow .15s}
+a.db7-kpi:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(20,43,68,.13)}
+a.db7-kpi:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.db7-kpi.green{background:linear-gradient(135deg,#f1fbf2,#fff 70%)}.db7-kpi.orange{background:linear-gradient(135deg,#fff3e8,#fff 70%)}
+.db7-kpi.blue{background:linear-gradient(135deg,#fff1e6,#fff 75%)}.db7-kpi.purple{background:linear-gradient(135deg,#f3efff,#fff 70%)}
+.db7-kpi.mint{background:linear-gradient(135deg,#fffbe9,#fff 70%)}.db7-kpi.gold{background:linear-gradient(135deg,#fff8e6,#fff 70%)}
+.db7-kpi-ic{flex:none;width:48px;height:48px}
+.db7-kpi-tx{display:flex;flex-direction:column;min-width:0}
+.db7-kpi-tx small{color:#2b415c;font-size:13px;font-weight:700;line-height:1.25}
+.db7-kpi-tx strong{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:3px 0 2px;font-size:24px;line-height:1.1;font-weight:900;color:#0d1f33}
+.db7-kpi.gold .db7-kpi-tx strong{font-size:17px;white-space:nowrap;letter-spacing:-.01em}
+.db7-kpi.gold .db7-kpi-ic{width:44px;height:44px}
+.db7-kpi-tx em{font-style:normal;color:var(--muted);font-size:12px;font-weight:600}
+.db7-kpi-tx em.cta{color:var(--orange);font-weight:800}
+.db7-delta{font-size:12px;font-weight:800}.db7-delta.good{color:var(--green)}.db7-delta.bad{color:var(--red)}
+
+/* ---------- Grid & kartu ---------- */
+.db7-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr) minmax(0,1fr);gap:14px}
+.db7-card{position:relative;min-width:0;padding:15px 18px;border-radius:20px;background:var(--card);border:1px solid var(--line);box-shadow:0 8px 24px rgba(20,43,68,.05);overflow:hidden}
+.db7-card>header,.db7-reports>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.db7-card h2{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:900;color:#0d1f33;letter-spacing:-.01em}
+.db7-card h2 .db7-3d{width:28px;height:28px;flex:none}
+.db7-select select{height:34px;padding:0 30px 0 12px;border:1px solid var(--line);border-radius:10px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23142b44' stroke-width='1.6'/%3E%3C/svg%3E") right 11px center/10px no-repeat;
+ -webkit-appearance:none;appearance:none;font:inherit;font-size:12.5px;font-weight:700;color:var(--ink);cursor:pointer}
+.db7-select select:focus-visible{outline:2px solid var(--orange);outline-offset:1px}
+.db7-link{display:inline-flex;align-items:center;gap:6px;color:var(--orange)!important;font-weight:800;font-size:14px;white-space:nowrap}
+.db7-link .off-svg{font-size:16px}
+.db7-empty{padding:18px 4px;color:var(--muted);font-weight:600}
+.db7-more{position:relative;z-index:1;display:inline-flex;align-items:center;gap:6px;margin:8px 0 0 auto;width:max-content;float:right;padding:7px 14px;border-radius:999px;font-weight:800;font-size:12.5px}
+.db7-more.green{background:var(--green-soft);color:var(--green)!important;border:1px solid #bfe3c6}
+
+/* Rekap iuran (donut) */
+.db7-dues{background:linear-gradient(180deg,#fff 55%,#f2faf2)}
+.db7-dues-body{display:flex;align-items:center;gap:22px;padding:4px 0 0}
+.db7-donut{--pc:0;flex:none;width:148px;height:148px;border-radius:50%;display:grid;place-items:center;
+ background:conic-gradient(#21a44a calc(var(--pc)*1%),#ff8a2b 0 calc(var(--pc)*1% + (100 - var(--pc))*1%));box-shadow:0 8px 20px rgba(15,122,58,.15)}
+.db7-donut span{width:108px;height:108px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:inset 0 2px 6px rgba(20,43,68,.08)}
+.db7-donut b{font-size:30px;font-weight:900;line-height:1}.db7-donut small{font-size:15px;font-weight:800;margin-top:2px}
+.db7-legend{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.db7-legend li{display:flex;gap:10px;align-items:flex-start}
+.db7-legend i{flex:none;width:14px;height:14px;border-radius:50%;margin-top:3px}
+.db7-legend i.green{background:#21a44a}.db7-legend i.orange{background:#ff8a2b}.db7-legend i.gray{background:#d7dde5}
+.db7-legend span{display:flex;flex-direction:column;font-weight:700;color:#2b415c}.db7-legend b{color:#0d1f33;font-size:15px}
+.db7-coins{position:absolute;left:10px;bottom:6px;width:70px;height:70px;opacity:.95;pointer-events:none}
+
+/* Grafik kas */
+.db7-legend-row{display:flex;justify-content:center;gap:22px;margin:-2px 0 10px;font-weight:700;font-size:12.5px}
+.db7-legend-row span{display:inline-flex;align-items:center;gap:7px}
+.db7-legend-row span:before{content:"";width:11px;height:11px;border-radius:50%}
+.db7-legend-row .in:before{background:#22a648}.db7-legend-row .out:before{background:#ff8a2b}
+.db7-chart{display:grid;grid-template-columns:auto 1fr;gap:10px;height:160px}
+.db7-axis{display:flex;flex-direction:column;justify-content:space-between;padding-bottom:22px;color:var(--muted);font-size:11.5px;font-weight:700;text-align:right}
+.db7-plot{position:relative;display:grid;grid-template-columns:repeat(var(--cols),1fr);align-items:end;gap:6px;padding-bottom:22px;border-left:1px solid var(--line);border-bottom:1px solid var(--line);
+ background:repeating-linear-gradient(to top,transparent 0,transparent calc(20% - 1px),#eef1f4 calc(20% - 1px),#eef1f4 20%) 0 0/100% calc(100% - 22px) no-repeat}
+.db7-col{position:relative;display:flex;align-items:flex-end;justify-content:center;gap:3px;height:100%;padding:0 2px}
+.db7-col span{width:min(16px,38%);border-radius:5px 5px 0 0;min-height:2px;transition:filter .15s}
+.db7-col .in{background:linear-gradient(#3cc35e,#1a8f3d)}.db7-col .out{background:linear-gradient(#ffa24f,#f2741c)}
+.db7-col:hover span,.db7-col:focus-visible span{filter:brightness(1.1) saturate(1.1)}
+.db7-col small{position:absolute;bottom:-21px;left:0;right:0;text-align:center;color:#2b415c;font-weight:700;font-size:12px}
+.db7-peak{position:absolute;left:50%;transform:translateX(-50%);z-index:1;padding:4px 8px;border-radius:8px;background:#1f9d47;color:#fff;font-style:normal;font-size:11.5px;font-weight:800;white-space:nowrap}
+
+/* Perlu tindakan */
+.db7-tasks{padding:0;background:linear-gradient(180deg,#fff,#fff8f2)}
+.db7-tasks-head{margin:0!important;padding:14px 18px;background:linear-gradient(90deg,#ff6a21,#ff8f4a);border-radius:20px 20px 0 0}
+.db7-tasks-head h2{color:#fff}.db7-tasks-head h2 .db7-3d{padding:3px;border-radius:8px;background:#fff;filter:none}
+.db7-count{display:grid;place-items:center;min-width:26px;height:26px;padding:0 7px;border-radius:999px;background:#e53935;color:#fff;font-size:13px;font-weight:900;box-shadow:0 0 0 3px rgba(255,255,255,.4)}
+.db7-tasks ul{list-style:none;margin:0;padding:6px 16px 12px}
+.db7-tasks li+li{border-top:1px solid var(--line)}
+.db7-tasks li a{display:flex;align-items:center;gap:12px;padding:11px 2px;border-radius:12px}
+.db7-tasks li a:hover .db7-task-tx b{color:var(--orange)}
+.db7-task-ic{flex:none;width:44px;height:44px;padding:6px;border-radius:12px;background:#fff3ea}
+.db7-task-tx{display:flex;flex-direction:column;min-width:0;flex:1}
+.db7-task-tx b{font-size:14.5px;font-weight:800;color:#0d1f33}.db7-task-tx small{color:var(--muted);font-weight:600}
+.db7-tasks em{flex:none;padding:6px 13px;border-radius:999px;background:var(--orange-soft);color:#e2560f;font-style:normal;font-weight:800;font-size:12.5px}
+.db7-tasks .db7-empty{padding:22px 18px}
+
+/* Agenda */
+.db7-agenda ul,.db7-activity ol{list-style:none;margin:0;padding:0;position:relative;z-index:1}
+.db7-agenda li a{display:flex;align-items:center;gap:14px;padding:8px 0;max-width:72%}
+.db7-agenda li+li{border-top:1px solid var(--line)}
+.db7-day{flex:none;width:62px;height:62px;border-radius:14px;background:linear-gradient(180deg,#fff1e4,#ffe2c8);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#e2560f}
+.db7-day b{font-size:24px;line-height:1;font-weight:900}.db7-day small{font-size:13px;font-weight:800}
+.db7-agenda-tx{display:flex;flex-direction:column;min-width:0}
+.db7-agenda-tx b{font-size:15px;font-weight:800;color:#0d1f33;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.db7-agenda-tx small{color:var(--muted);font-weight:600}
+.db7-agenda-tx .loc{display:inline-flex;align-items:center;gap:4px}.db7-agenda-tx .loc .off-svg{font-size:13px}
+.db7-cal-art{position:absolute;right:16px;bottom:12px;width:96px;height:96px;opacity:.95;pointer-events:none}
+
+/* Aktivitas */
+.db7-activity ol:before{content:"";position:absolute;left:7px;top:14px;bottom:14px;width:2px;background:#cfeed6}
+.db7-activity li a{position:relative;display:flex;align-items:center;gap:12px;padding:8px 0 8px 26px}
+.db7-activity li a:before{content:"";position:absolute;left:3px;top:50%;width:10px;height:10px;margin-top:-5px;border-radius:50%;background:#21a44a;box-shadow:0 0 0 3px #e8f6ea}
+.db7-activity li+li a{border-top:1px solid var(--line)}
+.db7-act-ic{flex:none;width:40px;height:40px;padding:6px;border-radius:12px;background:#fff6ee}
+.db7-activity li span:last-child{display:flex;flex-direction:column;min-width:0}
+.db7-activity b{font-size:14px;font-weight:800;color:#0d1f33;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.db7-activity small{color:var(--muted);font-weight:600}
+
+/* Laporan & statistik */
+.db7-reports>summary{list-style:none;cursor:pointer}
+.db7-reports>summary::-webkit-details-marker{display:none}
+.db7-chev{display:inline-flex;transition:transform .2s;font-size:18px}
+.db7-reports[open] .db7-chev{transform:rotate(90deg)}
+.db7-reports>div{display:grid;grid-template-columns:repeat(auto-fit,minmax(88px,1fr));gap:10px}
+.db7-reports>div a{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 8px;border-radius:16px;border:1px solid var(--line);background:linear-gradient(180deg,#f3f9ff,#fff);font-weight:800;font-size:13px;text-align:center;transition:transform .15s,box-shadow .15s}
+.db7-reports>div a:nth-child(2){background:linear-gradient(180deg,#effaf0,#fff)}.db7-reports>div a:nth-child(3){background:linear-gradient(180deg,#fff8e6,#fff)}.db7-reports>div a:nth-child(4){background:linear-gradient(180deg,#fff0f0,#fff)}
+.db7-reports>div a:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(20,43,68,.08)}
+.db7-reports>div .db7-3d{width:46px;height:46px}
+
+/* ---------- Responsif (mengikuti lebar area konten, bukan layar, karena sidebar) ---------- */
+@container db7 (max-width:1280px){
+ .db7-kpi{padding:14px 11px;gap:9px}.db7-kpi-ic{width:44px;height:44px}
+ .db7-kpi-tx small{font-size:12px}.db7-kpi-tx strong{font-size:21px}.db7-kpi.gold .db7-kpi-tx strong{font-size:15px}.db7-kpi.gold .db7-kpi-ic{width:36px;height:36px}
+ .db7-donut{width:140px;height:140px}.db7-donut span{width:92px;height:92px}.db7-donut b{font-size:25px}
+ .db7-card h2{font-size:16.5px}
+}
+@container db7 (max-width:1060px){
+ .db7-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .db7-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@container db7 (max-width:720px){
+ .db7-hero{padding:24px 22px 36px;min-height:220px}
+ .db7-hero:before{left:0;width:100%;height:100%;aspect-ratio:auto;background-position:70% bottom;opacity:.5;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 55%);mask-image:linear-gradient(90deg,transparent 0,#000 55%)}
+ .db7-kpis{grid-template-columns:repeat(2,minmax(0,1fr));margin:-18px 8px 0}
+ .db7-grid{grid-template-columns:minmax(0,1fr)}
+}
+@container db7 (max-width:520px){
+ .db7-hero{border-radius:18px;padding:20px 16px 34px;min-height:240px}
+ .db7-hero p{font-size:13.5px}
+ .db7-kpis{margin:-16px 0 0;gap:10px}
+ .db7-kpi{padding:12px 10px;gap:9px}.db7-kpi-ic{width:40px;height:40px}
+ .db7-kpi-tx strong{font-size:20px}.db7-kpi.gold .db7-kpi-tx strong{font-size:16px}
+ .db7-dues-body{flex-direction:column;align-items:flex-start}
+ .db7-card{padding:16px}
+ .db7-agenda li a{max-width:100%}.db7-cal-art{display:none}
+ .db7-card h2{font-size:16px}
+}
+@container db7 (max-width:340px){.db7-kpis{grid-template-columns:minmax(0,1fr)}}
+@media (prefers-reduced-motion:reduce){.db7 *{transition:none!important}}

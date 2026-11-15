@@ -21,10 +21,12 @@ $decision_items = citizen_notice_items((int) $this->session->userdata('citizen_i
  </div>
  <div class="cdp-body">
   <dl class="cdp-info">
-   <div><dt><?= family_icon('file') ?>Jenis Pengajuan</dt><dd id="cdp-type">-</dd></div>
-   <div><dt><?= family_icon('hash') ?>No. Pengajuan</dt><dd id="cdp-code">-</dd></div>
-   <div><dt><?= family_icon('calendar') ?>Diproses</dt><dd id="cdp-time">-</dd></div>
+   <div><dt><?= family_icon('file') ?><span id="cdp-l-type">Jenis Pengajuan</span></dt><dd id="cdp-type">-</dd></div>
+   <div><dt><?= family_icon('hash') ?><span id="cdp-l-code">No. Pengajuan</span></dt><dd id="cdp-code">-</dd></div>
+   <div><dt><?= family_icon('calendar') ?><span id="cdp-l-time">Diproses</span></dt><dd id="cdp-time">-</dd></div>
    <div><dt><?= family_icon('info') ?>Status</dt><dd><span class="cdp-status" id="cdp-status">Disetujui</span></dd></div>
+   <div id="cdp-program-row" hidden><dt><?= family_icon('heart') ?>Program Bantuan</dt><dd id="cdp-program">-</dd></div>
+   <div id="cdp-amount-row" hidden><dt><b class="cdp-rp" aria-hidden="true">Rp</b>Nominal Bantuan</dt><dd id="cdp-amount" class="cdp-amount">-</dd></div>
   </dl>
   <div class="cdp-note" id="cdp-note-box" hidden><strong><?= family_icon('person') ?>Catatan Admin</strong><p id="cdp-note"></p></div>
  </div>

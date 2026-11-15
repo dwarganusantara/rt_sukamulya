@@ -38,13 +38,17 @@ class Fitur extends Ops_Controller
             );
         }
         $active = count(array_filter($rows, function ($r) {return $r['effective'];}));
-        $filtered = array_filter($rows, function ($r) use ($q, $category) {
+        // REVISI: filter status (aktif / nonaktif) untuk tampilan sederhana.
+        $status = $this->choice('status', array('aktif' => 1, 'nonaktif' => 1), '', 'get');
+        $filtered = array_filter($rows, function ($r) use ($q, $category, $status) {
             if ($category !== '' && $r['category'] !== $category) return FALSE;
+            if ($status !== '' && ($status === 'aktif') !== (bool) $r['effective']) return FALSE;
             return $q === '' || mb_stripos($r['name'] . ' ' . $r['desc'] . ' ' . $r['category'], $q) !== FALSE;
         });
         foreach ($filtered as $code => &$r) $r['open'] = $this->feature_gate->open_count($code);
         unset($r);
-        $data = array('tab' => $tab, 'q' => $q, 'category' => $category, 'categories' => $categories, 'rows' => $rows, 'filtered' => $filtered,
+        $data = array('tab' => $tab, 'q' => $q, 'category' => $category, 'categories' => $categories, 'status' => $status,
+            'cat_counts' => array_count_values(array_column($rows, 'category')), 'rows' => $rows, 'filtered' => $filtered,
             'active' => $active, 'total' => count($rows), 'fields' => $this->fields);
         if ($tab === 'akses') {
             $this->config->load('rt_access', TRUE);

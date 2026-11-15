@@ -10,7 +10,20 @@ if(strlen($emergency_href)<8)$emergency_href='';
 $whatsapp=preg_replace('/[^0-9]/','',(string)($settings['whatsapp']??''));
 $whatsapp=preg_replace('/^0/','62',$whatsapp);
 $web_url=function($url){$url=trim((string)$url);return preg_match('#^https?://#i',$url)?$url:'';};
-$map=$web_url($settings['map_url']??'');$instagram=$web_url($settings['instagram_url']??'');
+$social_name=function($value){
+ $value=trim((string)$value);
+ if(preg_match('#^https?://#i',$value)){
+  $path=trim((string)parse_url($value,PHP_URL_PATH),'/');
+  $parts=$path===''?array():explode('/',$path);
+  $value=$parts?end($parts):'';
+ }
+ return ltrim(trim($value,"/ \t\n\r\0\x0B"),'@');
+};
+$map=$web_url($settings['map_url']??'');
+$instagram_name=$social_name($settings['instagram_url']??'');
+$youtube_name=$social_name($settings['youtube_url']??'');
+$instagram=$instagram_name!==''?'https://www.instagram.com/'.rawurlencode($instagram_name):'';
+$youtube=$youtube_name!==''?'https://www.youtube.com/@'.rawurlencode($youtube_name):'';
 $arrow='<span class="ctc-arrow" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M13 5l7 7-7 7"></path></svg></span>';
 $open=function($tag,$class,$href,$external=FALSE){
  if(!$href)return '<div class="'.$class.' is-empty">';
@@ -26,6 +39,7 @@ $cards=array(
 $channels=array(
  array('contact-whatsapp.png','WhatsApp','Chat Langsung',$whatsapp?'https://wa.me/'.$whatsapp:''),
  array('contact-instagram.png','Instagram','Lihat Kegiatan',$instagram),
+ array('contact-youtube.svg','YouTube','Lihat Video',$youtube),
  array('contact-maps.png','Google Maps','Lokasi RT',$map),
 );
 ?>

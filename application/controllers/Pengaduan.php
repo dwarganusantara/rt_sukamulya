@@ -34,7 +34,9 @@ class Pengaduan extends Ops_Controller
     {
         $this->guard_citizen();
         $items = $this->db->order_by('id', 'DESC')->get_where('complaints', array('citizen_id' => $this->citizen_id))->result_array();
-        $this->render_citizen('pengaduan_list', 'Pengaduan Saya', array('items' => $items, 'categories' => self::$categories, 'labels' => self::$labels, 'tones' => self::$tones, 'open' => $this->open));
+        $this->render_citizen('pengaduan_list', 'Pengaduan Saya', array('items' => $items, 'categories' => self::$categories, 'labels' => self::$labels, 'tones' => self::$tones, 'open' => $this->open,
+            // Form ringkas di tampilan HP (dikirim ke warga/pengaduan/buat seperti biasa).
+            'emergency' => $this->emergency_contacts(), 'anonymous_allowed' => $this->anonymous_allowed(), 'values' => array()));
     }
 
     public function buat()
@@ -71,7 +73,10 @@ class Pengaduan extends Ops_Controller
                 $error = $e->getMessage();
             }
         }
-        $this->render_citizen('pengaduan_form', 'Buat Pengaduan', array('values' => $values, 'error' => $error, 'categories' => self::$categories, 'emergency' => $this->emergency_contacts(), 'anonymous_allowed' => $anonymous_allowed));
+        // Daftar tiket (baca saja) untuk ringkasan & "Tiket Saya" pada tampilan HP.
+        $items = $this->db->order_by('id', 'DESC')->get_where('complaints', array('citizen_id' => $this->citizen_id))->result_array();
+        $this->render_citizen('pengaduan_form', 'Buat Pengaduan', array('values' => $values, 'error' => $error, 'categories' => self::$categories, 'emergency' => $this->emergency_contacts(), 'anonymous_allowed' => $anonymous_allowed,
+            'items' => $items, 'labels' => self::$labels, 'tones' => self::$tones, 'open' => $this->open));
     }
 
     public function detail($id = 0)
@@ -179,9 +184,9 @@ class Pengaduan extends Ops_Controller
             $priority = $this->choice('priority', $this->priorities, '');
             $assign = (int) $this->input->post('assigned_to');
             $message = $this->text('message', 3000);
-            $internal = $this->input->post('is_internal') ? 1 : 0;
+            $internal_message = $this->text('internal_message', 3000);
             try {
-                $changed = $this->atomic(function () use ($id, $status, $priority, $assign, $message, $internal) {
+                $changed = $this->atomic(function () use ($id, $status, $priority, $assign, $message, $internal_message) {
                     $c = $this->lock('complaints', $id);
                     if (!$c) throw new RuntimeException('Tiket tidak ditemukan.');
                     $update = array();
@@ -197,27 +202,30 @@ class Pengaduan extends Ops_Controller
                     if ($status && $status !== $c['status']) {
                         if (!in_array($status, $this->flow[$c['status']] ?? array(), TRUE)) throw new RuntimeException('Perubahan status dari "' . self::$labels[$c['status']] . '" ke "' . self::$labels[$status] . '" tidak diizinkan.');
                         if (in_array($status, array('resolved', 'rejected'), TRUE) && mb_strlen($message) < 5) throw new RuntimeException('Tuliskan catatan penyelesaian / alasan penolakan untuk warga.');
-                        if (in_array($status, array('resolved', 'rejected', 'waiting_resident'), TRUE) && $internal) throw new RuntimeException('Catatan untuk status ini harus terlihat oleh warga (jangan centang catatan internal).');
                         $update['status'] = $status;
                         if ($status === 'resolved') {$update['resolved_at'] = date('Y-m-d H:i:s'); $update['resolution_note'] = $message;}
                         if ($status === 'closed') $update['closed_at'] = date('Y-m-d H:i:s');
                     } else {
                         $status = NULL;
                     }
-                    if (!$update && $message === '') throw new RuntimeException('Tidak ada perubahan untuk disimpan.');
-                    if ($update) $this->db->where('id', $id)->update('complaints', $update + array('updated_at' => date('Y-m-d H:i:s')));
+                    if (!$update && $message === '' && $internal_message === '') throw new RuntimeException('Tidak ada perubahan untuk disimpan.');
+                    $this->db->where('id', $id)->update('complaints', $update + array('updated_at' => date('Y-m-d H:i:s')));
                     $text = trim(implode("\n", $changes) . ($message !== '' ? "\n" . $message : ''));
-                    $this->db->insert('complaint_updates', array('complaint_id' => $id, 'actor_type' => 'admin', 'actor_id' => $this->admin_id,
-                        'status_from' => $status ? $c['status'] : NULL, 'status_to' => $status, 'message' => $text ?: NULL, 'is_internal' => $internal));
-                    return array('status' => $status, 'citizen_id' => (int) $c['citizen_id'], 'ticket' => $c['ticket_no']);
+                    if ($text !== '' || $status) $this->db->insert('complaint_updates', array('complaint_id' => $id, 'actor_type' => 'admin', 'actor_id' => $this->admin_id,
+                        'status_from' => $status ? $c['status'] : NULL, 'status_to' => $status, 'message' => $text ?: NULL, 'is_internal' => 0));
+                    if ($internal_message !== '') $this->db->insert('complaint_updates', array('complaint_id' => $id, 'actor_type' => 'admin', 'actor_id' => $this->admin_id,
+                        'status_from' => NULL, 'status_to' => NULL, 'message' => $internal_message, 'is_internal' => 1));
+                    return array('status' => $status, 'citizen_id' => (int) $c['citizen_id'], 'ticket' => $c['ticket_no'], 'public_message' => $message);
                 });
                 // Status aktual dari dalam transaksi (bisa NULL bila tidak berubah, atau "assigned" otomatis saat PIC dipilih).
                 $this->audit('update', 'complaint:' . $id, $changed['status'] ? 'status=' . $changed['status'] : 'tanggapan');
-                if ($changed['status'] && $changed['citizen_id'] && !$internal) {
+                if ($changed['citizen_id'] && ($changed['status'] || $changed['public_message'] !== '')) {
                     $this->load->library('Notifier');
-                    $this->notifier->enqueue_citizen($changed['citizen_id'], 'Pengaduan ' . $changed['ticket'] . ': ' . self::$labels[$changed['status']],
-                        'Status pengaduan ' . $changed['ticket'] . ' sekarang: ' . self::$labels[$changed['status']] . '.' . ($message !== '' ? "\nTanggapan pengurus: " . $message : ''),
-                        'complaint:' . $id . ':' . $changed['status'] . ':' . date('YmdHis'));
+                    $notice_title = $changed['status'] ? 'Pengaduan ' . $changed['ticket'] . ': ' . self::$labels[$changed['status']] : 'Tanggapan baru untuk ' . $changed['ticket'];
+                    $notice_body = ($changed['status'] ? 'Status pengaduan ' . $changed['ticket'] . ' sekarang: ' . self::$labels[$changed['status']] . '.' : '')
+                        . ($changed['public_message'] !== '' ? ($changed['status'] ? "\n" : '') . 'Tanggapan pengurus: ' . $changed['public_message'] : '');
+                    $this->notifier->enqueue_citizen($changed['citizen_id'], $notice_title, $notice_body,
+                        'complaint:' . $id . ':' . ($changed['status'] ?: 'reply') . ':' . date('YmdHis'));
                 }
                 $this->back('admin/pengaduan/' . $id, 'Tiket diperbarui.');
             } catch (RuntimeException $e) {

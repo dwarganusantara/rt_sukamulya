@@ -5,7 +5,7 @@ $old = json_decode((string) $item['old_values_json'], TRUE) ?: array();
 $labels = array('nama_lengkap' => 'Nama lengkap', 'nik' => 'NIK', 'jenis_kelamin' => 'Jenis kelamin', 'tempat_lahir' => 'Tempat lahir', 'tanggal_lahir' => 'Tanggal lahir',
     'agama' => 'Agama', 'pendidikan' => 'Pendidikan', 'pekerjaan' => 'Pekerjaan', 'golongan_darah' => 'Golongan darah', 'hubungan_keluarga' => 'Hubungan keluarga',
     'domicile_status' => 'Status domisili', 'alamat_tujuan' => 'Alamat tujuan', 'tempat_meninggal' => 'Tempat meninggal',
-    'alamat' => 'Alamat', 'rt' => 'RT', 'rw' => 'RW', 'kelurahan' => 'Kelurahan', 'kecamatan' => 'Kecamatan', 'kota' => 'Kota/Kabupaten', 'provinsi' => 'Provinsi', 'kode_pos' => 'Kode pos');
+    'alamat' => 'Alamat sesuai KK', 'rt' => 'RT', 'rw' => 'RW', 'kelurahan' => 'Kelurahan', 'kecamatan' => 'Kecamatan', 'kota' => 'Kota/Kabupaten', 'provinsi' => 'Provinsi', 'kode_pos' => 'Kode pos');
 $current = array();
 if ($item['status'] === 'approved') {
     $current = ($old['fields'] ?? array()) + ($old['keluarga'] ?? array());

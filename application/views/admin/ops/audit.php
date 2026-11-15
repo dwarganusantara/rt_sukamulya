@@ -1,6 +1,6 @@
 <?php $qs = function ($extra) use ($f) { return http_build_query(array_filter(array('q' => $f['q'], 'admin' => $f['admin'] ?: '', 'dari' => $f['from'], 'sampai' => $f['to'])) + $extra); }; ?>
 <div class="ops ops-audit">
-<?= ops_hero('Pengaturan Sistem', 'Audit Aktivitas', 'Jejak aksi penting: siapa, apa, kapan, dan dari mana. NIK/nomor KK dimasking dan rahasia tidak dicatat. Log hanya ditambah, tidak diubah dari aplikasi.', array(array('admin/audit?' . $qs(array('export' => 'csv')), 'Ekspor CSV', 'outline')), 'shield') ?>
+<?= ops_hero('Pengaturan Sistem', 'Audit Aktivitas', 'Jejak aksi penting: siapa, apa, kapan, dan dari mana. NIK/nomor KK dimasking dan rahasia tidak dicatat. Log hanya ditambah, tidak diubah dari aplikasi.', array(array('admin/audit?' . $qs(array('export' => 'xlsx')), 'Excel (.xlsx)', 'outline'), array('admin/audit?' . $qs(array('export' => 'xls')), 'Excel 97-2003 (.xls)', 'outline')), 'shield') ?>
 <?php
 $today=new DateTimeImmutable('today');
 $quick_ranges=array(

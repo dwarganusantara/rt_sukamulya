@@ -1,110 +1,213 @@
 <?php
-$role=$this->session->userdata('admin_role');
-$paid=(float)($dues_summary['paid_total']??0);$due=(float)($dues_summary['due_total']??0);$percent=$due>0?(int)round(min(100,100*$paid/$due)):0;
-$bulan=array(1=>'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember');
-$short_month=array(1=>'Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des');
-$month_label=$bulan[(int)date('n')].' '.date('Y');
-$citizen_before=(int)$citizen_count-(int)$citizen_new;
-$citizen_trend=$citizen_before>0?'+'.(int)round(100*$citizen_new/$citizen_before).'% dari bulan lalu':'+'.(int)$citizen_new.' warga bulan ini';
-$money=function($v){return 'Rp '.number_format((float)$v,0,',','.');};
-$when=function($d)use($short_month){$t=strtotime((string)$d);return $t?date('j',$t).' '.$short_month[(int)date('n',$t)].' '.date('Y',$t):'-';};
-$admin_name=ucfirst($admin_user['username']??'Admin');$fon=function($c)use($feature_on){return !isset($feature_on[$c])||$feature_on[$c];};
+/*
+ * Dashboard admin v7 (redesign desktop "soft 3D").
+ * Semua angka dari controller (data operasional). Tidak ada angka contoh dari mockup.
+ * Kartu tampil hanya bila menu/izin/fitur terkait aktif untuk peran ini ($menu_ok, $show_*).
+ */
+$role = $this->session->userdata('admin_role');
+$hari = array('Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu');
+$bulan = array(1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember');
+$short_month = array(1 => 'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des');
+$money = function ($v) { return 'Rp ' . number_format((float) $v, 0, ',', '.'); };
+$num = function ($v) { return number_format((int) $v, 0, ',', '.'); };
+$fon = function ($code) use ($feature_on) { return !isset($feature_on[$code]) || $feature_on[$code]; };
+$ok = function ($path) use ($menu_ok) { return !empty($menu_ok[$path]); };
+$admin_name = trim((string) ($admin_user['username'] ?? '')) !== '' ? ucfirst($admin_user['username']) : 'Admin RT';
+$today_label = $hari[(int) date('w')] . ', ' . (int) date('j') . ' ' . $bulan[(int) date('n')] . ' ' . date('Y');
+
+// Header: ilustrasi khusus dashboard bila sudah disimpan pemilik; jika belum, pakai Gambar Halaman yang ada.
+$hero_file = 'assets/img/dashboard/admin-hero-3d.png';
+$hero = is_file(FCPATH . $hero_file) ? $hero_file . '?v=' . filemtime(FCPATH . $hero_file) : ($settings['dashboard_page_image'] ?? 'assets/mockup/home-hero-v4.png');
+
+// Total warga = anggota penduduk aktif (Data Penduduk); fallback akun warga aktif bila modul penduduk tidak tersedia.
+$resident_total = $resident_stats ? (int) $resident_stats['members'] : ($citizen_count === NULL ? NULL : (int) $citizen_count);
+$resident_delta = NULL;
+if ($resident_stats && count($resident_stats['points']) >= 2) {
+    $pts = $resident_stats['points'];
+    $resident_delta = (int) $pts[count($pts) - 1]['members'] - (int) $pts[count($pts) - 2]['members'];
+}
+$complaint_open = (int) ($ops['complaints_open'] ?? 0);
+$delta = function ($n, $good_up = TRUE) {
+    if ($n === NULL || $n === 0) return '';
+    $up = $n > 0;
+    return '<b class="db7-delta ' . (($up === $good_up) ? 'good' : 'bad') . '">' . ($up ? '↑' : '↓') . ' ' . ($up ? '+' : '−') . abs($n) . '</b>';
+};
+
+// Soft-3D icon set (SVG bergradasi, gradien didefinisikan sekali di <defs>).
+$icon = function ($name) {
+    $s = array(
+        'people' => '<circle cx="15" cy="15" r="6.5" fill="url(#g7-green2)"/><circle cx="33" cy="15" r="6.5" fill="url(#g7-green2)"/><path d="M4 34c0-7 5-11 11-11s11 4 11 11v3H4z" fill="url(#g7-green2)"/><path d="M22 34c0-7 5-11 11-11s11 4 11 11v3H22z" fill="url(#g7-green2)"/><circle cx="24" cy="18" r="8" fill="url(#g7-green)"/><path d="M11 40c0-8 6-13 13-13s13 5 13 13v3H11z" fill="url(#g7-green)"/><ellipse cx="21" cy="14" rx="3" ry="2" fill="#fff" opacity=".45"/>',
+        'house' => '<path d="M9 22h30v20H9z" fill="url(#g7-cream)"/><path d="M4 24 24 6l20 18-4 3L24 13 8 27z" fill="url(#g7-orange)"/><path d="M20 30h8v12h-8z" fill="url(#g7-orange)"/><path d="M12 28h6v6h-6zM30 28h6v6h-6z" fill="#ffd7b0"/><path d="M8 20 24 6" stroke="#fff" stroke-width="2" opacity=".5"/>',
+        'check' => '<circle cx="24" cy="24" r="19" fill="url(#g7-blue)"/><ellipse cx="19" cy="14" rx="9" ry="5" fill="#fff" opacity=".28"/><path d="m15 24 6 6 12-13" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>',
+        'doc' => '<path d="M11 5h18l9 9v29H11z" fill="url(#g7-purple)"/><path d="M29 5v9h9z" fill="#c9b6ff"/><path d="M17 22h15M17 28h15M17 34h10" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M13 7h10" stroke="#fff" stroke-width="2" opacity=".4"/>',
+        'megaphone' => '<path d="M6 19h8l20-10v30L14 29H6z" fill="url(#g7-green)"/><path d="M34 9c4 3 6 9 6 15s-2 12-6 15z" fill="url(#g7-green2)"/><path d="M10 29h7l3 11h-6z" fill="url(#g7-orange)"/><path d="M8 21h6" stroke="#fff" stroke-width="2" opacity=".5"/>',
+        'coins' => '<ellipse cx="18" cy="36" rx="12" ry="5" fill="#d9921a"/><path d="M6 30v6c0 3 5 5 12 5s12-2 12-5v-6z" fill="url(#g7-gold)"/><ellipse cx="18" cy="30" rx="12" ry="5" fill="#ffd45a"/><path d="M18 22v6c0 3 5 5 12 5s12-2 12-5v-6z" fill="url(#g7-gold)"/><ellipse cx="30" cy="22" rx="12" ry="5" fill="#ffd45a"/><path d="M18 14v8c0 3 5 5 12 5s12-2 12-5v-8z" fill="url(#g7-gold)"/><ellipse cx="30" cy="14" rx="12" ry="5" fill="#ffe17d"/><ellipse cx="27" cy="13" rx="5" ry="1.6" fill="#fff" opacity=".6"/>',
+        'chart' => '<rect x="6" y="26" width="9" height="16" rx="2" fill="url(#g7-orange)"/><rect x="19" y="16" width="9" height="26" rx="2" fill="url(#g7-orange)"/><rect x="32" y="8" width="9" height="34" rx="2" fill="url(#g7-orange)"/>',
+        'wallet' => '<rect x="5" y="13" width="38" height="27" rx="6" fill="url(#g7-orange)"/><path d="M9 13 31 6l3 7z" fill="#ffb27a"/><rect x="29" y="22" width="14" height="10" rx="4" fill="#ffd2ad"/><circle cx="35" cy="27" r="2.4" fill="#e9601b"/>',
+        'calendar' => '<rect x="6" y="9" width="36" height="33" rx="6" fill="url(#g7-cream)"/><path d="M6 15a6 6 0 0 1 6-6h24a6 6 0 0 1 6 6v5H6z" fill="url(#g7-orange)"/><path d="M15 5v8M33 5v8" stroke="#8a4a1d" stroke-width="3" stroke-linecap="round"/><path d="M13 27h5M22 27h5M31 27h5M13 34h5M22 34h5" stroke="#f2a26b" stroke-width="3" stroke-linecap="round"/>',
+        'bolt' => '<path d="M27 4 10 27h12l-3 17 18-24H25z" fill="url(#g7-green)"/>',
+        'task' => '<path d="M10 6h28v36H10z" rx="4" fill="url(#g7-orange)"/><path d="M17 17h14M17 24h14M17 31h9" stroke="#fff" stroke-width="3" stroke-linecap="round"/>',
+        'payment' => '<rect x="5" y="11" width="38" height="26" rx="5" fill="url(#g7-orange)"/><rect x="5" y="16" width="38" height="5" fill="#c4470f"/><rect x="10" y="26" width="12" height="4" rx="2" fill="#ffe0c7"/>',
+        'kk' => '<rect x="6" y="9" width="36" height="30" rx="5" fill="url(#g7-blue)"/><circle cx="17" cy="21" r="5" fill="#dff1ff"/><path d="M10 33c1-5 4-7 7-7s6 2 7 7z" fill="#dff1ff"/><path d="M28 19h9M28 25h9M28 31h6" stroke="#fff" stroke-width="3" stroke-linecap="round"/>',
+        'swap' => '<circle cx="24" cy="24" r="19" fill="url(#g7-purple)"/><path d="M14 19h18l-5-5M34 29H16l5 5" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>',
+    );
+    return '<svg class="db7-3d" viewBox="0 0 48 48" aria-hidden="true">' . ($s[$name] ?? $s['task']) . '</svg>';
+};
+
+$kpis = array();
+if ($resident_total !== NULL) $kpis[] = array('green', 'people', 'Total Warga', $num($resident_total), $delta($resident_delta), $resident_stats ? 'penduduk aktif' : 'akun warga aktif', $ok('admin/penduduk') ? 'admin/penduduk' : ($ok('admin/keluarga') ? 'admin/keluarga' : ''));
+if ($house_count !== NULL) $kpis[] = array('orange', 'house', 'Rumah', $num($house_count), '', 'terdaftar', 'admin/rumah');
+if ($kk_pending !== NULL) $kpis[] = array('blue', 'check', 'KK Perlu Verifikasi', $num($kk_pending), '', $kk_pending ? 'Lihat Detail →' : 'tidak ada antrean', 'admin/kk/pengajuan?status=pending', $kk_pending > 0);
+if ($fon('letters') && $ok('admin/requests')) $kpis[] = array('purple', 'doc', 'Pengajuan Surat', $num($letters_processing), '', 'perlu diproses', 'admin/requests');
+if ($fon('complaints') && $ok('admin/pengaduan')) $kpis[] = array('mint', 'megaphone', 'Pengaduan', $num($complaint_open), '', 'belum selesai', 'admin/pengaduan');
+if ($show_cash) $kpis[] = array('gold', 'coins', 'Saldo Kas RT', $money($cash_month['balance']), '', 'transaksi terverifikasi', $ok('admin/transactions') ? 'admin/transactions' : '');
+
+// Perlu tindakan: hanya antrean yang memang ada di alur aplikasi, diurutkan dari yang paling mendesak.
+$tasks = array();
+if ($fon('letters') && $ok('admin/requests') && $waiting_requests) $tasks[] = array('doc', 'Pengajuan surat baru', $waiting_requests . ' menunggu diperiksa', 'Proses', 'admin/requests?status=diajukan');
+if (!empty($waiting_payments['n']) && $fon('dues') && $ok('admin/dues')) $tasks[] = array('payment', 'Pembayaran iuran', 'Perlu verifikasi (' . (int) $waiting_payments['n'] . ' pembayaran)', 'Verifikasi', 'admin/dues#pembayaran');
+if ($complaints_new) $tasks[] = array('megaphone', 'Pengaduan masuk', $complaints_new . ' belum ditangani', 'Tindak Lanjut', 'admin/pengaduan');
+if ($kk_pending) $tasks[] = array('kk', 'Verifikasi data KK', $kk_pending . ' pengajuan menunggu', 'Periksa', 'admin/kk/pengajuan?status=pending');
+if ($mutations_pending) $tasks[] = array('swap', 'Mutasi warga', $mutations_pending . ' menunggu keputusan', 'Tinjau', 'admin/mutasi');
+$tasks = array_slice($tasks, 0, 5);
+
+// Grafik kas: skala sumbu Y "rapi".
+$cash_peak = 0;
+foreach ((array) ($cash_month['trend'] ?? array()) as $p) $cash_peak = max($cash_peak, (float) $p['income'], (float) $p['expense']);
+$axis_max = 0; $axis_step = 0;
+if ($cash_peak > 0) {
+    $raw = $cash_peak / 5; $mag = pow(10, floor(log10($raw))); $norm = $raw / $mag;
+    $axis_step = ($norm <= 1 ? 1 : ($norm <= 2 ? 2 : ($norm <= 2.5 ? 2.5 : ($norm <= 5 ? 5 : 10)))) * $mag;
+    $axis_max = $axis_step * ceil($cash_peak / $axis_step);
+}
+$short_money = function ($v) {
+    $v = (float) $v;
+    if ($v >= 1e9) return rtrim(rtrim(number_format($v / 1e9, 1, ',', '.'), '0'), ',') . ' M';
+    if ($v >= 1e6) return rtrim(rtrim(number_format($v / 1e6, 1, ',', '.'), '0'), ',') . ' jt';
+    if ($v >= 1e3) return rtrim(rtrim(number_format($v / 1e3, 1, ',', '.'), '0'), ',') . ' rb';
+    return number_format($v, 0, ',', '.');
+};
+$period_label = function ($p) use ($bulan) { $t = strtotime($p . '-01'); return $bulan[(int) date('n', $t)] . ' ' . date('Y', $t); };
+$keep = function ($skip) { $q = $_GET; unset($q[$skip]); $out = ''; foreach ($q as $k => $v) if (is_string($v) && preg_match('/^[a-z_]{1,20}$/', $k)) $out .= '<input type="hidden" name="' . html_escape($k) . '" value="' . html_escape($v) . '">'; return $out; };
+$ago = function ($at) use ($short_month) {
+    $t = strtotime((string) $at); if (!$t) return '';
+    if (date('Y-m-d', $t) === date('Y-m-d')) return 'Hari ini, ' . date('H:i', $t);
+    if (date('Y-m-d', $t) === date('Y-m-d', strtotime('-1 day'))) return 'Kemarin, ' . date('H:i', $t);
+    return (int) date('j', $t) . ' ' . $short_month[(int) date('n', $t)] . ' ' . date('Y', $t) . ', ' . date('H:i', $t);
+};
+$feed_icon = array('letter' => 'doc', 'complaint' => 'megaphone', 'payment' => 'coins', 'kk' => 'kk');
 ?>
-<link rel="stylesheet" href="<?= base_url('assets/admin-dashboard-v4.css') ?>?v=<?= filemtime(FCPATH.'assets/admin-dashboard-v4.css') ?>">
-<link rel="stylesheet" href="<?= base_url('assets/admin-dashboard-v5.css') ?>?v=<?= filemtime(FCPATH.'assets/admin-dashboard-v5.css') ?>">
-<div class="dbh">
-<section class="dbh-hero dbh-hero-v5">
- <?php /* Foto header sebagai <img> setinggi hero dengan lebar otomatis: tidak pernah terpotong, berapa pun rasionya. */ ?>
- <img class="dbh-hero-img" src="<?= base_url(html_escape($settings['dashboard_page_image']??'assets/mockup/home-hero-v4.png')) ?>" alt="" aria-hidden="true" decoding="async">
- <div class="dbh-hero-copy"><h1>Selamat Datang, <span><?= html_escape($admin_name) ?></span>! <i aria-hidden="true">👋</i></h1><p>Kelola informasi dan layanan RT 009/008 Suka Mulya IV<br>dengan mudah, cepat, dan terintegrasi.</p><div class="dbh-pills"><span class="green"><?= official_svg('leaf') ?>Lingkungan Aman</span><span class="orange"><?= official_svg('people') ?>Warga Harmonis</span><span class="blue"><?= official_svg('shield') ?>Informasi Transparan</span></div></div>
-</section>
+<link rel="stylesheet" href="<?= base_url('assets/admin-dashboard-v7.css') ?>?v=<?= filemtime(FCPATH . 'assets/admin-dashboard-v7.css') ?>">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+ <linearGradient id="g7-green" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4fd26b"/><stop offset="1" stop-color="#159447"/></linearGradient>
+ <linearGradient id="g7-green2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fe39a"/><stop offset="1" stop-color="#2fae58"/></linearGradient>
+ <linearGradient id="g7-orange" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a4d"/><stop offset="1" stop-color="#ec5a12"/></linearGradient>
+ <linearGradient id="g7-cream" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff8ee"/><stop offset="1" stop-color="#f6dcc0"/></linearGradient>
+ <linearGradient id="g7-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5fb6ff"/><stop offset="1" stop-color="#1769e0"/></linearGradient>
+ <linearGradient id="g7-purple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a98bff"/><stop offset="1" stop-color="#6b3fe0"/></linearGradient>
+ <linearGradient id="g7-gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffcc3f"/><stop offset="1" stop-color="#e59a12"/></linearGradient>
+</defs></svg>
 
-
-<section class="dbh-stats" aria-label="Ringkasan dashboard">
- <?php if(!empty($citizens_locked)): ?><a class="dbh-stat orange dbh-stat-locked" href="<?= site_url('admin/citizens') ?>" data-sub-feature="admin/citizens" data-sub-label="Data Warga"><span class="dbh-stat-ic"><?= official_svg('people') ?></span><span class="dbh-stat-tx"><small>Total Warga</small><strong class="dbh-locked-value"><?= official_svg('crown') ?>Premium</strong><em>Berlangganan untuk melihat data</em></span><span class="dbh-mark"><?= official_svg('people') ?></span></a>
- <?php else: ?><a class="dbh-stat orange" href="<?= site_url('admin/citizens') ?>"><span class="dbh-stat-ic"><?= official_svg('people') ?></span><span class="dbh-stat-tx"><small>Total Warga</small><strong><?= (int)$citizen_count ?></strong><em class="up"><?= official_svg('up') ?><?= html_escape($citizen_trend) ?></em></span><span class="dbh-mark"><?= official_svg('people') ?></span></a><?php endif; ?>
- <?php if($fon('events')): ?><a class="dbh-stat blue" href="<?= site_url('admin/posts/agenda') ?>"><span class="dbh-stat-ic"><?= official_svg('calendar') ?></span><span class="dbh-stat-tx"><small>Agenda Bulan Ini</small><strong><?= (int)$agenda_count ?></strong><em><?= $month_label ?></em></span><span class="dbh-mark"><?= official_svg('calendar') ?></span></a><?php endif; ?>
- <?php if($fon('announcements')): ?><a class="dbh-stat green" href="<?= site_url('admin/posts/pengumuman') ?>"><span class="dbh-stat-ic"><?= official_svg('megaphone') ?></span><span class="dbh-stat-tx"><small>Pengumuman</small><strong><?= (int)$announcement_count ?></strong><em class="up"><?= official_svg('up') ?>+<?= (int)$announcement_new ?> baru</em></span><span class="dbh-mark"><?= official_svg('megaphone') ?></span></a><?php endif; ?>
- <?php if($show_dues): ?><a class="dbh-stat purple" href="<?= site_url('admin/dues') ?>"><span class="dbh-stat-ic"><?= official_svg('wallet') ?></span><span class="dbh-stat-tx"><small>Total Iuran Bulan Ini</small><strong><?= $money($paid) ?></strong><em><span class="dbh-progress" role="progressbar" aria-valuenow="<?= $percent ?>" aria-valuemin="0" aria-valuemax="100" aria-label="Iuran terbayar"><i style="width:<?= $percent ?>%"></i></span><?= $percent ?>% sudah dibayar</em></span><span class="dbh-info" title="Persentase nominal iuran periode <?= html_escape($month_label) ?> yang sudah dibayar dari total tagihan." aria-label="Keterangan"><?= official_svg('alert') ?></span></a><?php endif; ?>
- <?php if($show_cash && !empty($ops)): ?><a class="dbh-stat amber" href="<?= site_url('admin/transactions') ?>"><span class="dbh-stat-ic"><?= official_svg('database') ?></span><span class="dbh-stat-tx"><small>Saldo Kas RT</small><strong><?= $money($ops['cash_balance']) ?></strong><em>Jurnal terverifikasi</em></span><span class="dbh-mark"><?= official_svg('database') ?></span></a><?php endif; ?>
-</section>
-
-<?php if($waiting_requests && $fon('letters')): ?><a class="dbh-alert" href="<?= site_url('admin/requests') ?>"><?= official_svg('alert') ?><span><b><?= (int)$waiting_requests ?> pengajuan warga</b> menunggu untuk diperiksa.</span><strong>Periksa sekarang <?= official_svg('arrow-right') ?></strong></a><?php endif; ?>
-
-<div class="dbh-row dbh-row-a">
- <?php if($resident_stats): $pts=$resident_stats['points']; $peak=1; foreach($pts as $p)$peak=max($peak,$p['members'],$p['families']);
-  $step=0; foreach(array(1,2,5,10,20,25,50,100,200,250,500,1000,2000,5000) as $s) if($s*5>=$peak){$step=$s;break;} if(!$step)$step=(int)ceil($peak/5);
-  $ymax=$step*5; $cw=300; $ch=170; $left=28; $top=8; $bottom=22; $plot_h=$ch-$top-$bottom; $plot_w=$cw-$left-6; $n=count($pts); $slot=$plot_w/$n; $bw=min(26,$slot*.58);
-  $y=function($v)use($ymax,$plot_h,$top){return round($top+$plot_h-($v/$ymax)*$plot_h,1);};
-  $line=array(); ?>
- <section class="dbh-card dbh-c-stat"><header><h2><span class="dbh-hic orange"><?= official_svg('chart') ?></span>Statistik Warga</h2>
-  <form method="get" action="<?= site_url('admin') ?>" class="dbh-select"><label class="sr-only" for="dbh-span">Rentang statistik</label><select id="dbh-span" name="statistik" onchange="this.form.submit()"><option value="6"<?= $stat_span===6?' selected':'' ?>>6 Bulan Terakhir</option><option value="12"<?= $stat_span===12?' selected':'' ?>>12 Bulan Terakhir</option></select><noscript><button type="submit">Terapkan</button></noscript></form></header>
-  <div class="dbh-chart">
-   <svg viewBox="0 0 <?= $cw ?> <?= $ch ?>" role="img" aria-labelledby="dbh-chart-t"><title id="dbh-chart-t">Jumlah keluarga aktif dan warga terdaftar <?= $n ?> bulan terakhir</title>
-    <?php for($k=0;$k<=5;$k++): $gy=$y($step*$k); ?><line x1="<?= $left ?>" x2="<?= $cw-4 ?>" y1="<?= $gy ?>" y2="<?= $gy ?>" class="g"/><text x="<?= $left-6 ?>" y="<?= $gy+3 ?>" class="ya"><?= $step*$k ?></text><?php endfor; ?>
-    <?php foreach($pts as $idx=>$p): $cx=round($left+$slot*$idx+$slot/2,1); $line[]=$cx.','.$y($p['members']); ?>
-    <g><title><?= html_escape($p['label']) ?>: <?= (int)$p['families'] ?> keluarga aktif, <?= (int)$p['members'] ?> warga terdaftar</title>
-     <rect x="<?= $cx-$bw/2 ?>" y="<?= $y($p['members']) ?>" width="<?= $bw ?>" height="<?= max(0,$top+$plot_h-$y($p['members'])) ?>" rx="3" class="bm"/>
-     <rect x="<?= $cx-$bw/2 ?>" y="<?= $y($p['families']) ?>" width="<?= $bw ?>" height="<?= max(0,$top+$plot_h-$y($p['families'])) ?>" rx="3" class="bf"/>
-     <text x="<?= $cx ?>" y="<?= $ch-6 ?>" class="xa"><?= html_escape($p['label']) ?></text></g>
-    <?php endforeach; ?>
-    <polyline points="<?= implode(' ',$line) ?>" class="ln"/>
-    <?php foreach($line as $pt): list($px,$py)=explode(',',$pt); ?><circle cx="<?= $px ?>" cy="<?= $py ?>" r="3.2" class="dt"/><?php endforeach; ?>
-   </svg>
-   <ul class="dbh-legend">
-    <li><i class="sq bf"></i><span>Keluarga Aktif<b><?= (int)$resident_stats['families'] ?></b></span></li>
-    <li><i class="sq bm"></i><span>Warga Terdaftar<b><?= (int)$resident_stats['members'] ?></b></span></li>
-    <li><i class="ring"></i><span>Perubahan<b><?= html_escape($resident_stats['change']) ?></b></span></li>
-   </ul>
+<main class="db7">
+ <section class="db7-hero" style="--hero:url('<?= html_escape(base_url($hero)) ?>')">
+  <div class="db7-hero-copy">
+   <h1>Selamat Datang,<br><span><?= html_escape($admin_name) ?>!</span> <i aria-hidden="true">👋</i></h1>
+   <p>Kelola data warga dan layanan RT dengan mudah</p>
+   <span class="db7-date"><?= official_svg('calendar') ?><?= $today_label ?></span>
   </div>
-  <p class="dbh-foot-note">Dihitung dari data KK terverifikasi per akhir bulan.</p>
+ </section>
+
+ <?php if ($kpis): ?>
+ <section class="db7-kpis" aria-label="Ringkasan utama" style="--n:<?= count($kpis) ?>">
+  <?php foreach ($kpis as $k): $tag = $k[6] !== '' ? 'a' : 'div'; ?>
+   <<?= $tag ?> class="db7-kpi <?= $k[0] ?>"<?= $k[6] !== '' ? ' href="' . site_url($k[6]) . '"' : '' ?>>
+    <span class="db7-kpi-ic"><?= $icon($k[1]) ?></span>
+    <span class="db7-kpi-tx"><small><?= $k[2] ?></small><strong><?= $k[3] ?><?= $k[4] ?></strong><em<?= !empty($k[7]) ? ' class="cta"' : '' ?>><?= $k[5] ?></em></span>
+   </<?= $tag ?>>
+  <?php endforeach; ?>
  </section>
  <?php endif; ?>
 
- <?php if($show_dues): $dtotal=(int)($dues_summary['total']??0); $dpaid=(int)($dues_summary['paid_count']??0); $lunas=$dtotal>0?(int)round(100*$dpaid/$dtotal):0; $circ=2*M_PI*48; ?>
- <section class="dbh-card dbh-c-dues"><header><h2><span class="dbh-hic orange"><?= official_svg('chart') ?></span>Iuran Warga <span class="muted">(Bulan Ini)</span></h2><a class="dbh-link" href="<?= site_url('admin/dues') ?>">Lihat Detail<?= official_svg('arrow-right') ?></a></header>
-  <div class="dbh-dues">
-   <div class="dbh-donut-wrap"><svg class="dbh-donut" viewBox="0 0 120 120" role="img" aria-label="<?= $lunas ?>% tagihan lunas"><circle cx="60" cy="60" r="48" class="trk"/><?php if($lunas>0): ?><circle cx="60" cy="60" r="48" class="val" stroke-dasharray="<?= round($circ*$lunas/100,2) ?> <?= round($circ,2) ?>" transform="rotate(-90 60 60)"/><?php endif; ?><text x="60" y="60" class="pc"><?= $lunas ?>%</text><text x="60" y="77" class="lb">Lunas</text></svg>
-    <svg class="dbh-coins" viewBox="0 0 80 64" aria-hidden="true"><g fill="#f7b500" stroke="#d98a00" stroke-width="1.4"><ellipse cx="22" cy="52" rx="18" ry="6"/><path d="M4 44v8c0 3 8 6 18 6s18-3 18-6v-8"/><ellipse cx="22" cy="44" rx="18" ry="6"/><path d="M4 36v8c0 3 8 6 18 6s18-3 18-6v-8"/><ellipse cx="22" cy="36" rx="18" ry="6"/><path d="M4 28v8c0 3 8 6 18 6s18-3 18-6v-8"/><ellipse cx="22" cy="28" rx="18" ry="6"/><ellipse cx="56" cy="54" rx="18" ry="6"/><path d="M38 46v8c0 3 8 6 18 6s18-3 18-6v-8"/><ellipse cx="56" cy="46" rx="18" ry="6"/></g></svg></div>
-   <ul><li><i class="dot green"></i><span>Sudah Bayar<b><?= $dpaid ?> warga</b></span></li><li><i class="dot orange"></i><span>Belum Bayar<b><?= max(0,$dtotal-$dpaid) ?> warga</b></span></li><li><i class="dot gray"></i><span>Total Tagihan<b><?= $money($due) ?></b></span></li></ul>
-  </div>
-  <?php if(!$dtotal): ?><p class="dbh-foot-note">Belum ada tagihan untuk periode <?= html_escape($month_label) ?>.</p><?php endif; ?>
+ <section class="db7-grid">
+  <?php if ($iuran): $billed = $iuran['billed']; $lunas_n = $iuran['lunas']; $pc = $billed > 0 ? (int) round(100 * $lunas_n / $billed) : 0; ?>
+  <article class="db7-card db7-dues">
+   <header><h2><?= $icon('chart') ?>Rekap Iuran Warga</h2>
+    <form method="get" class="db7-select"><?= $keep('iuran') ?><label><span class="sr-only">Periode iuran</span><select name="iuran" onchange="this.form.submit()"><?php foreach ($iuran['periods'] as $p): ?><option value="<?= html_escape($p) ?>"<?= $p === $iuran['period'] ? ' selected' : '' ?>><?= $p === date('Y-m') ? 'Bulan Ini' : $period_label($p) ?></option><?php endforeach; ?></select></label><noscript><button type="submit">Terapkan</button></noscript></form>
+   </header>
+   <?php if ($billed > 0): ?>
+   <div class="db7-dues-body">
+    <div class="db7-donut" style="--pc:<?= $pc ?>" role="img" aria-label="<?= $pc ?> persen warga lunas"><span><b><?= $pc ?>%</b><small>Lunas</small></span></div>
+    <ul class="db7-legend">
+     <li><i class="green"></i><span>Sudah Bayar<b><?= $num($lunas_n) ?> warga</b></span></li>
+     <li><i class="orange"></i><span>Belum Bayar<b><?= $num($billed - $lunas_n) ?> warga</b></span></li>
+     <li><i class="gray"></i><span>Total Ditagih<b><?= $num($billed) ?> warga</b></span></li>
+    </ul>
+   </div>
+   <?php else: ?><p class="db7-empty">Belum ada tagihan iuran untuk <?= $period_label($iuran['period']) ?>.</p><?php endif; ?>
+   <span class="db7-coins" aria-hidden="true"><?= $icon('coins') ?></span>
+   <?php if ($ok('admin/dues')): ?><a class="db7-more green" href="<?= site_url('admin/dues') ?>">Lihat Detail <?= official_svg('arrow-right') ?></a><?php endif; ?>
+  </article>
+  <?php endif; ?>
+
+  <?php if ($show_cash): ?>
+  <article class="db7-card db7-cash">
+   <header><h2><?= $icon('wallet') ?>Grafik Keuangan RT</h2>
+    <form method="get" class="db7-select"><?= $keep('kas') ?><label><span class="sr-only">Rentang grafik</span><select name="kas" onchange="this.form.submit()"><option value="6"<?= $cash_span === 6 ? ' selected' : '' ?>>6 Bulan Terakhir</option><option value="12"<?= $cash_span === 12 ? ' selected' : '' ?>>12 Bulan Terakhir</option></select></label><noscript><button type="submit">Terapkan</button></noscript></form>
+   </header>
+   <div class="db7-legend-row"><span class="in">Pemasukan</span><span class="out">Pengeluaran</span></div>
+   <?php if ($axis_max > 0): ?>
+   <div class="db7-chart" style="--cols:<?= count($cash_month['trend']) ?>">
+    <div class="db7-axis"><?php for ($v = $axis_max; $v >= 0; $v -= $axis_step): ?><span><?= $short_money($v) ?></span><?php endfor; ?></div>
+    <div class="db7-plot">
+     <?php $peak_i = 0; foreach ($cash_month['trend'] as $i => $p) if ($p['income'] >= $cash_month['trend'][$peak_i]['income']) $peak_i = $i; ?>
+     <?php foreach ($cash_month['trend'] as $i => $p): $t = strtotime($p['period'] . '-01'); $tip = $bulan[(int) date('n', $t)] . ' ' . date('Y', $t) . ' — Pemasukan ' . $money($p['income']) . ' · Pengeluaran ' . $money($p['expense']); ?>
+      <a class="db7-col" href="<?= $ok('admin/transactions') ? site_url('admin/transactions') : '#' ?>" title="<?= html_escape($tip) ?>" aria-label="<?= html_escape($tip) ?>">
+       <?php if ($i === $peak_i && $p['income'] > 0): ?><em class="db7-peak" style="bottom:calc(<?= round(100 * $p['income'] / $axis_max, 1) ?>% + 6px)"><?= html_escape('Rp ' . $short_money($p['income'])) ?></em><?php endif; ?>
+       <span class="in" style="height:<?= round(100 * $p['income'] / $axis_max, 1) ?>%"></span><span class="out" style="height:<?= round(100 * $p['expense'] / $axis_max, 1) ?>%"></span>
+       <small><?= $short_month[(int) date('n', $t)] ?></small>
+      </a>
+     <?php endforeach; ?>
+    </div>
+   </div>
+   <?php else: ?><p class="db7-empty">Belum ada transaksi kas terverifikasi pada <?= $cash_span ?> bulan terakhir.</p><?php endif; ?>
+  </article>
+  <?php endif; ?>
+
+  <article class="db7-card db7-tasks">
+   <header class="db7-tasks-head"><h2><?= $icon('task') ?>Perlu Tindakan Hari Ini</h2><?php if ($tasks): ?><b class="db7-count"><?= count($tasks) ?></b><?php endif; ?></header>
+   <?php if ($tasks): ?><ul>
+    <?php foreach ($tasks as $t): ?><li><a href="<?= site_url($t[4]) ?>"><span class="db7-task-ic"><?= $icon($t[0]) ?></span><span class="db7-task-tx"><b><?= html_escape($t[1]) ?></b><small><?= html_escape($t[2]) ?></small></span><em><?= html_escape($t[3]) ?></em></a></li><?php endforeach; ?>
+   </ul><?php else: ?><p class="db7-empty">Tidak ada pekerjaan tertunda. 🎉</p><?php endif; ?>
+  </article>
+
+  <?php if ($ok('admin/posts/agenda')): ?>
+  <article class="db7-card db7-agenda">
+   <header><h2><?= $icon('calendar') ?>Agenda Terdekat</h2><a class="db7-link" href="<?= site_url('admin/posts/agenda') ?>">Lihat Semua <?= official_svg('arrow-right') ?></a></header>
+   <?php if ($agenda_next): ?><ul>
+    <?php foreach ($agenda_next as $a): $at = strtotime($a['event_date']); ?><li><a href="<?= site_url('admin/post/agenda/' . (int) $a['id']) ?>"><span class="db7-day"><b><?= date('d', $at) ?></b><small><?= $short_month[(int) date('n', $at)] ?></small></span><span class="db7-agenda-tx"><b><?= html_escape($a['title']) ?></b><small><?= $a['event_time'] ? html_escape(substr($a['event_time'], 0, 5)) . ' WIB' : 'Waktu belum diisi' ?></small><?php if ($a['event_location'] !== ''): ?><small class="loc"><?= official_svg('pin') ?><?= html_escape($a['event_location']) ?></small><?php endif; ?></span></a></li><?php endforeach; ?>
+   </ul><?php else: ?><p class="db7-empty">Belum ada agenda mendatang yang dipublikasikan.</p><?php endif; ?>
+   <span class="db7-cal-art" aria-hidden="true"><?= $icon('calendar') ?></span>
+  </article>
+  <?php endif; ?>
+
+  <article class="db7-card db7-activity">
+   <header><h2><?= $icon('bolt') ?>Aktivitas Terbaru</h2><?php if ($ok('admin/requests')): ?><a class="db7-link" href="<?= site_url('admin/requests?status=semua') ?>">Lihat Semua <?= official_svg('arrow-right') ?></a><?php endif; ?></header>
+   <?php if ($activity): ?><ol>
+    <?php foreach ($activity as $a): ?><li><a href="<?= site_url($a['url']) ?>"><span class="db7-act-ic"><?= $icon($feed_icon[$a['kind']] ?? 'task') ?></span><span><b><?= html_escape($a['title']) ?></b><small><?= $ago($a['at']) ?></small></span></a></li><?php endforeach; ?>
+   </ol><?php else: ?><p class="db7-empty">Belum ada aktivitas.</p><?php endif; ?>
+  </article>
+
+  <?php $shortcuts = array_filter(array(
+      array('people', 'Data Warga', $ok('admin/keluarga') ? 'admin/keluarga' : ($ok('admin/penduduk') ? 'admin/penduduk' : '')),
+      array('coins', 'Iuran Warga', $show_dues && $ok('admin/dues') ? 'admin/dues' : ''),
+      array('wallet', 'Kas RT', $show_cash && $ok('admin/transactions') ? 'admin/transactions' : ''),
+      array('megaphone', 'Pengaduan', $fon('complaints') && $ok('admin/pengaduan') ? 'admin/pengaduan' : ''),
+  ), function ($s) {return $s[2] !== '';}); ?>
+  <?php if ($shortcuts): ?>
+  <details class="db7-card db7-reports" open>
+   <summary><h2><?= $icon('chart') ?>Laporan &amp; Statistik</h2><span class="db7-chev"><?= official_svg('chev-right') ?></span></summary>
+   <div><?php foreach ($shortcuts as $s): ?><a href="<?= site_url($s[2]) ?>"><?= $icon($s[0]) ?><span><?= $s[1] ?></span></a><?php endforeach; ?></div>
+  </details>
+  <?php endif; ?>
  </section>
- <?php endif; ?>
-</div>
-
-<div class="dbh-row dbh-row-b">
- <?php if($fon('events')): ?><section class="dbh-card dbh-c-agenda"><header><h2><span class="dbh-hic orange"><?= official_svg('calendar') ?></span>Agenda Kegiatan</h2><a class="dbh-btn" href="<?= site_url('admin/post/agenda') ?>"><?= official_svg('plus') ?>Tambah Agenda</a></header>
-  <div class="dbh-agenda"><?php foreach(array_slice((array)$agendas,0,3) as $item): $t=strtotime($item['event_date']); ?><a href="<?= site_url('admin/post/agenda/'.$item['id']) ?>"><span class="dbh-date"><b><?= date('d',$t) ?></b><small><?= $short_month[(int)date('n',$t)] ?></small></span><span class="dbh-list-tx"><strong><?= html_escape($item['title']) ?></strong><small class="row"><span><?= official_svg('clock') ?><?= $item['event_time']?html_escape(substr($item['event_time'],0,5)).' WIB':'Waktu belum diisi' ?></span><span class="pin"><?= official_svg('pin') ?><?= html_escape($item['event_location']?:'Lokasi belum diisi') ?></span></small></span><span class="dbh-chev"><?= official_svg('chev-right') ?></span></a><?php endforeach; ?>
-  <?php if(!$agendas): ?><p class="dbh-empty">Belum ada agenda mendatang. <a href="<?= site_url('admin/post/agenda') ?>">Tambah agenda</a>.</p><?php endif; ?></div>
- </section><?php endif; ?>
- <?php if($letters_latest!==NULL):
-  $l_state=array('diajukan'=>array('wait','Menunggu'),'diproses'=>array('proc','Diproses'),'disetujui'=>array('done','Disetujui'),'selesai'=>array('done','Selesai'),'ditolak'=>array('bad','Ditolak')); ?>
- <section class="dbh-card dbh-c-letters"><header><h2><span class="dbh-hic orange"><?= official_svg('doc') ?></span>Pengajuan Surat Terbaru</h2><a class="dbh-link" href="<?= site_url('admin/requests') ?>">Lihat Semua<?= official_svg('arrow-right') ?></a></header>
-  <div class="dbh-table"><?php foreach($letters_latest as $l): $st=$l_state[$l['status']]??array('proc',ucfirst($l['status'])); ?><a href="<?= site_url('admin/request_detail/'.(int)$l['id']) ?>"><b class="code">#SR-<?= str_pad((string)(int)$l['id'],4,'0',STR_PAD_LEFT) ?></b><span class="type"><?= html_escape($l['letter_title']?:$l['subject']) ?></span><span class="name"><?= html_escape($l['display_name']?:'Warga') ?></span><span class="date">Dibuat: <?= $when($l['created_at']) ?></span><span class="dbh-pill <?= $st[0] ?>"><?= html_escape($st[1]) ?></span><span class="dbh-chev"><?= official_svg('chev-right') ?></span></a><?php endforeach; ?>
-  <?php if(!$letters_latest): ?><p class="dbh-empty">Belum ada pengajuan surat.</p><?php endif; ?></div>
- </section>
- <?php endif; ?>
-</div>
-
-
-<?php if (!empty($ops)): $can_ops=function($p)use($rt_perm,$role){return in_array($role,$rt_perm[$p]??array(),TRUE);};
- $ops_cards=array(
-  array('KK Terverifikasi',(int)$ops['kk_active'],(int)$ops['members_active'].' anggota aktif','blue','people','admin/penduduk',$can_ops('penduduk.read')),
-  array('Mutasi Menunggu',(int)$ops['mutations_pending'],'Perlu diperiksa','orange','swap','admin/mutasi',$can_ops('mutasi.read')),
-  array('Pengaduan Terbuka',(int)$ops['complaints_open'],'Belum selesai','red','alert','admin/pengaduan',$can_ops('pengaduan.read')),
-  array('Tunggakan Iuran',$money($ops['arrears_total']),(int)$ops['arrears_count'].' tagihan','purple','money','admin/tunggakan',$can_ops('iuran.report')),
-  array('Tindak Lanjut',(int)$ops['actions_overdue'],'Terlambat, dari notulen','sky','check-circle','admin/notulen',$can_ops('notulen.read')),
-  array('Peminjaman Terlambat',(int)$ops['loans_overdue'],'Aset belum kembali','amber','box','admin/inventaris/pinjam',$can_ops('aset.read')),
- );
- // Kartu menu yang belum berlangganan/nonaktif tidak menampilkan angkanya (data mengikuti proses langganan).
- if(!isset($this->menu_access))$this->load->library('Menu_access');
- $ops_cards=array_values(array_filter($ops_cards,function($c){$p=strtok($c[5],'?');$m=$this->menu_access->match($p);return $c[6]&&$this->feature_gate->link_ok($p,'admin')&&(!$m||$this->menu_access->commercial($m)==='ALLOW');}));
- $backup_old=!$ops['last_backup']||strtotime($ops['last_backup']['created_at'])<strtotime('-7 days');
- if($ops_cards || ($role==='admin'&&$backup_old)): ?>
-<section class="dbh-card dbh-c-ops"><header><h2><span class="dbh-hic orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h4l3-8 4 16 3-8h6"/></svg></span>Monitoring Operasional</h2></header>
- <?php if($ops_cards): ?><div class="dbh-ops"><?php foreach($ops_cards as $c): ?><a class="dbh-op <?= $c[3] ?>" href="<?= site_url($c[5]) ?>"><span class="dbh-op-ic"><?= official_svg($c[4]) ?></span><span class="dbh-op-tx"><small><?= html_escape($c[0]) ?></small><strong><?= html_escape($c[1]) ?></strong><em><?= html_escape($c[2]) ?></em></span></a><?php endforeach; ?></div><?php endif; ?>
- <?php if($role==='admin'&&$backup_old): ?><form class="dbh-backup dbh-backup-v5" method="post" action="<?= site_url('admin/backup') ?>"><input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>"><input type="hidden" name="act" value="run"><span class="dbh-backup-ic" aria-hidden="true">!</span><span>Belum ada backup berhasil dalam 7 hari terakhir. Jalankan backup sekarang.</span><button type="submit"><?= official_svg('cloud') ?>Backup Sekarang</button></form><?php endif; ?>
-</section>
-<?php endif; endif; ?>
-</div>
+</main>

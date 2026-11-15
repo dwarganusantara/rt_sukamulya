@@ -21,6 +21,7 @@ if (!function_exists('citizen_shell_vars')) {
         $words = preg_split('/\s+/', $app);
         $slogan = trim((string) ($settings['slogan'] ?? '')) ?: (string) $CI->config->item('dashboard_slogan_default', 'dashboard');
         $logo = trim((string) ($settings['logo'] ?? '')); if ($logo === '' || !is_file(FCPATH . $logo)) $logo = 'assets/mockup/logo.png';
+        $logo_icon = trim((string) ($settings['logo_icon'] ?? '')); if ($logo_icon === '' || !is_file(FCPATH . $logo_icon)) $logo_icon = $logo;
         $footer_default = (string) $CI->config->item('dashboard_footer_default', 'dashboard');
         $footer_art = trim((string) ($settings['citizen_footer_image'] ?? ''));
         $custom_footer = $footer_art !== '' && is_file(FCPATH . $footer_art) && !in_array($footer_art, array($footer_default, 'assets/img/dashboard/footer-kampung.svg'), TRUE);
@@ -51,7 +52,7 @@ if (!function_exists('citizen_shell_vars')) {
             'app' => $app, 'app_l1' => implode(' ', array_slice($words, 0, 2)), 'app_l2' => implode(' ', array_slice($words, 2)),
             'rt_label' => trim((string) ($settings['brand_label'] ?? 'RT 009/008')), 'rt_area' => trim((string) ($settings['brand_subtitle'] ?? 'Suka Mulya IV')),
             'slogan' => $slogan, 'slogan_parts' => preg_split('/,\s*(?=[^,]*$)/', $slogan, 2),
-            'logo' => $logo, 'footer_art' => $custom_footer ? $footer_art : $footer_default, 'custom_footer' => $custom_footer,
+            'logo' => $logo, 'logo_icon' => $logo_icon, 'footer_art' => $custom_footer ? $footer_art : $footer_default, 'custom_footer' => $custom_footer,
             'name' => trim((string) ($citizen['display_name'] ?? $CI->session->userdata('citizen_name'))) ?: 'Warga',
             'avatar' => $avatar, 'notify' => $notify, 'nav' => $nav,
         );

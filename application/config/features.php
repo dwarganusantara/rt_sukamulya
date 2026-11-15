@@ -61,7 +61,7 @@ $config['feature_catalog'] = array(
     'patrol' => array('name' => 'Jadwal Ronda', 'desc' => 'Jadwal, absensi, dan laporan kejadian ronda', 'category' => 'Operasional', 'icon' => 'shield', 'tone' => 'green',
         'admin' => array('admin/ronda'), 'warga' => array('warga/ronda')),
     'work_program' => array('name' => 'Program Kerja', 'desc' => 'Rencana, progres, dan evaluasi program kerja pengurus', 'category' => 'Operasional', 'icon' => 'briefcase', 'tone' => 'blue',
-        'admin' => array('admin/program'), 'warga' => array()),
+        'admin' => array('admin/program'), 'warga' => array('warga/program')),
     'activity_notes' => array('name' => 'Catatan & Notulen', 'desc' => 'Notulen rapat dan tindak lanjut', 'category' => 'Operasional', 'icon' => 'lines', 'tone' => 'blue',
         'admin' => array('admin/notulen'), 'warga' => array()),
     'inventory' => array('name' => 'Aset & Inventaris', 'desc' => 'Data aset RT dan peminjaman barang', 'category' => 'Operasional', 'icon' => 'box', 'tone' => 'amber',

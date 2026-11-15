@@ -401,11 +401,14 @@ class Sistem extends Ops_Controller
             if (ops_valid_date($f['from'])) $this->db->where('l.created_at >=', $f['from'] . ' 00:00:00');
             if (ops_valid_date($f['to'])) $this->db->where('l.created_at <=', $f['to'] . ' 23:59:59');
         };
-        if ($this->input->get('export') === 'csv') {
+        $format = strtolower((string) $this->input->get('export', TRUE));
+        if (in_array($format, array('xls', 'xlsx'), TRUE)) {
             $apply();
             $rows = $this->db->select('l.created_at,a.username,l.action,l.subject,l.details,l.ip_address')->order_by('l.id', 'DESC')->limit(5000)->get()->result_array();
-            $this->audit('export', 'audit_log', count($rows) . ' baris');
-            $this->csv('audit-log-' . date('Ymd') . '.csv', array('Waktu', 'Pengguna', 'Aksi', 'Objek', 'Detail', 'IP'), array_map('array_values', $rows));
+            $this->audit('export', 'audit_log', count($rows) . ' baris (' . $format . ')');
+            $this->load->library('spreadsheet_export');
+            $this->spreadsheet_export->send($format, 'audit-log-' . date('Ymd'), 'Audit Aktivitas', array('Waktu', 'Pengguna', 'Aksi', 'Objek', 'Detail', 'IP'), array_map('array_values', $rows));
+            return;
         }
         $page = max(1, (int) $this->input->get('hal'));
         $apply();
@@ -460,7 +463,10 @@ class Sistem extends Ops_Controller
 
     private function backup_key()
     {
-        return hash('sha256', (string) $this->config->item('encryption_key') . '|rt-backup', TRUE);
+        $key = (string) $this->config->item('encryption_key');
+        // SEC-03: never derive the backup key from an empty secret.
+        if (strlen($key) < 16) throw new RuntimeException('Kunci enkripsi belum dikonfigurasi (application/config/secrets.php).');
+        return hash('sha256', $key . '|rt-backup', TRUE);
     }
 
     private function encrypt_to($plain, $target)
@@ -492,6 +498,9 @@ class Sistem extends Ops_Controller
             $sql = $this->dbutil->backup(array('format' => 'txt', 'add_drop' => TRUE, 'add_insert' => TRUE, 'newline' => "\n"));
             if (!is_string($sql) || strlen($sql) < 100) throw new RuntimeException('Dump database kosong.');
             $name = 'db-' . $stamp . '.sql.gz.enc';
+            // Restore harus bisa berjalan walau urutan tabel alfabetis melanggar FK, dan walau dump menyertakan
+            // kolom generated (active_family_key, active_citizen_key) yang ditolak di mode strict (error 1906).
+            $sql = "SET SESSION sql_mode='NO_ENGINE_SUBSTITUTION';\nSET foreign_key_checks=0;\n" . $sql . "\nSET foreign_key_checks=1;\n";
             $this->encrypt_to("-- Backup RT/RW Digital " . date('c') . "\n" . $sql, $dir . $name);
             $made[] = array('database', $name);
             $files_error = '';
@@ -784,18 +793,4 @@ class Sistem extends Ops_Controller
         exit(0);
     }
 
-    private function csv($filename, $header, $rows)
-    {
-        $safe = function ($v) {$v = (string) $v; return preg_match('/^[=+\-@\t\r]/', $v) ? "'" . $v : $v;};
-        while (ob_get_level()) ob_end_clean();
-        header('Content-Type: text/csv; charset=UTF-8');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
-        header('X-Content-Type-Options: nosniff');
-        $out = fopen('php://output', 'w');
-        fwrite($out, "\xEF\xBB\xBF");
-        fputcsv($out, $header, ';');
-        foreach ($rows as $r) fputcsv($out, array_map($safe, $r), ';');
-        fclose($out);
-        exit;
-    }
 }

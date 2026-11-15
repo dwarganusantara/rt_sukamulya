@@ -5,20 +5,29 @@
 .acw [hidden]{display:none!important}
 
 /* ---------- Tombol pembuka ---------- */
-.acw-launch{position:fixed;right:22px;bottom:22px;z-index:120;display:flex;align-items:center;gap:12px;min-width:252px;min-height:72px;padding:8px 22px 8px 8px;border:1px solid #f2ded1;border-radius:999px;background:linear-gradient(110deg,#fff,#fff7f1);color:var(--acw-navy);text-align:left;cursor:pointer;box-shadow:0 14px 34px #7542222e;transition:transform .18s,box-shadow .18s}
-.acw-launch:hover{transform:translateY(-2px);box-shadow:0 18px 38px #75422238}
+/* Ringkas: hanya ikon bulat 56px agar tidak menutupi tombol halaman. Label muncul saat hover/fokus. */
+.acw-launch{position:fixed;right:18px;bottom:18px;z-index:120;display:flex;align-items:center;gap:0;max-width:56px;height:56px;padding:0;overflow:hidden;border:0;border-radius:999px;background:transparent;color:var(--acw-navy);text-align:left;cursor:pointer;box-shadow:none;transition:max-width .22s ease,background .22s,box-shadow .22s,padding .22s}
+.acw-launch:hover,.acw-launch:focus-visible{max-width:280px;padding-right:18px;gap:10px;background:linear-gradient(110deg,#fff,#fff7f1);box-shadow:0 12px 30px #7542222e;overflow:visible}
 .acw-launch:focus-visible{outline:3px solid #ffb703;outline-offset:3px}
-.acw-launch-ic{position:relative;width:56px;height:56px;flex:none;display:grid;place-items:center;border:3px solid #fff;border-radius:50%;background:linear-gradient(145deg,#ff8a3d,var(--acw-accent));color:#fff;box-shadow:0 6px 14px #f0501a59}
+.acw.inbox-open .acw-launch{max-width:56px;padding:0;gap:0;background:transparent;box-shadow:none}
+.acw.inbox-open .acw-launch .acw-launch-tx{display:none}
+.acw-launch-ic{position:relative;width:56px;height:56px;flex:none;display:grid;place-items:center;border:3px solid #fff;border-radius:50%;background:linear-gradient(145deg,#ff8a3d,var(--acw-accent));color:#fff;box-shadow:0 6px 16px #f0501a59}
+.acw-launch-ic svg{width:26px;height:26px}
+.acw-launch-ic:after{content:"";position:absolute;right:1px;bottom:1px;width:13px;height:13px;border:2.5px solid #fff;border-radius:50%;background:#aab5c2}
+.acw-launch.has-online .acw-launch-ic:after{background:#22c55e}
 .acw-launch-ic b{position:absolute;top:-6px;right:-6px;min-width:24px;height:24px;display:grid;place-items:center;padding:0 6px;border:2px solid #fff;border-radius:99px;background:#e11d48;color:#fff;font-size:12px;font-weight:900;line-height:1}
 .acw-launch.has-unread .acw-launch-ic{animation:acw-pulse 1.8s ease-out infinite}
 @keyframes acw-pulse{0%{box-shadow:0 0 0 0 #f0501a80}70%{box-shadow:0 0 0 14px #f0501a00}100%{box-shadow:0 0 0 0 #f0501a00}}
-.acw-launch-tx{display:grid;gap:3px;line-height:1.15}
+.acw-launch-tx{display:grid;gap:3px;line-height:1.15;opacity:0;transition:opacity .15s}
+.acw-launch:hover .acw-launch-tx,.acw-launch:focus-visible .acw-launch-tx{opacity:1}
+/* Ruang kosong di bawah konten admin agar tombol terakhir bisa di-scroll melewati ikon chat. */
+body:has(#acw) .ad-main{padding-bottom:92px}
 .acw-launch-tx strong{font-size:16px;font-weight:800;white-space:nowrap}
 .acw-launch-tx small{display:flex;align-items:center;gap:6px;color:#56657d;font-size:12.5px;font-weight:700;white-space:nowrap}
 .acw-launch-tx i{width:10px;height:10px;border-radius:50%;background:#aab5c2}.acw-launch-tx i.on{background:#22c55e;box-shadow:0 0 0 3px #22c55e2e}
 
 /* ---------- Kotak masuk ---------- */
-.acw-inbox{position:fixed;right:22px;bottom:106px;z-index:121;width:370px;height:min(560px,calc(100vh - 130px));display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--acw-line);border-radius:24px;background:#fff;box-shadow:0 24px 60px #3d1c0c33}
+.acw-inbox{position:fixed;right:18px;bottom:86px;z-index:121;width:370px;height:min(560px,calc(100vh - 130px));display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--acw-line);border-radius:24px;background:#fff;box-shadow:0 24px 60px #3d1c0c33}
 .acw-inbox[hidden]{display:none}
 .acw-inbox-head{display:flex;align-items:center;gap:12px;padding:16px 16px 12px;background:linear-gradient(135deg,#fff3ea,#fff)}
 .acw-inbox-ic{width:44px;height:44px;flex:none;display:grid;place-items:center;border-radius:14px;background:linear-gradient(145deg,#ff8a3d,var(--acw-accent));color:#fff}
@@ -52,7 +61,7 @@
 .acw-av.on:after{background:#22c55e}
 
 /* ---------- Jendela percakapan (multi) ---------- */
-.acw-dock{position:fixed;right:290px;bottom:22px;z-index:119;display:flex;flex-direction:row-reverse;align-items:flex-end;gap:14px;pointer-events:none}
+.acw-dock{position:fixed;right:88px;bottom:18px;z-index:119;display:flex;flex-direction:row-reverse;align-items:flex-end;gap:14px;pointer-events:none}
 .acw.inbox-open .acw-dock{right:408px}
 .acw-win{width:330px;height:min(470px,calc(100vh - 60px));display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--acw-line);border-radius:22px;background:#fff;box-shadow:0 22px 50px #3d1c0c33;pointer-events:auto;animation:acw-in .18s ease-out}
 @keyframes acw-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
@@ -77,7 +86,7 @@
 .acw-send:hover{filter:brightness(1.06)}
 
 /* ---------- Notifikasi pesan baru ---------- */
-.acw-toast{position:fixed;right:22px;bottom:106px;z-index:122;width:330px;display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--acw-line);border-left:4px solid var(--acw-accent);border-radius:16px;background:#fff;box-shadow:0 18px 40px #3d1c0c2e;cursor:pointer;animation:acw-in .2s ease-out}
+.acw-toast{position:fixed;right:18px;bottom:86px;z-index:122;width:330px;display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--acw-line);border-left:4px solid var(--acw-accent);border-radius:16px;background:#fff;box-shadow:0 18px 40px #3d1c0c2e;cursor:pointer;animation:acw-in .2s ease-out}
 .acw-toast[hidden]{display:none}.acw.inbox-open .acw-toast{display:none}
 .acw-toast img{width:42px;height:42px;flex:none;border-radius:50%;object-fit:cover}
 .acw-toast span{min-width:0;display:grid;gap:2px}.acw-toast strong{font-size:14px;font-weight:800}
@@ -85,7 +94,7 @@
 
 /* ---------- Layar kecil: satu jendela penuh, tombol bulat ---------- */
 @media(max-width:699px){
- .acw-launch{right:14px;bottom:14px;min-width:0;min-height:0;padding:0;border:0;border-radius:50%;background:transparent;box-shadow:none}
+ .acw-launch,.acw-launch:hover,.acw-launch:focus-visible{right:14px;bottom:14px;max-width:62px;height:62px;padding:0;gap:0;border:0;border-radius:50%;background:transparent;box-shadow:none}
  .acw-launch-ic{width:62px;height:62px;box-shadow:0 10px 24px #f0501a66}
  .acw-launch-tx{display:none}
  .acw-inbox{inset:auto 0 0 0;width:100%;height:min(82vh,640px);border-radius:24px 24px 0 0}

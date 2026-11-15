@@ -73,7 +73,7 @@ CREATE TABLE `admins` (
 
 LOCK TABLES `admins` WRITE;
 /*!40000 ALTER TABLE `admins` DISABLE KEYS */;
-INSERT INTO `admins` VALUES (1,'admin','$2y$10$2DhqArcPy1qvhK4Gy9kOPecrGwWUKCoyAGBlAgPPoB86CThNLPY92','admin');
+-- SEC-01: seeded admin credential removed. Create accounts with: php create_admin.php <user> <password> admin
 /*!40000 ALTER TABLE `admins` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -139,7 +139,7 @@ CREATE TABLE `citizens` (
 
 LOCK TABLES `citizens` WRITE;
 /*!40000 ALTER TABLE `citizens` DISABLE KEYS */;
-INSERT INTO `citizens` (`id`,`username`,`display_name`,`full_name`,`gender`,`address`,`phone`,`email`,`notes`,`password_hash`,`is_active`,`created_at`) VALUES (2,'chendy','Chendy','Chendy','male',NULL,NULL,NULL,NULL,'$2y$10$mhH3DHgOTZdPv.jYmhPxK.JoIsxjmsIySP5cBDabN.QGA93kOI3Ne',1,'2026-10-17 13:29:51');
+-- SEC-01: personal resident account removed from the seed (privacy).
 /*!40000 ALTER TABLE `citizens` ENABLE KEYS */;
 UNLOCK TABLES;
 

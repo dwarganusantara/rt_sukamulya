@@ -7,19 +7,29 @@
  <div class="aal-glow" aria-hidden="true"></div>
  <header class="aal-head">
   <span class="aal-bell" aria-hidden="true"><?= family_icon('bell') ?><i></i></span>
-  <div><p class="aal-kicker">Peringatan untuk Admin</p><h2 id="aal-title">Ada Pengajuan Baru!</h2><p id="aal-sub">Warga menunggu verifikasi Anda.</p></div>
+  <div><p class="aal-kicker">Peringatan untuk Pengurus</p><h2 id="aal-title">Ada Layanan Warga Baru!</h2><p id="aal-sub">Warga menunggu tindak lanjut Anda.</p></div>
   <button type="button" class="aal-x" data-aal-snooze aria-label="Tutup peringatan"><?= family_icon('close') ?></button>
  </header>
  <div class="aal-grid">
   <section class="aal-box is-kk" data-aal="kk">
    <header><span class="aal-ic"><?= family_icon('people') ?></span><div><h3>Verifikasi Data KK</h3><p><b data-aal-count>0</b> pengajuan menunggu</p></div><span class="aal-new" data-aal-new hidden>BARU</span></header>
    <ul data-aal-list></ul>
-   <a class="aal-go" data-aal-go href="#"><?= family_icon('check') ?>Tinjau Verifikasi KK<?= family_icon('arrow') ?></a>
+   <a class="aal-go" data-aal-go href="#"><?= family_icon('check') ?>Tinjau Pengajuan KK<?= family_icon('arrow') ?></a>
   </section>
   <section class="aal-box is-letter" data-aal="letters">
    <header><span class="aal-ic"><?= family_icon('mail') ?></span><div><h3>Pengajuan Surat</h3><p><b data-aal-count>0</b> pengajuan menunggu</p></div><span class="aal-new" data-aal-new hidden>BARU</span></header>
    <ul data-aal-list></ul>
    <a class="aal-go" data-aal-go href="#"><?= family_icon('file') ?>Tinjau Pengajuan Surat<?= family_icon('arrow') ?></a>
+  </section>
+  <section class="aal-box is-complaint" data-aal="complaints">
+   <header><span class="aal-ic"><?= family_icon('info') ?></span><div><h3>Pengaduan Warga</h3><p><b data-aal-count>0</b> pengaduan baru</p></div><span class="aal-new" data-aal-new hidden>BARU</span></header>
+   <ul data-aal-list></ul>
+   <a class="aal-go" data-aal-go href="#"><?= family_icon('eye') ?>Tinjau Pengaduan<?= family_icon('arrow') ?></a>
+  </section>
+  <section class="aal-box is-due" data-aal="dues">
+   <header><span class="aal-ic"><?= family_icon('wallet') ?></span><div><h3>Pembayaran Iuran</h3><p><b data-aal-count>0</b> pembayaran menunggu</p></div><span class="aal-new" data-aal-new hidden>BARU</span></header>
+   <ul data-aal-list></ul>
+   <a class="aal-go" data-aal-go href="#"><?= family_icon('check') ?>Verifikasi Pembayaran<?= family_icon('arrow') ?></a>
   </section>
  </div>
  <footer class="aal-foot"><span><?= family_icon('clock') ?>Diperbarui otomatis setiap 30 detik</span><button type="button" class="aal-later" data-aal-snooze>Ingatkan 15 menit lagi</button></footer>

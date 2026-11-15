@@ -66,7 +66,9 @@
 switch (ENVIRONMENT)
 {
 	case 'development':
-		error_reporting(-1);
+		// Core CodeIgniter 3.1.13 memicu "dynamic property is deprecated" di PHP 8.2+;
+		// deprecation disembunyikan agar Warning/Notice/Error aplikasi tetap terlihat dan redirect berfungsi.
+		error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
 		ini_set('display_errors', 1);
 	break;
 
@@ -75,11 +77,11 @@ switch (ENVIRONMENT)
 		ini_set('display_errors', 0);
 		if (version_compare(PHP_VERSION, '5.3', '>='))
 		{
-			error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT & ~E_USER_NOTICE & ~E_USER_DEPRECATED);
+			error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~2048 /* E_STRICT, deprecated constant in PHP 8.4 */ & ~E_USER_NOTICE & ~E_USER_DEPRECATED);
 		}
 		else
 		{
-			error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_USER_NOTICE);
+			error_reporting(E_ALL & ~E_NOTICE & ~2048 /* E_STRICT, deprecated constant in PHP 8.4 */ & ~E_USER_NOTICE);
 		}
 	break;
 

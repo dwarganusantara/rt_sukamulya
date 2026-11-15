@@ -276,6 +276,9 @@ class Operasional extends Ops_Controller
     {
         $this->guard_admin('belanja.write');
         $id = (int) $id;
+        // Pembuatan permintaan baru dinonaktifkan; formulir ini hanya dipakai
+        // untuk mengubah draf/permintaan lama yang masih diizinkan.
+        if ($id < 1) show_404();
         $item = $id ? $this->db->get_where('purchase_requests', array('id' => $id))->row_array() : NULL;
         if ($id && !$item) show_404();
         if ($item && !in_array($item['status'], array('draft', 'rejected'), TRUE)) $this->back('admin/belanja/' . $id, '', 'Permintaan yang sudah diajukan tidak dapat diubah.');

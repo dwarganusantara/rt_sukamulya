@@ -1,4 +1,9 @@
-<main class="letter-page cdx-page crd-page crd-ops"><div class="cdx-wrap">
+<link rel="stylesheet" href="<?= base_url('assets/mobile-warm.css') ?>?v=<?= filemtime(FCPATH.'assets/mobile-warm.css') ?>">
+<link rel="stylesheet" href="<?= base_url('assets/pengaduan-mobile.css') ?>?v=<?= filemtime(FCPATH.'assets/pengaduan-mobile.css') ?>">
+<main class="letter-page cdx-page crd-page crd-ops mw-page pgm-page">
+ <header class="mw-header mw-only"><?php $this->load->view('site/mobile_brand_header',array('settings'=>$settings??$this->Content_model->settings())); ?></header>
+ <?php $pgm_tab='buat'; $this->load->view('citizen/ops/pengaduan_mobile',array('items'=>$items??array(),'categories'=>$categories??array(),'labels'=>$labels??array(),'tones'=>$tones??array(),'open'=>$open??array(),'values'=>$values??array(),'emergency'=>$emergency??array(),'anonymous_allowed'=>!empty($anonymous_allowed),'error'=>$error??'','pgm_tab'=>$pgm_tab)); ?>
+<div class="cdx-wrap">
  <?php $this->load->view('citizen/topbar', array('crumbs' => array(array('Beranda', 'warga'), array('Pengaduan', 'warga/pengaduan'), array('Buat Pengaduan', '')))); ?>
  <section class="cdx-hero cpx-warm"><span class="cdx-hero-icon"><?= official_svg('megaphone') ?></span><div><h1>Buat Pengaduan</h1><p>Jelaskan masalah dengan singkat dan jelas. Lampiran foto bersifat privat dan hanya dilihat pengurus berwenang.</p></div></section>
  <?php $this->load->view('citizen/ops/_flash', array('error' => $error)); ?>

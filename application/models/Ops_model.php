@@ -9,7 +9,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class Ops_model extends CI_Model
 {
-    const SCHEMA_VERSION = 'rt16-5-platform-owner';
+    const SCHEMA_VERSION = 'rt16-6-integrated-residence';
 
     public function ensure()
     {
@@ -133,6 +133,22 @@ class Ops_model extends CI_Model
                 subject VARCHAR(190) NOT NULL, body TEXT NOT NULL, dedupe_key VARCHAR(120) NOT NULL, status VARCHAR(20) NOT NULL DEFAULT 'pending', attempts TINYINT UNSIGNED NOT NULL DEFAULT 0,
                 last_error VARCHAR(300) NULL, next_attempt_at DATETIME NULL, sent_at DATETIME NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 PRIMARY KEY (id), UNIQUE KEY uq_outbox_dedupe (dedupe_key), KEY idx_outbox_status (status, next_attempt_at)",
+            'account_invitations' => "id INT UNSIGNED NOT NULL AUTO_INCREMENT, family_id INT UNSIGNED NOT NULL, token_hash CHAR(64) NOT NULL,
+                created_by INT UNSIGNED NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, expires_at DATETIME NOT NULL, attempts TINYINT UNSIGNED NOT NULL DEFAULT 0,
+                used_at DATETIME NULL, revoked_at DATETIME NULL, citizen_id INT UNSIGNED NULL, member_id INT UNSIGNED NULL,
+                PRIMARY KEY (id), UNIQUE KEY uq_invite_token (token_hash), KEY idx_invite_family (family_id, used_at, revoked_at)",
+            // Master rumah dan histori domisili keluarga. tenant_id dipertahankan agar data tidak dapat bercampur saat aplikasi menjadi multi-tenant.
+            'rt_houses' => "id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT, tenant_id INT UNSIGNED NOT NULL DEFAULT 1, house_code VARCHAR(40) NOT NULL,
+                house_number VARCHAR(30) NULL, block_name VARCHAR(100) NOT NULL DEFAULT '', address_text VARCHAR(500) NOT NULL, landmark VARCHAR(190) NOT NULL DEFAULT '',
+                building_type VARCHAR(30) NOT NULL DEFAULT 'rumah', occupancy_status VARCHAR(20) NOT NULL DEFAULT 'dihuni', notes VARCHAR(500) NOT NULL DEFAULT '',
+                created_by INT UNSIGNED NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME NULL,
+                PRIMARY KEY (id), UNIQUE KEY uq_house_code (tenant_id, house_code), KEY idx_house_address (tenant_id, house_number, block_name), KEY idx_house_status (tenant_id, occupancy_status)",
+            'rt_family_residences' => "id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT, tenant_id INT UNSIGNED NOT NULL DEFAULT 1, family_id INT UNSIGNED NOT NULL,
+                house_id BIGINT UNSIGNED NOT NULL, occupancy_relation VARCHAR(20) NOT NULL DEFAULT 'lainnya', start_date DATE NOT NULL, end_date DATE NULL,
+                verification_status VARCHAR(20) NOT NULL DEFAULT 'pending', verified_by INT UNSIGNED NULL, verified_at DATETIME NULL,
+                created_by INT UNSIGNED NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME NULL,
+                PRIMARY KEY (id), KEY idx_res_family_active (tenant_id, family_id, end_date), KEY idx_res_house_active (tenant_id, house_id, end_date),
+                KEY idx_res_verify (tenant_id, verification_status), CONSTRAINT fk_residence_house FOREIGN KEY (house_id) REFERENCES rt_houses(id)",
             // rt16-3: Manajemen Fitur & Menu (katalog fitur, status per tenant, audit perubahan).
             'app_features' => "id INT UNSIGNED NOT NULL AUTO_INCREMENT, code VARCHAR(80) NOT NULL, name VARCHAR(150) NOT NULL, category VARCHAR(80) NOT NULL,
                 parent_id INT UNSIGNED NULL, route_key VARCHAR(150) NULL, icon VARCHAR(80) NULL, sort_order INT NOT NULL DEFAULT 0, is_core TINYINT(1) NOT NULL DEFAULT 0,
@@ -149,11 +165,20 @@ class Ops_model extends CI_Model
         foreach ($tables as $name => $columns) {
             if (!$this->db->table_exists($name)) $this->db->query('CREATE TABLE IF NOT EXISTS `' . $name . '` (' . $columns . ')' . $opt);
         }
+        // Tautan akun -> anggota penduduk (satu akun = satu penduduk). FK butuh tabel induknya sudah ada.
+        // Constraint lain untuk tabel lama (FK, domisili/pengajuan aktif tunggal) ada di data_integrity_upgrade.sql.
+        if (!$this->db->table_exists('citizen_resident_links') && $this->db->table_exists('citizens') && $this->db->table_exists('kk_members'))
+            $this->db->query('CREATE TABLE IF NOT EXISTS `citizen_resident_links` (id INT UNSIGNED NOT NULL AUTO_INCREMENT, citizen_id INT UNSIGNED NOT NULL, member_id INT UNSIGNED NOT NULL,
+                verified_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, verification_source VARCHAR(30) NOT NULL DEFAULT \'admin\', verified_by INT UNSIGNED NULL,
+                PRIMARY KEY (id), UNIQUE KEY uq_link_citizen (citizen_id), UNIQUE KEY uq_link_member (member_id),
+                CONSTRAINT fk_link_citizen FOREIGN KEY (citizen_id) REFERENCES citizens(id), CONSTRAINT fk_link_member FOREIGN KEY (member_id) REFERENCES kk_members(id))' . $opt);
 
         $columns = array(
             'activity_logs' => array('ip_address' => 'VARCHAR(45) NULL', 'details' => 'VARCHAR(500) NULL'),
             'admins' => array('is_active' => 'TINYINT(1) NOT NULL DEFAULT 1', 'full_name' => 'VARCHAR(140) NULL', 'created_at' => 'DATETIME NULL'),
             'kk_members' => array('status' => "VARCHAR(20) NOT NULL DEFAULT 'aktif'", 'status_changed_at' => 'DATETIME NULL', 'domicile_status' => 'VARCHAR(20) NULL', 'resident_since' => 'DATE NULL'),
+            'kk_families' => array('source' => "VARCHAR(20) NOT NULL DEFAULT 'pengajuan_warga'", 'verified_by' => 'INT UNSIGNED NULL', 'verified_at' => 'DATETIME NULL'),
+            'kk_scan_requests' => array('source' => "VARCHAR(20) NOT NULL DEFAULT 'warga'", 'created_by_admin' => 'INT UNSIGNED NULL', 'updated_at' => 'DATETIME NULL'),
             'citizens' => array('notify_email' => 'TINYINT(1) NOT NULL DEFAULT 0'),
             'complaints' => array('is_anonymous' => 'TINYINT(1) NOT NULL DEFAULT 0'),
         );
@@ -162,6 +187,17 @@ class Ops_model extends CI_Model
             foreach ($fields as $field => $definition) {
                 if (!$this->db->field_exists($field, $table)) $this->db->query('ALTER TABLE `' . $table . '` ADD COLUMN `' . $field . '` ' . $definition);
             }
+        }
+        // Master KK dapat berdiri tanpa akun login. Perubahan ini melonggarkan constraint, tidak mengubah atau menghapus data existing.
+        if ($this->db->table_exists('kk_families')) {
+            $owner = $this->db->query("SHOW COLUMNS FROM `kk_families` LIKE 'owner_citizen_id'")->row_array();
+            if ($owner && $owner['Null'] !== 'YES') $this->db->query('ALTER TABLE `kk_families` MODIFY `owner_citizen_id` INT UNSIGNED NULL');
+        }
+        if ($this->db->table_exists('kk_scan_requests')) {
+            $citizen = $this->db->query("SHOW COLUMNS FROM `kk_scan_requests` LIKE 'citizen_id'")->row_array();
+            if ($citizen && $citizen['Null'] !== 'YES') $this->db->query('ALTER TABLE `kk_scan_requests` MODIFY `citizen_id` INT UNSIGNED NULL');
+            $status = $this->db->query("SHOW COLUMNS FROM `kk_scan_requests` LIKE 'status'")->row_array();
+            if ($status && strpos($status['Type'], "'draft'") === FALSE) $this->db->query("ALTER TABLE `kk_scan_requests` MODIFY `status` ENUM('pending','approved','revision_requested','rejected','draft') NOT NULL DEFAULT 'pending'");
         }
         // Retire the former pengurus Super Admin role; server ownership is separate.
         $role = $this->db->query("SHOW COLUMNS FROM `admins` LIKE 'role'")->row_array();

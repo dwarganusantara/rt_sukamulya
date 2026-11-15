@@ -1,5 +1,46 @@
 <?php $open_count = 0; foreach ($items as $it) if (in_array($it['status'], $open, TRUE)) $open_count++; ?>
-<main class="letter-page cdx-page crd-page crd-ops"><div class="cdx-wrap">
+<link rel="stylesheet" href="<?= base_url('assets/mobile-warm.css') ?>?v=<?= filemtime(FCPATH.'assets/mobile-warm.css') ?>">
+<link rel="stylesheet" href="<?= base_url('assets/pengaduan-mobile.css') ?>?v=<?= filemtime(FCPATH.'assets/pengaduan-mobile.css') ?>">
+<main class="letter-page cdx-page crd-page crd-ops mw-page pgm-page">
+ <header class="mw-header mw-only"><?php $this->load->view('site/mobile_brand_header',array('settings'=>$settings??$this->Content_model->settings())); ?></header>
+ <?php
+ $pgh_group=function($status)use($open){
+  if(in_array($status,$open??array(),TRUE))return 'process';
+  if(in_array($status,array('resolved','closed'),TRUE))return 'done';
+  if($status==='rejected')return 'rejected';
+  return 'draft';
+ };
+ ?>
+ <section class="pgh mw-only" aria-labelledby="pgh-title">
+  <a class="pgh-back" href="<?= site_url('warga') ?>"><?= official_svg('back') ?><span>Kembali</span></a>
+  <section class="pgh-hero">
+   <span class="pgh-hero-icon" aria-hidden="true"><?= official_svg('megaphone') ?></span>
+   <h1 id="pgh-title">Riwayat <b>Pengaduan</b></h1>
+   <img src="<?= base_url('assets/img/letters/mw-req-scene.png') ?>" alt="" aria-hidden="true">
+  </section>
+  <div class="pgh-stats" aria-label="Ringkasan pengaduan">
+   <article><span><?= official_svg('doc') ?></span><div><small>Total</small><strong><?= count($items) ?></strong></div></article>
+   <article class="is-process"><span><?= official_svg('clock') ?></span><div><small>Diproses</small><strong><?= $open_count ?></strong></div></article>
+   <article class="is-done"><span><?= official_svg('check-circle') ?></span><div><small>Selesai</small><strong><?= count($items)-$open_count ?></strong></div></article>
+  </div>
+  <div class="pgh-tools">
+   <label class="pgh-search"><?= official_svg('search') ?><span class="sr-only">Cari pengaduan</span><input type="search" id="pgh-search" placeholder="Cari pengaduan..." autocomplete="off"></label>
+   <label class="pgh-filter"><?= official_svg('filter') ?><span>Filter</span><select id="pgh-filter" aria-label="Filter status"><option value="all">Semua</option><option value="process">Diproses</option><option value="done">Selesai</option><option value="rejected">Ditolak</option></select></label>
+  </div>
+  <ol class="pgh-list" id="pgh-list">
+   <?php foreach($items as $it): $pgh_status=$pgh_group($it['status']); ?>
+   <li data-pgh-status="<?= $pgh_status ?>" data-pgh-search="<?= html_escape(mb_strtolower($it['ticket_no'].' '.$it['title'].' '.($categories[$it['category']]??''),'UTF-8')) ?>">
+    <span class="pgh-ticket-icon" aria-hidden="true"><?= official_svg('doc') ?></span>
+    <div class="pgh-ticket-copy"><strong><?= html_escape($it['ticket_no']) ?></strong><span><?= html_escape($it['title']) ?></span><time datetime="<?= html_escape(substr($it['created_at'],0,10)) ?>"><?= official_svg('calendar') ?><?= ops_date($it['created_at']) ?></time></div>
+    <span class="pgh-badge is-<?= $pgh_status ?>"><?php if($pgh_status==='done'): ?><?= official_svg('check') ?><?php elseif($pgh_status==='process'): ?><?= official_svg('clock') ?><?php else: ?><?= official_svg('doc') ?><?php endif; ?><?= html_escape($labels[$it['status']]??$it['status']) ?></span>
+    <a class="pgh-detail" href="<?= site_url('warga/pengaduan/'.(int)$it['id']) ?>" aria-label="Lihat <?= html_escape($it['ticket_no']) ?>"><?= official_svg('chev-right') ?></a>
+   </li>
+   <?php endforeach; ?>
+  </ol>
+  <p class="pgh-empty" id="pgh-empty"<?= $items?' hidden':'' ?>><?= $items?'Tidak ada pengaduan yang cocok.':'Belum ada pengaduan. Buat laporan pertama Anda.' ?></p>
+  <a class="pgh-create" href="<?= site_url('warga/pengaduan/buat') ?>"><?= official_svg('plus') ?><span>Buat Pengaduan Baru</span></a>
+ </section>
+<div class="cdx-wrap">
  <?php $this->load->view('citizen/topbar', array('crumbs' => array(array('Beranda', 'warga'), array('Layanan Warga', 'warga/layanan'), array('Pengaduan & Aspirasi', '')))); ?>
  <section class="cdx-hero cpx-warm crd-hero"><span class="crd-hero-art" aria-hidden="true"><img src="<?= base_url('assets/mockup/announcement-hero-v2.png') ?>" alt=""></span><span class="cdx-hero-icon"><?= official_svg('megaphone') ?></span><div><h1>Pengaduan &amp; <b>Aspirasi</b></h1><p>Laporkan masalah lingkungan atau sampaikan usulan. Setiap laporan mendapat nomor tiket yang bisa Anda pantau.</p></div></section>
  <?php $this->load->view('citizen/ops/_flash'); ?>
@@ -18,3 +59,4 @@
   </tbody></table></div>
  </section>
 </div><?php $this->load->view('citizen/red_deco'); ?></main>
+<script src="<?= base_url('assets/complaint-history.js') ?>?v=<?= filemtime(FCPATH.'assets/complaint-history.js') ?>" defer></script>

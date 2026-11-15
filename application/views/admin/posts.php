@@ -1,6 +1,7 @@
 <?php $label=array('pengumuman'=>'Pengumuman','agenda'=>'Agenda Kegiatan','galeri'=>'Galeri Kegiatan')[$type]; ?>
 <?php if($type==='pengumuman'):
  $this->load->helper(array('official_icons','page_ui'));
+ $can_delete=in_array($this->session->userdata('admin_role'),array('admin','ketua'),TRUE);
  $short=array(1=>'Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des');
  $st_label=array('published'=>array('Dipublikasikan','ok'),'pending'=>array('Menunggu','warn'),'draft'=>array('Draf','muted'));
  $base_url_q=function($extra){return site_url('admin/posts/pengumuman').'?'.http_build_query($extra);};
@@ -40,6 +41,10 @@
       <a href="<?= site_url('admin/post/pengumuman/'.$post['id']) ?>"><?= official_svg('pencil') ?>Edit pengumuman</a>
       <?php if($post['status']==='published'): ?><a href="<?= site_url('pengumuman/'.$post['id']) ?>" target="_blank" rel="noopener"><?= official_svg('eye') ?>Lihat di website</a><?php endif; ?>
       <a href="<?= site_url('admin/post/pengumuman') ?>"><?= official_svg('plus') ?>Tambah pengumuman baru</a>
+      <?php if($can_delete): ?><form method="post" action="<?= site_url('admin/post/pengumuman/'.$post['id'].'/hapus') ?>" onsubmit="return confirm('Hapus pengumuman ini? Tindakan ini tidak dapat dibatalkan.')">
+       <input type="hidden" name="<?= html_escape($this->security->get_csrf_token_name()) ?>" value="<?= html_escape($this->security->get_csrf_hash()) ?>">
+       <button class="pg-menu-danger" type="submit"><?= official_svg('trash') ?>Hapus pengumuman</button>
+      </form><?php endif; ?>
      </div></details>
     </div></td>
    </tr>
@@ -50,6 +55,7 @@
 </div>
 <?php elseif($type==='agenda'): ?>
 <link rel="stylesheet" href="<?= base_url('assets/admin-agenda-v2.css') ?>?v=<?= filemtime(FCPATH.'assets/admin-agenda-v2.css') ?>">
+<?php $this->load->helper('official_icons'); $can_delete=in_array($this->session->userdata('admin_role'),array('admin','ketua'),TRUE); ?>
 <div class="agenda-admin">
  <nav class="agenda-breadcrumb"><a href="<?= site_url('admin') ?>">Beranda</a><span>›</span><a href="<?= site_url('admin/posts/agenda') ?>">Konten</a><span>›</span><strong>Agenda Kegiatan</strong></nav>
  <section class="agenda-hero"><div class="agenda-title"><b>▦</b><div><span>KELOLA KONTEN</span><h1>Agenda Kegiatan</h1><p><?= (int)$total ?> konten tersedia dan dapat dikelola.</p></div></div><a href="<?= site_url('admin/post/agenda') ?>">＋ &nbsp; Tambah Konten</a></section>
@@ -61,19 +67,40 @@
   <label><span>⇅</span><select name="sort"><option value="newest" <?= $sort==='newest'?'selected':'' ?>>Terbaru</option><option value="oldest" <?= $sort==='oldest'?'selected':'' ?>>Terlama</option><option value="title" <?= $sort==='title'?'selected':'' ?>>Judul A–Z</option></select></label><button type="submit">Filter</button>
  </form>
  <section class="agenda-table-card"><div class="agenda-table-scroll"><table><thead><tr><th>Foto</th><th>Judul &amp; Keterangan</th><th>Jadwal</th><th>Lokasi</th><th>Status</th><th>Aksi</th></tr></thead><tbody>
- <?php foreach($posts as $post): ?><tr><td><?php if($post['image']): ?><img src="<?= base_url(html_escape($post['image'])) ?>" alt=""><?php else: ?><span class="agenda-no-image">▧</span><?php endif; ?></td><td><strong><?= html_escape($post['title']) ?></strong><p><?= html_escape(character_limiter(trim(strip_tags($post['body'])),125)) ?></p></td><td><span class="agenda-date"><b>▦</b><span><?= $post['event_date']?date('d M Y',strtotime($post['event_date'])):'Tanggal belum diisi' ?><small><?= $post['event_time']?html_escape(substr($post['event_time'],0,5)).' WIB':'Waktu belum diisi' ?></small></span></span></td><td><span class="agenda-location">⌖ <span><?= html_escape($post['event_location']?:'Lokasi belum diisi') ?></span></span></td><td><span class="agenda-status <?= html_escape($post['status']) ?>"><i></i><?= $post['status']==='published'?'Dipublikasikan':($post['status']==='pending'?'Menunggu':'Draf') ?></span></td><td><div class="agenda-actions"><a class="edit" href="<?= site_url('admin/post/agenda/'.$post['id']) ?>">✎ &nbsp; Edit</a><a class="more" href="<?= site_url('admin/post/agenda/'.$post['id']) ?>" aria-label="Menu agenda <?= html_escape($post['title']) ?>">⋮</a></div></td></tr><?php endforeach; ?>
+ <?php foreach($posts as $post): ?><tr><td><?php if($post['image']): ?><img src="<?= base_url(html_escape($post['image'])) ?>" alt=""><?php else: ?><span class="agenda-no-image">▧</span><?php endif; ?></td><td><strong><?= html_escape($post['title']) ?></strong><p><?= html_escape(character_limiter(trim(strip_tags($post['body'])),125)) ?></p></td><td><span class="agenda-date"><b>▦</b><span><?= $post['event_date']?date('d M Y',strtotime($post['event_date'])):'Tanggal belum diisi' ?><small><?= $post['event_time']?html_escape(substr($post['event_time'],0,5)).' WIB':'Waktu belum diisi' ?></small></span></span></td><td><span class="agenda-location">⌖ <span><?= html_escape($post['event_location']?:'Lokasi belum diisi') ?></span></span></td><td><span class="agenda-status <?= html_escape($post['status']) ?>"><i></i><?= $post['status']==='published'?'Dipublikasikan':($post['status']==='pending'?'Menunggu':'Draf') ?></span></td><td><div class="agenda-actions"><a class="edit" href="<?= site_url('admin/post/agenda/'.$post['id']) ?>">✎ &nbsp; Edit</a><details class="pg-menu agenda-more"><summary aria-label="Menu lain untuk <?= html_escape($post['title']) ?>">⋮</summary><div>
+       <a href="<?= site_url('admin/post/agenda/'.$post['id']) ?>"><?= official_svg('pencil') ?>Edit agenda</a>
+       <?php if($post['status']==='published'): ?><a href="<?= site_url('agenda/'.$post['id']) ?>" target="_blank" rel="noopener"><?= official_svg('eye') ?>Lihat di website</a><?php endif; ?>
+       <a href="<?= site_url('admin/post/agenda') ?>"><?= official_svg('plus') ?>Tambah agenda baru</a>
+       <?php if($can_delete): ?><form method="post" action="<?= site_url('admin/post/agenda/'.$post['id'].'/hapus') ?>" onsubmit="return confirm('Hapus agenda ini? Tindakan ini tidak dapat dibatalkan.')">
+        <input type="hidden" name="<?= html_escape($this->security->get_csrf_token_name()) ?>" value="<?= html_escape($this->security->get_csrf_hash()) ?>">
+        <button class="pg-menu-danger" type="submit"><?= official_svg('trash') ?>Hapus agenda</button>
+       </form><?php endif; ?>
+      </div></details></div></td></tr><?php endforeach; ?>
  <?php if(!$posts): ?><tr><td colspan="6" class="agenda-empty">Tidak ada agenda yang cocok dengan pencarian atau filter.</td></tr><?php endif; ?>
  </tbody></table></div><footer>Menampilkan <?= count($posts) ?> dari <?= (int)$total ?> konten</footer></section>
 </div>
+<script>
+/* Menu titik-tiga agenda: dropdown fixed agar tidak terpotong kontainer tabel yang bisa di-scroll. */
+(function(){
+ function place(d){var s=d.querySelector('summary'),m=d.querySelector('div');if(!s||!m)return;var r=s.getBoundingClientRect(),w=m.offsetWidth,h=m.offsetHeight;
+  var top=r.bottom+6;if(top+h>window.innerHeight-8)top=Math.max(8,r.top-h-6);m.style.top=top+'px';m.style.left=Math.max(8,Math.min(r.right-w,window.innerWidth-w-8))+'px';m.style.right='auto';}
+ document.querySelectorAll('.agenda-more').forEach(function(d){d.addEventListener('toggle',function(){if(d.open){document.querySelectorAll('.agenda-more[open]').forEach(function(o){if(o!==d)o.open=false;});place(d);}});});
+ function closeAll(){document.querySelectorAll('.agenda-more[open]').forEach(function(o){o.open=false;});}
+ window.addEventListener('resize',closeAll);document.addEventListener('scroll',closeAll,true);
+ document.addEventListener('click',function(e){if(!e.target.closest('.agenda-more'))closeAll();});
+})();
+</script>
 <?php else: ?>
 <link rel="stylesheet" href="<?= base_url('assets/admin-gallery-v3.css') ?>?v=<?= filemtime(FCPATH.'assets/admin-gallery-v3.css') ?>">
 <?php
+$this->load->helper('official_icons');
+$can_delete=in_array($this->session->userdata('admin_role'),array('admin','ketua'),TRUE);
 $galleryCategory=function($post){$text=mb_strtolower(($post['title']??'').' '.($post['body']??''));if(preg_match('/kerja bakti|gotong royong|bersih lingkungan/u',$text))return array('Lingkungan','leaf');if(preg_match('/lomba|turnamen|kompetisi|pertandingan/u',$text))return array('Pendidikan','trophy');if(preg_match('/pengajian|keagamaan|maulid|isra|idul|kajian/u',$text))return array('Sosial','people');if(preg_match('/posyandu|santunan|donor|kesehatan/u',$text))return array('Kesehatan','heart');return array('Kegiatan','calendar');};
 ?>
 <div class="gallery-admin-v3">
  <section class="gallery-hero-v3"><div class="gallery-title-v3"><b>◉</b><div><span>KELOLA KONTEN</span><h1>Galeri Kegiatan</h1><p><?= (int)$total ?> konten tersedia dan dapat dikelola.</p></div></div></section>
  <form class="gallery-filter-v3" method="get" action="<?= site_url('admin/posts/galeri') ?>"><label class="gallery-search-v3"><span>⌕</span><input type="search" name="q" value="<?= html_escape($q) ?>" placeholder="Cari judul kegiatan..."></label><label><span>▦</span><select name="date_scope"><option value="" <?= $date_scope===''?'selected':'' ?>>Semua Tanggal</option><option value="month" <?= $date_scope==='month'?'selected':'' ?>>Bulan Ini</option><option value="year" <?= $date_scope==='year'?'selected':'' ?>>Tahun Ini</option></select></label><label><span>●</span><select name="status"><option value="" <?= $status===''?'selected':'' ?>>Semua Status</option><option value="published" <?= $status==='published'?'selected':'' ?>>Dipublikasikan</option><option value="pending" <?= $status==='pending'?'selected':'' ?>>Menunggu</option><option value="draft" <?= $status==='draft'?'selected':'' ?>>Draf</option></select></label><label><span>⇅</span><select name="sort"><option value="newest" <?= $sort==='newest'?'selected':'' ?>>Terbaru</option><option value="oldest" <?= $sort==='oldest'?'selected':'' ?>>Terlama</option><option value="title" <?= $sort==='title'?'selected':'' ?>>Judul A–Z</option></select></label><button type="submit">Filter</button><a class="gallery-upload-v3" href="<?= site_url('admin/post/galeri') ?>">＋ &nbsp; Upload Foto</a></form>
- <div class="gallery-grid-v3"><?php foreach($posts as $post): $category=$galleryCategory($post); ?><article class="gallery-card-v3"><div class="gallery-photo-v3"><?php if($post['image']): ?><img src="<?= base_url(html_escape($post['image'])) ?>" alt="<?= html_escape($post['title']) ?>"><?php else: ?><span>▧</span><?php endif; ?><time>▦ &nbsp; <?= date('d M Y',strtotime($post['created_at'])) ?></time><a href="<?= site_url('admin/post/galeri/'.$post['id']) ?>" aria-label="Menu <?= html_escape($post['title']) ?>">⋮</a></div><div class="gallery-card-body-v3"><span class="gallery-category-v3 <?= $category[1] ?>"><?= html_escape($category[0]) ?></span><h2><?= html_escape($post['title']) ?></h2><p><?= html_escape(mb_strimwidth(trim(preg_replace('/\s+/u',' ',strip_tags($post['body']))),0,145,'…')) ?></p><footer><?php if($post['image']): ?><a class="view" href="<?= base_url(html_escape($post['image'])) ?>" target="_blank" rel="noopener">◉ &nbsp; Lihat</a><?php endif; ?><a class="edit" href="<?= site_url('admin/post/galeri/'.$post['id']) ?>">✎ &nbsp; Edit</a><a class="more" href="<?= site_url('admin/post/galeri/'.$post['id']) ?>" aria-label="Menu galeri">⋮</a></footer></div></article><?php endforeach; ?><?php if(!$posts): ?><div class="gallery-empty-v3">Tidak ada foto kegiatan yang cocok dengan pencarian atau filter.</div><?php endif; ?></div>
+ <div class="gallery-grid-v3"><?php foreach($posts as $post): $category=$galleryCategory($post); ?><article class="gallery-card-v3"><div class="gallery-photo-v3"><?php if($post['image']): ?><img src="<?= base_url(html_escape($post['image'])) ?>" alt="<?= html_escape($post['title']) ?>"><?php else: ?><span>▧</span><?php endif; ?><time>▦ &nbsp; <?= date('d M Y',strtotime($post['created_at'])) ?></time><a href="<?= site_url('admin/post/galeri/'.$post['id']) ?>" aria-label="Edit <?= html_escape($post['title']) ?>">⋮</a></div><div class="gallery-card-body-v3"><span class="gallery-category-v3 <?= $category[1] ?>"><?= html_escape($category[0]) ?></span><h2><?= html_escape($post['title']) ?></h2><p><?= html_escape(mb_strimwidth(trim(preg_replace('/\s+/u',' ',strip_tags($post['body']))),0,145,'…')) ?></p><footer><?php if($post['image']): ?><a class="view" href="<?= base_url(html_escape($post['image'])) ?>" target="_blank" rel="noopener">◉ &nbsp; Lihat</a><?php endif; ?><a class="edit" href="<?= site_url('admin/post/galeri/'.$post['id']) ?>">✎ &nbsp; Edit</a><?php if($can_delete): ?><form method="post" action="<?= site_url('admin/post/galeri/'.$post['id'].'/hapus') ?>" onsubmit="return confirm('Hapus foto galeri ini? Foto dan datanya akan dihapus permanen.')"><input type="hidden" name="<?= html_escape($this->security->get_csrf_token_name()) ?>" value="<?= html_escape($this->security->get_csrf_hash()) ?>"><button class="delete" type="submit"><?= official_svg('trash') ?>Hapus</button></form><?php endif; ?></footer></div></article><?php endforeach; ?><?php if(!$posts): ?><div class="gallery-empty-v3">Tidak ada foto kegiatan yang cocok dengan pencarian atau filter.</div><?php endif; ?></div>
  <footer class="gallery-count-v3">Menampilkan <?= count($posts) ?> dari <?= (int)$total ?> konten</footer>
 </div>
 <?php endif; ?>

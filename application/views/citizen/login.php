@@ -29,6 +29,9 @@ $line1=implode(' ',array_slice($words,0,$half));$line2=implode(' ',array_slice($
    <span><b><?= html_escape($line1) ?></b><?php if($line2!==''): ?><b><?= html_escape($line2) ?></b><?php endif; ?><small><?= html_escape($rt_label.' '.$rt_area) ?></small></span>
   </a>
   <section class="lw4-card" aria-labelledby="lw4-title">
+   <?php /* Identitas versi HP (kartu kaca): logo, nama aplikasi, pil RT, subjudul. Desktop memakai .lw4-brand di atas. */ ?>
+   <a class="lw4-mbrand" href="<?= site_url() ?>"><span class="lw4-mlogo"><img src="<?= base_url(html_escape($logo)) ?>" alt=""></span><span class="lw4-mtx"><b>RT/RW Digital</b><em><?= html_escape($rt_label) ?></em><small><?= html_escape($rt_area) ?></small></span></a>
+   <div class="lw4-panel">
    <header class="lw4-head">
     <div><h1 id="lw4-title">Masuk ke <span>Portal Warga<svg class="lw4-spark" viewBox="0 0 30 22" aria-hidden="true"><path d="M8 10 4 2M15 9l2-8M20 14l8-3"/></svg></span></h1>
     <p>Akses layanan dan informasi lingkungan RT dengan mudah, cepat, dan terintegrasi.</p></div>
@@ -47,6 +50,8 @@ $line1=implode(' ',array_slice($words,0,$half));$line2=implode(' ',array_slice($
    </form>
    <p class="lw4-switch">Belum memiliki akun? <a href="<?= site_url('warga/daftar') ?>">Daftar di sini</a></p>
    <svg class="lw4-deco" viewBox="0 0 440 110" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><path d="M0 70c80-30 170-36 250-22s140 6 190-14v76H0z" fill="#ffe2bf"/><path d="M0 88c90-18 190-20 280-8s120 2 160-8v38H0z" fill="#ffd09a"/><g fill="#ff9a2e"><circle cx="70" cy="44" r="16"/><rect x="68" y="56" width="4" height="22"/><circle cx="104" cy="58" r="9" opacity=".7"/><rect x="103" y="64" width="2" height="12" opacity=".7"/><circle cx="378" cy="42" r="17"/><rect x="376" y="55" width="4" height="23"/></g><g fill="#ff7a00"><path d="M172 48l32-26 32 26v36h-64z"/><path d="M226 56l26-20 26 20v28h-52z"/></g><g fill="#fff3e3"><rect x="184" y="58" width="12" height="11"/><rect x="210" y="58" width="12" height="11"/><rect x="246" y="62" width="10" height="9"/></g><path d="M166 50l38-31 38 31M222 58l30-24 30 24" stroke="#e65f00" stroke-width="5" fill="none" stroke-linejoin="round"/></svg>
+   <svg class="lw4-mdeco" viewBox="0 0 400 120" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><path d="M0 78c70-14 150-16 220-6s130 6 180-6v54H0z" fill="#fde6c4"/><g><rect x="57" y="40" width="3" height="40" fill="#8a5a2b"/><circle cx="58.5" cy="34" r="17" fill="#7cc142"/><rect x="342" y="40" width="3" height="40" fill="#8a5a2b"/><circle cx="343.5" cy="34" r="17" fill="#7cc142"/></g><g fill="#ff9a3c"><path d="M86 66l20-16 20 16v20H86z"/><path d="M276 66l20-16 20 16v20h-40z"/></g><g fill="#ff7a00"><path d="M150 54l34-28 34 28v36h-68z"/><path d="M206 62l24-19 24 19v28h-48z"/></g><path d="M144 56l40-33 40 33M202 64l28-22 28 22" stroke="#e65f00" stroke-width="5" fill="none" stroke-linejoin="round"/><g fill="#fff3e3"><rect x="162" y="62" width="11" height="10"/><rect x="186" y="62" width="11" height="10"/><rect x="224" y="68" width="9" height="9"/><rect x="99" y="70" width="8" height="7"/><rect x="289" y="70" width="8" height="7"/></g><path d="M0 92c80-22 170-24 250-12s110 6 150-6v46H0z" fill="#7cc142"/><path d="M0 102c90-16 190-18 270-8s100 4 130-4v30H0z" fill="#f7a21b"/><path d="M0 110c100-12 200-12 290-4s80 2 110-2v16H0z" fill="#ffd28a"/></svg>
+   </div>
   </section>
  </div>
 </main>

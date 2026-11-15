@@ -10,7 +10,7 @@ class Kegiatan extends Ops_Controller
     public static $program_tones = array('draft' => 'muted', 'diajukan' => 'pending', 'aktif' => 'info', 'ditunda' => 'purple', 'selesai' => 'ok', 'dibatalkan' => 'bad');
     private $program_categories = array('lingkungan' => 'Lingkungan & Kebersihan', 'keamanan' => 'Keamanan', 'sosial' => 'Sosial & Kemasyarakatan', 'infrastruktur' => 'Infrastruktur', 'kesehatan' => 'Kesehatan', 'administrasi' => 'Administrasi', 'lainnya' => 'Lainnya');
     private $program_flow = array('draft' => array('diajukan', 'dibatalkan'), 'diajukan' => array('aktif', 'draft'), 'aktif' => array('ditunda', 'selesai', 'dibatalkan'), 'ditunda' => array('aktif', 'dibatalkan'));
-    public static $note_labels = array('draft' => 'Draf', 'final' => 'Menunggu Pengesahan', 'disahkan' => 'Disahkan');
+    public static $note_labels = array('draft' => 'Draf', 'final' => 'Menunggu Pengesahan', 'disahkan' => 'Terbit'); // REVISI: notulen langsung terbit tanpa pengesahan; 'final' hanya untuk data lama
     public static $note_tones = array('draft' => 'muted', 'final' => 'pending', 'disahkan' => 'ok');
     public static $action_labels = array('open' => 'Belum Dikerjakan', 'in_progress' => 'Berjalan', 'done' => 'Selesai', 'cancelled' => 'Dibatalkan');
     public static $action_tones = array('open' => 'pending', 'in_progress' => 'info', 'done' => 'ok', 'cancelled' => 'muted');
@@ -160,7 +160,7 @@ class Kegiatan extends Ops_Controller
         $id = (int) $id;
         $item = $id ? $this->db->get_where('activity_notes', array('id' => $id))->row_array() : NULL;
         if ($id && !$item) show_404();
-        if ($item && $item['status'] === 'disahkan') $this->back('admin/notulen/' . $id, '', 'Notulen yang sudah disahkan dikunci. Gunakan "Buka Revisi" untuk mengubahnya.');
+        // REVISI: notulen yang sudah terbit tetap bisa diubah; setiap perubahan disimpan sebagai versi baru (riwayat tetap ada).
         $error = '';
         $agenda_id = (int) $this->input->get('agenda');
         if ($this->input->method(TRUE) === 'POST') {
@@ -168,15 +168,21 @@ class Kegiatan extends Ops_Controller
                 'program_id' => (int) $this->input->post('program_id') ?: NULL, 'location' => $this->str('location', 160), 'participants' => $this->str('participants', 1000),
                 'participant_count' => max(0, (int) $this->input->post('participant_count')), 'summary' => $this->text('summary', 8000), 'decisions' => $this->text('decisions', 8000),
                 'obstacles' => $this->text('obstacles', 3000), 'updated_at' => date('Y-m-d H:i:s'));
-            $data['status'] = $this->input->post('finalize') ? 'final' : 'draft';
-            if (mb_strlen($data['title']) < 3 || !$data['note_date']) $error = 'Judul kegiatan dan tanggal wajib diisi.';
+            // REVISI: status dari pilihan "Status Notulen" (final = diajukan untuk pengesahan, draft = draf). Checkbox lama tetap didukung.
+            $choice = (string) $this->input->post('save_as');
+            $data['status'] = ($choice === 'final' || ($choice === '' && $this->input->post('finalize'))) ? 'final' : 'draft';
+            if (mb_strlen($data['title']) < 3 || !$data['note_date']) $error = 'Tanggal kegiatan dan judul kegiatan / rapat wajib diisi.';
+            elseif ($data['status'] === 'final' && $data['participant_count'] < 1) $error = 'Isi jumlah peserta (minimal 1).';
+            elseif ($data['status'] === 'final' && mb_strlen(trim($data['summary'])) < 5) $error = 'Isi ringkasan hasil kegiatan (minimal 5 karakter).';
             elseif ($data['agenda_id'] && !$this->db->get_where('posts', array('id' => $data['agenda_id'], 'type' => 'agenda'))->row_array()) $error = 'Agenda tidak valid.';
             elseif ($data['program_id'] && !$this->db->get_where('work_programs', array('id' => $data['program_id']))->row_array()) $error = 'Program tidak valid.';
+            // REVISI: "Simpan sebagai Notulen" = langsung terbit (status disahkan), tanpa langkah pengesahan.
+            if (!$error && $data['status'] === 'final') $data = array_merge($data, array('status' => 'disahkan', 'approved_by' => $this->admin_id, 'approved_at' => date('Y-m-d H:i:s')));
+            if (!$error && $data['status'] === 'draft') $data = array_merge($data, array('approved_by' => NULL, 'approved_at' => NULL));
             if (!$error) {
                 $this->atomic(function () use (&$id, $item, $data) {
                     if ($id) {
                         $current = $this->lock('activity_notes', $id);
-                        if ($current['status'] === 'disahkan') throw new RuntimeException('Notulen sudah disahkan.');
                         // Versi sebelumnya disimpan utuh; revisi tidak menimpa tanpa histori.
                         $this->db->insert('activity_note_versions', array('note_id' => $id, 'version' => (int) $current['version'], 'snapshot_json' => json_encode($current, JSON_UNESCAPED_UNICODE), 'changed_by' => $this->admin_id));
                         $this->db->where('id', $id)->update('activity_notes', $data + array('version' => (int) $current['version'] + 1));
@@ -186,7 +192,7 @@ class Kegiatan extends Ops_Controller
                     }
                 });
                 $this->audit($item ? 'update' : 'create', 'notulen:' . $id, $data['status']);
-                $this->back('admin/notulen/' . $id, 'Notulen disimpan' . ($data['status'] === 'final' ? ' dan diajukan untuk pengesahan.' : ' sebagai draf.'));
+                $this->back('admin/notulen/' . $id, $data['status'] === 'disahkan' ? 'Notulen disimpan dan langsung terbit.' : 'Notulen disimpan sebagai draf. Lengkapi lalu simpan sebagai notulen bila sudah siap.');
             }
             $item = array_merge($item ?: array(), $data);
         } elseif (!$item && $agenda_id) {
@@ -214,8 +220,9 @@ class Kegiatan extends Ops_Controller
                 $this->atomic(function () use ($id, $act) {
                     $n = $this->lock('activity_notes', $id);
                     if ($act === 'approve') {
-                        $this->need('notulen.approve');
-                        if ($n['status'] !== 'final') throw new RuntimeException('Hanya notulen berstatus "Menunggu Pengesahan" yang dapat disahkan.');
+                        // REVISI: "Terbitkan" untuk draf / data lama yang masih menunggu pengesahan; cukup hak tulis notulen.
+                        $this->need('notulen.write');
+                        if ($n['status'] === 'disahkan') throw new RuntimeException('Notulen sudah terbit.');
                         $this->db->where('id', $id)->update('activity_notes', array('status' => 'disahkan', 'approved_by' => $this->admin_id, 'approved_at' => date('Y-m-d H:i:s')));
                     } elseif ($act === 'reopen') {
                         $this->need('notulen.approve');
@@ -282,18 +289,19 @@ class Kegiatan extends Ops_Controller
                 } elseif ($act === 'attendance') {
                     $sid = (int) $this->input->post('schedule_id');
                     $status = $this->choice('attendance', self::$attendance);
+                    // REVISI: ubah kehadiran sekali klik; alasan opsional (perubahan tetap tercatat di audit).
                     $note = $this->str('attendance_note', 255);
-                    if (!$status || mb_strlen($note) < 3) throw new RuntimeException('Pilih status kehadiran dan isi alasan perubahan manual (minimal 3 karakter).');
+                    if (!$status) throw new RuntimeException('Pilih status kehadiran.');
                     $sub = $this->str('substitute_name', 140);
                     if ($status === 'diganti' && $sub === '') throw new RuntimeException('Isi nama petugas pengganti.');
                     $this->atomic(function () use ($sid, $status, $note, $sub) {
                         $s = $this->lock('patrol_schedules', $sid);
                         if (!$s) throw new RuntimeException('Jadwal tidak ditemukan.');
-                        $this->db->where('id', $sid)->update('patrol_schedules', array('attendance' => $status, 'attendance_note' => $note, 'substitute_name' => $sub,
+                        $this->db->where('id', $sid)->update('patrol_schedules', array('attendance' => $status, 'attendance_note' => $note !== '' ? $note : (string) $s['attendance_note'], 'substitute_name' => $status === 'diganti' ? $sub : (string) $s['substitute_name'],
                             'marked_by_admin' => $this->admin_id, 'updated_at' => date('Y-m-d H:i:s')));
                         $this->audit('attendance_manual', 'patrol:' . $sid, $s['attendance'] . '->' . $status . ' alasan: ' . $note);
                     });
-                    $this->back('admin/ronda?dari=' . $from, 'Kehadiran diperbarui (tercatat di audit).');
+                    $this->back('admin/ronda?dari=' . $from, 'Kehadiran diperbarui: ' . self::$attendance[$status] . '.');
                 } elseif ($act === 'delete') {
                     $sid = (int) $this->input->post('schedule_id');
                     $s = $this->db->get_where('patrol_schedules', array('id' => $sid))->row_array();
@@ -310,8 +318,19 @@ class Kegiatan extends Ops_Controller
         $recap = $this->db->query("SELECT attendance, COUNT(*) n FROM patrol_schedules WHERE patrol_date BETWEEN ? AND ? GROUP BY attendance", array(date('Y-m-01'), date('Y-m-t')))->result_array();
         $citizens = array();
         foreach ($this->db->select('id,display_name,full_name')->where('is_active', 1)->order_by('display_name')->get('citizens')->result_array() as $c) $citizens[(int) $c['id']] = $c['full_name'] ?: $c['display_name'];
-        $incidents = $this->db->order_by('incident_at', 'DESC')->limit(10)->get('incident_reports')->result_array();
-        $this->render('ronda_index', array('items' => $items, 'from' => $from, 'to' => $to, 'recap' => array_column($recap, 'n', 'attendance'), 'citizens' => $citizens, 'incidents' => $incidents,
+        $incidents = $this->db->order_by('incident_at', 'DESC')->limit(5)->get('incident_reports')->result_array();
+        // REVISI: ringkasan & rekap kehadiran PEKAN INI (Senin–Minggu berjalan).
+        $wk_from = date('Y-m-d', strtotime('monday this week')); $wk_to = date('Y-m-d', strtotime($wk_from . ' +6 days'));
+        $wk = $this->db->select('attendance, officer_name')->where('patrol_date >=', $wk_from)->where('patrol_date <=', $wk_to)->get('patrol_schedules')->result_array();
+        $week = array('total' => count($wk), 'officers' => count(array_unique(array_map('mb_strtolower', array_column($wk, 'officer_name')))), 'hadir' => 0, 'tidak_hadir' => 0, 'scheduled' => 0, 'lain' => 0, 'from' => $wk_from, 'to' => $wk_to);
+        foreach ($wk as $w) {
+            if (in_array($w['attendance'], array('hadir', 'terlambat'), TRUE)) $week['hadir']++;
+            elseif ($w['attendance'] === 'tidak_hadir') $week['tidak_hadir']++;
+            elseif ($w['attendance'] === 'scheduled') $week['scheduled']++;
+            else $week['lain']++;
+        }
+        $week['pct'] = $week['total'] ? (int) round(100 * $week['hadir'] / $week['total']) : 0;
+        $this->render('ronda_index', array('items' => $items, 'from' => $from, 'to' => $to, 'recap' => array_column($recap, 'n', 'attendance'), 'citizens' => $citizens, 'incidents' => $incidents, 'week' => $week,
             'error' => $error, 'shifts' => self::$shifts, 'attendance' => self::$attendance, 'attendance_tones' => self::$attendance_tones, 'incident_categories' => $this->incident_categories));
     }
 
@@ -327,6 +346,26 @@ class Kegiatan extends Ops_Controller
             'description' => $desc, 'action_taken' => $this->text('action_taken', 3000), 'schedule_id' => (int) $this->input->post('schedule_id') ?: NULL, 'reported_by_admin' => $this->admin_id));
         $this->audit('create', 'incident:' . $this->db->insert_id());
         $this->back('admin/ronda', 'Laporan kejadian dicatat.');
+    }
+
+    /** Daftar program kerja yang sudah dipublikasikan untuk warga (baca-saja). */
+    public function program_warga()
+    {
+        $this->guard_citizen();
+        $visible = array('aktif', 'ditunda', 'selesai');
+        $items = $this->db->where('deleted_at IS NULL', NULL, FALSE)->where_in('status', $visible)
+            ->order_by("FIELD(status,'aktif','ditunda','selesai')", '', FALSE)->order_by('period_start', 'DESC')
+            ->get('work_programs')->result_array();
+        $counts = array_fill_keys($visible, 0);
+        foreach ($items as $item) $counts[$item['status']]++;
+        $this->render_citizen('program_warga', 'Program Kerja', array(
+            'items' => $items,
+            'counts' => $counts,
+            'labels' => self::$program_labels,
+            'tones' => self::$program_tones,
+            'categories' => $this->program_categories,
+            'shell_active' => 'program'
+        ));
     }
 
     /** Warga melihat jadwal ronda dan melakukan check-in/out untuk jadwal miliknya sendiri. */

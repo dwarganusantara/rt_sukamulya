@@ -17,13 +17,16 @@ $directory=array(
     : array('profil','info-card-profil.png','profile','Profil Lingkungan','Informasi lengkap struktur, wilayah, dan data warga.'),
 );
 ?>
-<main class="inf-page crd-page crd-info">
+<link rel="stylesheet" href="<?= base_url('assets/mobile-warm.css') ?>?v=<?= filemtime(FCPATH.'assets/mobile-warm.css') ?>">
+<main class="inf-page crd-page crd-info mw-page">
+  <header class="mw-header mw-only"><?php $this->load->view('site/mobile_brand_header',array('settings'=>$settings)); ?></header>
   <section class="inf-hero">
     <img class="inf-leaf" src="<?= base_url('assets/mockup/info-hero-leaf.png') ?>" alt="">
     <img class="inf-art" src="<?= base_url(html_escape($settings['information_page_image']??'assets/mockup/info-hero-art.png')) ?>" alt="Warga <?= html_escape($rt_label.' '.$rt_area) ?> menyapa di depan gerbang lingkungan">
     <div class="inf-copy">
+      <a class="anx-back mw-only" href="<?= site_url($this->session->userdata('citizen_id')?'warga':'') ?>"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>Kembali</a>
       <span>INFORMASI LINGKUNGAN</span>
-      <h1>Informasi Warga</h1>
+      <h1>Informasi <b>Warga</b></h1>
       <i class="inf-rule" aria-hidden="true"></i>
       <p>Temukan berbagai informasi penting seputar lingkungan, layanan warga, keuangan RT, agenda kegiatan, dan profil wilayah dalam satu tempat yang mudah diakses.</p>
     </div>

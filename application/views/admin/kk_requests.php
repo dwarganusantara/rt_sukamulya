@@ -15,12 +15,20 @@ $tab_icons=array('pending'=>'file','approved'=>'check','revision_requested'=>'ed
 ?>
 <link rel="stylesheet" href="<?= base_url('assets/admin-kk.css') ?>?v=<?= filemtime(FCPATH.'assets/admin-kk.css') ?>">
 <div class="akk">
-<nav class="akk-crumb" aria-label="Breadcrumb"><a href="<?= site_url('admin') ?>"><?= family_icon('home') ?>Beranda</a><?= family_icon('chevron-right') ?><span aria-current="page">Verifikasi KK</span></nav>
+<nav class="akk-crumb" aria-label="Breadcrumb"><a href="<?= site_url('admin') ?>"><?= family_icon('home') ?>Beranda</a><?= family_icon('chevron-right') ?><span aria-current="page">Pengajuan &amp; Verifikasi KK</span></nav>
 
-<header class="akk-hero">
- <span class="akk-hero-orb"><?= family_icon('people') ?></span>
- <div class="akk-hero-copy"><h1>Verifikasi Data Keluarga</h1><p>Periksa dan setujui pengajuan data Kartu Keluarga (KK) dari warga.</p></div>
- <div class="akk-hero-art" aria-hidden="true"><div class="akk-hero-doc"><?= family_document_art() ?><span><?= family_icon('check') ?></span></div><img src="<?= base_url('assets/mockup/chat-admin-avatar.png') ?>" alt=""></div>
+<?php
+// Banner: bila ilustrasi lengkap sesuai mockup sudah disimpan, pakai itu; jika belum, susun dari aset yang ada
+// (kartu KK di kiri + suasana warga di gapura RT di kanan).
+$kk_hero_file = 'assets/img/family/kk-verify-hero.png';
+$kk_hero_full = is_file(FCPATH . $kk_hero_file);
+$kk_scene = $kk_hero_full ? $kk_hero_file . '?v=' . filemtime(FCPATH . $kk_hero_file) : 'assets/mockup/home-hero-v4.png';
+?>
+<header class="akk-hero2<?= $kk_hero_full ? ' is-full' : '' ?>" style="--scene:url('<?= html_escape(base_url($kk_scene)) ?>')">
+ <?php if (!$kk_hero_full): ?><img class="akk-hero2-card" src="<?= base_url('assets/img/family/mw-kk-hero.png') ?>" alt="" aria-hidden="true"><?php endif; ?>
+ <div class="akk-hero2-copy"><h1>Pengajuan &amp; Verifikasi KK</h1><p>Periksa dan setujui pengajuan data Kartu Keluarga (KK) dari warga.</p><i aria-hidden="true"></i></div>
+ <span class="akk-hero2-scene" aria-hidden="true"></span>
+ <svg class="akk-hero2-wave" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 34C180 6 330 52 520 36s340-40 520-18 160 20 160 20v22H0z" fill="#ffd2b0"/><path d="M0 46c200-20 360 18 560 8s380-30 640-6v12H0z" fill="#ff8a3d"/></svg>
 </header>
 
 <?php if($msg=$this->session->flashdata('kk_notice')): ?><div class="akk-flash is-ok" role="status"><?= family_icon('check') ?><span><?= html_escape($msg) ?></span></div><?php endif; ?>
@@ -40,7 +48,7 @@ $tab_icons=array('pending'=>'file','approved'=>'check','revision_requested'=>'ed
   <form class="akk-filters" method="get" action="<?= site_url('admin/kk/pengajuan') ?>" role="search">
    <input type="hidden" name="status" value="<?= html_escape($status) ?>"><input type="hidden" name="tampil" value="<?= (int)$per ?>">
    <label class="akk-select"><?= family_icon('calendar') ?><span class="akk-sr">Periode</span><select name="periode" onchange="this.form.submit()"><?php foreach($periods as $k=>$v): ?><option value="<?= $k ?>" <?= $period===$k?'selected':'' ?>><?= $v ?></option><?php endforeach; ?></select></label>
-   <label class="akk-search"><?= family_icon('search') ?><span class="akk-sr">Cari pengajuan</span><input type="search" name="q" value="<?= html_escape($q) ?>" placeholder="Cari nama, NIK, atau No. KK..."></label>
+   <label class="akk-search"><?= family_icon('search') ?><span class="akk-sr">Cari pengajuan</span><input type="search" name="q" value="<?= html_escape($q) ?>" placeholder="Cari nama, NIK, atau No. Pengajuan..."></label>
   </form>
  </header>
  <nav class="akk-tabs" aria-label="Filter status">
@@ -89,7 +97,7 @@ $tab_icons=array('pending'=>'file','approved'=>'check','revision_requested'=>'ed
   <div><dt><?= family_icon('person') ?>Nama Pemohon</dt><dd data-f="name">-</dd></div>
   <div><dt><?= family_icon('hash') ?>No. KK</dt><dd data-f="nomor_kk" class="akk-mono">-</dd></div>
   <div><dt><?= family_icon('people') ?>Kepala Keluarga</dt><dd data-f="kepala">-</dd></div>
-  <div><dt><?= family_icon('home') ?>Alamat</dt><dd><span data-f="alamat">-</span><small> · RT/RW <span data-f="rt_rw">-</span></small></dd></div>
+  <div><dt><?= family_icon('home') ?>Alamat sesuai KK</dt><dd><span data-f="alamat">-</span><small> · RT/RW <span data-f="rt_rw">-</span></small></dd></div>
   <div><dt><?= family_icon('people') ?>Jumlah Anggota</dt><dd><span data-f="count">0</span> Orang</dd></div>
   <div><dt><?= family_icon('calendar') ?>Tanggal</dt><dd data-f="date">-</dd></div>
   <div><dt><?= family_icon('info') ?>Status</dt><dd><span class="akk-badge" data-f="status_label">-</span></dd></div>

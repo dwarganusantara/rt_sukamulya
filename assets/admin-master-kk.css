@@ -1,0 +1,441 @@
+/* Master Kartu Keluarga & Penduduk (admin/keluarga) — mengikuti tema admin-ui-v4: putih, navy, aksen oranye. */
+.mkk{--mkk-nv:var(--nv,#0b2b62);--mkk-ac:var(--ac,#f0501a);--mkk-ln:var(--ln,#e6eaf0)}
+.mkk .ops-note{margin:0}
+.mkk-note{display:flex;gap:10px;align-items:flex-start}
+.mkk-note .off-svg{flex:0 0 auto;font-size:20px;margin-top:1px}
+
+/* Hero */
+.mkk-hero{position:relative;display:flex;align-items:center;gap:20px;min-height:132px;padding:20px 26px;box-sizing:border-box;border-radius:20px;background:linear-gradient(100deg,#fff 0,#fff 46%,#fff4e8 72%,#ffe7cf 100%);overflow:hidden;box-shadow:0 8px 22px #f0501a12}
+.mkk-hero:after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;background:linear-gradient(90deg,#ffd2a8,#ff9a4d 60%,#f97316);opacity:.45}
+.mkk-hero-ic{position:relative;z-index:1;flex:0 0 auto;width:78px;height:78px;display:grid;place-items:center;border-radius:20px;background:linear-gradient(145deg,#ff8a3d,#f0501a);color:#fff;font-size:40px;box-shadow:0 12px 24px #f0501a40}
+.mkk-hero-tx{position:relative;z-index:1;min-width:0;max-width:760px}
+.mkk-hero h1{margin:0 0 6px;color:var(--mkk-nv);font:900 30px/1.15 Nunito,Arial,sans-serif;letter-spacing:-.01em}
+.mkk-hero p{margin:0;color:#1f3557;font-size:14px;line-height:1.55}
+.mkk-hero.small{min-height:104px}.mkk-hero.small .mkk-hero-ic{width:62px;height:62px;font-size:30px;border-radius:17px}.mkk-hero.small h1{font-size:25px}
+.mkk-hero-art{position:relative;z-index:0;margin-left:auto;flex:0 0 auto;width:230px;height:110px}
+.mkk-card-art{position:absolute;right:18px;top:8px;width:200px;height:112px;padding:12px 14px;box-sizing:border-box;border:2px solid #c9dcf6;border-radius:14px;background:linear-gradient(160deg,#f4f9ff,#dceafb);transform:rotate(-8deg);box-shadow:0 14px 26px #1d4f9a26}
+.mkk-card-art b{display:block;color:#1d4f9a;font:900 13px/1 Nunito,Arial,sans-serif;letter-spacing:.04em}
+.mkk-ppl{position:absolute;left:16px;bottom:16px;display:flex;gap:3px}
+.mkk-ppl i{position:relative;width:24px;height:22px;border-radius:12px 12px 4px 4px;background:#3b82f6}
+.mkk-ppl i:before{content:"";position:absolute;left:6px;top:-13px;width:12px;height:12px;border-radius:50%;background:#3b82f6}
+.mkk-ppl i+i{background:#60a5fa}.mkk-ppl i+i:before{background:#60a5fa}
+.mkk-lines{position:absolute;left:78px;right:16px;top:38px;display:grid;gap:8px}
+.mkk-lines i{height:6px;border-radius:4px;background:#9cc0ee}.mkk-lines i:nth-child(2){width:80%}.mkk-lines i:nth-child(3){width:60%}
+.mkk-card-art em{position:absolute;right:-12px;bottom:-14px;width:40px;height:40px;display:grid;place-items:center;border:3px solid #fff;border-radius:50%;background:#16a34a;color:#fff;font-size:22px;font-style:normal;box-shadow:0 6px 14px #16a34a55}
+
+/* Undangan */
+.mkk-invite{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;border:1.5px solid #bcd6fb;border-radius:16px;background:#f1f7ff}
+.mkk-invite-ic{flex:0 0 auto;width:42px;height:42px;display:grid;place-items:center;border-radius:12px;background:#1d6fd8;color:#fff;font-size:22px}
+.mkk-invite-tx{min-width:0;flex:1}
+.mkk-invite-tx strong{color:var(--mkk-nv);font-size:15px}
+.mkk-invite-tx p{margin:4px 0 10px;color:#33496b;font-size:13px;line-height:1.5}
+.mkk-invite-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.mkk-invite-row input{flex:1 1 260px;min-width:0;height:38px;padding:0 12px;border:1.5px solid #c9d7ea;border-radius:10px;background:#fff;color:var(--mkk-nv);font:600 12.5px ui-monospace,Consolas,monospace}
+.admin-body .mkk-wa{background:#16a34a;border-color:#16a34a;color:#fff}
+
+/* KPI + tombol utama */
+.mkk-top{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:14px;align-items:stretch}
+.mkk-stats{margin:0}
+.mkk-cta{display:grid;gap:10px}
+.admin-body .mkk-cta-btn{display:flex;align-items:center;gap:14px;min-height:62px;padding:10px 18px;border-radius:14px;color:#fff;text-decoration:none;box-shadow:0 10px 20px #0002;transition:filter .15s,transform .15s}
+.admin-body .mkk-cta-btn:hover{filter:brightness(1.06);transform:translateY(-1px);color:#fff}
+.mkk-cta-btn:focus-visible{outline:3px solid var(--mkk-nv);outline-offset:2px}
+.mkk-cta-btn.orange{background:linear-gradient(90deg,#ff7a24,#f0501a)}
+.mkk-cta-btn.green{background:linear-gradient(90deg,#22b45a,#15913f)}
+.mkk-cta-btn>span{flex:0 0 auto;width:36px;height:36px;display:grid;place-items:center;font-size:30px}
+.mkk-cta-btn b{display:flex;flex-direction:column;font:900 17px/1.2 Nunito,Arial,sans-serif}
+.mkk-cta-btn small{margin-top:2px;font:600 12px/1.3 Arial,sans-serif;opacity:.95}
+.mkk-scan-ic{position:relative;width:30px!important;height:30px!important;border:3px solid #fff;border-radius:6px;box-sizing:border-box;clip-path:polygon(0 0,35% 0,35% 100%,65% 100%,65% 0,100% 0,100% 35%,0 35%,0 65%,100% 65%,100% 100%,0 100%)}
+.mkk-scan-ic i{position:absolute;left:3px;right:3px;top:50%;height:3px;margin-top:-1.5px;background:#fff}
+
+/* Panel tabel */
+.mkk-panel{padding:0 0 4px}
+.mkk-bar{padding:12px 14px 0}
+.mkk-tabs .pg-tab{position:relative}
+.mkk-badge{display:inline-grid;place-items:center;min-width:20px;height:20px;margin-left:6px;padding:0 5px;box-sizing:border-box;border-radius:10px;background:#e11d48;color:#fff;font-size:11px;font-weight:900}
+.mkk-filter{padding:12px 14px}
+.mkk-export{margin-left:auto}
+.mkk-table td{vertical-align:middle}
+.mkk-kk,.mkk-addr,.mkk-count{display:inline-flex;align-items:center;gap:7px;color:#1f3557}
+.mkk-kk .off-svg,.mkk-addr .off-svg,.mkk-count .off-svg{flex:0 0 auto;font-size:16px;color:#5b6b82}
+.mkk-addr span{font-size:13px;line-height:1.35}
+.mkk-head{color:var(--mkk-nv);font-size:13px;font-weight:900;letter-spacing:.01em}
+.mkk-src{display:block;margin-top:3px;color:#7a5a00;font-size:11.5px;font-weight:700}
+.mkk-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:10px;background:#eef1f5;color:#4a5a70;font-size:12.5px;font-weight:800;white-space:nowrap}
+.mkk-pill .off-svg{font-size:15px}
+.mkk-pill.ok{background:#dcf7e7;color:#0a7a43}.mkk-pill.warn{background:#fff1dc;color:#a24d00}.mkk-pill.bad{background:#ffe4e6;color:#b42318}.mkk-pill.info{background:#e3efff;color:#1658b4}.mkk-pill.muted{background:#eef1f5;color:#5b6b82}
+.mkk-acts{flex-wrap:nowrap;justify-content:flex-end;gap:6px}
+@media(max-width:1500px){
+ .mkk-top{grid-template-columns:1fr}
+ .mkk-cta{grid-template-columns:1fr 1fr}
+ .mkk-tx{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+ .admin-body .mkk-act.view{width:34px;padding:0;justify-content:center}
+ .mkk-dup{display:none!important}
+}
+.mkk-table thead th{white-space:normal}
+.mkk-table .mkk-head,.mkk-table .mkk-addr span{white-space:normal;overflow-wrap:anywhere}
+.mkk-table .mkk-addr{display:flex;align-items:flex-start}
+.mkk-table .mkk-addr span{min-width:0}
+@media(min-width:901px){
+ .mkk-table th,.mkk-table td{padding-left:8px;padding-right:8px}
+ .mkk-table td.acts{min-width:0;width:1%}
+ .mkk-table td.lead{width:200px;max-width:210px}
+ .mkk-table td:nth-child(3){min-width:140px;max-width:230px}
+}
+@media(max-width:900px){
+ .mkk-acts{flex-wrap:wrap;justify-content:flex-start}
+ .admin-body .mkk-act.view{width:auto;padding:0 12px}
+ .mkk-tx{position:static!important;width:auto!important;height:auto!important;overflow:visible!important;clip:auto!important}
+}
+.mkk-table td.lead .mkk-kk{display:flex;margin-top:4px;font-size:12px}
+.mkk-table td.lead .mkk-kk .off-svg{font-size:14px}
+.mkk-bar,.mkk-filter{min-width:0;flex-wrap:wrap}
+.mkk-filter .pg-search{flex:1 1 240px;min-width:0}
+@media(min-width:901px) and (max-width:1500px){.mkk-pill{padding:5px 9px;font-size:12px}.admin-body .mkk-act{padding:0 9px;font-size:12px}}
+.mkk-acts form{margin:0}
+.admin-body .mkk-act{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;box-sizing:border-box;border:1.5px solid #c6d6ee;border-radius:10px;background:#f5f9ff;color:#1658b4;font:800 12.5px/1 inherit;font-family:inherit;white-space:nowrap;text-decoration:none;cursor:pointer}
+.admin-body .mkk-act .off-svg{font-size:15px}
+.admin-body .mkk-act.view:hover{background:#e7f0ff}
+.admin-body .mkk-act.invite{border-color:#9edcb6;background:#ecfbf2;color:#0a7a43}
+.admin-body .mkk-act.invite:hover{background:#dcf7e7}
+.admin-body .mkk-act.done{border-color:#e2e6ec;background:#fff;color:#5b6b82;cursor:default}
+.admin-body .mkk-menu-btn{display:flex;align-items:center;gap:10px;width:100%;min-height:40px;padding:0 12px;border:0;border-radius:10px;background:#fff;color:var(--mkk-nv);font:700 13.5px/1.2 inherit;font-family:inherit;white-space:nowrap;cursor:pointer;text-align:left}
+.admin-body .mkk-menu-btn:hover{background:#fff4ec;color:var(--mkk-ac)}
+.mkk-menu-btn .off-svg{font-size:17px;color:var(--mkk-ac)}
+
+/* Alur bisnis proses */
+.mkk-flow{display:grid;grid-template-columns:230px minmax(0,1fr);gap:18px;align-items:center;padding:18px;border:1px solid var(--mkk-ln);border-radius:18px;background:#fff;box-shadow:0 6px 18px #26344c0a}
+.mkk-flow-head{display:flex;gap:12px;align-items:flex-start;padding-right:16px;border-right:2px solid #eef1f5}
+.mkk-flow-head>span{flex:0 0 auto;width:42px;height:42px;display:grid;place-items:center;border-radius:50%;background:#16a34a;color:#fff;font-size:24px}
+.mkk-flow-head h2{margin:0 0 6px;color:var(--mkk-nv);font:900 18px/1.2 Nunito,Arial,sans-serif}
+.mkk-flow-head p{margin:0;color:#33496b;font-size:13px;line-height:1.45}
+.mkk-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:26px;margin:0;padding:0;list-style:none}
+.mkk-steps li{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 12px;border-radius:14px;text-align:center}
+.mkk-steps li+li:before{content:"";position:absolute;left:-21px;top:50%;width:14px;height:14px;margin-top:-7px;border-top:3px solid #16a34a;border-right:3px solid #16a34a;transform:rotate(45deg)}
+.mkk-steps .s1{background:#eef5ff}.mkk-steps .s2{background:#fff5e6}.mkk-steps .s3{background:#ecfaf1}.mkk-steps .s4{background:#f4effe}
+.mkk-steps b{position:absolute;left:10px;top:10px;width:26px;height:26px;display:grid;place-items:center;border-radius:50%;color:#fff;font-size:13px}
+.mkk-steps .s1 b{background:#1d6fd8}.mkk-steps .s2 b{background:#f59e0b}.mkk-steps .s3 b{background:#16a34a}.mkk-steps .s4 b{background:#7c3aed}
+.mkk-step-ic{font-size:34px;line-height:1}
+.mkk-steps .s1 .mkk-step-ic{color:#1d6fd8}.mkk-steps .s3 .mkk-step-ic{color:#16a34a}.mkk-steps .s4 .mkk-step-ic{color:#7c3aed}
+.mkk-ocr{padding:4px 6px;border:3px dashed #f97316;border-radius:6px;color:#f97316;font:900 15px/1 Nunito,Arial,sans-serif}
+.mkk-steps strong{color:var(--mkk-nv);font-size:14.5px;font-weight:900}
+.mkk-steps small{color:#33496b;font-size:12.5px;line-height:1.4}
+
+/* Form tambah KK */
+.mkk-stepper{display:flex;gap:10px;margin:0;padding:0;list-style:none;counter-reset:s}
+.mkk-stepper li{flex:1;display:flex;align-items:center;gap:10px;min-width:0;padding:10px 14px;border:1.5px solid var(--mkk-ln);border-radius:14px;background:#fff;color:#5b6b82;font-weight:800;font-size:13.5px}
+.mkk-stepper li b{flex:0 0 auto;width:28px;height:28px;display:grid;place-items:center;border-radius:50%;background:#eef1f5;color:#5b6b82}
+.mkk-stepper li span{display:inline-flex;align-items:center;gap:7px;min-width:0}
+.mkk-stepper li.current{border-color:#ffb98f;background:#fff6ef;color:var(--mkk-nv)}.mkk-stepper li.current b{background:var(--mkk-ac);color:#fff}
+.mkk-stepper li.done{color:#0a7a43}.mkk-stepper li.done b{background:#16a34a;color:#fff}
+.mkk-mode{align-self:flex-start}
+.mkk-upload{padding:18px}
+.mkk-drop{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:30px 16px;border:2px dashed #ffb98f;border-radius:16px;background:#fffaf5;color:var(--mkk-nv);text-align:center;cursor:pointer}
+.mkk-drop:hover,.mkk-drop:focus-within{background:#fff3e8}
+.mkk-drop-ic{font-size:44px;color:var(--mkk-ac)}
+.mkk-drop small{color:#5b6b82}
+.mkk-drop input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.mkk-drop em{color:#0a7a43;font-style:normal;font-weight:800}
+.mkk-upload-foot{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-top:14px}
+.mkk-upload-foot p{display:flex;gap:8px;align-items:center;margin:0;color:#33496b;font-size:13px}
+.mkk-progress{margin:12px 0 0;padding:10px 14px;border-radius:10px;background:#fff3c4;color:#8a5a00;font-weight:700}
+.admin-body #mkk-scan-btn.is-loading{gap:9px;cursor:wait}
+.admin-body #mkk-scan-btn.is-loading>.off-svg{animation:mkkSpin .8s linear infinite}
+body.mkk-no-scroll{overflow:hidden}
+.mkk-loading{position:fixed;inset:0;z-index:1200;display:grid;place-items:center;padding:16px;background:#13233dcc;backdrop-filter:blur(5px);animation:mkkFade .25s ease}
+.mkk-loading[hidden]{display:none}
+.mkk-loading-card{width:min(440px,100%);box-sizing:border-box;padding:28px 26px 22px;border-radius:26px;background:#fff;text-align:center;color:var(--mkk-nv);box-shadow:0 25px 70px #0006;outline:0;animation:mkkPop .35s cubic-bezier(.2,.9,.3,1.2)}
+.mkk-loading-doc{position:relative;display:grid;place-items:center;width:190px;height:125px;margin:0 auto 18px;border:2px solid #ffd2b7;border-radius:16px;background:linear-gradient(145deg,#fffaf5,#fff0e4);color:var(--mkk-ac);animation:mkkFloat 2.6s ease-in-out infinite;overflow:visible}
+.mkk-loading-doc>.off-svg{font-size:74px;filter:drop-shadow(0 7px 9px #f05a1830)}
+.mkk-scan-line{position:absolute;left:8%;right:8%;top:13%;height:4px;border-radius:4px;background:linear-gradient(90deg,transparent,#f97316,#ffd166,#f97316,transparent);box-shadow:0 0 14px 4px #f9731680;animation:mkkScan 1.8s ease-in-out infinite alternate}
+.mkk-loading-bolt{position:absolute;top:-13px;right:-13px;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:linear-gradient(145deg,#ff8a36,#e94d12);color:#fff;box-shadow:0 4px 10px #e94d1255;animation:mkkPulse 1.4s ease-in-out infinite}
+.mkk-loading-bolt .off-svg{font-size:20px}
+.mkk-loading-card h2{margin:0 0 6px;font-size:21px;font-weight:900}
+.mkk-loading-dots i{font-style:normal;animation:mkkDot 1.2s infinite}.mkk-loading-dots i:nth-child(2){animation-delay:.2s}.mkk-loading-dots i:nth-child(3){animation-delay:.4s}
+#mkk-loading-text{min-height:20px;margin:0 0 14px;color:#a94a16;font-size:14px;font-weight:800}
+.mkk-loading-bar{height:10px;border-radius:10px;background:#fff0e5;overflow:hidden}
+.mkk-loading-bar span{position:relative;display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#ef5b16,#ff9b45);transition:width 1s linear;overflow:hidden}
+.mkk-loading-bar span:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,#ffffff99 50%,transparent 70%);animation:mkkShine 1.3s linear infinite}
+.mkk-loading-steps{display:grid;gap:8px;margin:16px 0 12px;padding:0;list-style:none;text-align:left}
+.mkk-loading-steps li{display:flex;align-items:center;gap:10px;color:#8a97a8;font-size:14px;font-weight:700;transition:color .3s}
+.mkk-loading-steps b{position:relative;flex:none;width:20px;height:20px;box-sizing:border-box;border:2px solid #cfd8e0;border-radius:50%;transition:all .3s}
+.mkk-loading-steps li.is-active{color:var(--mkk-nv)}.mkk-loading-steps li.is-active b{border-color:#ffe1cd;border-top-color:#f05a18;animation:mkkSpin .8s linear infinite}
+.mkk-loading-steps li.is-done{color:#0a7a43}.mkk-loading-steps li.is-done b{border-color:#16a34a;background:#16a34a}
+.mkk-loading-steps li.is-done b:after{content:"";position:absolute;left:5px;top:2px;width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.mkk-loading-time{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;background:#fff6ef;color:#4b5b70;font-size:13px}.mkk-loading-time .off-svg{color:var(--mkk-ac)}
+.mkk-loading-card>small{display:block;margin-top:12px;color:#6a7b90;font-size:12px;line-height:1.45}
+@keyframes mkkFade{from{opacity:0}}@keyframes mkkPop{from{opacity:0;transform:scale(.92) translateY(10px)}}@keyframes mkkFloat{50%{transform:translateY(-6px)}}@keyframes mkkScan{from{top:13%}to{top:84%}}@keyframes mkkPulse{50%{transform:scale(1.12);box-shadow:0 0 0 8px #f9731622}}@keyframes mkkDot{0%,100%{opacity:.2}50%{opacity:1}}@keyframes mkkShine{from{transform:translateX(-100%)}to{transform:translateX(100%)}}@keyframes mkkSpin{to{transform:rotate(360deg)}}
+@media(max-width:480px){.mkk-loading-card{padding:22px 16px 18px}.mkk-loading-card h2{font-size:18px}.mkk-loading-steps li{font-size:13px}.mkk-loading-doc{width:160px;height:105px}}
+@media(prefers-reduced-motion:reduce){.mkk-loading *,.mkk-loading{animation-duration:3s!important}.mkk-loading-doc{animation:none!important}}
+.mkk-form{display:grid;gap:14px}
+.mkk-section{padding:16px 18px}
+.mkk-section>header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px}
+.mkk-ocr-meta{display:inline-flex;gap:6px;align-items:center;color:#8a5a00;font-size:12.5px;font-weight:800}
+.mkk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+.mkk-grid.fam .f-alamat{grid-column:span 2}
+.mkk-field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.mkk-field>span{color:var(--mkk-nv);font-size:12.5px;font-weight:800}
+.mkk-field>span b{color:#d92d20}
+.mkk-field input,.mkk-field select{width:100%;height:40px;padding:0 11px;box-sizing:border-box;border:1.5px solid #d5dde8;border-radius:10px;background:#fff;color:var(--mkk-nv);font:600 14px inherit;font-family:inherit}
+.mkk-field input:focus,.mkk-field select:focus{outline:none;border-color:var(--mkk-ac);box-shadow:0 0 0 3px #f0501a22}
+.mkk-field.needs-review input,.mkk-field.needs-review select{border-color:#f5b400;background:#fffbea}
+.mkk-field small{color:#8a5a00;font-size:11.5px;font-weight:700}
+.mkk-member{position:relative;margin:0 0 12px;padding:14px;border:1.5px solid var(--mkk-ln);border-radius:14px;background:#fbfcfe}
+.mkk-member legend{display:flex;align-items:center;gap:8px;padding:0 6px;color:var(--mkk-nv);font-weight:900;font-size:14px}
+.mkk-member-no{width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:var(--mkk-ac);color:#fff;font-size:12px}
+.admin-body .mkk-remove{position:absolute;right:12px;top:-6px;display:inline-flex;align-items:center;gap:5px;height:30px;padding:0 10px;border:1.5px solid #f5c2c7;border-radius:9px;background:#fff;color:#b42318;font:800 12px inherit;font-family:inherit;cursor:pointer}
+.mkk-remove[hidden]{display:none}
+.mkk-hint{margin:8px 0 0;color:#5b6b82;font-size:12.5px;line-height:1.5}
+.mkk-submit{display:grid;gap:12px}
+.mkk-submit .ops-note{display:flex;gap:10px}
+.mkk-check{display:flex;gap:10px;align-items:flex-start;margin-top:6px;color:var(--mkk-nv);font-weight:700;font-size:13.5px;line-height:1.45;cursor:pointer}
+.mkk-check input{flex:0 0 auto;width:18px;height:18px;margin:1px 0 0;accent-color:var(--mkk-ac)}
+.mkk-buttons{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}
+
+@media(max-width:1280px){
+ .mkk-top{grid-template-columns:1fr}
+ .mkk-cta{grid-template-columns:1fr 1fr}
+ .mkk-flow{grid-template-columns:1fr}
+ .mkk-flow-head{padding:0 0 12px;border-right:0;border-bottom:2px solid #eef1f5}
+}
+@media(max-width:900px){
+ .mkk-hero{padding:18px}
+ .mkk-hero-art{display:none}
+ .mkk-hero h1{font-size:24px}
+ .mkk-hero-ic{width:60px;height:60px;font-size:30px;border-radius:16px}
+ .mkk-steps{grid-template-columns:1fr 1fr;gap:12px}
+ .mkk-steps li+li:before{display:none}
+ .mkk-export{margin-left:0}
+ .mkk-acts{flex-wrap:wrap;justify-content:flex-start}
+ .mkk-stepper li{padding:8px 10px;font-size:12px}
+ .mkk-stepper li span .off-svg{display:none}
+}
+@media(max-width:600px){
+ .mkk-cta{grid-template-columns:1fr}
+ .mkk-hero{flex-direction:column;align-items:flex-start;gap:12px}
+ .mkk-steps{grid-template-columns:1fr}
+ .mkk-stepper{flex-direction:column}
+ .mkk-grid.fam .f-alamat{grid-column:auto}
+ .mkk-grid{grid-template-columns:1fr}
+ .mkk-buttons .pg-btn{flex:1 1 100%;justify-content:center}
+ .mkk-invite{flex-direction:column}
+ .mkk-invite-row .pg-btn{flex:1 1 auto;justify-content:center}
+}
+
+/* Master KK + rumah terintegrasi */
+.mkk-hero-house{background:linear-gradient(100deg,#fff 0,#fff 54%,#fff5e8 100%)}
+.mkk-house-art{position:absolute;right:12px;bottom:0;width:215px;height:96px;background:linear-gradient(145deg,#ffb54a,#f05a18);clip-path:polygon(8% 45%,38% 12%,52% 30%,68% 10%,96% 42%,96% 100%,8% 100%);border-radius:12px}.mkk-house-art:before{content:"";position:absolute;left:37px;bottom:0;width:69px;height:55px;background:#fff2d7;border:5px solid #f97316}.mkk-house-art:after{content:"";position:absolute;right:25px;bottom:0;width:76px;height:62px;background:#fff8e8;border:5px solid #f97316}.mkk-house-art i{position:absolute;z-index:2;left:60px;bottom:0;width:20px;height:36px;background:#ef5b16}.mkk-house-art b{position:absolute;z-index:3;right:0;bottom:15px;padding:6px 10px;border-radius:6px;background:#ef5b16;color:#fff;font-size:13px}
+.mkk-stats-six{grid-template-columns:repeat(6,minmax(0,1fr));margin:0}.mkk-stats-six .pg-stat{min-width:0;padding:12px}.mkk-stats-six .pg-stat-ic{width:44px;height:44px}.mkk-stats-six .pg-stat-tx strong{font-size:24px}.mkk-stats-six .pg-stat-tx em{white-space:normal}
+.mkk-add-menu{margin-left:auto;flex:0 0 auto}.mkk-add-menu>summary{list-style:none}.mkk-add-menu>summary::-webkit-details-marker{display:none}.mkk-add-menu>div{right:0;left:auto}
+.mkk-content-grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;border-top:1px solid var(--mkk-ln)}.mkk-table-wrap{min-width:0;overflow:auto}.mkk-detail{padding:0 14px 14px;border-left:1px solid var(--mkk-ln);background:#fbfcff}.mkk-detail>header{padding:14px 0;border-bottom:1px solid var(--mkk-ln)}.mkk-detail h2{display:flex;align-items:center;gap:8px;margin:0;color:var(--mkk-nv);font-size:15px}.mkk-detail-house{display:flex;gap:12px;align-items:center;margin:14px 0;padding:12px;border-radius:13px;background:#fff5e7}.mkk-detail-house>span{width:66px;height:56px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(145deg,#ff9a32,#ef4b13);color:#fff;font-size:32px}.mkk-detail-house div{display:flex;flex-direction:column}.mkk-detail-house small{color:#f05a18;font-weight:800}.mkk-detail-house strong{color:var(--mkk-nv);font-size:24px}.mkk-detail-house em{color:#40516c;font-size:11px;font-style:normal}.mkk-detail dl{display:grid;grid-template-columns:110px 1fr;gap:10px 8px;margin:0 0 14px;font-size:12px}.mkk-detail dt{color:#637087;font-weight:800}.mkk-detail dd{margin:0;color:var(--mkk-nv);font-weight:700;line-height:1.4}.mkk-detail-btn{width:100%;justify-content:center}.mkk-house-no{display:inline-flex;align-items:center;gap:5px;padding:4px 8px;border-radius:9px;background:#fff0df;color:#e75310!important;font-weight:900}.mkk-unlinked{display:inline-grid;place-items:center;width:42px;height:28px;border-radius:9px;background:#f0f2f5;color:#718096}.mkk-steps-five{grid-template-columns:repeat(5,minmax(0,1fr));gap:22px}.mkk-steps .s5{background:#eef3ff}.mkk-steps .s5 b{background:#2563eb}.mkk-steps .s5 .mkk-step-ic{color:#2563eb}
+.house-page{display:grid;gap:14px}.house-page .mkk-hero{margin:0}.house-page .ops-actions{margin-left:auto}.house-table .lead small{display:block;color:#718096}.house-table td small{display:block}.house-form,.house-link-form{display:grid;gap:18px;padding:20px}.house-form .f-alamat{grid-column:span 2}.house-link-form{max-width:900px}.house-link-empty{display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:900px}.house-link-empty>span{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.house-link-empty .pg-btn{flex:none}.house-page .pg-panel-head{padding:15px}.house-page .pg-panel-head h2{margin:0;color:var(--mkk-nv)}.house-page .pg-panel-head p{margin:3px 0 0;color:#64748b}
+@media(max-width:600px){.house-link-empty{align-items:stretch;flex-direction:column}.house-link-empty .pg-btn{justify-content:center}}
+@media(max-width:1300px){.mkk-stats-six{grid-template-columns:repeat(3,minmax(0,1fr))}.mkk-content-grid{grid-template-columns:1fr}.mkk-detail{border-left:0;border-top:1px solid var(--mkk-ln)}.mkk-steps-five{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:800px){.mkk-stats-six{grid-template-columns:repeat(2,minmax(0,1fr))}.mkk-content-grid .mkk-table tr{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px;padding:12px;border:1px solid var(--mkk-ln);border-radius:13px}.mkk-content-grid .mkk-table thead{display:none}.mkk-content-grid .mkk-table td{display:block;border:0!important;padding:3px!important}.mkk-content-grid .mkk-table td:before{content:attr(data-label);display:block;color:#718096;font-size:10px;font-weight:800;text-transform:uppercase}.mkk-content-grid .mkk-table td.no{display:none}.mkk-content-grid .mkk-table td.acts{grid-column:1/-1}.mkk-steps-five{grid-template-columns:1fr 1fr}.house-form .f-alamat{grid-column:auto}}
+@media(max-width:520px){.mkk-stats-six{grid-template-columns:1fr 1fr}.mkk-stats-six .pg-stat{flex-direction:column;align-items:flex-start}.mkk-steps-five{grid-template-columns:1fr}.mkk-detail dl{grid-template-columns:1fr}.mkk-detail dt{margin-top:5px}}
+
+/* Perbaikan tata letak dasbor gabungan: tombol menu berlabel, tabel tanpa scroll tersembunyi, kartu HP. */
+.mkk-add-menu>summary.pg-btn,.mkk-export>summary{width:auto;height:auto;min-height:40px;display:inline-flex;align-items:center;gap:7px;padding:0 15px;white-space:nowrap}
+.mkk-export>summary{border:1.5px solid #cfd8e6;border-radius:11px;background:#fff;color:var(--mkk-nv);font-size:13px;font-weight:800}
+.mkk-export>summary:after,.mkk-add-menu>summary:after{content:"";width:6px;height:6px;margin:-3px 0 0 2px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg)}
+.mkk-export>div{right:0;left:auto;min-width:220px}
+.mkk-bar{gap:10px}
+.mkk-tabs{min-width:0;flex:1 1 auto;flex-wrap:wrap}
+.mkk-table-wrap{overflow:visible}
+.mkk-table td.lead .mkk-kk{display:flex;margin-top:4px;font-size:12px}
+/* Panel Detail Rumah & Keluarga: kartu samping yang bisa dibuka/tutup. */
+.mkk-content-grid{grid-template-columns:minmax(0,1fr) 360px;gap:16px;padding:14px;border-top:0;align-items:start}
+.mkk-table-wrap{border:1px solid var(--mkk-ln);border-radius:16px;background:#fff;padding:10px 12px}
+.mkk-detail{position:relative;align-self:start;padding:0 16px 16px;border:1.5px solid #ffc999;border-radius:18px;background:#fff;box-shadow:0 8px 22px rgba(240,90,24,.10)}
+.mkk-detail>header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 0 10px;border-bottom:0}
+.mkk-detail h2{min-width:0;font-size:16px;font-weight:900}
+.mkk-detail h2 .off-svg{color:#f05a18;flex:0 0 auto;font-size:20px}
+/* tombol buka/tutup isi panel (^ / v) */
+.mkk-detail-toggle{flex:0 0 auto;width:40px;height:32px;display:grid;place-items:center;padding:0;border:0;border-radius:9px;background:linear-gradient(145deg,#ff9a32,#ef4b13);color:#fff;cursor:pointer;box-shadow:0 3px 8px rgba(239,75,19,.25)}
+.mkk-detail-toggle:before{content:"";width:9px;height:9px;margin-top:5px;border-left:3px solid currentColor;border-top:3px solid currentColor;transform:rotate(45deg);transition:transform .2s,margin .2s}
+.mkk-detail-toggle:hover{filter:brightness(1.06)}
+.mkk-detail-toggle:focus-visible,.mkk-detail-edge:focus-visible{outline:3px solid #ffd2a8;outline-offset:2px}
+.mkk-content-grid.is-collapsed .mkk-detail-body{display:none}
+.mkk-content-grid.is-collapsed .mkk-detail{padding-bottom:4px}
+.mkk-content-grid.is-collapsed .mkk-detail-toggle:before{margin-top:-5px;transform:rotate(225deg)}
+/* tombol kecil di tepi panel untuk menyembunyikan panel ke samping */
+.mkk-detail-edge{position:absolute;top:18px;left:-13px;z-index:2;width:22px;height:34px;display:grid;place-items:center;padding:0;border:1px solid #e3e8f0;border-radius:8px;background:#fff;color:#64748b;cursor:pointer;box-shadow:0 2px 6px rgba(15,23,42,.08)}
+.mkk-detail-edge:before{content:"";width:6px;height:6px;margin-left:-3px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg)}
+.mkk-detail-edge:hover{color:#f05a18;border-color:#ffc999}
+.mkk-content-grid.is-hidden{grid-template-columns:minmax(0,1fr) 46px}
+.mkk-content-grid.is-hidden .mkk-detail{padding:56px 0 14px}
+.mkk-content-grid.is-hidden .mkk-detail-body,.mkk-content-grid.is-hidden .mkk-detail-toggle{display:none}
+.mkk-content-grid.is-hidden .mkk-detail>header{justify-content:center;padding:0}
+.mkk-content-grid.is-hidden .mkk-detail h2{writing-mode:vertical-rl;white-space:nowrap;font-size:13px}
+.mkk-content-grid.is-hidden .mkk-detail h2 .off-svg{writing-mode:horizontal-tb;margin-bottom:4px}
+.mkk-content-grid.is-hidden .mkk-detail-edge{left:11px;top:12px}
+.mkk-content-grid.is-hidden .mkk-detail-edge:before{margin:0 0 0 3px;transform:rotate(135deg)}
+/* isi panel sesuai mockup */
+.mkk-detail-house{margin:4px 0 14px;padding:14px;border-radius:14px;background:#fff5e7}
+.mkk-detail-house>span{flex:0 0 auto;width:62px;height:62px;border-radius:14px;font-size:34px}
+.mkk-detail-house strong{font-size:22px;line-height:1.2;font-weight:900}
+.mkk-detail-house em{margin-top:3px;color:#1e293b;font-size:13px;font-weight:600}
+.mkk-detail dl{grid-template-columns:auto minmax(0,1fr);gap:9px 14px;margin:0 6px 16px;font-size:13.5px}
+.mkk-detail dt{color:#1e293b;font-weight:600}
+.mkk-detail dd{position:relative;padding-left:16px;color:#1e293b;font-weight:600}
+.mkk-detail dd:before{content:":";position:absolute;left:0;top:0;color:#1e293b}
+.mkk-detail dd.strong{font-weight:900;color:var(--mkk-nv)}
+.admin-body .mkk-detail-btn{min-height:44px;border:1.5px solid #f05a18;border-radius:12px;background:#fff;color:#f05a18;font-size:15px;font-weight:900;gap:10px}
+.admin-body .mkk-detail-btn:hover{background:#fff4ea}
+/* tombol ikon aksi: kotak bergaris warna */
+.mkk-acts{gap:7px;flex-wrap:nowrap;justify-content:center}
+.admin-body .mkk-ico{width:34px;height:34px;flex:0 0 auto;display:inline-grid;place-items:center;padding:0;box-sizing:border-box;border:1.5px solid currentColor;border-radius:10px;background:#fff;cursor:pointer;text-decoration:none;font-size:16px;transition:background .15s}
+.admin-body .mkk-ico.blue{color:#1d6fe0}.admin-body .mkk-ico.blue:hover,.admin-body .mkk-ico.blue.on{background:#e8f1ff}
+.admin-body .mkk-ico.orange{color:#ef6c10}.admin-body .mkk-ico.orange:hover{background:#fff1e4}
+.admin-body .mkk-ico.navy{color:#334e7d}.admin-body .mkk-ico.navy:hover{background:#eef2f8}
+.admin-body .mkk-ico.green{color:#0f8a4b}.admin-body .mkk-ico.green:hover{background:#e7f8ee}
+.admin-body .mkk-ico.red{color:#dc2626}.admin-body .mkk-ico.red:hover{background:#fdecec}
+.mkk-pill .off-svg{flex:0 0 auto}
+.admin-body .mkk-ico .off-svg{width:17px;height:17px;font-size:17px}
+@media(min-width:901px){.mkk-content-grid .mkk-table td.lead{width:auto;min-width:170px;max-width:230px}.mkk-content-grid .mkk-table td:nth-child(3){min-width:80px;max-width:160px}.mkk-content-grid .mkk-table td.acts{width:1%;white-space:nowrap}.mkk-content-grid .mkk-table th,.mkk-content-grid .mkk-table td{padding-left:7px;padding-right:7px}}
+@media(max-width:1439px){
+ .mkk-content-grid,.mkk-content-grid.is-hidden{grid-template-columns:1fr}
+ .mkk-detail-edge{display:none}
+ .mkk-content-grid.is-hidden .mkk-detail{padding:0 16px 16px}
+ .mkk-content-grid.is-hidden .mkk-detail>header{justify-content:space-between;padding:14px 0 10px}
+ .mkk-content-grid.is-hidden .mkk-detail h2{writing-mode:horizontal-tb;font-size:16px}
+ .mkk-content-grid.is-hidden .mkk-detail-toggle{display:grid}
+ .mkk-content-grid.is-hidden:not(.is-collapsed) .mkk-detail-body{display:grid}
+ .mkk-detail-body{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr) auto;gap:6px 22px;align-items:center}
+ .mkk-detail-house,.mkk-detail dl{margin:8px 0}
+ .admin-body .mkk-detail-btn{width:auto;padding:0 18px}
+}
+@media(max-width:1100px){.mkk-detail-body{grid-template-columns:1fr}.admin-body .mkk-detail-btn{width:100%}}
+@media(max-width:800px){.mkk-content-grid{padding:0 0 12px}.mkk-table-wrap{border:0;padding:0}.mkk-detail{margin:0 10px}.mkk-acts{justify-content:flex-start;flex-wrap:wrap}}
+@media(max-width:800px){
+ .mkk-content-grid .mkk-table tr{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+ .mkk-content-grid .mkk-table td{min-width:0;overflow:visible;text-align:left}
+ .mkk-content-grid .mkk-table td:before{float:none;max-width:none;margin:0 0 3px}
+ .mkk-content-grid .mkk-table td.lead{grid-column:1/-1}
+ .mkk-content-grid .mkk-table .mkk-pill{white-space:normal;max-width:100%;line-height:1.25}
+ .mkk-add-menu,.mkk-add-menu>summary.pg-btn{width:100%;justify-content:center}
+ .mkk-add-menu>div{left:0;right:0}
+}
+
+/* ===== Tambah KK (OCR/Manual): ringkas — daftar anggota + panel Periksa/Edit ===== */
+.mkk-form-page .mkk-section{padding:16px 20px;border-radius:16px}
+.mkk-form-page .mkk-section>header h2{display:flex;align-items:center;gap:9px;margin:0;color:#102a56;font-size:19px}
+.mkk-form-page .mkk-section>header h2 .off-svg{color:#ff6a1a;font-size:22px}
+.mkk-form-page .mkk-ocr-meta{color:#0a7a43}
+.mkk-form-page .mkk-grid.fam{grid-template-columns:repeat(12,minmax(0,1fr));gap:12px 14px}
+.mkk-form-page .mkk-grid.fam>.mkk-field{grid-column:span 3}
+.mkk-form-page .mkk-grid.fam>.f-nomor_kk{grid-column:span 3}
+.mkk-form-page .mkk-grid.fam>.f-alamat{grid-column:span 5}
+.mkk-form-page .mkk-grid.fam>.f-rt,.mkk-form-page .mkk-grid.fam>.f-rw{grid-column:span 2}
+.mkk-form-page .mkk-grid.fam>.f-kode_pos{grid-column:span 3}
+@media(max-width:1100px){.mkk-form-page .mkk-grid.fam>.mkk-field{grid-column:span 6}.mkk-form-page .mkk-grid.fam>.f-alamat{grid-column:1/-1}.mkk-form-page .mkk-grid.fam>.f-rt,.mkk-form-page .mkk-grid.fam>.f-rw{grid-column:span 3}}
+@media(max-width:600px){.mkk-form-page .mkk-grid.fam{grid-template-columns:1fr 1fr}.mkk-form-page .mkk-grid.fam>.mkk-field,.mkk-form-page .mkk-grid.fam>.f-alamat{grid-column:1/-1}.mkk-form-page .mkk-grid.fam>.f-rt,.mkk-form-page .mkk-grid.fam>.f-rw{grid-column:span 1}}
+
+/* ringkasan status */
+.mkk-members-card>header{gap:10px 14px}
+.mkk-members-card>header .pg-btn{margin-left:auto}
+.mkk-review-sum{display:inline-flex;align-items:center;min-height:28px;padding:0 12px;border-radius:999px;background:#eef2f7;color:#334e7d;font-size:12.5px;font-weight:800}
+.mkk-review-sum.warn{background:#fff3df;color:#9a5300}.mkk-review-sum.bad{background:#ffe9e9;color:#b42318}.mkk-review-sum.ok{background:#e3f7ec;color:#0a7a43}
+.mkk-head-warn{display:flex;align-items:center;gap:8px;margin:0 0 10px;padding:9px 12px;border:1px solid #f5c2c7;border-radius:11px;background:#fff5f5;color:#b42318;font-size:13px;font-weight:700}
+.mkk-head-warn[hidden]{display:none}
+
+/* tabel ringkas anggota */
+.mkk-msum-wrap{border:1px solid #e6ebf2;border-radius:14px;overflow:hidden}
+.mkk-msum{width:100%;border-collapse:collapse;font-size:13.5px}
+.mkk-msum th{padding:11px 12px;background:#fff6ee;color:#102a56;font-size:12.5px;font-weight:900;text-align:left;white-space:nowrap}
+.mkk-msum td{padding:11px 12px;border-top:1px solid #eef1f5;color:#102a56;vertical-align:middle}
+.mkk-msum .no{width:44px;text-align:center;color:#5b6b82;font-weight:800}
+.mkk-msum .nm strong{font-weight:800;text-transform:uppercase;overflow-wrap:anywhere}
+.mkk-msum em{color:#94a3b8;font-style:normal;font-weight:600}
+.mkk-msum .nik{white-space:nowrap;color:#334155}
+.mkk-msum td small{display:block;margin-top:4px;color:#64748b;font-size:11.5px;font-weight:600}
+.mkk-msum tr.is-error td{background:#fffafa}
+.mkk-msum .act{width:1%;white-space:nowrap;text-align:right}
+.mkk-rv{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font-size:12.5px;font-weight:800;white-space:nowrap}
+.mkk-rv .off-svg{font-size:14px}
+.mkk-rv.review{background:#fff3df;color:#9a5300}.mkk-rv.ok{background:#e3f7ec;color:#0a7a43}.mkk-rv.error{background:#ffe9e9;color:#b42318}
+.admin-body .mkk-rv-btn{display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:0 14px;border:1.5px solid #ff6a1a;border-radius:11px;background:#fff;color:#e8590c;font:800 13px/1 inherit;font-family:inherit;cursor:pointer;vertical-align:middle}
+.admin-body .mkk-rv-btn:hover{background:#fff4ec}
+.admin-body .mkk-rv-del{display:inline-grid;place-items:center;width:40px;height:40px;margin-left:6px;padding:0;border:1.5px solid #f5c2c7;border-radius:11px;background:#fff;color:#dc2626;cursor:pointer;vertical-align:middle;font-size:16px}
+.admin-body .mkk-rv-del:hover{background:#fdecec}
+.mkk-rv-btn:focus-visible,.mkk-rv-del:focus-visible{outline:3px solid #ffd2a8;outline-offset:2px}
+
+/* input asli anggota: disimpan tersembunyi saat mode ringkas (JS aktif) */
+.mkk-js .mkk-member-store>.mkk-member{display:none}
+.mkk-js .mkk-member .mkk-remove{display:none}
+
+/* drawer Periksa / Edit */
+.mkk-drawer{position:fixed;inset:0;z-index:1200}
+.mkk-drawer[hidden]{display:none}
+.mkk-drawer-backdrop{position:absolute;inset:0;background:rgba(16,42,86,.38);animation:mkkFade .2s}
+.mkk-drawer-panel{position:absolute;top:0;right:0;bottom:0;width:min(560px,100%);display:flex;flex-direction:column;background:#fff;box-shadow:-12px 0 32px rgba(16,42,86,.18);animation:mkkSlide .22s ease-out;outline:none}
+@keyframes mkkSlide{from{transform:translateX(40px);opacity:.4}}
+.mkk-drawer-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:18px 20px 12px;border-bottom:1px solid #eef1f5}
+.mkk-drawer-head small{color:#ff6a1a;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.03em}
+.mkk-drawer-head h2{margin:3px 0 0;color:#102a56;font-size:20px;line-height:1.25;overflow-wrap:anywhere}
+.admin-body .mkk-drawer-x{flex:0 0 auto;width:40px;height:40px;display:grid;place-items:center;padding:0;border:1px solid #e3e8f0;border-radius:11px;background:#fff;color:#334155;cursor:pointer;font-size:18px}
+.mkk-drawer-x:hover{background:#f5f7fb}
+.mkk-drawer-tip{display:flex;gap:8px;align-items:flex-start;margin:12px 20px 0;padding:9px 12px;border-radius:11px;background:#fff8e6;color:#8a5a00;font-size:12.5px;font-weight:700;line-height:1.45}
+.mkk-drawer-tip[hidden]{display:none}
+.mkk-drawer-body{flex:1 1 auto;overflow:auto;padding:14px 20px 18px}
+.mkk-drawer-body .mkk-member{margin:0;padding:0;border:0;background:none}
+.mkk-drawer-body .mkk-member legend{display:none}
+.mkk-drawer-body .mkk-grid{grid-template-columns:1fr 1fr;gap:12px 14px}
+.mkk-drawer-body .f-nama_lengkap,.mkk-drawer-body .f-nik{grid-column:1/-1}
+.mkk-drawer-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:12px 20px;border-top:1px solid #eef1f5;background:#fbfcfe}
+.mkk-drawer-nav,.mkk-drawer-main{display:flex;gap:8px;flex-wrap:wrap}
+.mkk-drawer-foot .pg-btn{min-height:42px}
+.mkk-drawer-foot .pg-btn[disabled]{opacity:.45;cursor:not-allowed}
+@media(max-width:600px){
+ .mkk-drawer-panel{top:auto;height:calc(100% - 24px);width:100%;border-radius:18px 18px 0 0;animation-name:mkkUp}
+ @keyframes mkkUp{from{transform:translateY(40px);opacity:.4}}
+ .mkk-drawer-body .mkk-grid{grid-template-columns:1fr}
+ .mkk-drawer-foot{flex-direction:column-reverse;align-items:stretch}
+ .mkk-drawer-nav,.mkk-drawer-main{display:grid;grid-template-columns:1fr 1fr}
+ .mkk-drawer-foot .pg-btn{justify-content:center}
+}
+
+/* bar aksi */
+.mkk-form-page .mkk-submit{gap:10px}
+.mkk-check.is-missing{color:#b42318}.mkk-check.is-missing input{outline:2px solid #f87171;outline-offset:2px}
+.mkk-buttons .pg-btn{min-height:44px}
+.mkk-buttons .pg-btn.is-loading{opacity:.75;cursor:progress}
+@media(min-width:901px){.mkk-form-page .mkk-submit{position:sticky;bottom:12px;z-index:20;padding:12px 18px;box-shadow:0 -6px 24px rgba(16,42,86,.10);border:1px solid #ffd9bf}}
+@media(min-width:1300px){
+ .mkk-form-page .mkk-submit{grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px 18px}
+ .mkk-form-page .mkk-submit>.ops-note,.mkk-form-page .mkk-submit>.mkk-hint{grid-column:1/-1}
+ .mkk-form-page .mkk-submit>.mkk-check{margin:0}
+ .mkk-form-page .mkk-submit>.mkk-hint{margin:0;font-size:12px}
+}
+
+/* daftar anggota sebagai kartu di layar kecil */
+@media(max-width:760px){
+ .mkk-msum-wrap{border:0;overflow:visible}
+ .mkk-msum thead{display:none}
+ .mkk-msum,.mkk-msum tbody{display:block}
+ .mkk-msum tr{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;margin:0 0 10px;padding:12px;border:1px solid #e6ebf2;border-radius:14px;background:#fff}
+ .mkk-msum tr.is-error{border-color:#f5c2c7}
+ .mkk-msum td{display:block;padding:0;border:0;background:none!important}
+ .mkk-msum td:before{content:attr(data-label);display:block;margin-bottom:2px;color:#64748b;font-size:10.5px;font-weight:800;text-transform:uppercase}
+ .mkk-msum td.no{display:none}
+ .mkk-msum td.nm{grid-column:1/-1}
+ .mkk-msum .act{grid-column:1/-1;width:auto;display:flex;gap:8px;text-align:left}
+ .mkk-msum .act:before{display:none}
+ .admin-body .mkk-rv-btn{flex:1 1 auto;justify-content:center}
+ .admin-body .mkk-rv-del{margin-left:0}
+ .mkk-members-card>header .pg-btn{margin-left:0;width:100%;justify-content:center}
+}
+
+/* Data Kartu Keluarga: buka/tutup */
+.mkk-fam-card>header .mkk-ocr-meta{margin-left:auto}
+.mkk-fam-card>header .mkk-ocr-meta.warn{color:#9a5300}
+.admin-body .mkk-fold{flex:0 0 auto;width:40px;height:34px;display:grid;place-items:center;margin-left:auto;padding:0;border:0;border-radius:10px;background:linear-gradient(145deg,#ff9a32,#ef4b13);color:#fff;cursor:pointer;box-shadow:0 3px 8px rgba(239,75,19,.25)}
+.mkk-fam-card>header .mkk-ocr-meta+.mkk-fold{margin-left:0}
+.mkk-fold:before{content:"";width:9px;height:9px;margin-top:5px;border-left:3px solid currentColor;border-top:3px solid currentColor;transform:rotate(45deg);transition:transform .2s,margin .2s}
+.mkk-fold:hover{filter:brightness(1.06)}
+.mkk-fold:focus-visible{outline:3px solid #ffd2a8;outline-offset:2px}
+.mkk-fam-card.is-collapsed .mkk-fold:before{margin-top:-5px;transform:rotate(225deg)}
+.mkk-fam-card.is-collapsed>.mkk-grid{display:none}
+.mkk-fam-card.is-collapsed>header{margin-bottom:6px}
+.mkk-fam-sum{margin:0;color:#334e7d;font-size:13.5px;font-weight:700;line-height:1.5;overflow-wrap:anywhere}
+.mkk-fam-sum[hidden]{display:none}

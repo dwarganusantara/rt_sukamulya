@@ -20,10 +20,10 @@
 @media(max-width:360px){.fkm-home{padding-inline:12px}.fkm-hero h1{font-size:21px}.fkm-hero p{font-size:12px}.fkm-art{width:80px;height:90px}.fkm-art .fui-document{width:88px}.fkm-actions a{font-size:11px;gap:5px}.fkm-status button{font-size:11px;padding:6px}.fkm-shortcuts span{font-size:11px}.fkm-meta-icon{width:27px;height:32px}.fkm-meta strong{font-size:12px}}
 @media(min-width:601px) and (max-width:1024px){.fkm-home{padding:0 24px}.fkm-hero h1{font-size:32px}.fkm-hero p{font-size:16px}.fkm-art{width:180px;height:155px}.fkm-art .fui-document{width:180px}.fkm-actions a{font-size:17px;min-height:56px}.fkm-card{padding:22px}.fkm-card h2{font-size:27px}.fkm-status strong{font-size:21px}.fkm-status p{font-size:14px}.fkm-meta small{font-size:14px}.fkm-meta strong{font-size:19px}.fkm-shortcuts span{font-size:17px}}
 @media(max-width:600px){
- body:has(.fkm-home) .dwh-brand>span{display:flex!important;flex-direction:column;max-width:155px;gap:2px}
- body:has(.fkm-home) .dwh-brand b{display:block;font-size:11px!important;line-height:1.2;white-space:normal}
+ body:has(.fkm-home) .dwh-brand>span{display:flex!important;flex-direction:row;gap:.3em;white-space:nowrap}
+ body:has(.fkm-home) .dwh-brand b{display:inline;font-size:12px!important;line-height:1.2;white-space:nowrap}
  body:has(.fkm-home) .dwh-brand{gap:7px;min-width:0}
- body:has(.fkm-home) .dwh-brand img{width:38px;height:38px}
+ body:has(.fkm-home) .dwh-brand .dwh-logo{width:38px;height:38px}
  body:has(.fkm-home) .dwh-top{gap:8px;padding:10px 12px}
  body:has(.fkm-home) .dwh-actions{gap:7px}
  body:has(.fkm-home) .dwh-user summary>img{width:35px;height:35px}
@@ -31,3 +31,72 @@
 }
 @media(max-width:360px){.fkm-bottom-art{margin-inline:-12px}}
 @media(max-width:1024px){.fkm-shortcuts span{padding-right:15px}.fkm-shortcuts b{top:auto;bottom:17px}}
+
+/* ---- Desain krem-oranye versi HP (mockup 14 Nov 2026). Tablet 601-1024px tetap desain sebelumnya. ---- */
+.fkm-art-mw,.fkm-sc-art{display:none}
+@media(max-width:600px){
+ .fui-family-overview{padding-top:0!important;background:#fdf6f1}
+ body:has(.fkm-home.mw-page){background:#fdf6f1!important}
+ .fkm-home.mw-page{padding:0 14px;color:#2b1a12;background:linear-gradient(180deg,#fdf8f4,#fdf3ea 70%)!important}
+ .fkm-home .mw-header{margin:0 -14px;padding-bottom:6px}
+ .fkm-back{min-height:44px;margin-top:4px;padding:8px 18px;color:#f05a14!important;background:linear-gradient(180deg,#fff6ee,#ffe9d8);border:1px solid #fff;box-shadow:0 6px 16px #c2551a24;font-size:15px}
+ /* Hero: judul dua warna + ilustrasi KK, gelombang hijau di bawah */
+ .fkm-hero{position:relative;padding:12px 0 26px;margin:0 -14px;padding-left:14px;overflow:hidden}
+ .fkm-hero:after{content:"";position:absolute;left:0;right:0;bottom:0;height:34px;background:radial-gradient(120% 100% at 30% 100%,#c9e8a0 0,#b5df7c 35%,transparent 36%),linear-gradient(180deg,transparent 40%,#e9f5d6 41%,transparent 100%);opacity:.9;pointer-events:none}
+ .fkm-hero>div{position:relative;z-index:1}
+ .fkm-hero h1{margin:0;padding-bottom:16px;font-size:34px;line-height:1.05;color:#2b1a12}
+ .fkm-h1-accent{display:block;color:#f05a14;white-space:nowrap}
+ .fkm-h1-tail,.fkm-hero p{display:none}
+ .fkm-hero h1:after{width:84px;height:5px;background:#f05a14}
+ .fkm-art{display:none}
+ .fkm-art-mw{display:block;position:absolute;right:-6px;top:0;width:52%;height:auto;z-index:0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 14%);mask-image:linear-gradient(90deg,transparent,#000 14%)}
+ /* Tombol aksi */
+ .fkm-actions{gap:10px;margin:6px 0 14px}
+ .fkm-actions a{min-height:50px;border:1.5px solid #f6a57a;border-radius:16px;background:#fff;color:#2b1a12;font-size:14px}
+ .fkm-actions a svg{color:#f05a14}
+ .fkm-actions .is-primary,.fkm-primary{background:linear-gradient(100deg,#ff8a2a,#f26a12 55%,#ee5a0a)!important;border-color:transparent!important;color:#fff!important;box-shadow:0 8px 18px #f05a1440!important}
+ .fkm-actions .is-primary svg{color:#fff}
+ /* Kartu KK */
+ .fkm-card{position:relative;padding:16px 14px 18px;border:1px solid #fff;border-radius:24px;background:#fffaf6;box-shadow:0 10px 24px #c2551a17;overflow:hidden}
+ .fkm-card:before,.fkm-card:after{content:"";position:absolute;bottom:0;width:58px;height:30px;background:url("mockup/mobile-card-leaf.png") center/contain no-repeat;pointer-events:none}
+ .fkm-card:before{left:0;transform:scaleX(-1)}.fkm-card:after{right:0}
+ .fkm-card h2{color:#2b1a12;font-size:22px}
+ .fkm-card h2>span{width:40px;height:40px;background:linear-gradient(135deg,#ff6b7d,#e8213b)}
+ .fkm-status{gap:12px;padding:10px 12px;border-radius:18px;background:#eaf7e2}
+ .fkm-status.is-ready strong{color:#1f9d3a;font-size:19px}
+ .fkm-status p{display:none}
+ .fkm-status.is-ready .fkm-status-icon{width:38px;height:38px;background:linear-gradient(#5bd04a,#27a83a)}
+ .fkm-status button{position:relative;margin-left:auto;min-height:42px;padding:7px 14px;border:1.5px solid #f6a57a;border-radius:999px;color:#f05a14;font-size:13.5px}
+ .fkm-status button:before{content:"";position:absolute;left:-12px;top:6px;bottom:6px;width:1px;background:#cfe3c4}
+ .fkm-meta{margin:14px 0}
+ .fkm-meta>div+div{border-left-color:#f1e3d6}
+ .fkm-meta small{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+ .fkm-meta strong{margin:0;font-size:16px;color:#2b1a12}
+ .fkm-time{display:none}
+ .fkm-meta-icon{width:44px;height:44px;border-radius:50%;background:#e3f0fd;color:#2b7de9}
+ .fkm-meta>div+div .fkm-meta-icon{background:#ffeadb;color:#f05a14}
+ .fkm-primary{position:relative;z-index:1;min-height:50px;border-radius:999px;font-size:16px}
+ /* Pintasan bergambar */
+ .fkm-shortcuts{gap:9px;margin:14px 0 0}
+ .fkm-shortcuts>a,.fkm-shortcuts>button{--tone:#f97316;min-height:0;padding:8px 10px 12px;border:1px solid #fff!important;border-radius:20px;background:linear-gradient(170deg,#fffaf3,#fdeedd)!important;box-shadow:0 8px 18px #c2551a14;overflow:hidden}
+ .fkm-shortcuts>.tone-blue{--tone:#2196f3;background:linear-gradient(170deg,#f6faff,#e7f1fd)!important}
+ .fkm-shortcuts>.tone-purple{--tone:#8b3ff0;background:linear-gradient(170deg,#fbf8ff,#efe6fc)!important}
+ .fkm-shortcuts>a:after,.fkm-shortcuts>button:after{content:"";position:absolute;left:0;bottom:0;width:46px;height:24px;background:url("mockup/mobile-card-leaf.png") center/contain no-repeat;transform:scaleX(-1);pointer-events:none}
+ .fkm-sc-art{display:block;width:100%;height:auto;aspect-ratio:200/125;object-fit:contain;-webkit-mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,#000 70%,transparent 100%);mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,#000 70%,transparent 100%)}
+ .fkm-shortcuts>a>svg,.fkm-shortcuts>button>svg{display:none}
+ .fkm-shortcuts span{padding-right:26px!important;color:#2b1a12;font-size:13px}
+ .fkm-shortcuts b{right:8px!important;bottom:10px!important;top:auto!important;width:30px!important;height:30px!important;background:var(--tone)!important;font-size:24px!important;box-shadow:0 5px 12px color-mix(in srgb,var(--tone) 40%,transparent)}
+ .fkm-bottom-art{display:none}
+}
+@media(max-width:360px){
+ .fkm-hero h1{font-size:28px}.fkm-art-mw{width:48%}
+ .fkm-actions a{font-size:12.5px}.fkm-status.is-ready strong{font-size:16px}.fkm-status button{padding:6px 10px;font-size:12px}
+ .fkm-shortcuts span{font-size:11.5px;padding-right:22px!important}.fkm-shortcuts b{width:26px!important;height:26px!important}
+}
+@media(max-width:600px){
+ .fkm-hero h1{font-size:clamp(26px,7.9vw,31px)}
+ .fkm-art-mw{width:47%;top:14px}
+ .fkm-shortcuts>a,.fkm-shortcuts>button{padding-bottom:48px}
+ .fkm-shortcuts span{padding-right:0!important;font-size:12.5px}
+ .fkm-shortcuts b{bottom:9px!important}
+}

@@ -30,8 +30,10 @@ $css = 'assets/dashboard-icons.css';
 <link rel="icon" href="<?= base_url(html_escape($logo)) ?>">
 <link rel="stylesheet" href="<?= base_url($css) ?>?v=<?= filemtime(FCPATH . $css) ?>">
 <link rel="stylesheet" href="<?= base_url('assets/chat.css') ?>?v=<?= filemtime(FCPATH . 'assets/chat.css') ?>">
-<?php $this->load->helper('theme'); echo theme_style($settings); ?>
 <link rel="stylesheet" href="<?= base_url('assets/dashboard-mobile.css') ?>?v=<?= filemtime(FCPATH.'assets/dashboard-mobile.css') ?>">
+<link rel="stylesheet" href="<?= base_url('assets/responsive-ui.css') ?>?v=<?= filemtime(FCPATH.'assets/responsive-ui.css') ?>">
+<link rel="stylesheet" href="<?= base_url('assets/theme-runtime.css') ?>?v=<?= filemtime(FCPATH.'assets/theme-runtime.css') ?>">
+<?php $this->load->helper('theme'); echo theme_style($settings); ?>
 </head>
 <body class="dwb dm-enabled">
 <a class="dwb-skip" href="#dwb-main">Lewati ke konten</a>

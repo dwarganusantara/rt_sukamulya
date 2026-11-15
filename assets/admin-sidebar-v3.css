@@ -1,0 +1,56 @@
+﻿/* Sidebar admin v3 (mockup Nov 2026): logo + badge RT, judul grup hijau, ikon berwarna hijau/oranye,
+   menu aktif pil oranye, dan tautan www.warganusa.com di bawah. Hanya mengubah tampilan sidebar;
+   tema gelap (Tema & Tampilan) dibiarkan memakai gaya bawaannya. */
+.admin-body:not(.ui-dark) .ad-sidebar{--sb-green:#1f8a3b;--sb-green-2:#2fa84f;--sb-orange:#f26a1b;--sb-ink:#13233f;background:#fff}
+
+/* Brand */
+/* Logo kiri (persegi, berisi tulisan) + 3 baris teks rata kiri, sejajar tengah secara vertikal. */
+.admin-body:not(.ui-dark) .ad-sidebar .ad-brand{display:flex;align-items:center;gap:12px;margin:0 10px 8px;padding:16px 4px 16px;border-bottom:0;
+ background:linear-gradient(90deg,#ff8a2b 0%,#ffb35c 45%,#3fae49 100%) left bottom/100% 3px no-repeat}
+.admin-body:not(.ui-dark) .ad-sidebar .ad-brand img{width:66px;height:66px;flex:0 0 66px;object-fit:contain}
+.admin-body:not(.ui-dark) .ad-sidebar .ad-brand>span{display:flex;flex-direction:column;align-items:flex-start;gap:5px;min-width:0}
+.admin-body:not(.ui-dark) .ad-sidebar .ad-brand .ad-brand-app{display:block;margin:0;font-size:19px;font-weight:900;line-height:1.05;letter-spacing:-.01em;color:var(--sb-green);white-space:nowrap}
+.admin-body:not(.ui-dark) .ad-sidebar .ad-brand strong{display:inline-block;margin:0;padding:3px 12px;border-radius:999px;background:linear-gradient(95deg,#ff8a2b,#f2561a);
+ color:#fff;font-size:12.5px;font-weight:800;line-height:1.4;letter-spacing:.02em;box-shadow:0 3px 8px #f2561a33;white-space:nowrap;width:max-content;max-width:100%}
+/* Tombol tutup drawer (.rsp-drawer-close, 44px di kanan atas) tidak boleh menimpa nama aplikasi. */
+@media(max-width:950px){
+ .admin-body:not(.ui-dark) .ad-sidebar .ad-brand{padding-right:52px!important;gap:9px}
+ .admin-body:not(.ui-dark) .ad-sidebar .ad-brand img{width:44px;height:42px;flex:0 0 44px}
+ .admin-body:not(.ui-dark) .ad-sidebar .ad-brand>span{min-width:0}
+ .admin-body:not(.ui-dark) .ad-sidebar .ad-brand .ad-brand-app{font-size:16px!important;white-space:nowrap}
+}
+.admin-body:not(.ui-dark) .ad-sidebar .ad-brand small{display:block;margin:0;font-size:12px;font-weight:700;line-height:1.2;color:#2b7a3d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+
+/* Judul grup */
+.admin-body:not(.ui-dark) .ad-sidebar .sbx-head{min-height:34px;color:var(--sb-green);font-size:15px;font-weight:800;letter-spacing:0;text-transform:none}
+.admin-body:not(.ui-dark) .ad-sidebar .sbx-head:hover{background:#f1f8f2;color:#17702f}
+.admin-body:not(.ui-dark) .ad-sidebar .sbx-head svg{color:#2b4a35}
+
+/* Baris menu & ikon berwarna (hijau default, oranye untuk menu tertentu seperti mockup) */
+.admin-body:not(.ui-dark) .ad-sidebar .sbx-row{color:var(--sb-ink);font-weight:600}
+.admin-body:not(.ui-dark) .ad-sidebar .sbx-chip{width:30px;height:30px;background:transparent;color:var(--sb-green-2)}
+.admin-body:not(.ui-dark) .ad-sidebar .sbx-chip svg{width:21px;height:21px;stroke-width:2.1}
+.admin-body:not(.ui-dark) .ad-sidebar .sbx-line[data-key="admin/letter_types"] .sbx-chip,
+.admin-body:not(.ui-dark) .ad-sidebar .sbx-line[data-key="admin/pengaduan"] .sbx-chip,
+.admin-body:not(.ui-dark) .ad-sidebar .sbx-line[data-key="admin/posts/pengumuman"] .sbx-chip,
+.admin-body:not(.ui-dark) .ad-sidebar .sbx-line[data-key="admin/posts/agenda"] .sbx-chip,
+.admin-body:not(.ui-dark) .ad-sidebar .sbx-line[data-key="admin/tunggakan"] .sbx-chip,
+.admin-body:not(.ui-dark) .ad-sidebar .sbx-line[data-key="admin/ronda"] .sbx-chip,
+.admin-body:not(.ui-dark) .ad-sidebar .sbx-line[data-key="admin/langganan"] .sbx-chip{color:var(--sb-orange)}
+.admin-body:not(.ui-dark) .ad-sidebar .sbx-line:not(.active):hover .sbx-row{background:#f3faf4}
+.admin-body:not(.ui-dark) .ad-sidebar .sbx-line.active .sbx-row{border-radius:14px;font-weight:800}
+.admin-body:not(.ui-dark) .ad-sidebar .sbx-line.active .sbx-chip{background:transparent;color:#fff}
+
+/* Bawah sidebar: alamat situs (menggantikan ilustrasi) */
+/* Tombol pil alamat situs: besar dan jelas terlihat */
+.ad-sidebar .sbx-site{flex:none;display:flex;align-items:center;justify-content:center;gap:7px;margin:8px 12px 14px;padding:12px 8px;border:1.5px solid #bfe3c6;border-radius:14px;
+ background:linear-gradient(180deg,#f2fbf3,#e4f5e7);color:#17702f;font-size:15px;font-weight:900;letter-spacing:.01em;text-decoration:none;white-space:nowrap;box-shadow:0 4px 12px #1f8a3b1a}
+.ad-sidebar .sbx-site:before{content:"";flex:none;width:17px;height:17px;background:currentColor;
+ -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z'/%3E%3C/svg%3E") center/contain no-repeat;
+ mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z'/%3E%3C/svg%3E") center/contain no-repeat}
+.ad-sidebar .sbx-site:hover{border-color:#ffb27a;background:linear-gradient(180deg,#fff6ee,#ffe9d8);color:#e2560f}
+.ad-sidebar .sbx-site:focus-visible{outline:2px solid #ff5b1b;outline-offset:2px;border-radius:6px}
+.ui-dark .ad-sidebar .sbx-site{color:#9fdcae;border-top-color:#ffffff1f}
+/* Sidebar ciut (ikon saja): sembunyikan teks alamat & badge agar tidak terpotong */
+.ad-collapsed .ad-sidebar .sbx-site{display:none}
+@media(min-width:951px){.admin-body.ad-collapsed .ad-sidebar .ad-brand strong,.admin-body.ad-collapsed .ad-sidebar .ad-brand small,.admin-body.ad-collapsed .ad-sidebar .ad-brand .ad-brand-app{display:none}}

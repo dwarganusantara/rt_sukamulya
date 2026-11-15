@@ -2,7 +2,7 @@
   const dialog = document.getElementById('cdp');
   if (!dialog || !dialog.showModal) return;
   const POLL_MS = 30000;
-  const statusLabel = { approved: 'Disetujui', rejected: 'Ditolak', revision_requested: 'Perlu Perbaikan', disetujui: 'Disetujui', selesai: 'Selesai', ditolak: 'Ditolak' };
+  const statusLabel = { approved: 'Disetujui', rejected: 'Ditolak', revision_requested: 'Perlu Perbaikan', diproses: 'Diproses', disetujui: 'Disetujui', selesai: 'Selesai', ditolak: 'Ditolak', tidak_layak: 'Tidak Layak', usulan: 'Diusulkan', layak: 'Lolos Verifikasi', waiting_resident: 'Menunggu Tanggapan Anda', resolved: 'Selesai Ditangani', sent: 'Terkirim' };
   const kicker = { approved: 'Selamat! Kabar baik dari Admin RT', rejected: 'Kabar dari Admin RT', revision: 'Tindakan diperlukan' };
   const key = it => `${it.kind}:${it.id}:${it.status}`;
   const $ = id => document.getElementById(id);
@@ -24,13 +24,23 @@
     const it = queue[index];
     if (!it) return;
     dialog.dataset.tone = it.tone;
-    $('cdp-kicker').textContent = kicker[it.tone] || 'Kabar dari Admin RT';
+    $('cdp-kicker').textContent = it.kicker || kicker[it.tone] || 'Kabar dari Admin RT';
     $('cdp-title').textContent = it.title;
     $('cdp-message').textContent = it.message;
+    // Label info bisa diganti per jenis kabar (mis. jadwal ronda, pengumuman); default untuk pengajuan.
+    const lb = it.labels || {};
+    $('cdp-l-type').textContent = lb.type || 'Jenis Pengajuan';
+    $('cdp-l-code').textContent = lb.code || 'No. Pengajuan';
+    $('cdp-l-time').textContent = lb.time || 'Diproses';
     $('cdp-type').textContent = it.type;
     $('cdp-code').textContent = it.code;
     $('cdp-time').textContent = it.time;
-    $('cdp-status').textContent = statusLabel[it.status] || it.status;
+    $('cdp-status').textContent = it.status_label || statusLabel[it.status] || it.status;
+    // Bantuan sosial: tampilkan nama program & nominal (opsional, hanya bila dikirim server).
+    $('cdp-program-row').hidden = !it.program;
+    $('cdp-program').textContent = it.program || '';
+    $('cdp-amount-row').hidden = !it.amount;
+    $('cdp-amount').textContent = it.amount || '';
     $('cdp-note-box').hidden = !it.note;
     $('cdp-note').textContent = it.note || '';
     $('cdp-go').href = it.url;

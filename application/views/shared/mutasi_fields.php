@@ -5,7 +5,7 @@ $active = array();
 foreach ($family['members'] as $m) if ($m['status'] === 'aktif') $active[(int) $m['id']] = ($m['fields']['nama_lengkap'] ?? '-') . ' — ' . ($m['fields']['hubungan_keluarga'] ?? '-');
 $labels = array('nama_lengkap' => 'Nama lengkap', 'nik' => 'NIK (16 digit)', 'jenis_kelamin' => 'Jenis kelamin', 'tempat_lahir' => 'Tempat lahir', 'tanggal_lahir' => 'Tanggal lahir',
     'agama' => 'Agama', 'pendidikan' => 'Pendidikan', 'pekerjaan' => 'Pekerjaan', 'golongan_darah' => 'Golongan darah', 'hubungan_keluarga' => 'Hubungan keluarga',
-    'alamat' => 'Alamat', 'rt' => 'RT', 'rw' => 'RW', 'kelurahan' => 'Kelurahan', 'kecamatan' => 'Kecamatan', 'kota' => 'Kota/Kabupaten', 'provinsi' => 'Provinsi', 'kode_pos' => 'Kode pos');
+    'alamat' => 'Alamat sesuai KK', 'rt' => 'RT', 'rw' => 'RW', 'kelurahan' => 'Kelurahan', 'kecamatan' => 'Kecamatan', 'kota' => 'Kota/Kabupaten', 'provinsi' => 'Provinsi', 'kode_pos' => 'Kode pos');
 $gender = array('L' => 'Laki-laki', 'P' => 'Perempuan');
 ?>
 <div class="ops-form">

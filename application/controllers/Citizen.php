@@ -41,12 +41,22 @@ class Citizen extends CI_Controller
         $data['error'] = '';
         if ($this->input->method(TRUE) === 'POST') {
             $username = trim((string) $this->input->post('username', TRUE));
+            // SEC-02: brute-force protection (failed attempts only).
+            $this->load->library('Login_throttle');
+            if ($this->login_throttle->blocked('citizen', $username)) {
+                $data['error'] = Login_throttle::MESSAGE;
+                $this->load->view('citizen/login', $data);
+                return;
+            }
             $user = $this->db->get_where('citizens', array('username' => $username, 'is_active' => 1))->row_array();
+            if (!$user) Login_throttle::dummy_verify($this->input->post('password'));
             if ($user && password_verify((string) $this->input->post('password'), $user['password_hash'])) {
+                $this->login_throttle->succeed('citizen', $username);
                 $this->session->sess_regenerate(TRUE);
                 $this->session->set_userdata(array('citizen_id' => $user['id'], 'citizen_name' => $user['display_name']));
                 redirect('warga');
             }
+            $this->login_throttle->fail('citizen', $username);
             $data['error'] = 'Username atau password salah.';
         }
         $this->load->view('citizen/login', $data);
@@ -74,6 +84,9 @@ class Citizen extends CI_Controller
                 $data['error'] = 'Username wajib diisi.';
             } elseif ($password === '') {
                 $data['error'] = 'Password wajib diisi.';
+            } elseif (strlen($password) < 8) {
+                // SEC-06: same minimum as the existing "ganti password" rule (warga/password).
+                $data['error'] = 'Password minimal 8 karakter.';
             } elseif ($password !== $password_confirmation) {
                 $data['error'] = 'Konfirmasi password tidak sama.';
             } elseif ($this->db->get_where('citizens', array('username' => $username))->row_array()) {
@@ -103,7 +116,11 @@ class Citizen extends CI_Controller
 
     public function logout()
     {
+        // SEC-08: only a POST (CSRF-checked) or the per-session logout link may end the session.
+        if (!logout_request_ok()) {logout_confirm_page('warga/logout', 'warga'); return;}
         $this->session->unset_userdata(array('citizen_id', 'citizen_name'));
+        // SEC-05: issue a new session ID so a captured pre-logout ID cannot be reused.
+        $this->session->sess_regenerate(TRUE);
         redirect('warga/login');
     }
 
@@ -521,17 +538,36 @@ class Citizen extends CI_Controller
         $preview = $this->input->get('preview', TRUE) === '1';
         $item = $this->db->select('service_requests.*,citizens.display_name,service_request_details.applicant_name,service_request_details.address,service_request_details.purpose,service_request_details.extra_data,service_request_details.letter_number,service_request_details.approved_at')->join('citizens','citizens.id=service_requests.citizen_id')->join('service_request_details','service_request_details.request_id=service_requests.id')->where('service_requests.id',(int)$id)->get('service_requests')->row_array();
         if (!$item || (!$this->session->userdata('admin_id') && (int)$this->session->userdata('citizen_id') !== (int)$item['citizen_id']) || (!$preview && ($item['status'] !== 'disetujui' || !$item['letter_number']))) show_404();
-        $this->load->view('citizen/letter', array('item'=>$item,'settings'=>$this->Content_model->settings(),'catalog'=>$this->Letter_model->catalog(),'preview'=>$preview));
+        // SEC-07: the real stamp/signature are printed only on approved letters (staff always see them).
+        $show_sign = $this->is_staff_session() || ($item['status'] === 'disetujui' && $item['letter_number']);
+        $this->load->view('citizen/letter', array('item'=>$item,'settings'=>$this->Content_model->settings(),'catalog'=>$this->Letter_model->catalog(),'preview'=>$preview,'show_sign'=>$show_sign));
+    }
+
+    /** Staff session: an admin account or the server-owned platform identity. */
+    private function is_staff_session()
+    {
+        if ($this->session->userdata('admin_id')) return TRUE;
+        $this->load->library('Platform_owner');
+        return $this->platform_owner->valid_session();
     }
 
     public function letter_asset($kind = '')
     {
         $fields = array('logo'=>'letter_logo','signature'=>'letter_signature','stamp'=>'letter_stamp');
         if (!isset($fields[$kind])) show_404();
-        if (!$this->session->userdata('admin_id') && !$this->session->userdata('citizen_id')) {
-            $id=(int)$this->input->get('id');
-            $owned=$this->db->get_where('service_requests',array('id'=>$id,'citizen_id'=>(int)$this->session->userdata('citizen_id'),'status'=>'disetujui'))->row_array();
-            if (!$owned) show_404();
+        // SEC-07: staff see every asset. Residents see the logo (letter head / preview) and the stamp and
+        // signature only for their own approved letter (?id=). Anonymous visitors get nothing.
+        if (!$this->is_staff_session()) {
+            $citizen_id = (int) $this->session->userdata('citizen_id');
+            if (!$citizen_id) show_404();
+            if ($kind !== 'logo') {
+                $owned = $this->db->select('service_requests.id')
+                    ->join('service_request_details', 'service_request_details.request_id=service_requests.id')
+                    ->where(array('service_requests.id' => (int) $this->input->get('id'), 'service_requests.citizen_id' => $citizen_id, 'service_requests.status' => 'disetujui'))
+                    ->where("service_request_details.letter_number IS NOT NULL AND service_request_details.letter_number <> ''", NULL, FALSE)
+                    ->get('service_requests')->row_array();
+                if (!$owned) show_404();
+            }
         }
         $settings=$this->Content_model->settings();
         $filename=$settings[$fields[$kind]] ?? '';

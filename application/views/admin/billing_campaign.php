@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="<?= base_url('assets/admin-billing-campaign.css') ?>?v=<?= filemtime(FCPATH.'assets/admin-billing-campaign.css') ?>">
 <?php $posted=function($key,$fallback=''){ $value=$this->input->post($key); return $value!==NULL?$value:$fallback; }; $selectedCitizen=(string)$posted('citizen_id','all'); ?>
 <div class="billing-page">
- <nav class="billing-breadcrumb" aria-label="Breadcrumb"><a href="<?= site_url('admin/dues') ?>">Keuangan</a><span>›</span><a href="<?= site_url('admin/dues') ?>">Iuran Warga</a><span>›</span><strong>Buat Tagihan</strong></nav>
+ <?php $this->load->helper('official_icons'); ?><div class="pg-crumb-row billing-crumb-row"><a class="pg-back" href="<?= site_url('admin/dues') ?>"><?= official_svg('back') ?><span>Kembali ke Iuran Warga</span></a><nav class="billing-breadcrumb" aria-label="Breadcrumb"><a href="<?= site_url('admin/dues') ?>">Keuangan</a><span>›</span><a href="<?= site_url('admin/dues') ?>">Iuran Warga</a><span>›</span><strong>Buat Tagihan</strong></nav></div>
  <section class="billing-hero"><div class="billing-hero-copy"><span class="billing-hero-icon" aria-hidden="true">▣</span><div><h1>Buat Tagihan Iuran</h1><p>Satu formulir untuk membuat tagihan iuran bagi seluruh warga<br>atau satu warga tertentu.</p></div></div></section>
  <?php if($error): ?><div class="error billing-error"><?= html_escape($error) ?></div><?php endif; ?>
  <div class="billing-layout">
@@ -11,7 +11,8 @@
     <label><strong>Jenis Iuran</strong><span class="billing-control"><i>▣</i><select name="due_type" required><option value="rutin" <?= $posted('due_type','rutin')==='rutin'?'selected':'' ?>>Rutin bulanan</option><option value="non_rutin" <?= $posted('due_type')==='non_rutin'?'selected':'' ?>>Nonrutin</option><option value="sosial" <?= $posted('due_type')==='sosial'?'selected':'' ?>>Sosial</option></select></span><small>Pilih jenis iuran yang akan ditagihkan.</small></label>
     <label><strong>Periode</strong><span class="billing-control"><i>▦</i><input type="month" name="period" value="<?= html_escape($posted('period',date('Y-m'))) ?>" required></span><small>Pilih periode tagihan.</small></label>
     <label><strong>Nama Tagihan</strong><span class="billing-control"><i>▤</i><input name="title" maxlength="140" required placeholder="Contoh: Iuran Keamanan Oktober" value="<?= html_escape($posted('title')) ?>"></span><small>Nama yang akan tampil di tagihan warga.</small></label>
-    <label><strong>Kategori</strong><span class="billing-control"><i>◇</i><select name="category" required><option value="">Pilih kategori</option><?php foreach(array('Keamanan','Kebersihan','Sosial','Pembangunan','Operasional','Lain-lain') as $category): ?><option value="<?= $category ?>" <?= $posted('category')===$category?'selected':'' ?>><?= $category ?></option><?php endforeach; ?></select></span><small>Contoh: Keamanan, Kebersihan, dan lainnya.</small></label>
+    <label><strong>Kategori</strong><?php $catList=array('Keamanan','Kebersihan','Sosial','Pembangunan','Operasional','Lain-lain'); $postedCat=(string)$posted('category'); ?><span class="billing-control"><i>◇</i><select name="category" id="bill-category" required><option value="">Pilih kategori</option><?php foreach($catList as $category): ?><option value="<?= $category ?>" <?= $postedCat===$category?'selected':'' ?>><?= $category ?></option><?php endforeach; ?><option value="__custom" <?= $postedCat==='__custom'?'selected':'' ?>>Lainnya (tulis sendiri)…</option></select></span><small id="bill-category-help">Satu warga hanya bisa punya satu tagihan per kategori per periode.</small></label>
+    <label class="billing-custom-cat" id="bill-custom-wrap"<?= $postedCat==='__custom'?'':' hidden' ?>><strong>Nama Kategori Baru</strong><span class="billing-control"><i>✎</i><input name="category_custom" id="bill-category-custom" maxlength="100" placeholder="Contoh: Iuran 17 Agustus" value="<?= html_escape($posted('category_custom')) ?>"<?= $postedCat==='__custom'?' required':'' ?>></span><small>Dipakai bila kategori yang dibutuhkan belum ada di daftar.</small></label>
     <label><strong>Nominal per Warga (Rp)</strong><span class="billing-control"><i>▤</i><input type="number" name="amount" min="1" max="999999999999" step="1" required placeholder="Contoh: 50000" value="<?= html_escape($posted('amount')) ?>"></span><small>Jumlah iuran untuk setiap warga.</small></label>
     <label><strong>Sasaran</strong><span class="billing-control"><i>♧</i><select name="target" id="bill-target"><option value="semua" <?= $posted('target','semua')==='semua'?'selected':'' ?>>Semua warga aktif</option><option value="warga" <?= $posted('target')==='warga'?'selected':'' ?>>Satu warga tertentu</option></select></span><small>Tentukan siapa yang menerima tagihan.</small></label>
     <label class="billing-wide" id="bill-citizen"><strong>Pilih Warga</strong><span class="billing-control"><i>♙</i><select name="citizen_id" id="bill-citizen-select" required><option value="all" <?= $selectedCitizen==='all' || $posted('target','semua')==='semua'?'selected':'' ?>>Semua Warga Aktif</option><?php foreach($citizens as $citizen): ?><option value="<?= (int)$citizen['id'] ?>" <?= $selectedCitizen===(string)$citizen['id']?'selected':'' ?>><?= html_escape($citizen['display_name']) ?></option><?php endforeach; ?></select></span><small>Pilih semua warga aktif atau satu warga tertentu.</small></label>
@@ -42,4 +43,26 @@
  select.addEventListener('change',syncFromCitizen);
  document.querySelector('.billing-form-card').addEventListener('reset',function(){setTimeout(syncFromCitizen,0);});
  syncFromCitizen();
+})();</script>
+<script>(function(){
+ // REVISI: kategori yang sudah dipakai warga terpilih pada periode terpilih ditandai "(sudah ada)" dan tidak bisa dipilih.
+ var used=<?= json_encode($used ?? array(), JSON_UNESCAPED_UNICODE) ?>;
+ var cat=document.getElementById('bill-category'),wrap=document.getElementById('bill-custom-wrap'),custom=document.getElementById('bill-category-custom'),help=document.getElementById('bill-category-help');
+ var who=document.getElementById('bill-citizen-select'),period=document.querySelector('input[name="period"]'),target=document.getElementById('bill-target');
+ var baseHelp=help.textContent;
+ function syncCustom(){var on=cat.value==='__custom';wrap.hidden=!on;custom.required=on;if(on&&!custom.value)custom.focus();}
+ function markUsed(){
+  var list=(target.value==='warga'&&who.value&&who.value!=='all'&&used[who.value]&&used[who.value][period.value])||[],taken=[];
+  [].forEach.call(cat.options,function(o){
+   if(!o.value||o.value==='__custom')return;
+   var t=list.indexOf(o.value)>=0;o.disabled=t;o.textContent=o.value+(t?' (sudah ada)':'');if(t)taken.push(o.value);
+  });
+  if(cat.selectedOptions[0]&&cat.selectedOptions[0].disabled)cat.value='';
+  help.textContent=taken.length?'Warga ini sudah punya tagihan periode ini untuk: '+taken.join(', ')+'. Pilih kategori lain atau "Lainnya (tulis sendiri)".':baseHelp;
+  help.classList.toggle('is-warn',taken.length>0);
+ }
+ cat.addEventListener('change',syncCustom);
+ [who,period,target].forEach(function(el){el.addEventListener('change',function(){setTimeout(markUsed,0);});});
+ document.querySelector('.billing-form-card').addEventListener('reset',function(){setTimeout(function(){syncCustom();markUsed();},0);});
+ syncCustom();markUsed();
 })();</script>

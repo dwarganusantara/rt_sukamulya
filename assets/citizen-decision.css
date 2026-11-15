@@ -26,6 +26,9 @@
 .cdp-info dt{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#64748b}
 .cdp-info dt .fui-icon{width:15px;height:15px;color:var(--c1)}
 .cdp-info dd{margin:4px 0 0;font-size:14.5px;font-weight:800;overflow-wrap:anywhere}
+.cdp-info>div[hidden]{display:none}
+.cdp-rp{display:inline-grid;place-items:center;padding:0 4px;border:1.5px solid var(--c1);border-radius:4px;color:var(--c1);font-size:9.5px;font-weight:900;line-height:14px}
+.cdp-amount{font-size:17px!important;color:var(--c1)}
 .cdp-status{display:inline-block;padding:3px 10px;border-radius:999px;background:var(--soft);color:var(--ink);font-size:13px;font-weight:900}
 .cdp-note{margin-top:12px;padding:12px 14px;border-radius:14px;background:var(--bg);border:1px solid var(--line)}
 .cdp-note strong{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:900;color:var(--ink)}

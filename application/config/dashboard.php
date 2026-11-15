@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 // Routes are server-owned; administrators may change presentation, never destinations.
-$config['dashboard_icons']=array('person'=>'Profil','people'=>'Keluarga','doc'=>'Surat','clock'=>'Riwayat','wallet'=>'Dompet','chart'=>'Grafik','megaphone'=>'Pengumuman','calendar'=>'Agenda','image'=>'Galeri','shield'=>'Keamanan','alert'=>'Aspirasi','chat'=>'Chat','swap'=>'Mutasi','phone'=>'Telepon','gear'=>'Pengaturan','upload'=>'Unggah / OCR');
+$config['dashboard_icons']=array('person'=>'Profil','people'=>'Keluarga','doc'=>'Surat','clock'=>'Riwayat','wallet'=>'Dompet','chart'=>'Grafik','megaphone'=>'Pengumuman','calendar'=>'Agenda','image'=>'Galeri','shield'=>'Keamanan','briefcase'=>'Program Kerja','alert'=>'Aspirasi','chat'=>'Chat','swap'=>'Mutasi','phone'=>'Telepon','gear'=>'Pengaturan','upload'=>'Unggah / OCR');
 // Tema heksagon (spesifikasi dashboard warga). Lima tema lama tetap dikenali agar pengaturan tersimpan tidak rusak.
 $config['dashboard_colors']=array('maroon'=>'Merah marun','mint'=>'Mint','orange'=>'Oranye','lavender'=>'Lavender','navy'=>'Biru tua','cream'=>'Krem','cyan'=>'Cyan','peach'=>'Jingga','sky'=>'Biru','rose'=>'Merah muda','lilac'=>'Ungu');
 $config['dashboard_categories']=array('Akun','Kependudukan','Layanan Warga','Keuangan','Informasi','Bantuan');
@@ -19,8 +19,10 @@ $config['dashboard_registry']=array(
  'events'=>array('agenda','Agenda Kegiatan','calendar','cream','Informasi',1,0,1),
  'gallery'=>array('galeri','Galeri Kegiatan','image','lavender','Informasi',1,0,1),
  'patrol'=>array('warga/ronda','Jadwal Ronda','shield','cyan','Informasi',1,0,0),
+ 'program'=>array('warga/program','Program Kerja','briefcase','peach','Informasi',1,0,0),
  'complaints'=>array('warga/pengaduan','Pengaduan & Aspirasi','alert','cream','Layanan Warga',1,0,0),
- 'chat'=>array('warga/chat','Chat Pengurus','chat','lavender','Layanan Warga',1,1,0),
+ // REVISI: kotak "Chat Pengurus" tidak ditampilkan; chat memakai tombol melayang "Chat Admin/Petugas" (site/chat_widget).
+ 'chat'=>array('warga/chat','Chat Pengurus','chat','lavender','Layanan Warga',0,0,0),
  'ocr'=>array('warga/keluarga/scan','Upload KK / OCR','upload','cyan','Kependudukan',0,0,0),
  'mutation'=>array('warga/mutasi','Mutasi Data','swap','mint','Kependudukan',0,0,0),
  'contact_rt'=>array('kontak','Kontak Pengurus','phone','cream','Bantuan',0,0,1),

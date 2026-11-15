@@ -16,8 +16,11 @@ $hero=trim((string)($settings['announcement_page_image']??''))?:'assets/mockup/a
 $is_citizen=(bool)$this->session->userdata('citizen_id');
 ?>
 <link rel="stylesheet" href="<?= base_url('assets/citizen-red.css') ?>?v=<?= filemtime(FCPATH.'assets/citizen-red.css') ?>">
-<main class="announcement-page anx-page crd-page">
+<link rel="stylesheet" href="<?= base_url('assets/mobile-warm.css') ?>?v=<?= filemtime(FCPATH.'assets/mobile-warm.css') ?>">
+<main class="announcement-page anx-page crd-page mw-page">
+  <header class="mw-header mw-only"><?php $this->load->view('site/mobile_brand_header',array('settings'=>$settings)); ?></header>
   <section class="anx-hero">
+    <?php $this->load->view('site/mobile_wave'); ?>
     <span class="anx-hero-art" aria-hidden="true"><img src="<?= base_url(html_escape($hero)) ?>" alt=""></span>
     <svg class="anx-hero-wave" viewBox="0 0 1600 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 120V40C220 96 420 110 700 84S1260 30 1600 70v50Z" fill="#fff"/><path d="M0 52C230 104 430 116 700 92S1260 40 1600 80v10C1260 52 980 102 700 104S220 112 0 66Z" fill="#d9002c"/><path d="M0 0v34C120 70 220 84 320 82 200 66 90 36 0 0Z" fill="#e3062f" opacity=".85"/></svg>
     <div class="anx-wrap anx-hero-copy">

@@ -12,22 +12,33 @@
  var summaryPeriod=$('dux-summary-period');
  summaryPeriod.addEventListener('change',function(){location.href=summaryPeriod.dataset.url+'?period='+encodeURIComponent(summaryPeriod.value)});
 
- var more=$('dux-pay-more');
- if(more)more.addEventListener('click',function(){
-  var open=more.getAttribute('aria-expanded')==='true';
-  document.querySelectorAll('#dux-pay-body .dux-extra').forEach(function(row){row.hidden=open});
-  more.setAttribute('aria-expanded',open?'false':'true');
-  more.querySelector('span').textContent=open?more.dataset.more:more.dataset.less;
- });
-
- var periodFilter=$('dux-filter-period'),search=$('dux-filter-search'),emptyRow=$('dux-due-empty');
- var rows=Array.prototype.slice.call(document.querySelectorAll('#dux-due-body tr[data-period]'));
- function applyFilter(){
-  var period=periodFilter.value,q=search.value.trim().toLowerCase(),visible=0;
-  rows.forEach(function(row){var show=(!period||row.dataset.period===period)&&(!q||row.dataset.name.indexOf(q)>=0);row.hidden=!show;if(show)visible++});
-  if(rows.length)emptyRow.hidden=visible>0;
+ // Dua tabel utama ditampilkan sebagai tab agar halaman tetap ringkas.
+ var tabs=Array.prototype.slice.call(document.querySelectorAll('[data-dux-tab]'));
+ var panels=Array.prototype.slice.call(document.querySelectorAll('[data-dux-panel]'));
+ function activateTab(name,updateUrl){
+  if(name!=='tagihan')name='pembayaran';
+  tabs.forEach(function(tab){
+   var active=tab.dataset.duxTab===name;
+   tab.setAttribute('aria-selected',active?'true':'false');
+   tab.setAttribute('tabindex',active?'0':'-1');
+  });
+  panels.forEach(function(panel){panel.hidden=panel.dataset.duxPanel!==name});
+  if(updateUrl&&history.replaceState)history.replaceState(null,'',location.pathname+location.search+'#'+name);
  }
- periodFilter.addEventListener('change',applyFilter);search.addEventListener('input',applyFilter);
+ if(tabs.length&&panels.length){
+  activateTab(location.hash==='#tagihan'?'tagihan':'pembayaran',false);
+  tabs.forEach(function(tab,index){
+   tab.addEventListener('click',function(event){event.preventDefault();activateTab(tab.dataset.duxTab,true)});
+   tab.addEventListener('keydown',function(event){
+    if(event.key!=='ArrowLeft'&&event.key!=='ArrowRight')return;
+    event.preventDefault();var next=(index+(event.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;
+    activateTab(tabs[next].dataset.duxTab,true);tabs[next].focus();
+   });
+  });
+  window.addEventListener('hashchange',function(){activateTab(location.hash==='#tagihan'?'tagihan':'pembayaran',false)});
+ }
+
+ // Filter kategori/periode/pencarian & halaman kini diproses server (lihat Admin::dues); tidak ada filter di browser.
 
  // Menu ⋮ memakai posisi fixed agar tidak terpotong oleh tabel yang bisa di-scroll.
  var menus=Array.prototype.slice.call(document.querySelectorAll('.dux-menu'));
@@ -54,4 +65,13 @@
   });
  });
  document.querySelectorAll('[name=review_note]').forEach(function(note){note.addEventListener('input',function(){note.setCustomValidity('')})});
+})();
+
+// Panel filter Daftar Tagihan: bisa dibuka/tutup (diingat per browser).
+(function(){
+ var fp=document.getElementById('dux-fp'),btn=document.getElementById('dux-fp-fold');if(!fp||!btn)return;
+ var key='sukamulya.dues.filter.collapsed';
+ function set(c,save){fp.classList.toggle('is-collapsed',c);btn.setAttribute('aria-expanded',c?'false':'true');btn.title=c?'Tampilkan filter':'Sembunyikan filter';if(save)try{localStorage.setItem(key,c?'1':'0')}catch(e){}}
+ try{set(localStorage.getItem(key)==='1',false)}catch(e){}
+ btn.addEventListener('click',function(){set(!fp.classList.contains('is-collapsed'),true)});
 })();

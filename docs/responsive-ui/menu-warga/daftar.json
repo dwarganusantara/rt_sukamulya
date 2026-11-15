@@ -1,0 +1,80 @@
+[
+ {
+  "f": "00-dashboard-warga.jpg",
+  "l": "Dashboard Warga",
+  "u": "warga",
+  "h": 928
+ },
+ {
+  "f": "01-profil-saya.jpg",
+  "l": "Profil Saya",
+  "u": "warga/profil",
+  "h": 2669
+ },
+ {
+  "f": "02-kartu-keluarga.jpg",
+  "l": "Kartu Keluarga",
+  "u": "warga/keluarga",
+  "h": 997
+ },
+ {
+  "f": "03-pengajuan-surat.jpg",
+  "l": "Pengajuan Surat",
+  "u": "warga/layanan",
+  "h": 3564
+ },
+ {
+  "f": "04-riwayat-surat.jpg",
+  "l": "Riwayat Surat",
+  "u": "warga/riwayat",
+  "h": 2327
+ },
+ {
+  "f": "05-iuran-warga.jpg",
+  "l": "Iuran Warga",
+  "u": "warga/iuran",
+  "h": 2825
+ },
+ {
+  "f": "06-laporan-kas.jpg",
+  "l": "Laporan Kas",
+  "u": "keuangan",
+  "h": 3526
+ },
+ {
+  "f": "07-pengumuman.jpg",
+  "l": "Pengumuman",
+  "u": "pengumuman",
+  "h": 1993
+ },
+ {
+  "f": "08-agenda-kegiatan.jpg",
+  "l": "Agenda Kegiatan",
+  "u": "agenda",
+  "h": 2401
+ },
+ {
+  "f": "09-galeri-kegiatan.jpg",
+  "l": "Galeri Kegiatan",
+  "u": "galeri",
+  "h": 2977
+ },
+ {
+  "f": "10-jadwal-ronda.jpg",
+  "l": "Jadwal Ronda",
+  "u": "warga/ronda",
+  "h": 1110
+ },
+ {
+  "f": "11-program-kerja.jpg",
+  "l": "Program Kerja",
+  "u": "warga/program",
+  "h": 1117
+ },
+ {
+  "f": "12-pengaduan-aspirasi.jpg",
+  "l": "Pengaduan & Aspirasi",
+  "u": "warga/pengaduan",
+  "h": 1265
+ }
+]

@@ -29,3 +29,65 @@ button.live-chat-float{width:252px;min-height:72px;padding:10px 16px;border:1px 
 .live-chat-logo .chat-logo-spark{fill:#ffd55c;stroke:#fff;stroke-width:1}
 .live-chat-float:hover>.live-chat-logo{transform:rotate(-4deg) scale(1.05)}
 .live-chat-widget>header,.live-chat-widget>form{position:relative}
+/* Ringkas (semua halaman warga): hanya ikon bulat agar tidak menutupi tombol halaman; label muncul saat hover di desktop.
+   Posisi right/bottom sengaja tidak di-!important agar offset bilah navigasi mobile (mobile-app.css) tetap berlaku. */
+button.live-chat-float{width:auto!important;min-width:0!important;max-width:58px;height:58px!important;min-height:0!important;padding:0!important;gap:0!important;overflow:hidden!important;border:0!important;border-radius:999px!important;background:transparent!important;box-shadow:none!important;transform:none!important;transition:max-width .22s ease,padding .22s,background .22s,box-shadow .22s}
+button.live-chat-float>span:first-child{width:58px!important;height:58px!important;flex:0 0 58px!important;margin:0!important;border:3px solid #fff!important;box-shadow:0 6px 16px #ff4b1f59!important}
+button.live-chat-float>span:last-child{opacity:0;white-space:nowrap;transition:opacity .15s}
+button.live-chat-float:after{display:none!important}
+@media(hover:hover) and (min-width:700px){
+ button.live-chat-float:hover,button.live-chat-float:focus-visible{max-width:300px;padding-right:18px!important;gap:10px!important;background:#fff9f5!important;box-shadow:0 12px 30px #75422230!important}
+ button.live-chat-float:hover>span:last-child,button.live-chat-float:focus-visible>span:last-child{opacity:1}
+}
+button.live-chat-float[aria-expanded="true"]{max-width:58px;padding:0!important;gap:0!important;background:transparent!important;box-shadow:none!important}
+button.live-chat-float[aria-expanded="true"]>span:last-child{opacity:0}
+
+/* ===== REVISI: tombol "Chat Admin/Petugas" lebih besar, jelas, dan tidak terlalu bawah ===== */
+button.live-chat-float{right:24px!important;bottom:110px!important;width:auto!important;min-width:300px;max-width:calc(100vw - 32px);min-height:80px!important;padding:12px 24px 12px 14px!important;gap:14px!important;border:3px solid #fff!important;border-radius:999px!important;background:linear-gradient(105deg,#ff7a1a,#f0450f)!important;color:#fff!important;box-shadow:0 16px 36px rgba(240,69,15,.38),0 0 0 6px rgba(255,122,26,.18)!important;overflow:visible!important}
+button.live-chat-float:hover{filter:brightness(1.05);transform:translateY(-2px)}
+button.live-chat-float:focus-visible{outline:4px solid #ffd2a8;outline-offset:4px}
+button.live-chat-float .live-chat-logo{width:58px!important;height:58px!important;flex:0 0 58px!important;border:3px solid #fff!important}
+
+button.live-chat-float>span:nth-child(2){display:flex!important;flex-direction:column;gap:3px;min-width:0;opacity:1!important;visibility:visible!important;transform:none!important}
+button.live-chat-float strong{color:#fff!important;font-size:18px!important;font-weight:900!important;line-height:1.15;white-space:nowrap}
+button.live-chat-float small{display:flex;align-items:center;gap:7px;color:#fff!important;font-size:14px!important;font-weight:700!important;opacity:.95}
+button.live-chat-float small b{color:#fff!important}
+button.live-chat-float small i{width:10px!important;height:10px!important;border:2px solid #fff;border-radius:50%}
+button.live-chat-float:before{content:"";position:absolute;inset:-3px;border-radius:999px;border:3px solid rgba(255,122,26,.55);animation:liveChatPulse 2.4s ease-out infinite;pointer-events:none}
+button.live-chat-float[aria-expanded="true"]:before{animation:none;opacity:0}
+@keyframes liveChatPulse{0%{transform:scale(1);opacity:.8}80%,100%{transform:scale(1.18);opacity:0}}
+@media(prefers-reduced-motion:reduce){button.live-chat-float:before{animation:none;opacity:0}button.live-chat-float:hover{transform:none}}
+.live-chat-widget{bottom:204px!important;height:min(520px,calc(100vh - 230px))!important}
+@media(max-width:650px){
+ button.live-chat-float{right:12px!important;bottom:92px!important;min-width:0;min-height:66px!important;padding:8px 18px 8px 10px!important;gap:10px!important}
+ button.live-chat-float .live-chat-logo{width:46px!important;height:46px!important;flex-basis:46px!important}
+ button.live-chat-float strong{font-size:16px!important}
+ button.live-chat-float small{font-size:12.5px!important}
+ .live-chat-widget{right:8px!important;bottom:168px!important;width:calc(100vw - 16px)!important;height:min(500px,calc(100vh - 190px))!important}
+}
+/* REVISI: di tampilan HP dashboard, tombol chat tetap tampil (sebelumnya disembunyikan), di atas navigasi bawah. */
+@media(max-width:900px){
+ .dm-enabled>button.live-chat-float,.dwb button.live-chat-float{display:flex!important;width:auto!important;height:auto!important;border-radius:999px!important;place-items:initial}
+ .dwb button.live-chat-float>span:nth-child(2),.dm-enabled>button.live-chat-float>span:nth-child(2){display:flex!important}
+}
+@media(max-width:650px){.dm-enabled>button.live-chat-float,.dwb button.live-chat-float{right:12px!important;bottom:96px!important}}
+
+/* ===== REVISI 2: tombol chat diam di pojok kanan bawah, ringkas, tanpa animasi naik-turun ===== */
+button.live-chat-float{bottom:20px!important;right:20px!important;min-width:0!important;min-height:64px!important;padding:8px 20px 8px 8px!important;gap:12px!important;box-shadow:0 10px 26px rgba(240,69,15,.32)!important;transition:none!important;animation:none!important}
+button.live-chat-float:before{display:none!important;animation:none!important}
+button.live-chat-float:hover{transform:none!important;filter:brightness(1.06)}
+button.live-chat-float .live-chat-logo{width:48px!important;height:48px!important;flex:0 0 48px!important}
+button.live-chat-float strong{font-size:16px!important}
+button.live-chat-float small{font-size:13px!important}
+.live-chat-widget{bottom:96px!important;height:min(520px,calc(100vh - 120px))!important}
+/* ruang di bawah halaman supaya konten terakhir tidak tertutup tombol */
+body:has(#live-chat-toggle) .dwb-main,body:has(#live-chat-toggle) main{padding-bottom:96px}
+@media(max-width:650px){
+ .dm-enabled>button.live-chat-float,.dwb button.live-chat-float,button.live-chat-float{right:12px!important;bottom:92px!important;min-height:56px!important;padding:6px 16px 6px 6px!important}
+ button.live-chat-float .live-chat-logo{width:44px!important;height:44px!important;flex-basis:44px!important}
+ button.live-chat-float strong{font-size:15px!important}
+ .live-chat-widget{bottom:158px!important;height:min(480px,calc(100vh - 180px))!important}
+}
+@media(min-width:651px){body:has(#live-chat-toggle){padding-bottom:100px!important}body:has(#live-chat-toggle) .dwb-main,body:has(#live-chat-toggle) main{padding-bottom:0}}
+@media(max-width:650px){body:has(#live-chat-toggle){padding-bottom:84px!important}.dm-enabled>button.live-chat-float,.dwb button.live-chat-float,button.live-chat-float{min-height:52px!important;padding:5px 14px 5px 5px!important;gap:9px!important}button.live-chat-float .live-chat-logo{width:40px!important;height:40px!important;flex-basis:40px!important;border-width:2px!important}button.live-chat-float strong{font-size:14px!important}button.live-chat-float small{font-size:11.5px!important}}
+html body button.live-chat-float>.live-chat-logo{width:48px!important;height:48px!important;min-width:0!important;flex:0 0 48px!important}html body button.live-chat-float{align-items:center!important}@media(max-width:650px){html body button.live-chat-float>.live-chat-logo{width:40px!important;height:40px!important;flex:0 0 40px!important}}

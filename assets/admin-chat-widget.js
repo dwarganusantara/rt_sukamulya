@@ -77,6 +77,8 @@
       launch.classList.toggle('has-unread', unread > 0);
       $('acw-online').textContent = j.online + ' warga online';
       $('acw-dot').classList.toggle('on', j.online > 0);
+      launch.classList.toggle('has-online', j.online > 0);
+      launch.title = 'Chat Warga · ' + j.online + ' warga online' + (unread ? ' · ' + unread + ' pesan baru' : '');
       $('acw-sum').textContent = j.conversations.length + ' percakapan · ' + j.unread + ' belum dibaca';
       Object.keys(wins).forEach(function (id) { if (convs[id]) paintHead(wins[id], convs[id]); });
       renderList();

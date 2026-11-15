@@ -10,15 +10,19 @@ $login_logo = (!$custom_logo || $custom_logo === 'assets/mockup/logo.png') ? 'as
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Masuk Admin &middot; <?= html_escape($login_settings['brand_label'] ?? 'RT 009/008') ?></title>
     <link rel="stylesheet" href="<?= base_url('assets/login-community.css') ?>?v=<?= filemtime(FCPATH.'assets/login-community.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/theme-runtime.css') ?>?v=<?= filemtime(FCPATH.'assets/theme-runtime.css') ?>">
 <?php $this->load->helper('theme'); echo theme_style(isset($settings) && is_array($settings) ? $settings : $this->Content_model->settings()); ?></head>
 <body class="community-login">
 <main class="login-stage">
+    <div class="login-lockup" aria-label="Digital Warga Nusantara">
+        <img src="<?= base_url('assets/mockup/login-logo.png') ?>" alt="">
+        <strong>Digital Warga<br>Nusantara</strong>
+    </div>
     <form class="community-card" method="post" action="<?= site_url('admin/login') ?>">
         <div class="card-content">
             <div class="login-brand">
-                <img src="<?= base_url(html_escape($login_logo)) ?>" alt="Logo RT 009/008">
                 <strong><?= html_escape($login_settings['brand_label'] ?? 'RT 009/008') ?></strong>
-                <span><?= html_escape(strtoupper($login_settings['brand_subtitle'] ?? 'Suka Mulya IV')) ?></span>
+                <span>DIGITAL WARGA NUSANTARA</span>
                 <div class="administrasi"><i></i>ADMINISTRASI<i></i></div>
             </div>
             <h1>Masuk Admin</h1>
@@ -40,8 +44,11 @@ $login_logo = (!$custom_logo || $custom_logo === 'assets/mockup/logo.png') ? 'as
             <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
             <button class="login-submit" type="submit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 4h6a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6M3 12h13m-4-4 4 4-4 4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Masuk</button>
             <div class="login-or"><span></span>atau<span></span></div>
-            <a class="back-site" href="<?= site_url() ?>"><span aria-hidden="true">&larr;</span> Kembali ke website</a>
-            <a class="back-site" href="<?= site_url('platform/login') ?>" style="margin-top:10px;font-size:12px">Login pengelola platform</a>
+            <div class="login-links">
+                <a class="back-site" href="<?= site_url() ?>"><span aria-hidden="true">&#8599;</span>Kembali ke Website</a>
+                <i aria-hidden="true"></i>
+                <a class="platform-login" href="<?= site_url('platform/login') ?>">Login pengelola platform</a>
+            </div>
         </div>
         <div class="card-waves" aria-hidden="true"><div></div></div>
     </form>

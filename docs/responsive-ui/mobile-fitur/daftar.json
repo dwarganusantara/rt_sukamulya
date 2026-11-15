@@ -1,0 +1,657 @@
+[
+ {
+  "kind": "admin",
+  "group": "Utama",
+  "shots": [
+   {
+    "file": "admin/01-admin.jpg",
+    "label": "Dashboard",
+    "url": "/admin",
+    "status": 200,
+    "note": ""
+   }
+  ]
+ },
+ {
+  "kind": "admin",
+  "group": "Kependudukan",
+  "shots": [
+   {
+    "file": "admin/02-admin-keluarga.jpg",
+    "label": "Data Warga (Master KK)",
+    "url": "/admin/keluarga",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/03-admin-keluarga-baru.jpg",
+    "label": "Tambah KK Manual",
+    "url": "/admin/keluarga/baru",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/04-admin-rumah.jpg",
+    "label": "Rumah & Domisili",
+    "url": "/admin/rumah",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/05-admin-rumah-baru.jpg",
+    "label": "Tambah Rumah",
+    "url": "/admin/rumah/baru",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/06-admin-rumah-tautkan.jpg",
+    "label": "Hubungkan KK ke Rumah",
+    "url": "/admin/rumah/tautkan",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/07-admin-penduduk.jpg",
+    "label": "Data Penduduk",
+    "url": "/admin/penduduk",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/08-admin-penduduk-rekap.jpg",
+    "label": "Rekap Penduduk",
+    "url": "/admin/penduduk/rekap",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/09-admin-kk-pengajuan.jpg",
+    "label": "Verifikasi KK",
+    "url": "/admin/kk/pengajuan",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/10-admin-mutasi.jpg",
+    "label": "Mutasi Warga",
+    "url": "/admin/mutasi",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/11-admin-mutasi-baru.jpg",
+    "label": "Catat Mutasi",
+    "url": "/admin/mutasi/baru",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/12-admin-bansos.jpg",
+    "label": "Bantuan Sosial",
+    "url": "/admin/bansos",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/13-admin-bansos-baru.jpg",
+    "label": "Program Bantuan Baru",
+    "url": "/admin/bansos/baru",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/14-admin-citizens.jpg",
+    "label": "Akun Warga",
+    "url": "/admin/citizens",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/15-admin-citizen.jpg",
+    "label": "Tambah Akun Warga",
+    "url": "/admin/citizen",
+    "status": 200,
+    "note": ""
+   }
+  ]
+ },
+ {
+  "kind": "admin",
+  "group": "Layanan Warga",
+  "shots": [
+   {
+    "file": "admin/16-admin-requests.jpg",
+    "label": "Pengajuan Warga (Surat)",
+    "url": "/admin/requests",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/17-admin-letter-types.jpg",
+    "label": "Jenis Surat & Ikon",
+    "url": "/admin/letter_types",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/18-admin-letter-type.jpg",
+    "label": "Tambah Jenis Surat",
+    "url": "/admin/letter_type",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/19-admin-pengaduan.jpg",
+    "label": "Pengaduan & Aspirasi",
+    "url": "/admin/pengaduan?status=all",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/20-admin-chat.jpg",
+    "label": "Live Chat Warga",
+    "url": "/admin/chat",
+    "status": 200,
+    "note": ""
+   }
+  ]
+ },
+ {
+  "kind": "admin",
+  "group": "Kegiatan & Informasi",
+  "shots": [
+   {
+    "file": "admin/21-admin-posts-pengumuman.jpg",
+    "label": "Pengumuman",
+    "url": "/admin/posts/pengumuman",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/22-admin-post-pengumuman.jpg",
+    "label": "Tambah Pengumuman",
+    "url": "/admin/post/pengumuman",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/23-admin-posts-agenda.jpg",
+    "label": "Agenda Kegiatan",
+    "url": "/admin/posts/agenda",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/24-admin-posts-galeri.jpg",
+    "label": "Galeri Kegiatan",
+    "url": "/admin/posts/galeri",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/25-admin-page-images.jpg",
+    "label": "Gambar Halaman",
+    "url": "/admin/page-images",
+    "status": 200,
+    "note": ""
+   }
+  ]
+ },
+ {
+  "kind": "admin",
+  "group": "Keuangan",
+  "shots": [
+   {
+    "file": "admin/26-admin-dues.jpg",
+    "label": "Iuran Warga",
+    "url": "/admin/dues",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/27-admin-due.jpg",
+    "label": "Tambah Iuran",
+    "url": "/admin/due",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/28-admin-tunggakan.jpg",
+    "label": "Tunggakan Iuran",
+    "url": "/admin/tunggakan",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/29-admin-transactions.jpg",
+    "label": "Kas RT (Transaksi)",
+    "url": "/admin/transactions",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/30-admin-transaction.jpg",
+    "label": "Tambah Transaksi Kas",
+    "url": "/admin/transaction",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/31-admin-rekonsiliasi.jpg",
+    "label": "Rekonsiliasi Kas",
+    "url": "/admin/rekonsiliasi",
+    "status": 200,
+    "note": ""
+   }
+  ]
+ },
+ {
+  "kind": "admin",
+  "group": "Kegiatan & Keamanan",
+  "shots": [
+   {
+    "file": "admin/32-admin-program.jpg",
+    "label": "Program Kerja",
+    "url": "/admin/program",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/33-admin-program-baru.jpg",
+    "label": "Program Kerja Baru",
+    "url": "/admin/program/baru",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/34-admin-notulen.jpg",
+    "label": "Catatan & Notulen",
+    "url": "/admin/notulen",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/35-admin-notulen-baru.jpg",
+    "label": "Notulen Baru",
+    "url": "/admin/notulen/baru",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/36-admin-ronda.jpg",
+    "label": "Jadwal & Absensi Ronda",
+    "url": "/admin/ronda",
+    "status": 200,
+    "note": ""
+   }
+  ]
+ },
+ {
+  "kind": "admin",
+  "group": "Operasional RT",
+  "shots": [
+   {
+    "file": "admin/37-admin-inventaris.jpg",
+    "label": "Aset & Inventaris",
+    "url": "/admin/inventaris",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/38-admin-inventaris-pinjam.jpg",
+    "label": "Peminjaman Aset",
+    "url": "/admin/inventaris/pinjam?status=all",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/39-admin-belanja.jpg",
+    "label": "Belanja & Penerimaan",
+    "url": "/admin/belanja",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/40-admin-kontak.jpg",
+    "label": "Kontak Penting",
+    "url": "/admin/kontak",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/41-admin-arsip.jpg",
+    "label": "Arsip Dokumen",
+    "url": "/admin/arsip",
+    "status": 200,
+    "note": ""
+   }
+  ]
+ },
+ {
+  "kind": "admin",
+  "group": "Pengaturan",
+  "shots": [
+   {
+    "file": "admin/42-admin-fitur.jpg",
+    "label": "Manajemen Fitur & Menu",
+    "url": "/admin/fitur",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/43-admin-langganan.jpg",
+    "label": "Paket & Langganan",
+    "url": "/admin/langganan",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/44-admin-pages.jpg",
+    "label": "Profil RT (Halaman)",
+    "url": "/admin/pages",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/45-admin-settings.jpg",
+    "label": "Pengaturan Aplikasi",
+    "url": "/admin/settings",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/46-admin-tampilan.jpg",
+    "label": "Tema & Tampilan",
+    "url": "/admin/tampilan",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/47-admin-officials.jpg",
+    "label": "Manajemen Pengurus",
+    "url": "/admin/officials",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/48-admin-official.jpg",
+    "label": "Tambah Posisi Pengurus",
+    "url": "/admin/official",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/49-admin-letter-settings.jpg",
+    "label": "Pengaturan Surat RT",
+    "url": "/admin/letter_settings",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/50-admin-quick-links.jpg",
+    "label": "Menu & Ikon",
+    "url": "/admin/quick_links",
+    "status": 403,
+    "note": "Terkunci paket langganan"
+   },
+   {
+    "file": "admin/51-admin-akun.jpg",
+    "label": "Akun & Hak Akses",
+    "url": "/admin/akun",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/52-admin-field-tambahan.jpg",
+    "label": "Field Tambahan Warga",
+    "url": "/admin/field-tambahan",
+    "status": 403,
+    "note": "Terkunci paket langganan"
+   },
+   {
+    "file": "admin/53-admin-antrean-email.jpg",
+    "label": "Antrean Email",
+    "url": "/admin/antrean-email",
+    "status": 403,
+    "note": "Terkunci paket langganan"
+   },
+   {
+    "file": "admin/54-admin-serah-terima.jpg",
+    "label": "Serah Terima Pengurus",
+    "url": "/admin/serah-terima",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/55-admin-audit.jpg",
+    "label": "Audit Aktivitas",
+    "url": "/admin/audit",
+    "status": 403,
+    "note": "Terkunci paket langganan"
+   },
+   {
+    "file": "admin/56-admin-backup.jpg",
+    "label": "Backup Data",
+    "url": "/admin/backup",
+    "status": 403,
+    "note": "Terkunci paket langganan"
+   },
+   {
+    "file": "admin/57-admin-pengaturan-riwayat.jpg",
+    "label": "Riwayat Pengaturan",
+    "url": "/admin/pengaturan/riwayat",
+    "status": 403,
+    "note": "Terkunci paket langganan"
+   },
+   {
+    "file": "admin/58-admin-notifications.jpg",
+    "label": "Notifikasi",
+    "url": "/admin/notifications",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "admin/59-admin-password.jpg",
+    "label": "Ganti Password",
+    "url": "/admin/password",
+    "status": 200,
+    "note": ""
+   }
+  ]
+ },
+ {
+  "kind": "warga",
+  "group": "Portal Warga",
+  "shots": [
+   {
+    "file": "warga/01-warga.jpg",
+    "label": "Dashboard Warga",
+    "url": "/warga",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "warga/02-warga-profil.jpg",
+    "label": "Profil Saya",
+    "url": "/warga/profil",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "warga/03-warga-profil-edit.jpg",
+    "label": "Edit Profil",
+    "url": "/warga/profil/edit",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "warga/04-warga-keluarga.jpg",
+    "label": "Data Kartu Keluarga",
+    "url": "/warga/keluarga",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "warga/05-warga-keluarga-scan.jpg",
+    "label": "Upload / Scan KK",
+    "url": "/warga/keluarga/scan",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "warga/06-warga-layanan.jpg",
+    "label": "Layanan Surat",
+    "url": "/warga/layanan",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "warga/07-warga-ajukan.jpg",
+    "label": "Pengajuan Surat",
+    "url": "/warga/ajukan",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "warga/08-warga-riwayat.jpg",
+    "label": "Riwayat Pengajuan",
+    "url": "/warga/riwayat",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "warga/09-warga-iuran.jpg",
+    "label": "Iuran Saya",
+    "url": "/warga/iuran",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "warga/10-warga-chat.jpg",
+    "label": "Live Chat",
+    "url": "/warga/chat",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "warga/11-warga-mutasi.jpg",
+    "label": "Mutasi Data Keluarga",
+    "url": "/warga/mutasi",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "warga/12-warga-pengaduan.jpg",
+    "label": "Pengaduan Saya",
+    "url": "/warga/pengaduan",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "warga/13-warga-pengaduan-buat.jpg",
+    "label": "Buat Pengaduan",
+    "url": "/warga/pengaduan/buat",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "warga/14-warga-program.jpg",
+    "label": "Program Kerja",
+    "url": "/warga/program",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "warga/15-warga-ronda.jpg",
+    "label": "Jadwal Ronda",
+    "url": "/warga/ronda",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "warga/16-warga-kontak-penting.jpg",
+    "label": "Kontak Penting",
+    "url": "/warga/kontak-penting",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "warga/17-warga-password.jpg",
+    "label": "Ubah Password",
+    "url": "/warga/password",
+    "status": 200,
+    "note": ""
+   }
+  ]
+ },
+ {
+  "kind": "warga",
+  "group": "Halaman Publik",
+  "shots": [
+   {
+    "file": "warga/18-beranda.jpg",
+    "label": "Beranda",
+    "url": "/",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "warga/19-pengumuman.jpg",
+    "label": "Pengumuman",
+    "url": "/pengumuman",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "warga/20-agenda.jpg",
+    "label": "Agenda & Acara",
+    "url": "/agenda",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "warga/21-informasi.jpg",
+    "label": "Informasi Warga",
+    "url": "/informasi",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "warga/22-galeri.jpg",
+    "label": "Galeri Kegiatan",
+    "url": "/galeri",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "warga/23-keuangan.jpg",
+    "label": "Laporan Kas RT",
+    "url": "/keuangan",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "warga/24-profil.jpg",
+    "label": "Profil RT",
+    "url": "/profil",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "warga/25-struktur.jpg",
+    "label": "Struktur Organisasi",
+    "url": "/struktur",
+    "status": 200,
+    "note": ""
+   },
+   {
+    "file": "warga/26-kontak.jpg",
+    "label": "Kontak RT",
+    "url": "/kontak",
+    "status": 200,
+    "note": ""
+   }
+  ]
+ }
+]

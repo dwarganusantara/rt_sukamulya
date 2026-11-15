@@ -419,3 +419,30 @@
 @media(max-width:560px){.akk-dialog .akd-foot{grid-template-columns:1fr;padding:16px 20px 22px}}
 .akk-dialog h2{max-width:330px}
 @media(max-width:560px){.akk-dialog h2{max-width:none;padding-right:120px}}
+
+/* ---- Banner Pengajuan & Verifikasi KK (sesuai mockup): kartu KK | judul | suasana warga + gelombang oranye ---- */
+.akk-hero2{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:26px;min-height:184px;padding:22px 30px 34px;border-radius:24px;overflow:hidden;
+ background:radial-gradient(circle at 18% 20%,#ffffff,transparent 45%),linear-gradient(100deg,#eef6ff 0%,#f6fbff 45%,#e9f4fb 100%);box-shadow:0 8px 24px #1e3a5f12}
+.akk-hero2-card{position:relative;z-index:2;width:clamp(170px,15vw,250px);height:auto;margin:-6px 0 -18px;transform:rotate(-4deg);filter:drop-shadow(0 12px 16px #2f5c8a30)}
+.akk-hero2-copy{position:relative;z-index:2;max-width:46%}
+.akk-hero2-copy h1{margin:0 0 8px;font-size:clamp(26px,2.5vw,38px);font-weight:900;color:#13235a;line-height:1.12;letter-spacing:-.01em}
+.akk-hero2-copy p{margin:0;font-size:15.5px;color:#22324f}
+.akk-hero2-copy i{display:block;width:74px;height:5px;margin-top:14px;border-radius:9px;background:linear-gradient(90deg,#ff6a21,#ff9a52)}
+.akk-hero2-scene{position:absolute;z-index:1;top:0;right:0;bottom:0;width:50%;background:var(--scene) right 72%/cover no-repeat;
+ -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 30%);mask-image:linear-gradient(90deg,transparent 0,#000 30%)}
+.akk-hero2-wave{position:absolute;z-index:3;left:0;right:0;bottom:0;width:100%;height:34px;display:block}
+/* Ilustrasi lengkap dari pemilik (assets/img/family/kk-verify-hero.png): gambar mengisi banner, teks di atasnya. */
+.akk-hero2.is-full{grid-template-columns:minmax(0,1fr);padding-left:clamp(200px,20vw,300px);background:var(--scene) center/cover no-repeat,#eef6ff}
+.akk-hero2.is-full .akk-hero2-scene{display:none}
+.akk-hero2.is-full .akk-hero2-copy{max-width:520px}
+@media(max-width:1100px){.akk-hero2-scene{width:44%;opacity:.55}.akk-hero2-copy{max-width:none}}
+@media(max-width:760px){
+ .akk-hero2{grid-template-columns:minmax(0,1fr);gap:8px;padding:20px 18px 34px;min-height:0}
+ .akk-hero2-card{width:120px;margin:0}.akk-hero2-scene{display:none}
+ .akk-hero2-copy h1{font-size:24px}.akk-hero2-copy p{font-size:14px}
+ .akk-hero2.is-full{padding-left:18px;background-position:right center}
+}
+/* Panel detail tersembunyi (daftar kosong) -> tabel memakai lebar penuh seperti mockup. */
+.akk-board:has(>.akk-panel[hidden]){grid-template-columns:minmax(0,1fr)}
+.akk-hero2-card{mix-blend-mode:multiply}
+@media(min-width:1101px){.akk-filters .akk-search{min-width:330px}}

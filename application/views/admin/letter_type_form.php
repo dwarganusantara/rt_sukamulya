@@ -22,8 +22,8 @@ $icon_url = $v('icon_path') ? base_url(html_escape($v('icon_path'))) : '';
  </header>
  <?php if ($error): ?><div class="error lt-error" role="alert"><?= html_escape($error) ?></div><?php endif; ?>
 
- <div class="lt-grid">
-  <form class="lt-card" method="post" enctype="multipart/form-data" novalidate data-lt-form>
+ <div class="lt-grid" data-rsp-tabs>
+  <form class="lt-card" method="post" enctype="multipart/form-data" novalidate data-lt-form data-rsp-tab="Data Jenis Surat">
    <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
    <h2><span class="lt-h-ic orange"><?= $svg($i['doc'], 20) ?></span>Informasi Jenis Surat</h2>
    <div class="lt-two">
@@ -78,7 +78,7 @@ $icon_url = $v('icon_path') ? base_url(html_escape($v('icon_path'))) : '';
    <div class="lt-actions"><button class="lt-btn" type="submit"><?= $svg($i['save']) ?>Simpan Jenis Surat</button><a class="lt-btn ghost" href="<?= site_url('admin/letter_types') ?>"><?= $svg($i['x']) ?>Batal</a></div>
   </form>
 
-  <aside class="lt-side">
+  <aside class="lt-side" data-rsp-tab="Panduan">
    <div class="lt-art-card" aria-hidden="true">
     <svg viewBox="0 0 320 260"><ellipse cx="160" cy="248" rx="130" ry="9" fill="#e6f3df"/><path d="M40 240c-6-60 30-96 70-104-20 34-18 70 4 104z" fill="#7cc35a"/><path d="M28 210c10-40 40-58 66-56-22 18-28 40-24 62z" fill="#5fb848"/><path d="M286 240c8-62-26-100-66-110 18 36 14 74-8 110z" fill="#7cc35a"/><path d="M300 200c-8-38-36-56-60-56 20 18 24 40 20 60z" fill="#5fb848"/>
      <rect x="92" y="38" width="140" height="190" rx="14" fill="#ff9a2e"/><rect x="102" y="52" width="120" height="168" rx="8" fill="#fff"/><rect x="132" y="26" width="60" height="22" rx="8" fill="#ff8a1a"/><circle cx="162" cy="24" r="8" fill="#ff8a1a"/>
