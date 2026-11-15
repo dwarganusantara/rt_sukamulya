@@ -23,6 +23,7 @@ class Kk_ocr
                 $ci->load->library('Kk_local_engine');
                 @set_time_limit(180);
                 $result=$ci->kk_local_engine->scan($file['tmp_name'],$mime,$ci->config->item('kk_tesseract'),$ci->config->item('kk_pdftoppm'),$ci->config->item('kk_magick'));
+                log_message('error', 'OCR RAW RESULT: '.print_r($result, TRUE));
                 $data=$ci->kk_fields->normalize($result);
                 if(!$data['jumlah_anggota']) throw new RuntimeException('Belum ada anggota terbaca. Pastikan seluruh tabel KK terlihat jelas atau isi manual.');
                 return $data;

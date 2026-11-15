@@ -4,12 +4,15 @@ class Kk_local_engine
 {
     public function scan($source,$mime,$exe,$pdf='',$magick='')
     {
-        if(!is_file($exe) || !is_callable('proc_open')) throw new RuntimeException('Mesin OCR lokal belum tersedia. Hubungi pengelola.');
-        $temp=array(); $pages=array(); $this->started=microtime(TRUE);
+        $this->started=microtime(TRUE);
+        if(!$this->executable($exe) || !is_callable('proc_open')) throw new RuntimeException('Mesin OCR lokal belum tersedia. Hubungi pengelola.');
+        $magick=$this->converter($magick);$identify=$this->imageInfo($magick);
+        if($magick==='' && function_exists('log_message')) log_message('error','KK OCR: ImageMagick tidak ditemukan. KK_MAGICK='.getenv('KK_MAGICK').' PATH='.getenv('PATH'));
+        $temp=array(); $pages=array();
         try {
             if($mime==='application/pdf') {
-                if(!$pdf || !is_file($pdf)) throw new RuntimeException('Pembaca PDF belum tersedia. Hubungi pengelola.');
-                try {$info=$this->run(array(dirname($pdf).'/pdfinfo.exe',$source));}
+                if(!$pdf || !$this->executable($pdf)) throw new RuntimeException('Pembaca PDF belum tersedia. Hubungi pengelola.');
+                try {$info=$this->run(array($this->companion($pdf,'pdfinfo'),$source));}
                 catch(RuntimeException $e) {throw new RuntimeException('PDF rusak atau terkunci. Unggah PDF yang dapat dibuka tanpa password.');}
                 if(preg_match('/^Encrypted:\s*yes/mi',$info)) throw new RuntimeException('PDF terkunci. Unggah salinan tanpa password atau enkripsi.');
                 if(!preg_match('/^Pages:\s*(\d+)/m',$info,$match)) throw new RuntimeException('Jumlah halaman PDF tidak dapat diperiksa.');
@@ -26,7 +29,7 @@ class Kk_local_engine
                 if(!$coder) throw new RuntimeException('Format foto tidak didukung.');
                 $input=$coder.':'.$source;
                 $limits=array('-limit','memory','256MiB','-limit','map','256MiB','-limit','disk','512MiB','-limit','thread','2');
-                $info=$this->run(array_merge(array($magick,'identify'),$limits,array('-ping','-format',"%w %h\n",$input)));
+                $info=$this->run(array_merge($identify,$limits,array('-ping','-format',"%w %h\n",$input)));
                 $frames=preg_split('/\r?\n/',trim($info));
                 // Animated images use their first frame; multi-page TIFF reads all pages.
                 $count=$coder==='TIFF'?count($frames):1;
@@ -35,26 +38,37 @@ class Kk_local_engine
                     $dimensions=explode(' ',trim($frames[$i]));
                     if(count($dimensions)!==2 || (float)$dimensions[0]*(float)$dimensions[1]>40000000) throw new RuntimeException('Foto melebihi 40 megapiksel. Perkecil foto terlebih dahulu.');
                     $base=tempnam(sys_get_temp_dir(),'kk_');$temp[]=$base;$temp[]=$base.'.png';
-                    $this->run(array_merge(array($magick),$limits,array($input.'['.$i.']','-auto-orient','-resize','3500x3500','-background','white','-alpha','remove','-alpha','off','-colorspace','sRGB','-strip','PNG:'.$base.'.png')));
+                    // Foto ponsel sering tidak rata terangnya (vignette/bayangan). Membagi citra terhadap versi
+                    // blur-nya (koreksi pencahayaan) membuat goresan huruf dan garis tabel kontras merata
+                    // sehingga OCR dan deteksi garis bekerja jauh lebih andal.
+                    $this->run(array_merge(array($magick),$limits,array($input.'['.$i.']','-auto-orient','-resize','3500x3500','-background','white','-alpha','remove','-alpha','off','-colorspace','sRGB','-colorspace','Gray','(','+clone','-blur','0x60',')','-compose','Divide','-composite','-normalize','-colorspace','sRGB','-strip','PNG:'.$base.'.png')));
                     $pages[]=$base.'.png';
                 }
             } else {
                 if(!in_array($mime,array('image/jpeg','image/png'),TRUE)) throw new RuntimeException('Konverter foto belum tersedia. Hubungi pengelola.');
                 $pages[]=$source;
             }
-            // Foto/scan dari ponsel hampir selalu sedikit miring; luruskan dulu agar garis tabel KK terdeteksi lurus
-            // (deteksi kolom & baris memakai proyeksi garis horizontal/vertikal).
+            // Foto/scan dari ponsel kadang sedikit miring. Namun memutar gambar menambah interpolasi yang
+            // menghaluskan goresan huruf tipis, sehingga OCR justru memburuk: pada uji langsung, NIK 16 digit
+            // hilang TOTAL setelah deskew meski kemiringannya hanya ~0,6 derajat. Tesseract masih sanggup membaca
+            // teks dengan kemiringan kecil, jadi gambar hanya diputar bila kemiringannya benar-benar besar.
             if($magick && is_file($magick)) {
                 foreach($pages as $k=>$page) {
-                    // Hanya bila benar-benar miring: resampling gambar yang sudah lurus menurunkan ketajaman huruf.
                     $angle=(float)trim($this->run(array($magick,$page,'-deskew','40%','-format','%[deskew:angle]','info:')));
-                    if(abs($angle)<0.15)continue;
+                    if(abs($angle)<1.2)continue;
                     $straight=tempnam(sys_get_temp_dir(),'kk_dsk_');$temp[]=$straight;$temp[]=$straight.'.png';
-                    $this->run(array($magick,$page,'-background','white','-deskew','40%','+repage','-colorspace','sRGB','PNG:'.$straight.'.png'));
+                    $this->run(array($magick,$page,'-background','white','-filter','Lanczos','-deskew','40%','+repage','-unsharp','0x1.5+1.0+0.02','-colorspace','sRGB','PNG:'.$straight.'.png'));
                     if(is_file($straight.'.png') && filesize($straight.'.png')>0)$pages[$k]=$straight.'.png';
                 }
             }
-            $lang=is_file(dirname($exe).'/tessdata/ind.traineddata')?'ind+eng':'eng';
+            $indPaths=array(
+                '/usr/share/tesseract/tessdata/ind.traineddata',
+                '/usr/share/tesseract-ocr/4.00/tessdata/ind.traineddata',
+                '/usr/share/tesseract-ocr/5/tessdata/ind.traineddata'
+            );
+            $hasInd=FALSE;
+            foreach($indPaths as $indPath)if(is_file($indPath)){$hasInd=TRUE;break;}
+            $lang=$hasInd?'ind+eng':'eng';
             require_once __DIR__.'/Kk_tsv_parser.php';
             $result=array('keluarga'=>array(),'anggota'=>array());$seen=array();
             foreach($pages as $page) {
@@ -76,17 +90,23 @@ class Kk_local_engine
                 if(!$data['anggota'] && count($grid['x'] ?? array())===11 && count($grid['y'] ?? array())>3) {
                     $columns=array('nama_lengkap','nik','jenis_kelamin','tempat_lahir','tanggal_lahir','agama','pendidikan','pekerjaan','golongan_darah');$bounds=array();
                     foreach($columns as $i=>$field)$bounds[$field]=array($grid['x'][$i+1],$grid['x'][$i+2]);
-                    $header=$this->cell($page,$bounds['nik'],$grid['y'][0],$grid['y'][1],$magick,$exe,$lang,$temp);
-                    if(strtoupper(trim($header['value']))==='NIK') {
-                        for($r=1;$r<count($grid['y'])-1;$r++) {
-                            $name=$this->cell($page,$bounds['nama_lengkap'],$grid['y'][$r],$grid['y'][$r+1],$magick,$exe,$lang,$temp);
-                            if(!preg_match('/[a-z]{2}/i',$name['value']))continue;
-                            $nik=$this->cell($page,$bounds['nik'],$grid['y'][$r],$grid['y'][$r+1],$magick,$exe,$lang,$temp);
-                            $i=count($data['anggota']);$m=array('nama_lengkap'=>$name['value'],'nik'=>'','fields_need_review'=>array());
-                            if($nik['confidence']>=80 && preg_match('/^\d{16}$/D',$nik['value']))$m['nik']=$nik['value'];
-                            if($name['confidence']<80)$m['fields_need_review'][]='nama_lengkap';
-                            $data['anggota'][]=$m;$geometry[$i]=array('bounds'=>$bounds,'top'=>$grid['y'][$r],'bottom'=>$grid['y'][$r+1]);
-                        }
+                    // Jangan menggantungkan pembacaan anggota pada hasil OCR header "NIK".
+                    // Header sering terbaca keliru (mis. NlK), padahal sel nama dan baris data masih terbaca.
+                    for($r=1;$r<count($grid['y'])-1;$r++) {
+                        $name=$this->cell($page,$bounds['nama_lengkap'],$grid['y'][$r],$grid['y'][$r+1],$magick,$exe,$lang,$temp);
+                        $nameValue=trim(preg_replace('/\s+/u',' ',$name['value']));
+                        // Abaikan sel kosong, teks header, dan teks yang terlalu pendek.
+                        if(!preg_match('/^.{3,}$/us',$nameValue))continue;
+                        if(preg_match('/^(NAMA(?:\s+LENGKAP)?|NIK|NO\.?|NOMOR)$/iu',$nameValue))continue;
+                        if(!preg_match('/[a-z]{2}/i',$nameValue))continue;
+
+                        $nik=$this->cell($page,$bounds['nik'],$grid['y'][$r],$grid['y'][$r+1],$magick,$exe,$lang,$temp);
+                        $i=count($data['anggota']);
+                        $m=array('nama_lengkap'=>$nameValue,'nik'=>'','fields_need_review'=>array());
+                        if($nik['confidence']>=80 && preg_match('/^\d{16}$/D',$nik['value']))$m['nik']=$nik['value'];
+                        if($name['confidence']<80)$m['fields_need_review'][]='nama_lengkap';
+                        $data['anggota'][]=$m;
+                        $geometry[$i]=array('bounds'=>$bounds,'top'=>$grid['y'][$r],'bottom'=>$grid['y'][$r+1]);
                     }
                 }
                 foreach($data['anggota'] as $i=>&$m) {
@@ -134,11 +154,83 @@ class Kk_local_engine
                     $result['anggota'][]=$member;
                 }
             }
+            // Tanpa ImageMagick, foto tidak diperjelas/deskew dan garis tabel tidak terbaca:
+            // beri pesan penyebab yang sebenarnya, bukan seolah foto pengguna yang salah.
+            if(!$result['anggota'] && $magick==='') throw new RuntimeException('Belum ada anggota terbaca. Konverter gambar (ImageMagick) tidak ditemukan di server sehingga foto tidak dapat diperjelas sebelum dibaca. Pasang ImageMagick atau set variabel KK_MAGICK ke path executable yang benar (mis. /usr/bin/magick), lalu hubungi pengelola.');
             return $result;
         } finally {foreach($temp as $path) if(is_file($path)) @unlink($path);}
     }
 
     private $started;
+
+    /**
+     * Paket ImageMagick menyediakan `convert` (IM6) atau `magick` (IM7). Lokasi tidak selalu
+     * /usr/bin: distro, snap, conda, atau build source bisa menaruhnya di path lain. Selain
+     * daftar path umum, cari juga melalui $PATH (dan open_basedir tetap dihormati PHP).
+     */
+    private function converter($configured)
+    {
+        $candidates=array();
+        if(is_string($configured) && $configured!=='') $candidates[]=$configured;
+        $dirs=array('/usr/bin','/usr/local/bin','/bin','/snap/bin');
+        foreach(array(getenv('PATH'),$_SERVER['PATH'] ?? '') as $envPath) {
+            if(!is_string($envPath) || $envPath==='') continue;
+            foreach(explode(PATH_SEPARATOR,$envPath) as $dir) if($dir!=='') $dirs[]=$dir;
+        }
+        foreach($dirs as $dir) {
+            $dir=rtrim(str_replace('\\','/',$dir),'/');
+            $candidates[]=$dir.'/magick';
+            $candidates[]=$dir.'/convert';
+        }
+        foreach(array('/opt/*/bin/magick','/opt/*/bin/convert','/usr/local/ImageMagick*/bin/magick','/usr/local/ImageMagick*/bin/convert') as $pattern)
+            foreach((array)@glob($pattern) as $match) $candidates[]=$match;
+        foreach($candidates as $path) {
+            $resolved=$this->resolve($path);
+            if($resolved!=='') return $resolved;
+        }
+        return '';
+    }
+
+    /** IM7 memakai `magick identify` bila executable `identify` terpisah tidak ada; IM6 `convert` bisa langsung info:. */
+    private function imageInfo($magick)
+    {
+        if($magick==='') return array('/usr/bin/identify');
+        $dir=str_replace('\\','/',dirname($magick));
+        foreach(array($dir.'/identify','/usr/bin/identify','/usr/local/bin/identify') as $path) {
+            $resolved=$this->resolve($path);
+            if($resolved!=='') return array($resolved);
+        }
+        return strtolower(pathinfo($magick,PATHINFO_FILENAME))==='magick'?array($magick,'identify'):array($magick);
+    }
+
+    /** Binary harus ada dan executable; di Windows is_executable kurang konsisten, ekstensi .exe dicoba otomatis. */
+    private function executable($path)
+    {
+        return $this->resolve($path)!=='';
+    }
+
+    private function resolve($path)
+    {
+        if(!is_string($path) || $path==='') return '';
+        $candidates=array($path);
+        if(DIRECTORY_SEPARATOR==='\\' && strtolower(pathinfo($path,PATHINFO_EXTENSION))!=='exe') $candidates[]=$path.'.exe';
+        foreach($candidates as $candidate) {
+            if(!is_file($candidate)) continue;
+            if(DIRECTORY_SEPARATOR==='\\' || is_executable($candidate)) return $candidate;
+        }
+        return '';
+    }
+
+    /** Cari executable pendamping (mis. pdfinfo di folder yang sama dengan pdftoppm). */
+    private function companion($path,$name)
+    {
+        $dir=str_replace('\\','/',dirname($path));
+        foreach(array($dir.'/'.$name,'/usr/bin/'.$name,'/usr/local/bin/'.$name) as $candidate) {
+            $resolved=$this->resolve($candidate);
+            if($resolved!=='') return $resolved;
+        }
+        return $name;
+    }
 
     private function cell($page,$bounds,$top,$bottom,$magick,$exe,$lang,&$temp,$psm=7)
     {
@@ -277,23 +369,85 @@ class Kk_local_engine
         return array_map(function($g){return (int)round(array_sum($g)/count($g));},$groups);
     }
 
+    
     private function run($args)
     {
-        $pipes=array();
-        // Array commands bypass the shell and safely handle Windows paths.
-        $process=proc_open($args,array(0=>array('pipe','r'),1=>array('pipe','w'),2=>array('file',PHP_OS_FAMILY==='Windows'?'NUL':'/dev/null','w')),$pipes,NULL,NULL,array('bypass_shell'=>TRUE));
-        if(!is_resource($process)) throw new RuntimeException('Mesin OCR tidak dapat dijalankan.');
-        fclose($pipes[0]);stream_set_blocking($pipes[1],FALSE);$text='';$start=microtime(TRUE);
+        $pipes = array();
+
+        $process = proc_open(
+            $args,
+            array(
+                0 => array('pipe', 'r'),
+                1 => array('pipe', 'w'),
+                2 => array('pipe', 'w')
+            ),
+            $pipes,
+            NULL,
+            NULL,
+            array('bypass_shell' => TRUE)
+        );
+
+        if (!is_resource($process)) {
+            throw new RuntimeException('Mesin OCR tidak dapat dijalankan.');
+        }
+
+        fclose($pipes[0]);
+
+        stream_set_blocking($pipes[1], FALSE);
+        stream_set_blocking($pipes[2], FALSE);
+
+        $stdout = '';
+        $stderr = '';
+        $start = microtime(TRUE);
+        $exitCode = -1;
+
         try {
             do {
-                $text.=stream_get_contents($pipes[1]);
-                if(strlen($text)>4194304 || microtime(TRUE)-$start>40 || microtime(TRUE)-$this->started>150) {proc_terminate($process);throw new RuntimeException('Pembacaan terlalu lama. Gunakan foto yang lebih jelas atau pisahkan halaman.');}
-                $status=proc_get_status($process);
-                if($status['running']) usleep(20000);
-            } while($status['running']);
-            $text.=stream_get_contents($pipes[1]);
-            if($status['exitcode']!==0) throw new RuntimeException('Foto belum dapat dibaca. Coba foto ulang.');
-            return $text;
-        } finally {fclose($pipes[1]);proc_close($process);}
+                $stdout .= stream_get_contents($pipes[1]);
+                $stderr .= stream_get_contents($pipes[2]);
+
+                if (
+                    strlen($stdout) > 4194304 ||
+                    strlen($stderr) > 1048576 ||
+                    microtime(TRUE) - $start > 40 ||
+                    microtime(TRUE) - $this->started > 150
+                ) {
+                    proc_terminate($process);
+                    throw new RuntimeException(
+                        'Pembacaan terlalu lama. Gunakan foto yang lebih jelas atau pisahkan halaman.'
+                    );
+                }
+
+                $status = proc_get_status($process);
+
+                if (!$status['running']) {
+                    $exitCode = $status['exitcode'];
+                    break;
+                }
+
+                usleep(20000);
+
+            } while (TRUE);
+
+            $stdout .= stream_get_contents($pipes[1]);
+            $stderr .= stream_get_contents($pipes[2]);
+
+            if ($exitCode !== 0) {
+                throw new RuntimeException(
+                'OCR ERROR | ExitCode: ' . $exitCode .
+                ' | Command: ' . implode(' ', $args) .
+                ' | STDERR: ' . trim($stderr) .
+                ' | STDOUT: ' . trim($stdout)
+            );
+        }
+
+        return $stdout;
+
+    } finally {
+        fclose($pipes[1]);
+        fclose($pipes[2]);
+        proc_close($process);
     }
+}
+
 }

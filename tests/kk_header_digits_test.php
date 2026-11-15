@@ -1,7 +1,7 @@
 <?php
 if(PHP_SAPI!=='cli')exit;
 define('BASEPATH',__DIR__);require __DIR__.'/../application/libraries/Kk_header_digits.php';
-$magick='C:/Program Files/ImageMagick-7.1.2-Q16-HDRI/magick.exe';
+$magick='/usr/bin/convert';
 $run=function($args){$p=proc_open($args,array(0=>array('pipe','r'),1=>array('pipe','w'),2=>array('file','NUL','w')),$pipes);fclose($pipes[0]);$s=stream_get_contents($pipes[1]);fclose($pipes[1]);if(proc_close($p)!==0)throw new RuntimeException('Image conversion failed');return $s;};
 $file=tempnam(sys_get_temp_dir(),'kk_digit_test_');
 try {
