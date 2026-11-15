@@ -51,3 +51,16 @@
 [Sun Nov 15 10:37:59.725573 2026] [ssl:warn] [pid 939290:tid 939290] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
 [Sun Nov 15 10:40:52.930151 2026] [ssl:warn] [pid 940185:tid 940185] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
 [Sun Nov 15 10:40:52.944273 2026] [ssl:warn] [pid 940185:tid 940185] AH01909: www.dev.rifhandi.com:443:0 server certificate does NOT include an ID which matches the server name
+[Sun Nov 15 11:06:22.993015 2026] [rewrite:error] [pid 940189:tid 940349] [client 104.23.168.108:9668] AH10508: Unsafe URL with %3f URL rewritten without UnsafeAllow3F
+[Sun Nov 15 11:06:23.081898 2026] [authz_core:error] [pid 940187:tid 940320] [client 172.71.98.182:14251] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.vite
+[Sun Nov 15 11:06:23.091509 2026] [rewrite:error] [pid 940387:tid 940416] [client 104.22.109.100:14098] AH10508: Unsafe URL with %3f URL rewritten without UnsafeAllow3F
+[Sun Nov 15 11:06:23.149612 2026] [rewrite:error] [pid 940187:tid 940328] [client 104.23.170.15:9926] AH10508: Unsafe URL with %3f URL rewritten without UnsafeAllow3F
+[Sun Nov 15 11:06:29.940700 2026] [authz_core:error] [pid 940189:tid 940361] [client 162.159.113.94:14258] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.local
+[Sun Nov 15 11:06:29.945520 2026] [authz_core:error] [pid 940187:tid 940335] [client 104.23.166.128:13216] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.stage
+[Sun Nov 15 11:06:29.946403 2026] [authz_core:error] [pid 940188:tid 940221] [client 172.71.98.182:13981] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.production
+[Sun Nov 15 11:06:29.950926 2026] [authz_core:error] [pid 940189:tid 940354] [client 172.71.95.32:9803] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env
+[Sun Nov 15 11:06:29.952629 2026] [authz_core:error] [pid 940187:tid 940336] [client 162.159.113.95:9951] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.env.prod
+[Sun Nov 15 11:06:44.448579 2026] [rewrite:error] [pid 940387:tid 940421] [client 172.71.98.182:11240] AH10508: Unsafe URL with %3f URL rewritten without UnsafeAllow3F
+[Sun Nov 15 11:06:44.639380 2026] [rewrite:error] [pid 940187:tid 940321] [client 162.159.113.95:11028] AH10508: Unsafe URL with %3f URL rewritten without UnsafeAllow3F
+[Sun Nov 15 11:06:44.833455 2026] [rewrite:error] [pid 940188:tid 940250] [client 162.159.113.95:11031] AH10508: Unsafe URL with %3f URL rewritten without UnsafeAllow3F
+[Sun Nov 15 11:06:45.849111 2026] [authz_core:error] [pid 940188:tid 940253] [client 172.71.102.215:13141] AH01630: client denied by server configuration: /var/www/html/rt_sukamulya/.vite

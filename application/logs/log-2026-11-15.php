@@ -7706,3 +7706,85 @@ ERROR - 2026-11-15 09:40:59 --> 404 Page Not Found: Rt_sukamulya/index
 ERROR - 2026-11-15 09:40:59 --> 404 Page Not Found: Faviconico/index
 ERROR - 2026-11-15 09:45:14 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
 ERROR - 2026-11-15 09:45:14 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 09:47:25 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 09:47:25 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 09:49:43 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 09:49:43 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 09:49:45 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 09:49:45 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 09:49:51 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 09:49:51 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 09:49:51 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 09:49:51 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 09:49:55 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 09:49:55 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 09:49:55 --> Severity: Warning --> session_regenerate_id(): Cannot regenerate session id - session is not active /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 767
+ERROR - 2026-11-15 09:49:55 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 09:49:55 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 09:49:55 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 09:49:55 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 09:56:24 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 09:56:24 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 09:56:26 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 09:56:26 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 09:56:32 --> 404 Page Not Found: Faviconico/index
+ERROR - 2026-11-15 09:56:34 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 09:56:34 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 09:56:34 --> Severity: Warning --> session_regenerate_id(): Cannot regenerate session id - session is not active /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 767
+ERROR - 2026-11-15 09:56:34 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 09:56:34 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 09:56:34 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 09:56:34 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 10:01:18 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 10:01:18 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 10:01:18 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 10:01:18 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 10:01:23 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 10:01:23 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 10:01:23 --> Severity: Warning --> session_regenerate_id(): Cannot regenerate session id - session is not active /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 767
+ERROR - 2026-11-15 10:01:23 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 10:01:23 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 10:01:23 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 10:01:23 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 10:02:42 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 10:02:42 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 10:02:45 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 10:02:45 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 10:02:45 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 10:02:45 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 10:02:49 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 10:02:49 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 10:02:49 --> Severity: Warning --> session_regenerate_id(): Cannot regenerate session id - session is not active /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 767
+ERROR - 2026-11-15 10:02:49 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 10:02:49 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 10:02:49 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 10:02:49 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 10:03:01 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 10:03:01 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 10:05:38 --> Session: Configured save path '/var/www/html/rt_sukamulya/application/cache/sessions' is not writable by the PHP process.
+ERROR - 2026-11-15 10:05:38 --> Severity: Warning --> session_start(): Failed to initialize storage module: user (path: /var/www/html/rt_sukamulya/application/cache/sessions) /var/www/html/rt_sukamulya/system/libraries/Session/Session.php 137
+ERROR - 2026-11-15 10:06:22 --> 404 Page Not Found: _next/static
+ERROR - 2026-11-15 10:06:22 --> 404 Page Not Found: Asset-manifestjson/index
+ERROR - 2026-11-15 10:06:23 --> 404 Page Not Found: %22/assets
+ERROR - 2026-11-15 10:06:23 --> 404 Page Not Found: %22/assets
+ERROR - 2026-11-15 10:06:23 --> 404 Page Not Found: Statsjson/index
+ERROR - 2026-11-15 10:06:23 --> 404 Page Not Found: %22/assets
+ERROR - 2026-11-15 10:06:23 --> 404 Page Not Found: Static/js
+ERROR - 2026-11-15 10:06:23 --> 404 Page Not Found: Webpackjson/index
+ERROR - 2026-11-15 10:06:23 --> 404 Page Not Found: Viteconfigjs/index
+ERROR - 2026-11-15 10:06:23 --> 404 Page Not Found: _next/static
+ERROR - 2026-11-15 10:06:23 --> 404 Page Not Found: _next/static
+ERROR - 2026-11-15 10:06:23 --> 404 Page Not Found: _next/static
+ERROR - 2026-11-15 10:06:44 --> 404 Page Not Found: _next/static
+ERROR - 2026-11-15 10:06:44 --> 404 Page Not Found: _next/static
+ERROR - 2026-11-15 10:06:44 --> 404 Page Not Found: _next/static
+ERROR - 2026-11-15 10:06:44 --> 404 Page Not Found: %22/assets
+ERROR - 2026-11-15 10:06:44 --> 404 Page Not Found: %22/assets
+ERROR - 2026-11-15 10:06:44 --> 404 Page Not Found: Static/js
+ERROR - 2026-11-15 10:06:44 --> 404 Page Not Found: %22/assets
+ERROR - 2026-11-15 10:06:44 --> 404 Page Not Found: Viteconfigjs/index
+ERROR - 2026-11-15 10:06:44 --> 404 Page Not Found: _next/static
+ERROR - 2026-11-15 10:06:45 --> 404 Page Not Found: Asset-manifestjson/index
+ERROR - 2026-11-15 10:06:45 --> 404 Page Not Found: Webpackjson/index
+ERROR - 2026-11-15 10:06:45 --> 404 Page Not Found: Statsjson/index
+ERROR - 2026-11-15 10:16:03 --> 404 Page Not Found: Faviconico/index
