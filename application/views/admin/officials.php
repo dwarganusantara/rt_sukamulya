@@ -1,0 +1,26 @@
+<?php
+$leader=NULL;$members=array();
+foreach($items as $candidate){if(empty($candidate['parent_id'])){$leader=$candidate;break;}}
+if(!$leader&&$items)$leader=$items[0];
+if($leader){foreach($items as $candidate){if((int)$candidate['id']!==(int)$leader['id'])$members[]=$candidate;}}
+$csrf=function(){return '<input type="hidden" name="'.html_escape($this->security->get_csrf_token_name()).'" value="'.html_escape($this->security->get_csrf_hash()).'">';};
+$can_delete=in_array($this->session->userdata('admin_role'),array('admin','ketua'),TRUE);
+$photo=function($person){return base_url(!empty($person['photo'])?html_escape($person['photo']):'assets/mockup/official-avatar.svg');};
+$actions=function($person)use($csrf,$can_delete){
+ $html='<a class="off-btn-edit" href="'.site_url('admin/official/'.$person['id']).'">'.official_svg('pencil').'Edit</a>';
+ if($can_delete)$html.='<form method="post" action="'.site_url('admin/official_delete/'.$person['id']).'" onsubmit="return confirm(\'Hapus posisi ini?\')">'.$csrf().'<button class="off-btn-delete">'.official_svg('trash').'Hapus</button></form>';
+ return $html;
+};
+?>
+<link rel="stylesheet" href="<?= base_url('assets/admin-officials-v2.css') ?>?v=<?= filemtime(FCPATH.'assets/admin-officials-v2.css') ?>">
+<section class="off-hero off-hero-list"><div class="off-hero-copy"><nav class="off-crumb"><span>Pengelolaan Sistem</span><i>›</i><span>Struktur Organisasi</span></nav><div class="off-hero-title"><span class="off-hero-icon"><?= official_svg('people') ?></span><div><h1>Kelola Struktur Organisasi</h1><p>Atur susunan pengurus RT, upload foto, dan kelola informasi dengan mudah.</p></div></div></div><a class="off-hero-action" href="<?= site_url('admin/official') ?>">+ &nbsp;Tambah Posisi</a></section>
+
+<section class="off-chart">
+<?php if($leader): ?><div class="off-tree<?= $members?' has-members':'' ?>">
+ <article class="off-card-leader"><img src="<?= $photo($leader) ?>" alt="Foto <?= html_escape($leader['name']) ?>"><div><h2><span class="off-role-mini"><?= official_svg(official_icon_meta($leader['icon'])[1]) ?></span><?= html_escape($leader['position']) ?></h2><strong><?= html_escape($leader['name']) ?></strong><p><?= html_escape($leader['description']?:'Belum ada deskripsi tugas.') ?></p><span class="off-actions"><?= $actions($leader) ?></span></div><?= official_icon_tile($leader['icon'],'off-tile off-tile-corner') ?></article>
+ <?php if($members): ?><div class="off-branches" style="--off-cols:<?= min(count($members),5) ?>"><?php foreach($members as $n=>$person): ?><article class="off-card color-<?= ($n%5)+1 ?>"><header><?= official_icon_tile($person['icon']) ?><img src="<?= $photo($person) ?>" alt="Foto <?= html_escape($person['name']) ?>"></header><h2><?= html_escape($person['position']) ?></h2><strong><?= html_escape($person['name']) ?></strong><p><?= html_escape($person['description']?:'Belum ada deskripsi tugas.') ?></p><span class="off-actions"><?= $actions($person) ?></span></article><?php endforeach; ?></div><?php endif; ?>
+ </div><?php else: ?><div class="off-empty"><?= official_icon_tile('👥') ?><h2>Belum ada posisi organisasi</h2><p>Tambahkan posisi pertama untuk mulai menyusun pengurus.</p><a class="off-hero-action" href="<?= site_url('admin/official') ?>">+ &nbsp;Tambah Posisi</a></div><?php endif; ?>
+</section>
+
+<section class="off-list"><header class="off-list-head"><?= official_icon_tile('🪪','off-tile off-tile-large') ?><div><h2>Daftar Posisi</h2><p>Daftar seluruh posisi pengurus RT yang telah ditetapkan.</p></div><label class="off-search"><?= official_svg('search') ?><input id="official-search" type="search" placeholder="Cari posisi..." aria-label="Cari posisi"></label><select id="official-status" aria-label="Filter status"><option value="">Semua Status</option><option value="aktif">Aktif</option><option value="arsip">Arsip</option></select></header><div class="off-table-scroll"><table><thead><tr><th>No</th><th>Ikon</th><th>Nama Jabatan</th><th>Nama Pengurus</th><th>Deskripsi Tugas</th><th>Status</th><th>Urutan</th><th>Aksi</th></tr></thead><tbody id="official-table-body"><?php foreach($items as $n=>$person): ?><tr data-status="<?= $person['is_active']?'aktif':'arsip' ?>"><td><?= $n+1 ?></td><td><?= official_icon_tile($person['icon']) ?></td><td><strong><?= html_escape($person['position']) ?></strong></td><td><?= html_escape($person['name']) ?></td><td><?= html_escape($person['description']?:'-') ?></td><td><span class="off-status <?= $person['is_active']?'active':'' ?>"><?= $person['is_active']?'Aktif':'Arsip' ?></span></td><td><?= (int)$person['sort_order'] ?></td><td><span class="off-actions"><?= $actions($person) ?></span></td></tr><?php endforeach; ?><?php if(!$items): ?><tr><td colspan="8">Belum ada pengurus.</td></tr><?php endif; ?></tbody></table></div></section>
+<script>(function(){var search=document.getElementById('official-search'),status=document.getElementById('official-status');function apply(){var q=search.value.toLowerCase(),s=status.value;document.querySelectorAll('#official-table-body tr[data-status]').forEach(function(row){row.hidden=(q&&row.textContent.toLowerCase().indexOf(q)<0)||(s&&row.dataset.status!==s)})}search.addEventListener('input',apply);status.addEventListener('change',apply)})();</script>

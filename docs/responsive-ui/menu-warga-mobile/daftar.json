@@ -1,0 +1,210 @@
+{
+ "grid": [
+  [
+   "Kartu Keluarga",
+   "/warga/keluarga"
+  ],
+  [
+   "Pengajuan Surat",
+   "/warga/layanan"
+  ],
+  [
+   "Jadwal Ronda",
+   "/warga/ronda"
+  ],
+  [
+   "Pengaduan & Aspirasi",
+   "/warga/pengaduan"
+  ]
+ ],
+ "nav": [
+  [
+   "Beranda",
+   "/warga"
+  ],
+  [
+   "Surat",
+   "/warga/layanan"
+  ],
+  [
+   "Iuran",
+   "/warga/iuran"
+  ]
+ ],
+ "more": [
+  [
+   "Profil Saya",
+   "/warga/profil"
+  ],
+  [
+   "Kartu Keluarga",
+   "/warga/keluarga"
+  ],
+  [
+   "Pengajuan Surat",
+   "/warga/layanan"
+  ],
+  [
+   "Riwayat Surat",
+   "/warga/riwayat"
+  ],
+  [
+   "Iuran Warga",
+   "/warga/iuran"
+  ],
+  [
+   "Laporan Kas",
+   "/keuangan"
+  ],
+  [
+   "Pengumuman",
+   "/pengumuman"
+  ],
+  [
+   "Agenda Kegiatan",
+   "/agenda"
+  ],
+  [
+   "Galeri Kegiatan",
+   "/galeri"
+  ],
+  [
+   "Jadwal Ronda",
+   "/warga/ronda"
+  ],
+  [
+   "Program Kerja",
+   "/warga/program"
+  ],
+  [
+   "Pengaduan & Aspirasi",
+   "/warga/pengaduan"
+  ],
+  [
+   "Chat Pengurus",
+   "/warga/chat"
+  ],
+  [
+   "Upload KK / OCR",
+   "/warga/keluarga/scan"
+  ],
+  [
+   "Mutasi Data",
+   "/warga/mutasi"
+  ],
+  [
+   "Kontak Pengurus",
+   "/kontak"
+  ],
+  [
+   "Kontak Penting",
+   "/warga/kontak-penting"
+  ],
+  [
+   "Pengaturan Akun",
+   "/warga/password"
+  ]
+ ],
+ "shots": [
+  {
+   "f": "00-dashboard.jpg",
+   "label": "Dashboard Warga",
+   "group": "Layar utama"
+  },
+  {
+   "f": "01-menu-lainnya.jpg",
+   "label": "Menu \"Lainnya\"",
+   "group": "Layar utama"
+  },
+  {
+   "f": "02-kartu-keluarga.jpg",
+   "label": "Kartu Keluarga",
+   "group": "Ikon utama"
+  },
+  {
+   "f": "03-pengajuan-surat.jpg",
+   "label": "Pengajuan Surat",
+   "group": "Ikon utama"
+  },
+  {
+   "f": "04-jadwal-ronda.jpg",
+   "label": "Jadwal Ronda",
+   "group": "Ikon utama"
+  },
+  {
+   "f": "05-pengaduan-aspirasi.jpg",
+   "label": "Pengaduan & Aspirasi",
+   "group": "Ikon utama"
+  },
+  {
+   "f": "06-iuran.jpg",
+   "label": "Iuran",
+   "group": "Navigasi bawah"
+  },
+  {
+   "f": "07-profil-saya.jpg",
+   "label": "Profil Saya",
+   "group": "Menu Lainnya"
+  },
+  {
+   "f": "08-riwayat-surat.jpg",
+   "label": "Riwayat Surat",
+   "group": "Menu Lainnya"
+  },
+  {
+   "f": "09-laporan-kas.jpg",
+   "label": "Laporan Kas",
+   "group": "Menu Lainnya"
+  },
+  {
+   "f": "10-pengumuman.jpg",
+   "label": "Pengumuman",
+   "group": "Menu Lainnya"
+  },
+  {
+   "f": "11-agenda-kegiatan.jpg",
+   "label": "Agenda Kegiatan",
+   "group": "Menu Lainnya"
+  },
+  {
+   "f": "12-galeri-kegiatan.jpg",
+   "label": "Galeri Kegiatan",
+   "group": "Menu Lainnya"
+  },
+  {
+   "f": "13-program-kerja.jpg",
+   "label": "Program Kerja",
+   "group": "Menu Lainnya"
+  },
+  {
+   "f": "14-chat-pengurus.jpg",
+   "label": "Chat Pengurus",
+   "group": "Menu Lainnya"
+  },
+  {
+   "f": "15-upload-kk-ocr.jpg",
+   "label": "Upload KK / OCR",
+   "group": "Menu Lainnya"
+  },
+  {
+   "f": "16-mutasi-data.jpg",
+   "label": "Mutasi Data",
+   "group": "Menu Lainnya"
+  },
+  {
+   "f": "17-kontak-pengurus.jpg",
+   "label": "Kontak Pengurus",
+   "group": "Menu Lainnya"
+  },
+  {
+   "f": "18-kontak-penting.jpg",
+   "label": "Kontak Penting",
+   "group": "Menu Lainnya"
+  },
+  {
+   "f": "19-pengaturan-akun.jpg",
+   "label": "Pengaturan Akun",
+   "group": "Menu Lainnya"
+  }
+ ]
+}

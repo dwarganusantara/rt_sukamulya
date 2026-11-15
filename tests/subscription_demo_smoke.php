@@ -1,0 +1,13 @@
+<?php
+if(PHP_SAPI!=='cli'||getenv('DB_NAME')!=='sukamulya_ui_test')exit(1);
+$db=new mysqli('localhost','root','','sukamulya_ui_test');
+function demo_check($ok,$name){if(!$ok)throw new RuntimeException($name);echo 'PASS '.$name.PHP_EOL;}
+$ids=json_decode($db->query("SELECT setting_value FROM settings WHERE setting_key='subscription_demo_offers_v1'")->fetch_assoc()['setting_value'],TRUE);
+demo_check(count($ids)===3,'Three persisted demo package IDs');
+foreach(array('basic'=>array(0,0),'pro'=>array(99000,365),'enterprise'=>array(199000,365)) as $key=>$expected){$id=(int)$ids[$key];$r=$db->query('SELECT * FROM subscription_plans WHERE id='.$id)->fetch_assoc();demo_check($r&&(float)$r['price']==(float)$expected[0]&&(int)$r['duration_days']===$expected[1]&&(int)$r['is_active']===1,'Configured demo price and duration '.$key);$details=$db->query('SELECT * FROM subscription_plan_details WHERE plan_id='.$id)->fetch_assoc();demo_check($details&&count(json_decode($details['benefits_json'],TRUE))>0,'Editable package details '.$key);}
+$invalid=$db->query('SELECT p.feature_code FROM subscription_plan_features p LEFT JOIN app_features f ON BINARY f.code=BINARY p.feature_code WHERE f.id IS NULL')->num_rows;demo_check($invalid===0,'All demo features map to existing modules');
+$before=(int)$db->query('SELECT COUNT(*) n FROM subscription_plans')->fetch_assoc()['n'];$licences=$db->query('SELECT COUNT(*) n FROM tenant_subscriptions')->fetch_assoc()['n'];$overrides=$db->query('SELECT COUNT(*) n FROM subscription_overrides')->fetch_assoc()['n'];$catalog=$db->query('SELECT * FROM subscription_catalog ORDER BY feature_code')->fetch_all(MYSQLI_ASSOC);
+$id=(int)$ids['pro'];$db->query("UPDATE subscription_plans SET name='Pro hasil edit uji' WHERE id=$id");
+$cmd=escapeshellarg(PHP_BINARY).' '.escapeshellarg(__DIR__.'/../tools/seed-subscription-demo.php');exec($cmd,$out,$status);demo_check($status===0,'Seeder can run again');
+demo_check((int)$db->query('SELECT COUNT(*) n FROM subscription_plans')->fetch_assoc()['n']===$before,'Repeated seed creates no duplicate offers');demo_check($db->query('SELECT name FROM subscription_plans WHERE id='.$id)->fetch_assoc()['name']==='Pro hasil edit uji','Repeated seed preserves user edits');$db->query("UPDATE subscription_plans SET name='Pro' WHERE id=$id");
+demo_check($db->query('SELECT COUNT(*) n FROM tenant_subscriptions')->fetch_assoc()['n']===$licences&&$db->query('SELECT COUNT(*) n FROM subscription_overrides')->fetch_assoc()['n']===$overrides&&$catalog===$db->query('SELECT * FROM subscription_catalog ORDER BY feature_code')->fetch_all(MYSQLI_ASSOC),'Seeder leaves licences, overrides and commercial access unchanged');

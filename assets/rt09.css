@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+:root{--ink:#2f3a36;--green:#3f6f5e;--lime:#7fb5a0;--cream:#faf8f3;--line:#e5e9e3}
+body{font-family:Inter,Arial,sans-serif;background:var(--cream);font-size:17px}
+h1,h2,h3,.brand,.button{font-family:Inter,Arial,sans-serif}
+.button{background:var(--green);color:#fff;border-radius:999px;padding:14px 25px}
+.button:hover{background:#315a4b}.button.secondary{background:#e4efe8;color:var(--green)}
+.hero{background-color:#7fb5a0;min-height:450px}.hero h1{font-size:clamp(32px,4vw,56px)}
+.hero .button{background:#fff;color:var(--green)}.eyebrow{color:#eaf7ec}.eyebrow.green{color:var(--green)}
+.menu-toggle{display:none;border:0;background:#e9f2eb;color:var(--green);border-radius:10px;font-size:23px;padding:4px 12px}
+.home-highlights{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:-42px;position:relative;z-index:1}
+.highlight,.stats>div,.official-card,.finance-summary>div{background:white;border:1px solid var(--line);border-radius:15px;padding:25px;box-shadow:0 5px 20px #2f3a360b}
+.highlight span,.finance-summary span,.stats span{display:block;color:#64766b;font-size:14px;font-weight:700}.highlight strong,.finance-summary strong,.stats strong{display:block;font-size:28px;color:var(--green);margin:12px 0}.highlight a{display:block;margin:8px 0;font-size:15px;font-weight:700}.highlight p{font-size:15px;color:#64766b}
+.stats,.finance-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:17px;margin-top:22px}.stats strong{font-size:35px}.finance-summary{margin:24px 0}.finance-summary strong{font-size:22px}.positive{color:#5fa77f!important}.negative{color:#c76f69!important}
+.officials{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.official-card{text-align:center}.official-card img,.avatar{width:100px;height:100px;border-radius:50%;object-fit:cover;margin:0 auto 16px}.avatar{display:grid;place-items:center;background:#e4efe8;font-size:40px;color:var(--green)}.official-card p{margin-bottom:6px}.official-card small{display:block;margin-bottom:14px;color:#6b7873}
+.period-form{display:flex;align-items:end;gap:12px;flex-wrap:wrap}.period-form label{margin:0}.period-form input{min-width:180px}
+select{display:block;width:100%;padding:12px 14px;margin-top:7px;border:1px solid #c9d7cc;border-radius:7px;background:#fff;color:var(--ink);font:inherit}
+.wa-float{position:fixed;bottom:22px;right:22px;background:#3f6f5e;color:white;width:55px;height:55px;border-radius:50%;display:grid;place-items:center;font-weight:800;z-index:9;box-shadow:0 8px 20px #1b413455}
+.admin-header .nav nav{gap:12px}.admin-header .nav nav a{font-size:13px}
+.nav-search,.search-page{display:flex;align-items:center;gap:6px}.nav-search input,.search-page input{border:1px solid #d8e2d9;border-radius:999px;padding:8px 12px;font:inherit;min-width:100px;width:130px}.nav-search button{border:0;background:none;color:var(--green);font-size:22px;cursor:pointer}.search-page input{width:min(400px,100%);padding:12px 18px}
+.nav-search input:not([type=checkbox]):not([type=hidden]){width:130px;margin:0;border-radius:999px;padding:7px 12px}.search-page input:not([type=checkbox]):not([type=hidden]){width:min(400px,100%);margin:0;border-radius:999px}
+@media(max-width:900px){.home-highlights,.officials{grid-template-columns:repeat(2,1fr)}.finance-summary,.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.site-header .nav{flex-direction:row;align-items:center;position:relative}.site-header .nav nav{display:none;position:absolute;top:70px;left:-20px;right:-20px;background:white;padding:18px 24px;box-shadow:0 15px 25px #203b2820;flex-direction:column;align-items:stretch}.site-header .nav nav.open{display:flex}.menu-toggle{display:block}.home-highlights{grid-template-columns:1fr;margin-top:-22px}.finance-summary,.stats,.officials{grid-template-columns:1fr 1fr}.admin-header .nav{align-items:start}.admin-header .nav nav{gap:10px}.hero{min-height:430px}}
+@media(max-width:480px){.finance-summary,.stats,.officials{grid-template-columns:1fr}.brand{font-size:16px}.hero p{font-size:17px}}
+@media print{.site-header,.period-form,.wa-float,footer{display:none!important}.page-title{padding:10px 0}.section{padding:12px 0}.finance-summary{grid-template-columns:repeat(4,1fr)}body{font-size:12px}}

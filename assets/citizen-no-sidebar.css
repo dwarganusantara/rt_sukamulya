@@ -1,0 +1,24 @@
+/* Halaman warga tanpa sidebar: konten selebar layar namun proporsional, tombol "Kembali" besar & berwarna.
+   Dimuat terakhir oleh site/header agar menimpa margin 270px peninggalan tata letak sidebar. */
+.citizen-letter-sidebar{display:none!important}
+.citizen-letter-body .letter-page,.citizen-letter-body .letter-request-page,.citizen-letter-body .portal-footer,.citizen-letter-body .citizen-back-bar,.letter-focus-body .letter-page{margin-left:0!important}
+@media(min-width:768px){
+ .cdx-wrap{width:calc(100% - 64px)!important;max-width:1280px!important;margin-inline:auto!important}
+ .citizen-letter-body .letter-page .wrap,.citizen-letter-body .letter-request-page .wrap{width:calc(100% - 64px)!important;max-width:1280px;margin-inline:auto}
+}
+
+/* ---------- Tombol Kembali (semua halaman warga & detail publik) ---------- */
+.cdx-back,.citizen-back-link,.pwx-back,.fui-back,.lrq-back,.announcement-back{
+ display:inline-flex!important;align-items:center;justify-content:center;gap:10px;flex:none;
+ min-height:48px;padding:0 26px 0 18px!important;border:0!important;border-radius:999px!important;
+ background:linear-gradient(135deg,#ff8a3d,var(--theme-accent,#f0501a))!important;color:#fff!important;
+ font-size:16px!important;font-weight:800!important;line-height:1!important;letter-spacing:.2px;text-decoration:none!important;white-space:nowrap;
+ box-shadow:0 8px 18px rgba(240,80,26,.32)!important;transition:transform .15s,box-shadow .15s,filter .15s}
+.cdx-back:hover,.citizen-back-link:hover,.pwx-back:hover,.fui-back:hover,.lrq-back:hover,.announcement-back:hover{transform:translateY(-1px);filter:brightness(1.05);box-shadow:0 12px 24px rgba(240,80,26,.4)!important;color:#fff!important}
+.cdx-back:focus-visible,.citizen-back-link:focus-visible,.pwx-back:focus-visible,.fui-back:focus-visible,.lrq-back:focus-visible,.announcement-back:focus-visible{outline:3px solid #ffb703;outline-offset:3px}
+.cdx-back svg,.citizen-back-link svg,.pwx-back svg,.fui-back svg,.lrq-back svg,.announcement-back svg{width:20px!important;height:20px!important;flex:none;color:#fff!important;stroke:currentColor}
+.citizen-back-link span{font-size:20px;line-height:1}
+.citizen-back-bar{padding:14px 0 4px}
+@media(max-width:600px){
+ .cdx-back,.citizen-back-link,.pwx-back,.fui-back,.lrq-back,.announcement-back{min-height:44px;padding:0 20px 0 14px!important;font-size:15px!important}
+}

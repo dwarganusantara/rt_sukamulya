@@ -1,0 +1,258 @@
+[
+ {
+  "label": "Dashboard Warga",
+  "url": "/warga",
+  "who": "warga",
+  "status": "baru",
+  "file": "",
+  "bg": "linear-gradient(rgb(253, 248, 244), rgb(252, 243, 236))"
+ },
+ {
+  "label": "Kartu Keluarga",
+  "url": "/warga/keluarga",
+  "who": "warga",
+  "status": "baru",
+  "file": "",
+  "bg": "linear-gradient(rgb(254, 241, 230), rgb(254, 239, 222))"
+ },
+ {
+  "label": "Scan / Upload KK",
+  "url": "/warga/keluarga/scan",
+  "who": "warga",
+  "status": "baru",
+  "file": "",
+  "bg": "linear-gradient(rgb(254, 241, 230), rgb(254, 239, 222))"
+ },
+ {
+  "label": "Form Isi/Periksa KK",
+  "url": "/warga/keluarga/scan?manual=1",
+  "who": "warga",
+  "status": "baru",
+  "file": "",
+  "bg": "linear-gradient(rgb(254, 241, 230), rgb(254, 239, 222))"
+ },
+ {
+  "label": "Profil Saya",
+  "url": "/warga/profil",
+  "who": "warga",
+  "status": "MERAH",
+  "file": "05-profil-saya.jpg",
+  "bg": "linear-gradient(110deg, rgb(146, 0, 30) 0%, rgb(185, 0, 43) "
+ },
+ {
+  "label": "Edit Profil",
+  "url": "/warga/profil/edit",
+  "who": "warga",
+  "status": "MERAH",
+  "file": "06-edit-profil.jpg",
+  "bg": "rgba(255, 255, 255, 0.96)"
+ },
+ {
+  "label": "Ubah Password",
+  "url": "/warga/password",
+  "who": "warga",
+  "status": "MERAH",
+  "file": "07-ubah-password.jpg",
+  "bg": "rgba(255, 255, 255, 0.96)"
+ },
+ {
+  "label": "Layanan Surat",
+  "url": "/warga/layanan",
+  "who": "warga",
+  "status": "MERAH",
+  "file": "08-layanan-surat.jpg",
+  "bg": "linear-gradient(110deg, rgb(146, 0, 30) 0%, rgb(185, 0, 43) "
+ },
+ {
+  "label": "Pengajuan Surat (form)",
+  "url": "/warga/ajukan",
+  "who": "warga",
+  "status": "MERAH",
+  "file": "09-pengajuan-surat-form.jpg",
+  "bg": "rgba(255, 255, 255, 0.96)"
+ },
+ {
+  "label": "Riwayat Pengajuan Surat",
+  "url": "/warga/riwayat",
+  "who": "warga",
+  "status": "MERAH",
+  "file": "10-riwayat-pengajuan-surat.jpg",
+  "bg": "linear-gradient(110deg, rgb(146, 0, 30) 0%, rgb(185, 0, 43) "
+ },
+ {
+  "label": "Iuran Saya",
+  "url": "/warga/iuran",
+  "who": "warga",
+  "status": "MERAH",
+  "file": "11-iuran-saya.jpg",
+  "bg": "linear-gradient(110deg, rgb(146, 0, 30) 0%, rgb(185, 0, 43) "
+ },
+ {
+  "label": "Laporan Kas RT",
+  "url": "/keuangan",
+  "who": "warga",
+  "status": "MERAH",
+  "file": "12-laporan-kas-rt.jpg",
+  "bg": "linear-gradient(110deg, rgb(146, 0, 30) 0%, rgb(185, 0, 43) "
+ },
+ {
+  "label": "Mutasi Data",
+  "url": "/warga/mutasi",
+  "who": "warga",
+  "status": "MERAH",
+  "file": "13-mutasi-data.jpg",
+  "bg": "linear-gradient(110deg, rgb(146, 0, 30) 0%, rgb(185, 0, 43) "
+ },
+ {
+  "label": "Form Mutasi",
+  "url": "/warga/mutasi/ajukan?jenis=ubah_data",
+  "who": "warga",
+  "status": "MERAH",
+  "file": "14-form-mutasi.jpg",
+  "bg": "linear-gradient(110deg, rgb(146, 0, 30) 0%, rgb(185, 0, 43) "
+ },
+ {
+  "label": "Pengaduan & Aspirasi",
+  "url": "/warga/pengaduan",
+  "who": "warga",
+  "status": "MERAH",
+  "file": "15-pengaduan-aspirasi.jpg",
+  "bg": "linear-gradient(110deg, rgb(146, 0, 30) 0%, rgb(185, 0, 43) "
+ },
+ {
+  "label": "Buat Pengaduan",
+  "url": "/warga/pengaduan/buat",
+  "who": "warga",
+  "status": "MERAH",
+  "file": "16-buat-pengaduan.jpg",
+  "bg": "linear-gradient(110deg, rgb(146, 0, 30) 0%, rgb(185, 0, 43) "
+ },
+ {
+  "label": "Program Kerja",
+  "url": "/warga/program",
+  "who": "warga",
+  "status": "MERAH",
+  "file": "17-program-kerja.jpg",
+  "bg": "linear-gradient(110deg, rgb(146, 0, 30) 0%, rgb(185, 0, 43) "
+ },
+ {
+  "label": "Jadwal Ronda",
+  "url": "/warga/ronda",
+  "who": "warga",
+  "status": "MERAH",
+  "file": "18-jadwal-ronda.jpg",
+  "bg": "linear-gradient(110deg, rgb(146, 0, 30) 0%, rgb(185, 0, 43) "
+ },
+ {
+  "label": "Kontak Penting",
+  "url": "/warga/kontak-penting",
+  "who": "warga",
+  "status": "MERAH",
+  "file": "19-kontak-penting.jpg",
+  "bg": "linear-gradient(110deg, rgb(146, 0, 30) 0%, rgb(185, 0, 43) "
+ },
+ {
+  "label": "Pengumuman",
+  "url": "/pengumuman",
+  "who": "warga",
+  "status": "baru",
+  "file": "",
+  "bg": "linear-gradient(rgb(254, 241, 230), rgb(254, 239, 222))"
+ },
+ {
+  "label": "Detail Pengumuman",
+  "url": "//pengumuman/11",
+  "who": "warga",
+  "status": "MERAH",
+  "file": "21-detail-pengumuman.jpg",
+  "bg": "rgba(255, 255, 255, 0.96)"
+ },
+ {
+  "label": "Agenda",
+  "url": "/agenda",
+  "who": "warga",
+  "status": "baru",
+  "file": "",
+  "bg": "linear-gradient(rgb(254, 241, 230), rgb(254, 239, 222))"
+ },
+ {
+  "label": "Detail Agenda",
+  "url": "//agenda/17",
+  "who": "warga",
+  "status": "MERAH",
+  "file": "23-detail-agenda.jpg",
+  "bg": "linear-gradient(110deg, rgb(146, 0, 30) 0%, rgb(185, 0, 43) "
+ },
+ {
+  "label": "Galeri Kegiatan",
+  "url": "/galeri",
+  "who": "warga",
+  "status": "MERAH",
+  "file": "24-galeri-kegiatan.jpg",
+  "bg": "linear-gradient(110deg, rgb(146, 0, 30) 0%, rgb(185, 0, 43) "
+ },
+ {
+  "label": "Informasi Warga",
+  "url": "/informasi",
+  "who": "warga",
+  "status": "baru",
+  "file": "",
+  "bg": "linear-gradient(rgb(254, 241, 230), rgb(254, 239, 222))"
+ },
+ {
+  "label": "Kontak RT",
+  "url": "/kontak",
+  "who": "warga",
+  "status": "MERAH",
+  "file": "26-kontak-rt.jpg",
+  "bg": "linear-gradient(110deg, rgb(146, 0, 30) 0%, rgb(185, 0, 43) "
+ },
+ {
+  "label": "Profil RT",
+  "url": "/profil",
+  "who": "warga",
+  "status": "MERAH",
+  "file": "27-profil-rt.jpg",
+  "bg": "linear-gradient(110deg, rgb(146, 0, 30) 0%, rgb(185, 0, 43) "
+ },
+ {
+  "label": "Struktur Organisasi",
+  "url": "/struktur",
+  "who": "warga",
+  "status": "MERAH",
+  "file": "28-struktur-organisasi.jpg",
+  "bg": "rgba(255, 255, 255, 0.96)"
+ },
+ {
+  "label": "Beranda (tamu)",
+  "url": "/",
+  "who": "tamu",
+  "status": "baru",
+  "file": "",
+  "bg": "linear-gradient(rgb(254, 241, 230), rgb(254, 239, 222))"
+ },
+ {
+  "label": "Login Warga",
+  "url": "/warga/login",
+  "who": "tamu",
+  "status": "baru",
+  "file": "",
+  "bg": "rgb(255, 243, 227)"
+ },
+ {
+  "label": "Daftar Akun Warga",
+  "url": "/warga/daftar",
+  "who": "tamu",
+  "status": "MERAH",
+  "file": "31-daftar-akun-warga.jpg",
+  "bg": "rgba(255, 255, 255, 0.96)"
+ },
+ {
+  "label": "Pencarian",
+  "url": "/cari?q=rapat",
+  "who": "tamu",
+  "status": "MERAH",
+  "file": "32-pencarian.jpg",
+  "bg": "rgba(255, 255, 255, 0.96)"
+ }
+]

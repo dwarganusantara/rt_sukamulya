@@ -1,0 +1,8 @@
+JSON.stringify((function(){
+var row=document.querySelector('.dws-row'),label=row.querySelector('[data-field=label]'),check=row.querySelector('[data-field=show_on_dashboard]'),key=row.dataset.key,original=label.value,out={};
+label.value='Nama Uji';label.dispatchEvent(new Event('input',{bubbles:true}));out.label=document.querySelector('#dws-preview [data-menu-key="'+key+'"] strong').textContent==='Nama Uji';label.value=original;label.dispatchEvent(new Event('input',{bubbles:true}));
+check.checked=false;check.dispatchEvent(new Event('change',{bubbles:true}));out.hidden=!document.querySelector('#dws-preview [data-menu-key="'+key+'"]');check.checked=true;check.dispatchEvent(new Event('change',{bubbles:true}));
+var second=document.querySelectorAll('.dws-row')[1],secondKey=second.dataset.key;second.querySelector('[data-move=up]').click();out.reorder=document.querySelector('.dws-row').dataset.key===secondKey&&document.querySelector('#dws-preview .dwi-tile').dataset.menuKey===secondKey;second.querySelector('[data-move=down]').click();
+document.querySelector('[data-preview=mobile]').click();out.mobile=getComputedStyle(document.querySelector('#dws-preview .dwi-grid')).gridTemplateColumns.split(' ').length===2;document.querySelector('[data-preview=desktop]').click();
+var boxes=Array.from(document.querySelectorAll('#dashboard-settings-form [data-field=show_on_dashboard]')),states=boxes.map(x=>x.checked);boxes.forEach(x=>x.checked=false);check.dispatchEvent(new Event('change',{bubbles:true}));out.empty=!!document.querySelector('#dws-preview .dwi-empty');boxes.forEach((x,i)=>x.checked=states[i]);check.dispatchEvent(new Event('change',{bubbles:true}));return out;
+})())

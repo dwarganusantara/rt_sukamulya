@@ -1,0 +1,34 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# SECURITY (SEC-01): never serve VCS metadata, database dumps, docs, tests, tools or
+# temporary artifacts from the web root. Application routes are unaffected.
+RewriteRule (^|/)\.(?!well-known/) - [F,L]
+RewriteRule ^(database\ sql|tests|tools|tmp|docs|application|system)(/|$) - [F,L,NC]
+RewriteRule \.(sql|md|log|bak|old|orig|swp|ps1|sh|cjs|ini|env|lock|dist)$ - [F,L,NC]
+RewriteRule ^(?!index\.php$)[^/]+\.php$ - [F,L,NC]
+RewriteRule ^[^/]+\.png$ - [F,L,NC]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php/$1 [L]
+</IfModule>
+Options -Indexes
+
+# Fallback when mod_rewrite is unavailable (SEC-01).
+<FilesMatch "(^\.|\.(sql|md|log|bak|old|orig|swp|ps1|sh|cjs|ini|env|lock|dist)$)">
+    <IfModule authz_core_module>
+        Require all denied
+    </IfModule>
+    <IfModule !authz_core_module>
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# SECURITY (SEC-04): baseline headers for static files served directly by Apache.
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always unset X-Powered-By
+</IfModule>

@@ -1,0 +1,38 @@
+<?php if(!isset($this->feature_gate))$this->load->library('Feature_gate'); ?><?php
+$title=$settings['site_name']??'RT 009/008 Suka Mulya IV';
+$hero_image=$settings['home_banner_jpg']??'';
+if($hero_image==='') $hero_image='assets/mockup/home-banner.jpg';
+// Banner bawaan versi bersih (teks tercetak dihapus) → teks, papan gapura & lencana dirender dinamis dan sejajar gambar.
+$hero_clean=in_array($hero_image,array('uploads/fcfb10544bfccb7d153892cee6691ace.png','assets/mockup/home-banner.jpg'),TRUE)&&is_file(FCPATH.'assets/img/home/home-banner-clean.jpg');
+if($hero_clean)$hero_image='assets/img/home/home-banner-clean.jpg';
+// Foto 'Tentang' di Beranda: unggahan admin bila ada; bawaan memakai foto deretan rumah (sesuai mockup).
+$home_about=trim((string)($settings['about_image']??''));
+if(strpos($home_about,'uploads/')!==0||!is_file(FCPATH.$home_about))$home_about='assets/mockup/about-neighborhood.png';
+$citizen_shell=TRUE; $shell_active='home'; // header merah (warga & tamu)
+$this->load->view('site/header',compact('title','settings','menu','citizen_shell','shell_active'));
+$home_area=trim((string)($settings['brand_subtitle']??'Suka Mulya IV'));
+$hico=function($d){return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="'.$d.'"/></svg>';};
+$badges=array(array('Guyub','M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20c.6-3.6 3-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 4.5a3.5 3.5 0 0 1 0 6.5M18 14.8c2 .7 3.2 2.5 3.5 5.2'),array('Aman','M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6zM9 12l2 2 4-4'),array('Bersih','M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10ZM2 21c0-3 1.9-5.4 5.1-6'),array('Maju','M4 20V4M4 20h16M8 16v-5M13 16V8M18 16v-3'));
+?>
+<link rel="stylesheet" href="<?= base_url('assets/citizen-red.css') ?>?v=<?= filemtime(FCPATH.'assets/citizen-red.css') ?>">
+<?php $this->load->view('site/home_mobile',compact('settings','home_area','announcements','events')); ?>
+<main class="portal-home home-v2 crd-home">
+ <section class="home-banner<?= $hero_clean?' hm-clean':'' ?>" aria-label="Tampilan utama <?= html_escape($settings['site_name']??'RT 009/008 Suka Mulya IV') ?>">
+  <img src="<?= base_url(html_escape($hero_image)) ?>" alt="Banner utama <?= html_escape($settings['site_name']??'RT 009/008 Suka Mulya IV') ?>">
+  <?php if($hero_clean): ?><p class="hm-sign" aria-hidden="true"><b><?= html_escape(trim((string)($settings['brand_label']??'RT 009/008'))) ?></b><span><?= html_escape(mb_strtoupper($home_area)) ?></span></p><?php else: ?><span class="hm-veil" aria-hidden="true"></span><?php endif; ?>
+  <div class="hm-copy"><span class="hm-eyebrow">SELAMAT DATANG DI</span><h1>RT Digital <b><?= html_escape($home_area) ?><svg class="hm-spark" viewBox="0 0 40 40" aria-hidden="true"><path d="M8 30l10-4M10 18l12 2M18 6l6 12"/></svg></b></h1><p>Solusi digital untuk lingkungan RT/RW yang aman, guyub, transparan, dan terhubung.</p></div>
+  <ul class="hm-badges" aria-label="Nilai lingkungan"><?php foreach($badges as $bd): ?><li><span><?= $hico($bd[1]) ?></span><?= $bd[0] ?><i aria-hidden="true">&#10003;</i></li><?php endforeach; ?></ul>
+ </section>
+
+ <div class="wrap home-overlap home-overlap-v2">
+  <section class="quick-menu-card" aria-label="Menu cepat"><div class="quick-menu-grid"><?php $quick_links=array_values(array_filter((array)$quick_links,function($l){return $this->feature_gate->link_ok((string)$l['url_path'],'warga');})); foreach($quick_links as $link): ?><a href="<?= site_url($link['url_path']) ?>"><span class="quick-icon"><?php if($link['icon_image']): ?><img src="<?= base_url(html_escape($link['icon_image'])) ?>" alt=""><?php else: ?><b>&nearr;</b><?php endif; ?></span><strong><?= html_escape($link['title']) ?></strong><small><?= html_escape($link['subtitle']) ?></small></a><?php endforeach; ?></div><?php if(!$quick_links): ?><p class="home-empty">Menu cepat belum diatur oleh admin.</p><?php endif; ?></section>
+  <?php if($this->feature_gate->link_ok('pengumuman','warga')): ?><section class="home-list-card announcement-card"><div class="home-card-head"><div><img src="<?= base_url(html_escape($settings['announcement_icon']??'assets/mockup/icon-announcement.png')) ?>" alt=""><h2>Pengumuman Terbaru</h2></div><a href="<?= site_url('pengumuman') ?>">Lihat Semua &rarr;</a></div><div class="home-list-items"><?php foreach($announcements as $item): ?><a href="<?= site_url('pengumuman/'.(int)$item['id']) ?>"><span class="date-tile"><b><?= date('d',strtotime($item['created_at'])) ?></b><small><?= date('M',strtotime($item['created_at'])) ?></small></span><span><strong><?= html_escape($item['title']) ?></strong><small><?= html_escape(mb_strimwidth(strip_tags($item['body']),0,95,'...')) ?></small></span><i aria-hidden="true">&rsaquo;</i></a><?php endforeach; ?><?php if(!$announcements): ?><div class="home-empty">Belum ada pengumuman. Informasi terbaru akan muncul di sini.</div><?php endif; ?></div></section><?php endif; ?>
+ </div>
+
+ <div class="wrap home-content-grid home-content-v2">
+  <a class="about-photo-card" href="<?= site_url('profil') ?>" style="background-image:url('<?= base_url(html_escape($home_about)) ?>')"><span class="hm-quote">&ldquo;Lingkungan Bersih, Warga Sehat, Silaturahmi Erat&rdquo;</span><span class="sr-only">Lihat profil lingkungan</span></a>
+  <section class="about-text-card"><h2><?= html_escape($settings['about_title']??'Tentang RT 009/008') ?></h2><p><?= nl2br(html_escape($settings['about_text']??'')) ?></p><div class="value-grid"><div><img src="<?= base_url(html_escape($settings['value1_icon']??'assets/mockup/icon-rukun.png')) ?>" alt=""><strong><?= html_escape($settings['value1_title']??'Rukun') ?></strong><small><?= html_escape($settings['value1_text']??'Menjaga silaturahmi') ?></small></div><div><img src="<?= base_url(html_escape($settings['value2_icon']??'assets/mockup/icon-bersih.png')) ?>" alt=""><strong><?= html_escape($settings['value2_title']??'Bersih') ?></strong><small><?= html_escape($settings['value2_text']??'Lingkungan yang sehat') ?></small></div><div><img src="<?= base_url(html_escape($settings['value3_icon']??'assets/mockup/icon-aman.png')) ?>" alt=""><strong><?= html_escape($settings['value3_title']??'Aman') ?></strong><small><?= html_escape($settings['value3_text']??'Nyaman untuk semua warga') ?></small></div></div></section>
+  <?php if($this->feature_gate->link_ok('agenda','warga')): ?><section class="home-list-card agenda-card"><div class="home-card-head"><div><img src="<?= base_url(html_escape($settings['agenda_icon']??'assets/mockup/icon-calendar-small.png')) ?>" alt=""><h2>Agenda Mendatang</h2></div><a href="<?= site_url('agenda') ?>">Lihat Semua &rarr;</a></div><div class="home-list-items"><?php foreach($events as $item): ?><a href="<?= site_url('agenda/'.(int)$item['id']) ?>"><span class="date-tile"><b><?= date('d',strtotime($item['event_date'])) ?></b><small><?= date('M',strtotime($item['event_date'])) ?></small></span><span><strong><?= html_escape($item['title']) ?></strong><small><b class="event-meta">&#128338; <?= $item['event_time']?html_escape(substr($item['event_time'],0,5)).' WIB':'Waktu menyusul' ?></b><?= $item['event_location']?' &nbsp; &#128205; '.html_escape($item['event_location']):'' ?></small></span><i aria-hidden="true">&rsaquo;</i></a><?php endforeach; ?><?php if(!$events): ?><div class="home-empty">Belum ada agenda mendatang. Jadwal kegiatan akan muncul di sini.</div><?php endif; ?></div></section><?php endif; ?>
+ </div>
+ </main>
+<?php $this->load->view('site/footer',array('settings'=>$settings,'citizen_shell'=>FALSE,'home_red'=>TRUE)); ?>

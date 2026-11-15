@@ -1,0 +1,23 @@
+/* Penerapan warna sederhana dari Admin > Pengaturan > Tema & Fitur.
+   Dimuat paling akhir agar tidak kalah oleh stylesheet komponen atau Tema & Tampilan. */
+:root{
+ --theme-accent-soft:color-mix(in srgb,var(--theme-accent,#f0501a) 11%,#fff);
+ --theme-accent-mid:color-mix(in srgb,var(--theme-accent,#f0501a) 26%,#fff);
+ --theme-accent-deep:color-mix(in srgb,var(--theme-accent,#f0501a) 82%,#000);
+}
+body.portal-body{--orange:var(--theme-accent,#f0501a);--orange-light:color-mix(in srgb,var(--theme-accent,#f0501a) 72%,#fff);--navy:var(--theme-navy,#082654)}
+body.dwb{--dw-maroon:var(--theme-accent,#f0501a);--dw-maroon-deep:var(--theme-accent-deep);--dw-red:var(--theme-accent,#f0501a);--dw-red-2:color-mix(in srgb,var(--theme-accent,#f0501a) 78%,#fff);--dw-navy:var(--theme-navy,#082654)}
+.crd-page{--cr-red:var(--theme-accent,#f0501a)!important;--cr-red-2:var(--theme-accent-deep)!important;--cr-navy:var(--theme-navy,#082654)!important}
+
+/* Admin: navigasi, identitas akun, tombol utama, tab pengaturan, dan fokus formulir. */
+.admin-body .ad-sidebar .sbx-line.active .sbx-row,.admin-body .ad-sidebar .sbx-line.active:hover .sbx-row{background:linear-gradient(95deg,color-mix(in srgb,var(--theme-accent,#f0501a) 72%,#fff),var(--theme-accent,#f0501a));box-shadow:0 8px 18px color-mix(in srgb,var(--theme-accent,#f0501a) 28%,transparent)}
+.admin-body .ad-topbar .ad-account-avatar,.admin-body .set-hero-icon{background:linear-gradient(135deg,color-mix(in srgb,var(--theme-accent,#f0501a) 72%,#fff),var(--theme-accent,#f0501a))}
+.admin-body .pg-btn.solid,.admin-body .set-save .button{background:linear-gradient(90deg,color-mix(in srgb,var(--theme-accent,#f0501a) 72%,#fff),var(--theme-accent,#f0501a));box-shadow:0 7px 16px color-mix(in srgb,var(--theme-accent,#f0501a) 26%,transparent)}
+.admin-body .set-tabs button.active{background:linear-gradient(90deg,var(--theme-accent-soft),#fff);color:var(--theme-accent,#f0501a);box-shadow:inset 3px 0 var(--theme-accent,#f0501a)}
+.admin-body .set-tabs button.active>i{background:var(--theme-accent-mid)}
+.admin-body .set-form :is(input,textarea,select):focus{border-color:var(--theme-accent,#f0501a);box-shadow:0 0 0 3px color-mix(in srgb,var(--theme-accent,#f0501a) 14%,transparent)}
+
+/* Situs publik dan portal warga. */
+.portal-body .nav nav a.active,.portal-body .resident-login,.portal-body .portal-button,.portal-body .button:not(.secondary),.portal-body .ctc-send{background:linear-gradient(90deg,color-mix(in srgb,var(--theme-accent,#f0501a) 72%,#fff),var(--theme-accent,#f0501a));box-shadow:0 6px 16px color-mix(in srgb,var(--theme-accent,#f0501a) 25%,transparent)}
+.portal-body :is(h1,h2,h3,.brand){--navy:var(--theme-navy,#082654)}
+.portal-body :is(input,textarea,select):focus{border-color:var(--theme-accent,#f0501a);box-shadow:0 0 0 3px color-mix(in srgb,var(--theme-accent,#f0501a) 14%,transparent)}

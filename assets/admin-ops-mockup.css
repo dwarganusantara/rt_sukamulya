@@ -1,0 +1,268 @@
+﻿/* Penyelarasan visual final dengan mockup admin, dibatasi modul .ops. */
+.admin-body:has(.ops) .ad-main{padding:22px 28px 28px;background:linear-gradient(130deg,#fffcfa,#f8fbff 70%)}
+.admin-body:has(.ops) .ad-topbar{min-height:70px}
+.admin-body:has(.ops) .sbx-row{font-size:14px;min-height:40px;font-weight:600}
+.admin-body:has(.ops) .sbx-head{font-size:14px;min-height:37px}
+.admin-body .ops{font-family:'Plus Jakarta Sans','Segoe UI',Arial,sans-serif;font-size:14px;line-height:1.5}
+.admin-body .ops :is(h1,h2,h3){font-family:inherit;letter-spacing:-.035em}
+.admin-body .ops .ops-hero{min-height:140px;padding:22px 25px;border-radius:22px;gap:20px;margin-bottom:20px;background:linear-gradient(110deg,#fffaf6,#fff4e7)}
+.admin-body .ops .ops-kicker{font-size:13px;line-height:1.4;letter-spacing:0}
+.admin-body .ops .ops-hero h1{font-size:29px;line-height:1.2;margin:4px 0 6px;font-weight:800}
+.admin-body .ops .ops-hero p{font-size:14px;line-height:1.55;max-width:780px}
+.admin-body .ops .ops-hero-icon{width:70px;flex-basis:70px;height:70px;border-radius:19px}
+.admin-body .ops .ops-hero-art{width:270px;height:140px;margin:-22px -8px -22px 8px;object-fit:contain}
+.admin-body .ops .ops-hero-actions{flex:0 0 auto;max-width:none}
+.admin-body .ops .ops-hero-actions .ops-btn{font-size:14px;padding:0 20px;height:44px}
+.admin-body .ops .ops-card{border-radius:22px;padding:22px 24px;margin-bottom:20px}
+.admin-body .ops .ops-card h2{font-size:22px;font-weight:800;line-height:1.35;margin-bottom:17px}
+.admin-body .ops .ops-card>header{margin-bottom:20px;gap:14px}
+.admin-body .ops .ops-card>header h2{margin:0}
+.admin-body .ops .ops-grid{gap:22px;grid-template-columns:minmax(0,1.62fr) minmax(360px,1fr)}
+.admin-body .ops:is(.ops-accounts,.ops-fields,.ops-handover)>.ops-grid{align-items:stretch}
+.admin-body .ops:is(.ops-accounts,.ops-fields,.ops-handover)>.ops-grid>.ops-card{min-height:530px}
+.admin-body .ops .ops-field{font-size:14px;line-height:1.35;gap:7px;font-weight:700}
+.admin-body .ops .ops-field :is(input,select,textarea){font-size:14px;font-family:inherit;border-color:#dce2ec;font-weight:400}
+.admin-body .ops .ops-field :is(input,select):not([type=checkbox]){height:43px;min-height:43px}
+.admin-body .ops .ops-form{gap:16px 20px}
+.admin-body .ops .ops-form.one{gap:17px}
+.admin-body .ops .ops-field small{font-size:11px;line-height:1.5}
+.admin-body .ops .ops-field.check{font-size:12px;line-height:1.5;align-items:center}
+.admin-body .ops .ops-control-icon{top:12px}
+.admin-body .ops .ops-btn{font-size:14px;min-height:42px;font-weight:700;padding-inline:18px}
+.admin-body .ops .ops-btn.small{font-size:12px;min-height:35px;padding-inline:12px}
+.admin-body .ops .ops-table{font-size:14px;line-height:1.65}
+.admin-body .ops .ops-table th{font-size:12px;padding:13px 15px;letter-spacing:0;font-weight:800}
+.admin-body .ops .ops-table td{padding:11px 15px}
+.admin-body .ops .ops-table td small{font-size:11px;line-height:1.5}
+.admin-body .ops .ops-badge{font-size:12px;line-height:1.3;padding:6px 11px}
+.admin-body .ops .ops-stat strong{font-size:28px;line-height:1.15;font-weight:800}
+.admin-body .ops .ops-stat small{font-size:13px;line-height:1.4}
+.admin-body .ops .ops-stat em{font-size:11px;line-height:1.4}
+.admin-body .ops .ops-stat{min-height:103px;grid-template-columns:53px minmax(0,1fr);padding:16px 20px;gap:0 15px}
+.admin-body .ops .ops-stat-icon{width:53px;height:53px;border-radius:15px}
+.admin-body .ops .ops-stat-icon svg{width:29px;height:29px}
+.admin-body .ops .ops-empty-state{min-height:235px;justify-content:center;gap:12px}
+.admin-body .ops .ops-empty-state>strong{font-size:18px}.admin-body .ops .ops-empty-state>p{font-size:13px;line-height:1.5}
+.admin-body .ops .ops-filter input,.admin-body .ops .ops-filter select{font-size:14px;height:43px}
+.admin-body .ops .ops-status-tabs button{font-size:13px;padding:10px 14px}
+.admin-body .ops .ops-row-menu nav{position:fixed;z-index:160;min-width:190px;max-height:250px;overflow:auto;box-shadow:0 12px 35px #1b355c25}
+.admin-body .ops .ops-row-menu nav form{margin:0}.admin-body .ops .ops-row-menu nav :is(a,button){display:block;min-height:39px;width:100%;text-align:left;padding:9px 12px;border:0;border-radius:8px;background:#fff;color:#19365c;font:inherit;font-size:12px;cursor:pointer}.admin-body .ops .ops-row-menu nav :is(a,button):hover{background:#fff0e0}
+.admin-body .ops-accounts .ops-hero-art{display:none}
+.admin-body .ops-accounts .ops-account-initial{width:42px;height:42px;font-size:15px}
+.admin-body .ops-accounts .ops-role-tag{font-size:12px;padding:6px 10px;white-space:nowrap;background:#fff1df;color:#9c5815}
+.admin-body .ops-accounts .ops-role-tag svg{width:17px;height:17px}
+.admin-body .ops-fields .ops-table th:nth-child(1){width:28%}
+.admin-body .ops-fields .ops-table th:nth-child(2){width:23%}
+.admin-body .ops-fields .ops-table .ops-req-badge{background:#fff0de;color:#dd7100}
+.admin-body .ops-fields .ops-table .ops-more-muted{background:#edf0f5;color:#536780}
+.admin-body .ops-audit .audit-filter{padding:22px 24px 20px}
+.admin-body .ops-audit .audit-filter summary strong{font-size:21px}.admin-body .ops-audit .audit-filter summary small{font-size:13px}
+.admin-body .ops-audit .audit-form{margin-top:24px;gap:21px 17px;grid-template-columns:1.07fr .9fr 1.12fr}
+.admin-body .ops-audit .audit-form input,.admin-body .ops-audit .audit-form select{font-size:14px;height:46px}
+.admin-body .ops-audit .audit-period{align-items:center;padding:0 9px;border-radius:11px;min-height:46px}
+.admin-body .ops-audit .audit-period legend{display:none}
+.admin-body .ops-audit .audit-period input{border:0;height:40px;font-size:12px}
+.admin-body .ops-audit .audit-ranges{gap:7px;flex-wrap:nowrap;grid-column:1/3}
+.admin-body .ops-audit .audit-ranges>strong{font-size:12px;flex:none}
+.admin-body .ops-audit .audit-ranges a{font-size:11px;padding:8px 10px;min-height:37px}
+.admin-body .ops-audit .audit-filter-actions{gap:8px}
+.admin-body .ops-audit .ops-table td{padding-block:9px}
+.admin-body .ops-audit .ops-table td:nth-child(5):empty:before{content:'–'}
+.admin-body .ops-recon .ops-hero{min-height:140px}.admin-body .ops-recon .ops-stats{gap:16px}
+.admin-body .ops-recon .recon-entry{padding:18px 23px}
+.admin-body .ops-recon .recon-entry>header{margin-bottom:8px}
+.admin-body .ops-recon .recon-steps{width:78%;margin:12px auto 17px;gap:14px}
+.admin-body .ops-recon .recon-steps li{font-size:12px}
+.admin-body .ops-recon .recon-form{padding:12px 14px;gap:16px;grid-template-columns:1fr 1.15fr 1.2fr auto}
+.admin-body .ops-recon .recon-form .ops-field{font-size:12px}
+.admin-body .ops-recon .recon-bottom-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.55fr);gap:17px}
+.admin-body .ops-recon .recon-bottom-grid h2{font-size:19px;gap:8px;margin-bottom:14px}
+.admin-body .ops-recon .recon-check{font-size:12px;margin-bottom:8px}
+.admin-body .ops-recon .recon-history .ops-table{font-size:12px}.admin-body .ops-recon .recon-history .ops-table th{font-size:10px;padding:11px 8px}.admin-body .ops-recon .recon-history .ops-table td{padding:10px 8px}
+.admin-body .ops-handover .ops-hero-art{display:none}.admin-body .ops-handover .ops-process{padding:23px;gap:25px}.admin-body .ops-handover .ops-process li+li:before{content:'›';font-size:28px;font-weight:400;color:#8094ae;margin-right:14px}.admin-body .ops-handover .ops-process strong{font-size:14px}.admin-body .ops-handover .ops-process small{font-size:12px}
+.admin-body .ops-backup .ops-grid{grid-template-columns:minmax(0,1.75fr) minmax(330px,1fr);align-items:stretch}.admin-body .ops-backup .ops-grid>.ops-card{min-height:470px}.admin-body .ops-backup .ops-guide-panel summary{font-size:21px;line-height:1.4}.admin-body .ops-backup .ops-grid>div>.ops-card{padding:24px}.admin-body .ops-backup .ops-guide-panel>p{font-size:13px}
+.admin-body .ops-settings-history .ops-hero-actions{display:none}.admin-body .ops-settings-history .ops-filter{padding:18px 20px;gap:12px}.admin-body .ops-settings-history .ops-filter [data-history-search]{flex:1.4 1 250px}.admin-body .ops-settings-history .ops-filter [data-history-period]{flex:1 1 180px}.admin-body .ops-settings-history .ops-filter [data-history-apply]{background:linear-gradient(135deg,#ffa021,#ff7900)!important;color:#fff}.admin-body .ops-settings-history .ops-more summary{padding:5px 12px;border-radius:99px;background:#eaf1ff;color:#1f60e3;font-size:12px;list-style:none;display:inline-block}.admin-body .ops-settings-history .ops-table td:nth-child(3){max-width:650px;line-height:1.7}
+@media(max-width:1450px){.admin-body .ops .ops-hero-art{width:215px}.admin-body .ops .ops-hero h1{font-size:27px}.admin-body .ops-audit .audit-ranges{flex-wrap:wrap}.admin-body .ops-audit .audit-form{grid-template-columns:1fr 1fr}.admin-body .ops-audit .audit-period{grid-column:1/-1}.admin-body .ops-audit .audit-filter-actions{grid-column:auto}.admin-body .ops .ops-grid{grid-template-columns:minmax(0,1.45fr) minmax(330px,1fr)}}
+@media(max-width:1200px){.admin-body .ops-recon .recon-bottom-grid{grid-template-columns:1fr}.admin-body .ops-recon .recon-form{grid-template-columns:1fr 1fr}.admin-body .ops .ops-grid,.admin-body .ops-backup .ops-grid{grid-template-columns:minmax(0,1fr)}.admin-body .ops:is(.ops-accounts,.ops-fields,.ops-handover)>.ops-grid>.ops-card{min-height:0}.admin-body .ops-audit .audit-ranges{grid-column:1/-1}.admin-body .ops-audit .audit-filter-actions{grid-column:1/-1}}
+@media(max-width:760px){.admin-body:has(.ops) .ad-main{padding:15px 12px}.admin-body .ops .ops-hero{padding:17px;min-height:115px;gap:10px}.admin-body .ops .ops-hero h1{font-size:24px}.admin-body .ops .ops-hero p{font-size:13px}.admin-body .ops .ops-hero-art{width:135px;height:110px;margin:0}.admin-body .ops .ops-card{padding:17px 15px}.admin-body .ops .ops-card h2{font-size:20px}.admin-body .ops .ops-table{font-size:13px}.admin-body .ops .ops-table td{padding:8px 3px}.admin-body .ops .ops-field{font-size:13px}.admin-body .ops .ops-stats{grid-template-columns:minmax(0,1fr)}.admin-body .ops-audit .audit-form{grid-template-columns:minmax(0,1fr)}.admin-body .ops-audit .audit-period{grid-column:1}.admin-body .ops-recon .recon-form{grid-template-columns:1fr}.admin-body .ops-recon .recon-steps{width:100%;gap:5px}.admin-body .ops-recon .recon-steps li{font-size:10px}.admin-body .ops-backup .ops-grid>.ops-card{min-height:0}.admin-body .ops .ops-table.stack td:nth-child(1){width:auto}.admin-body .ops-handover .ops-process li+li:before{display:none}}
+/* Skala desktop mengikuti mockup 1680–1742px. */
+@media(min-width:1400px){
+ .admin-body:has(.ops) .ad-main{padding-top:15px}
+ .admin-body:has(.ops) .sbx-row{font-size:15px;font-weight:500}
+ .admin-body:has(.ops) .sbx-head{font-size:15px}
+ .admin-body .ops .ops-hero h1{font-size:32px}
+ .admin-body .ops .ops-hero p{font-size:15px}
+ .admin-body .ops .ops-card h2{font-size:24px}
+ .admin-body .ops .ops-table{font-size:15px}
+ .admin-body .ops .ops-table th{font-size:13px}
+ .admin-body .ops .ops-btn{font-size:15px}
+ .admin-body .ops .ops-field{font-size:14px}
+ .admin-body .ops .ops-field :is(input,select,textarea){font-size:14px}
+ .admin-body .ops-fields .ops-grid{grid-template-columns:minmax(0,1.85fr) minmax(390px,1fr)}
+ .admin-body .ops .ops-stat strong{font-size:30px}
+ .admin-body .ops .ops-stat small{font-size:14px}
+ .admin-body .ops-audit .audit-filter summary strong{font-size:23px}
+ .admin-body .ops-audit .audit-ranges a{font-size:12px;padding-inline:12px}
+ .admin-body .ops-audit .audit-ranges>strong{font-size:13px}
+ .admin-body .ops-recon .recon-bottom-grid h2{font-size:21px}
+ .admin-body .ops-recon .recon-check{font-size:13px}
+ .admin-body .ops-recon .recon-history .ops-table{font-size:12px}
+}
+.admin-body .ops-audit .audit-period{height:46px;align-self:center}
+.admin-body .ops-audit .audit-form>label{height:46px;align-self:center}
+.admin-body .ops .ops-field-advanced summary{font-size:12px;color:#536b91;font-weight:600;cursor:pointer;min-height:24px}
+.admin-body .ops .ops-advanced-body{display:grid;gap:14px;margin-top:15px;padding:14px;background:#f7faff;border:1px solid #e5ebf5;border-radius:12px}
+.admin-body .ops .ops-advanced-body .ops-note{margin:0;font-size:11px}
+.admin-body .ops-fields .ops-form.one{gap:15px}
+.admin-body .ops-backup .ops-note{font-size:12px;margin:12px 0 0;padding:9px 12px}
+.admin-body .ops-backup .ops-grid>div>.ops-card:first-child h2{margin-bottom:7px}
+.admin-body .ops-backup .ops-grid>div>.ops-card:first-child>.ops-muted{margin-bottom:14px}
+.admin-body .ops-backup .ops-grid>div>.ops-card:first-child form>.ops-btn{width:100%;font-size:14px}
+.admin-body .ops .ops-status-tabs button{font-family:inherit;font-weight:700}
+.admin-body .ops .ops-status-tabs [data-status=active]:before,.admin-body .ops .ops-status-tabs [data-status=inactive]:before{content:'';display:inline-block;width:8px;height:8px;margin-right:7px;border-radius:50%;background:#47ba43}
+.admin-body .ops .ops-status-tabs [data-status=inactive]:before{background:#8997b2}
+.admin-body .ops-fields .ops-form.one{gap:12px}
+@media(min-width:1400px){.admin-body:has(.ops) .sbx-row{font-size:14px}.admin-body:has(.ops) .sbx-label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+/* Tunggakan: jaga tabel tetap berada di panel kiri pada viewport lebar/zoom browser. */
+.pg-arrears .pg-due-grid>*{min-width:0}
+.pg-arrears .pg-due-table{width:100%;table-layout:fixed}
+.pg-arrears .pg-due-table .no{display:none}
+.pg-arrears .pg-due-table .pick{width:4%}
+.pg-arrears .pg-due-table .resident{width:24%}
+.pg-arrears .pg-due-table .category{width:12%}
+.pg-arrears .pg-due-table .period{width:10%}
+.pg-arrears .pg-due-table .delay{width:18%}
+.pg-arrears .pg-due-table .amount{width:12%}
+.pg-arrears .pg-due-table .action{width:20%}
+.pg-arrears .pg-due-table td{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.pg-arrears .pg-due-table td.acts{overflow:visible}
+.pg-arrears .pg-due-table .pg-acts{min-width:0;justify-content:flex-end;flex-wrap:nowrap}
+.pg-arrears .pg-due-table .pg-edit{min-width:0;flex:1 1 auto;justify-content:center;padding-inline:10px;overflow:hidden;text-overflow:ellipsis}
+.pg-arrears .pg-due-table .pg-menu{flex:0 0 auto}
+.pg-arrears .pg-rank li{min-width:0}
+.pg-arrears .pg-rank span{overflow:hidden}
+.pg-arrears .pg-rank small{white-space:normal;line-height:1.35}
+@media(max-width:1100px){
+ .pg-arrears .pg-due-table{table-layout:auto}
+ .pg-arrears .pg-due-table td{overflow:visible;text-overflow:clip}
+}
+
+/* Detail notulen: komposisi khusus agar isi dan riwayat tetap rapi. */
+.admin-body .ops-notulen-detail{max-width:1540px}
+.admin-body .ops-notulen-detail .ops-crumb{margin-bottom:16px;font-size:14px}
+.admin-body .ops-notulen-detail .ops-hero{min-height:154px;margin-bottom:24px;padding:24px 28px}
+.admin-body .ops-notulen-detail .ops-hero h1{max-width:760px;font-size:34px;overflow-wrap:anywhere}
+.admin-body .ops-notulen-detail .ops-hero p{display:flex;align-items:center;gap:7px;color:#536c91;font-size:15px}
+.admin-body .ops-notulen-detail .ops-hero-actions{margin-left:auto}
+.admin-body .ops-notulen-detail .ops-hero-actions .ops-btn{min-width:112px;background:#fff!important;color:#102d5c;border:1px solid #dce3ed;box-shadow:0 5px 14px #17345a12!important}
+.admin-body .ops-notulen-detail .ops-hero-actions .ops-btn:before{content:'\270E';margin-right:8px;color:#f36b16;font-size:20px;line-height:1}
+.admin-body .ops-notulen-detail .notulen-layout{grid-template-columns:minmax(0,1.48fr) minmax(350px,1fr);gap:24px;align-items:start}
+.admin-body .ops-notulen-detail .notulen-layout>div{min-width:0}
+.admin-body .ops-notulen-detail .ops-card{overflow:hidden;border-color:#dde4ee;background:#fff;box-shadow:0 10px 28px #263b5a0a}
+.admin-body .ops-notulen-detail .notulen-content{padding:24px 28px}
+.admin-body .ops-notulen-detail .notulen-content>header{padding-bottom:14px;margin-bottom:0;border-bottom:1px solid #dfe5ed}
+.admin-body .ops-notulen-detail .ops-card h2{display:flex;align-items:center;gap:12px;margin:0;color:#092858;font-size:24px}
+.admin-body .ops-notulen-detail .notulen-heading-icon{width:31px;height:31px;display:grid;place-items:center;flex:none;color:#ff6b00}
+.admin-body .ops-notulen-detail .notulen-heading-icon svg{width:29px;height:29px;fill:currentColor}
+.admin-body .ops-notulen-detail .ops-badge{flex:none;padding:8px 14px;font-size:13px}
+.admin-body .ops-notulen-detail .ops-dl{grid-template-columns:minmax(130px,190px) minmax(0,1fr);font-size:14px}
+.admin-body .ops-notulen-detail .ops-dl dt,.admin-body .ops-notulen-detail .ops-dl dd{min-height:43px;padding:10px 0;border-color:#dfe5ed;line-height:1.55}
+.admin-body .ops-notulen-detail .ops-dl dt{padding-right:18px;color:#60728f;font-weight:800}
+.admin-body .ops-notulen-detail .ops-dl dd{color:#102b57}
+.admin-body .ops-notulen-detail .ops-dl a{color:#dd590c;font-weight:700;text-decoration:none}
+.admin-body .ops-notulen-detail .ops-dl a:hover{text-decoration:underline}
+.admin-body .ops-notulen-detail .ops-dl dt:last-of-type,.admin-body .ops-notulen-detail .ops-dl dd:last-child{border-bottom:0}
+.admin-body .ops-notulen-detail .notulen-side{display:grid;gap:18px;align-content:start}
+.admin-body .ops-notulen-detail .notulen-side .ops-card{margin:0;padding:24px 28px}
+.admin-body .ops-notulen-detail .notulen-publish{border-color:#f3d2b2;background:linear-gradient(135deg,#fff,#fff8ef)}
+.admin-body .ops-notulen-detail .notulen-publish .ops-muted{margin:12px 0 16px;line-height:1.65}
+.admin-body .ops-notulen-detail .notulen-publish .ops-btn{width:100%}
+.admin-body .ops-notulen-detail .notulen-history h2{padding-bottom:15px;margin-bottom:18px;border-bottom:1px solid #e1e6ed}
+.admin-body .ops-notulen-detail .ops-timeline{padding-top:2px}
+.admin-body .ops-notulen-detail .ops-timeline li{min-height:58px;margin-left:8px;padding:0 0 20px 30px;border-left-color:#ffd2ad;font-size:14px}
+.admin-body .ops-notulen-detail .ops-timeline li:last-child{padding-bottom:0;border-left-color:transparent}
+.admin-body .ops-notulen-detail .ops-timeline li:before{left:-8px;top:1px;width:14px;height:14px;border-color:#ff710f;box-shadow:0 0 0 4px #fff2e7}
+.admin-body .ops-notulen-detail .ops-timeline li strong{display:block;font-size:15px;line-height:1.4}
+.admin-body .ops-notulen-detail .ops-timeline li small{margin-top:5px;color:#667895;line-height:1.5}
+@media(max-width:1200px){
+ .admin-body .ops-notulen-detail .notulen-layout{grid-template-columns:minmax(0,1fr)}
+ .admin-body .ops-notulen-detail .notulen-side{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:760px){
+ .admin-body .ops-notulen-detail .ops-crumb{margin-bottom:10px;font-size:12px}
+ .admin-body .ops-notulen-detail .ops-hero{min-height:130px;padding:18px}
+ .admin-body .ops-notulen-detail .ops-hero h1{font-size:25px}
+ .admin-body .ops-notulen-detail .ops-hero-actions .ops-btn{width:100%}
+ .admin-body .ops-notulen-detail .notulen-content,.admin-body .ops-notulen-detail .notulen-side .ops-card{padding:18px 16px}
+ .admin-body .ops-notulen-detail .notulen-side{grid-template-columns:minmax(0,1fr)}
+ .admin-body .ops-notulen-detail .ops-card h2{font-size:20px}
+ .admin-body .ops-notulen-detail .ops-dl{grid-template-columns:minmax(0,1fr)}
+ .admin-body .ops-notulen-detail .ops-dl dt{min-height:0;padding:12px 0 2px;border-bottom:0}
+ .admin-body .ops-notulen-detail .ops-dl dd{min-height:0;padding:0 0 12px}
+}
+
+/* Kontak penting: direktori penuh dengan filter kategori dan dialog form. */
+.admin-body .ops-contacts-admin{max-width:1540px}
+.admin-body .ops-contacts-admin .ops-hero{min-height:168px;margin-bottom:18px;background:linear-gradient(105deg,#fffaf6,#fff5ea)}
+.admin-body .ops-contacts-admin .ops-hero h1{font-size:34px}.admin-body .ops-contacts-admin .ops-hero p{font-size:15px}
+.admin-body .ops-contacts-admin .ops-hero-icon{width:82px;height:82px;flex-basis:82px;border-radius:22px;background:linear-gradient(145deg,#ff9d43,#ff5a0b);color:#fff;box-shadow:0 10px 22px #ff6a1d30}
+.admin-body .ops-contacts-admin .ops-hero-icon svg{width:42px;height:42px}
+.admin-body .contact-directory{padding:0;overflow:visible}
+.admin-body .contact-tabs{display:flex;gap:14px;align-items:center;padding:18px 26px 14px;border-bottom:1px solid #e8ebf1;overflow-x:auto;scrollbar-width:thin}
+.admin-body .contact-tabs button{position:relative;min-width:180px;height:50px;display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:0 20px;border:0;border-radius:999px;background:#f3f5fb;color:#17315e;font:700 14px inherit;white-space:nowrap;cursor:pointer}
+.admin-body .contact-tabs button svg{width:20px;height:20px;fill:currentColor;color:#6273a5}.admin-body .contact-tabs button.is-active{background:linear-gradient(100deg,#ff7c2c,#ff4f0b);color:#fff;box-shadow:0 8px 18px #ff5c1730}.admin-body .contact-tabs button.is-active svg{color:#fff}
+.admin-body .contact-tabs button.is-active:after{content:'';position:absolute;left:50%;bottom:-8px;transform:translateX(-50%);border:8px solid transparent;border-top-color:#ff5811;border-bottom:0}
+.admin-body .contact-toolbar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:20px 26px}
+.admin-body .contact-search{width:min(820px,70%);height:50px;display:flex;align-items:center;gap:12px;padding:0 18px;border:1px solid #dce2ec;border-radius:999px;background:#fff;color:#7284a2}
+.admin-body .contact-search svg{width:22px;height:22px;fill:currentColor;flex:none}.admin-body .contact-search input{width:100%;height:46px;border:0!important;outline:0;background:transparent!important;box-shadow:none!important;color:#17315e;font:500 14px inherit}
+.admin-body .contact-add{height:50px;display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:0 24px;border:0;border-radius:999px;background:linear-gradient(100deg,#ff791f,#ff4e08);color:#fff;font:800 14px inherit;text-decoration:none;white-space:nowrap;cursor:pointer;box-shadow:0 9px 20px #ff5b1830}.admin-body .contact-add svg{width:19px;height:19px;fill:currentColor}
+.admin-body .contact-table-wrap{margin:0 26px;border:1px solid #e1e5ed;border-radius:17px;overflow:visible}
+.admin-body .contact-table{width:100%;border-collapse:separate;border-spacing:0;color:#0c2857;font-size:14px}
+.admin-body .contact-table th{height:56px;padding:0 18px;background:#fff4ea;color:#102c58;text-align:left;font-size:13px;font-weight:900}.admin-body .contact-table th:first-child{border-radius:16px 0 0 0}.admin-body .contact-table th:last-child{border-radius:0 16px 0 0}
+.admin-body .contact-table td{height:74px;padding:10px 18px;border-bottom:1px solid #e8ebf1;vertical-align:middle}.admin-body .contact-table tbody tr:last-child td{border-bottom:0}.admin-body .contact-table .num{width:58px;text-align:center}.admin-body .contact-table .action{width:85px;text-align:center}
+.admin-body .contact-name strong{display:block;font-size:15px}.admin-body .contact-name small,.admin-body .contact-hours small{display:block;margin-top:4px;color:#72829a;font-size:11px}
+.admin-body .contact-category{width:max-content;display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:999px;background:#eef2f7;color:#52637d;font-size:12px;font-weight:800;white-space:nowrap}.admin-body .contact-category svg{width:16px;height:16px;fill:currentColor}
+.admin-body .contact-category.blue{background:#e3efff;color:#1967d2}.admin-body .contact-category.green{background:#e4f7ea;color:#13804a}.admin-body .contact-category.purple{background:#eee7ff;color:#6936cf}.admin-body .contact-category.red{background:#ffe4e6;color:#c72531}.admin-body .contact-category.orange{background:#fff0dd;color:#cf6900}
+.admin-body .contact-phone{display:inline-flex;align-items:center;gap:9px;color:#142f60;font-weight:700;text-decoration:none;white-space:nowrap}.admin-body .contact-phone svg{width:19px;height:19px;fill:#ff843c}.admin-body .contact-phone:hover{color:#ed5b0c}
+.admin-body .contact-menu{position:relative;display:inline-block}.admin-body .contact-menu>summary{width:40px;height:40px;display:grid;place-items:center;border:0;border-radius:12px;background:#f1f4fa;color:#354e80;cursor:pointer;list-style:none}.admin-body .contact-menu>summary::-webkit-details-marker{display:none}.admin-body .contact-menu>summary svg{width:20px;height:20px;fill:currentColor}
+.admin-body .contact-menu>div{position:absolute;right:0;top:46px;z-index:40;width:225px;padding:7px;border:1px solid #e1e5ed;border-radius:14px;background:#fff;box-shadow:0 17px 40px #17335b28;text-align:left}
+.admin-body .contact-menu a,.admin-body .contact-menu button{width:100%;min-height:40px;display:flex;align-items:center;gap:9px;padding:8px 11px;border:0;border-radius:9px;background:#fff;color:#17315e;font:700 12px inherit;text-decoration:none;cursor:pointer}.admin-body .contact-menu a:hover,.admin-body .contact-menu button:hover{background:#fff2e8;color:#e85c0b}.admin-body .contact-menu svg{width:17px;height:17px;fill:currentColor}.admin-body .contact-menu form{margin:0}
+.admin-body .contact-empty td{height:120px!important;color:#71819a;text-align:center}.admin-body .contact-footer{padding:15px 28px 19px;color:#6a7b96;font-size:12px}
+.contact-dialog{width:min(760px,calc(100% - 30px));max-height:calc(100dvh - 30px);padding:0;border:0;border-radius:22px;background:#fff;color:#102c58;box-shadow:0 25px 80px #152a4b55;overflow:auto}.contact-dialog::backdrop{background:#12223d85;backdrop-filter:blur(3px)}
+.contact-dialog>header{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid #e8ebf1;background:#fff}.contact-dialog>header>div{display:flex;align-items:center;gap:12px}.contact-dialog>header>div>span{width:46px;height:46px;display:grid;place-items:center;border-radius:13px;background:#fff0df;color:#f2640d}.contact-dialog>header svg{width:24px;height:24px;fill:currentColor}.contact-dialog header small{color:#e9610d;font-size:11px;font-weight:800;text-transform:uppercase}.contact-dialog h2{margin:2px 0 0;font-size:21px}.contact-dialog>header>button{width:38px;height:38px;border:0;border-radius:50%;background:#f3f5f8;color:#52637d;font-size:25px;cursor:pointer}
+.admin-body .contact-form{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 18px;padding:20px 22px}.admin-body .contact-form .ops-field:nth-of-type(5),.admin-body .contact-form .ops-field:nth-of-type(6){grid-column:1/-1}.admin-body .contact-options{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 20px;margin:2px 0;padding:14px;border:1px solid #e5e9ef;border-radius:14px}.admin-body .contact-options legend{padding:0 7px;color:#17315e;font-size:12px;font-weight:800}.admin-body .contact-options .ops-field{margin:0}
+@media(max-width:900px){.admin-body .contact-tabs{padding-inline:16px}.admin-body .contact-toolbar{padding:16px}.admin-body .contact-search{width:100%}.admin-body .contact-table-wrap{margin:0 16px;overflow-x:auto}.admin-body .contact-table{min-width:850px}}
+@media(max-width:600px){.admin-body .ops-contacts-admin .ops-hero{min-height:125px}.admin-body .ops-contacts-admin .ops-hero h1{font-size:25px}.admin-body .ops-contacts-admin .ops-hero-icon{width:56px;height:56px;flex-basis:56px}.admin-body .contact-toolbar{flex-direction:column}.admin-body .contact-add{width:100%}.admin-body .contact-form,.admin-body .contact-options{grid-template-columns:minmax(0,1fr)}.admin-body .contact-form .ops-field{grid-column:1!important}}
+
+/* Dokumen & Arsip Digital */
+.admin-body .ops-archive-admin{max-width:1540px}
+.admin-body .ops-archive-admin .ops-hero{min-height:160px;margin-bottom:18px;background:linear-gradient(105deg,#fffaf6,#fff4e8)}
+.admin-body .ops-archive-admin .ops-hero h1{font-size:34px}.admin-body .ops-archive-admin .ops-hero p{font-size:15px}
+.admin-body .ops-archive-admin .ops-hero-icon{width:76px;height:76px;flex-basis:76px;border-radius:20px;background:linear-gradient(145deg,#fff0df,#ffd9b5);color:#ff650b}
+.admin-body .archive-tabs{display:flex;align-items:center;gap:10px;margin:0 0 18px;border-bottom:1px solid #dfe5ed;overflow-x:auto;scrollbar-width:thin}
+.admin-body .archive-tabs button{position:relative;height:58px;min-width:175px;display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:0 20px;border:0;background:transparent;color:#15315f;font:700 14px inherit;white-space:nowrap;cursor:pointer}
+.admin-body .archive-tabs button svg{width:21px;height:21px;fill:currentColor;color:#52698c}.admin-body .archive-tabs button.is-active{color:#ed5d0b}.admin-body .archive-tabs button.is-active svg{color:#ff650b}.admin-body .archive-tabs button.is-active:after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:3px;border-radius:3px;background:#ff650b}
+.admin-body .archive-toolbar{display:grid;grid-template-columns:minmax(280px,1fr) minmax(220px,310px) auto;gap:18px;align-items:center;margin-bottom:18px}
+.admin-body .archive-search,.admin-body .archive-period{height:50px;display:flex;align-items:center;gap:10px;padding:0 16px;border:1px solid #d9e1ec;border-radius:11px;background:#fff;color:#59708f}
+.admin-body .archive-search svg,.admin-body .archive-period svg{width:20px;height:20px;fill:currentColor;flex:none}.admin-body .archive-search input,.admin-body .archive-period select{width:100%;height:46px;border:0!important;outline:0;background:transparent!important;box-shadow:none!important;color:#17315d;font:500 14px inherit}
+.admin-body .archive-upload-open{height:50px;display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:0 24px;border:0;border-radius:11px;background:linear-gradient(100deg,#ff8b26,#ff5c08);color:#fff;font:800 14px inherit;white-space:nowrap;cursor:pointer;box-shadow:0 8px 18px #ff661c2c}.admin-body .archive-upload-open svg{width:19px;height:19px;fill:currentColor}
+.admin-body .archive-layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(370px,.95fr);gap:18px;align-items:start}.admin-body .archive-layout.no-form,.admin-body .archive-layout.form-closed{grid-template-columns:minmax(0,1fr)}
+.admin-body .archive-list-card,.admin-body .archive-upload-card{min-width:0;border:1px solid #e0e5ed;border-radius:20px;background:#fff;box-shadow:0 10px 28px #233a5b0c}
+.admin-body .archive-table-wrap{border-radius:20px 20px 0 0;overflow:visible}.admin-body .archive-table{width:100%;border-collapse:separate;border-spacing:0;color:#0f2c59;font-size:13.5px}
+.admin-body .archive-table th{height:54px;padding:0 14px;background:#fff3e7;text-align:left;color:#102e5a;font-size:12px;font-weight:900}.admin-body .archive-table th:first-child{border-radius:19px 0 0 0}.admin-body .archive-table th:last-child{border-radius:0 19px 0 0}
+.admin-body .archive-table td{height:65px;padding:9px 14px;border-bottom:1px solid #e9edf2;vertical-align:middle}.admin-body .archive-table .num{width:46px;text-align:center}.admin-body .archive-table .action{width:96px;text-align:center}
+.admin-body .archive-title{display:flex;align-items:center;gap:10px;min-width:180px}.admin-body .archive-title>span{width:31px;height:31px;display:grid;place-items:center;flex:none;color:#47618a}.admin-body .archive-title>span svg{width:23px;height:23px;fill:currentColor}.admin-body .archive-title strong{display:block;font-size:13.5px}.admin-body .archive-title small{display:block;margin-top:2px;color:#73839a;font-size:10.5px}
+.admin-body .archive-category{width:max-content;display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:#eef2f7;color:#52627c;font-size:11px;font-weight:800;white-space:nowrap}.admin-body .archive-category svg{width:15px;height:15px;fill:currentColor}.admin-body .archive-category.orange{background:#fff0df;color:#e7660c}.admin-body .archive-category.blue{background:#e4f0ff;color:#1671dc}.admin-body .archive-category.green{background:#e2f7e9;color:#16844c}.admin-body .archive-category.purple{background:#f0e7ff;color:#7536df}
+.admin-body .archive-version{display:inline-flex;padding:6px 10px;border-radius:10px;background:#f0f3f7;color:#354b6c;font-size:11px;font-weight:700;white-space:nowrap}
+.admin-body .archive-actions{display:flex;align-items:center;justify-content:center;gap:6px}.admin-body .archive-actions>a,.admin-body .archive-actions>details>summary{width:36px;height:36px;display:grid;place-items:center;border:1px solid #dce3ec;border-radius:10px;background:#fff;color:#244978;cursor:pointer;list-style:none}.admin-body .archive-actions svg{width:18px;height:18px;fill:currentColor}.admin-body .archive-actions details{position:relative}.admin-body .archive-actions summary::-webkit-details-marker{display:none}
+.admin-body .archive-actions details>div{position:absolute;right:0;top:42px;z-index:35;width:210px;padding:7px;border:1px solid #e1e6ed;border-radius:13px;background:#fff;box-shadow:0 15px 38px #17335b28;text-align:left}.admin-body .archive-actions details>div a{display:flex;align-items:center;gap:9px;min-height:39px;padding:7px 10px;border-radius:8px;color:#17315d;font-size:12px;font-weight:700;text-decoration:none}.admin-body .archive-actions details>div a:hover{background:#fff2e7;color:#e75b0b}
+.admin-body .archive-empty td{height:190px!important;text-align:center}.admin-body .archive-list-card>footer{padding:14px 20px;color:#6d7f99;font-size:11px}
+.admin-body .archive-upload-card{overflow:hidden}.admin-body .archive-upload-card>header{display:flex;align-items:center;justify-content:space-between;padding:19px 22px 14px}.admin-body .archive-upload-card>header>div{display:flex;align-items:center;gap:11px}.admin-body .archive-upload-card>header>div>svg{width:30px;height:30px;fill:#ff650b}.admin-body .archive-upload-card h2{margin:0;font-size:21px}.admin-body .archive-upload-card>header>button{width:35px;height:35px;border:0;border-radius:50%;background:#fff;color:#16315b;font-size:26px;cursor:pointer}
+.admin-body .archive-form-tabs{display:grid;grid-template-columns:1fr 1fr;margin:0 22px;border:1px solid #e0e5ed;border-radius:12px;background:#f6f8fb;overflow:hidden}.admin-body .archive-form-tabs button{position:relative;height:58px;display:flex;align-items:center;justify-content:center;gap:8px;border:0;background:transparent;color:#29436c;font:700 13px inherit;cursor:pointer}.admin-body .archive-form-tabs button svg{width:19px;height:19px;fill:currentColor}.admin-body .archive-form-tabs button.is-active{background:#fff1e4;color:#ed620e}.admin-body .archive-form-tabs button.is-active:after{content:'';position:absolute;left:8px;right:8px;bottom:0;height:3px;background:#ff650b}
+.admin-body .archive-form{display:block;padding:18px 22px 20px}.admin-body .archive-step{display:none}.admin-body .archive-step.is-active{display:grid;gap:13px}.admin-body .archive-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.admin-body .archive-form .ops-field{gap:6px;font-size:12px}.admin-body .archive-form .ops-control input,.admin-body .archive-form .ops-control select{height:43px;min-height:43px}
+.admin-body .archive-next,.admin-body .archive-back{min-height:42px;display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid #ff8a43;border-radius:10px;background:#fff8f1;color:#dc5a0b;font:800 12px inherit;cursor:pointer}.admin-body .archive-next svg,.admin-body .archive-back svg{width:16px;height:16px;fill:currentColor}
+.admin-body .archive-dropzone{display:grid;justify-items:center;gap:7px;padding:23px 14px;border:2px dashed #f2b27e;border-radius:14px;background:#fff9f3;text-align:center}.admin-body .archive-dropzone>svg{width:45px;height:45px;fill:#f16a13}.admin-body .archive-dropzone>strong{font-size:15px}.admin-body .archive-dropzone>p{margin:0;color:#718099;font-size:11px}.admin-body .archive-dropzone .ops-field{width:100%;margin-top:6px;text-align:left}
+.admin-body .archive-form-actions{display:flex;justify-content:flex-end;gap:10px;margin:18px -22px -20px;padding:16px 22px;border-top:1px solid #e7ebf0}.admin-body .archive-form-actions .ops-btn{min-width:110px}
+@media(max-width:1250px){.admin-body .archive-layout{grid-template-columns:minmax(0,1fr)}.admin-body .archive-upload-card{max-width:720px;width:100%;justify-self:center}}
+@media(max-width:800px){.admin-body .archive-toolbar{grid-template-columns:minmax(0,1fr) minmax(190px,.6fr)}.admin-body .archive-upload-open{grid-column:1/-1}.admin-body .archive-table-wrap{overflow-x:auto}.admin-body .archive-table{min-width:760px}}
+@media(max-width:600px){.admin-body .ops-archive-admin .ops-hero{min-height:125px}.admin-body .ops-archive-admin .ops-hero h1{font-size:25px}.admin-body .archive-tabs button{min-width:150px}.admin-body .archive-toolbar{grid-template-columns:minmax(0,1fr)}.admin-body .archive-form-grid{grid-template-columns:minmax(0,1fr)}.admin-body .archive-upload-card{border-radius:16px}.admin-body .archive-form-actions .ops-btn{min-width:0;flex:1}}

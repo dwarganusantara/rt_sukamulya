@@ -1,0 +1,67 @@
+/* Layanan Surat Warga — versi HP (<=600px), mockup 14 Nov 2026. Desktop memakai daftar kartu yang lama (.cdx-wrap). */
+@media(max-width:600px){
+ .cpx-services.mw-page{padding:0 0 100px!important;background:linear-gradient(180deg,#fdf8f4,#fdf3ea 70%)!important;color:#2b1a12}
+ .cpx-services.mw-page>.cdx-wrap{display:none!important}
+ .cpx-services .mw-header{padding-bottom:0}
+ .lsm{display:block;padding:0 14px}
+ .lsm-hero{display:block;width:calc(100% + 28px);height:auto;aspect-ratio:941/250;margin:-2px -14px 0;object-fit:cover;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 16%,#000 100%);mask-image:linear-gradient(180deg,transparent 0,#000 16%,#000 100%)}
+ .lsm-title-card{position:relative;display:flex;align-items:center;gap:12px;margin:-34px 0 14px;padding:14px 16px 14px 10px;border:1px solid #fff;border-radius:26px;background:#fffaf6;box-shadow:0 10px 24px #c2551a1a;overflow:hidden}
+ .lsm-title-card:after{content:"";position:absolute;right:0;bottom:0;width:74px;height:40px;background:url("mockup/mobile-card-leaf.png") right bottom/contain no-repeat;pointer-events:none}
+ .lsm-title-card>img{width:96px;height:auto;flex:none}
+ .lsm-title-card>div{position:relative;z-index:1;padding-left:12px;border-left:1.5px solid #e9ddd2}
+ .lsm-title-card h1{margin:0 0 4px;color:#2b1a12;font-size:23px;line-height:1.15;font-weight:900}
+ .lsm-title-card p{margin:0;color:#4a4f5c;font-size:13.5px;line-height:1.45}
+ .lsm-flash{margin:0 0 12px;border-radius:14px}
+ .lsm-search{display:flex;align-items:center;gap:12px;min-height:54px;margin:0 0 12px;padding:0 18px;border:1px solid #fff;border-radius:999px;background:#fff;box-shadow:0 6px 16px #c2551a14;color:#f05a14}
+ .lsm-search svg{width:24px;height:24px;flex:none}
+ .lsm-search input{flex:1;min-width:0;height:52px;border:0!important;outline:0;background:transparent!important;box-shadow:none!important;color:#2b1a12;font:inherit;font-size:16px!important;padding:0!important}
+ .lsm-search input::placeholder{color:#7a7d89}
+ .lsm-select{position:relative;display:flex;align-items:center;gap:14px;min-height:72px;margin:0 0 12px;padding:10px 16px 10px 12px;border:1px solid #fff;border-radius:20px;background:#fffaf6;box-shadow:0 6px 16px #c2551a14;cursor:pointer}
+ .lsm-select:focus-within{outline:3px solid #f05a1455;outline-offset:1px}
+ .lsm-select-ic{display:grid;place-items:center;flex:none;width:52px;height:52px;border-radius:16px;background:#fff1e4;color:#f97316}
+ .lsm-select-ic svg{width:30px;height:30px}
+ .lsm-select-ic.tone-doc{background:#fff4e0;color:#f59e0b}
+ .lsm-select-tx{flex:1;min-width:0;display:grid;gap:1px}
+ .lsm-select-tx small{color:#5b6170;font-size:13px;font-weight:600}
+ .lsm-select select{width:100%;min-height:30px;margin:0;padding:0 26px 0 0;border:0!important;background:transparent!important;box-shadow:none!important;color:#2b1a12;font:inherit;font-size:17px!important;font-weight:900;appearance:none;-webkit-appearance:none;cursor:pointer;text-overflow:ellipsis}
+ .lsm-chev{position:absolute;right:16px;top:50%;width:24px;height:24px;margin-top:-12px;color:#f05a14;pointer-events:none}
+ .lsm-count{margin:-4px 6px 10px;color:#6f7280;font-size:12.5px}
+ .lsm-count:empty{display:none}
+ /* Kartu surat terpilih */
+ .lsm-card{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:6px 14px;margin:0 0 14px;padding:16px 16px 18px;border:1px solid #fff;border-radius:26px;background:#fffaf6;box-shadow:0 12px 28px #c2551a1a;overflow:hidden;animation:lsm-in .2s ease-out}
+ .lsm-card[hidden]{display:none}
+ .lsm-card:before,.lsm-card:after{content:"";position:absolute;bottom:0;width:62px;height:32px;background:url("mockup/mobile-card-leaf.png") center/contain no-repeat;pointer-events:none}
+ .lsm-card:before{left:0;transform:scaleX(-1)}.lsm-card:after{right:0}
+ .lsm-card-icon{display:grid;place-items:center;width:104px;height:96px}
+ .lsm-card-icon img{width:96px;height:96px;object-fit:contain}
+ .lsm-card-icon .letter-icon{transform:scale(1.25);transform-origin:center;background-color:transparent}
+ .lsm-card-tx{min-width:0;padding-left:14px;border-left:1.5px solid #e9ddd2}
+ .lsm-badge{display:inline-block;margin:0 0 6px;padding:3px 12px;border-radius:999px;background:#e5f5dc;color:#1f7a32;font-size:13px;font-weight:800}
+ .lsm-badge.cat-keterangan{background:#e6f0fd;color:#1d4ed8}.lsm-badge.cat-kegiatan{background:#fff1d6;color:#b45309}.lsm-badge.cat-lainnya{background:#f1e9fc;color:#6d28d9}
+ .lsm-card h2{margin:0 0 4px;color:#2b1a12;font-size:19px;line-height:1.2;font-weight:900}
+ .lsm-card p{margin:0;color:#4a4f5c;font-size:13.5px;line-height:1.45}
+ .lsm-go{position:relative;z-index:1;grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:10px;min-height:52px;margin:8px 22px 0;border-radius:999px;background:linear-gradient(100deg,#ff8a2a,#f26a12 55%,#ee5a0a);color:#fff!important;font-size:17px;font-weight:900;text-decoration:none;box-shadow:0 10px 22px #f05a1440}
+ .lsm-go svg{width:22px;height:22px}
+ /* Bantuan */
+ .lsm-help{display:flex;align-items:center;gap:12px;padding:12px 16px 12px 10px;border:1px solid #fff;border-radius:22px;background:linear-gradient(100deg,#fffaf3,#f1f8e8);box-shadow:0 6px 16px #c2551a14;color:#2b1a12;text-decoration:none}
+ .lsm-help img{width:66px;height:auto;flex:none}
+ .lsm-help>span{flex:1;min-width:0;padding-left:12px;border-left:1.5px solid #e1dccd}
+ .lsm-help strong{display:block;font-size:18px;font-weight:900}
+ .lsm-help small{display:block;margin-top:2px;color:#4a4f5c;font-size:12.5px;line-height:1.4}
+ .lsm-help>svg{width:24px;height:24px;flex:none;color:#f05a14}
+}
+@media(max-width:360px){
+ .lsm-title-card>img{width:76px}.lsm-title-card h1{font-size:20px}
+ .lsm-card-icon{width:84px;height:84px}.lsm-card-icon .letter-icon{transform:scale(1.05)}.lsm-card h2{font-size:17px}
+ .lsm-go{margin-inline:8px}
+}
+@keyframes lsm-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.lsm-card{animation:none}}
+@media(max-width:600px){
+ /* Sprite ikon surat (di CSS lama hanya untuk .letter-card) */
+ .lsm-card-icon .letter-icon{display:block;width:76px;height:76px;flex:0 0 76px;border-radius:12px;background-image:url('mockup/letter-icons-source.png');background-repeat:no-repeat;background-size:1738px 905px;font-size:0}
+ .lsm-hero{max-width:none!important}
+ .lsm-search input{font-weight:500!important}
+ .lsm-search input::placeholder{font-weight:500;font-size:15px}
+ .cpx-services.mw-page .crd-deco{display:none!important}
+}

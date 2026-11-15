@@ -1,0 +1,79 @@
+/* Landing warga mobile (<=600px) — tema krem-oranye sesuai mockup 14 Nov 2026. Layout desktop tidak berubah. */
+.mh-home{display:none}
+@media(max-width:600px){
+body:has(.mh-home){background:#fdf3ea!important;padding-bottom:0!important}
+body:has(.mh-home)>:is(.dwb-shell,.portal-home,.public-footer-banner,.mbx-nav,.wa-float,.live-chat-float,.citizen-back-bar){display:none!important}
+.mh-home{--mh-or:#f05a14;--mh-or2:#ff8a3d;--mh-nv:#0d1b3e;--mh-tx:#3d4559;--mh-mt:#6f7280;--mh-cream:#fdf3ea;--mh-peach:#ffeadb;--mh-line:#f6e3d3;
+ display:block;min-height:100dvh;background:linear-gradient(180deg,#fef1e6 0,#fdf5ee 40%,#fceadc 100%);color:var(--mh-nv);font-family:Nunito,'Segoe UI',sans-serif;line-height:1.4}
+.mh-home *{box-sizing:border-box}.mh-home a{color:inherit;text-decoration:none}.mh-home svg{width:24px;height:24px;flex-shrink:0}.mh-home :is(a,button):focus-visible{outline:3px solid #2364d2;outline-offset:3px}
+
+/* Header merek: lihat assets/mobile-warm.css (.mw-header, partial site/mobile_brand_header.php). Ilustrasi desa khusus beranda: */
+.mh-home .mw-header svg{width:23px;height:23px}
+.mh-village{display:block;width:100%;height:auto;aspect-ratio:941/222;margin-top:6px;object-fit:cover;object-position:center bottom}
+
+/* Konten */
+/* Ilustrasi berlatar krem menyatu dengan kartu */
+.mh-news-art,.mh-agenda-art{mix-blend-mode:multiply}
+.mh-news-art,.mh-agenda-art{-webkit-mask-image:linear-gradient(90deg,transparent,#000 30%),linear-gradient(180deg,transparent,#000 25%);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent,#000 30%),linear-gradient(180deg,transparent,#000 25%);mask-composite:intersect}
+.mh-content{position:relative;z-index:1;margin:-6px auto 0;width:calc(100% - 20px);max-width:560px;padding-bottom:112px;display:grid;gap:14px}
+.mh-card{position:relative;background:#fffaf6;border:1px solid #fff;border-radius:22px;box-shadow:0 8px 20px #c2551a14;padding:16px 14px;min-width:0;overflow:hidden}
+
+/* Menu cepat: kotak per ikon, ikon berwarna */
+.mh-quick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:9px;background:#fdf1e8}
+.mh-quick>a{display:flex;min-width:0;min-height:104px;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:12px 2px 10px;border:1px solid #fff;border-radius:18px;background:linear-gradient(180deg,#fff8f2,#fdeee2);box-shadow:0 4px 10px #c2551a14,inset 0 1px 0 #fff;text-align:center}
+.mh-quick strong{font-size:clamp(10.5px,2.95vw,12.5px);letter-spacing:-.01em;font-weight:900;line-height:1.2;color:var(--mh-nv);max-width:100%;overflow-wrap:normal;word-break:keep-all;hyphens:none}
+.mh-gloss-icon{display:grid;place-items:center;width:44px;height:44px}
+.mh-gloss-icon svg{width:40px;height:40px;filter:drop-shadow(0 3px 2px #0000001a)}
+.mh-quick .tone-orange{color:var(--mh-or)}.mh-quick .tone-purple{color:#b450d3}.mh-quick .tone-green{color:#3db54a}
+.mh-quick .tone-orange .mh-gloss-icon,.mh-quick .tone-purple .mh-gloss-icon,.mh-quick .tone-green .mh-gloss-icon{color:inherit}
+
+/* Kepala kartu */
+.mh-card-head{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+.mh-card h2{display:flex;align-items:center;gap:8px;margin:0;color:var(--mh-nv);font-size:18px;font-weight:900;line-height:1.25}
+.mh-head-ic{display:grid;place-items:center;color:var(--mh-or)}.mh-head-ic svg{width:26px;height:26px}
+.mh-card-head>a{display:flex;align-items:center;gap:4px;min-height:44px;color:#d9480f;font-size:12.5px;font-weight:800;white-space:nowrap}
+
+/* Pengumuman */
+.mh-announcement{background:linear-gradient(160deg,#fffaf6 55%,#fdeedd)}
+.mh-news{position:relative;display:flex;align-items:center;min-height:92px;padding:12px 12px 12px 14px;border-radius:16px;background:linear-gradient(100deg,#fff 50%,#fff6ee)}
+.mh-news>div{position:relative;z-index:1;flex:1;min-width:0;padding-right:96px}
+.mh-home h3{margin:0 0 7px;color:var(--mh-nv);font-size:15px;line-height:1.35;font-weight:800;overflow-wrap:anywhere}
+.mh-news>div>span{display:flex;align-items:center;gap:7px;color:var(--mh-mt);font-size:12.5px}
+.mh-news>div>span svg{width:18px;height:18px;color:var(--mh-or)}
+.mh-news-art{position:absolute;right:-4px;bottom:-4px;width:118px;height:auto;pointer-events:none}
+
+/* Agenda */
+.mh-agenda{padding-bottom:22px}
+.mh-event{position:relative;z-index:1;display:flex;gap:12px;align-items:center;min-height:82px;padding:10px 0}
+.mh-event+.mh-event{border-top:1px solid var(--mh-line)}
+.mh-event>div{flex:1;min-width:0}.mh-event h3{margin:0 0 4px;font-size:14.5px}
+.mh-date{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none;min-width:56px;min-height:60px;border-radius:13px;background:var(--mh-peach);color:var(--mh-or);line-height:1.05}
+.mh-date b{font-size:26px;font-weight:900}.mh-date span{font-size:12.5px;font-weight:800}
+.mh-event p{display:flex;align-items:center;gap:5px;margin:0;color:var(--mh-mt);font-size:12.5px}.mh-event p svg{width:16px;height:16px}
+.mh-event small{display:block;margin-top:3px;color:var(--mh-mt);font-size:12px;padding-right:70px}
+.mh-chevron{color:var(--mh-or);font-size:28px;line-height:1}
+.mh-agenda-art{position:absolute;right:0;bottom:0;width:150px;height:auto;pointer-events:none;opacity:.95}
+.mh-empty{position:relative;z-index:1;margin:0;padding:10px 0;color:var(--mh-mt);font-size:13px}
+
+/* Navigasi bawah */
+.mh-bottom{position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;justify-content:space-around;align-items:center;gap:4px;min-height:76px;padding:8px 10px max(10px,env(safe-area-inset-bottom));border-radius:24px 24px 0 0;background:#fffcf9f5;box-shadow:0 -4px 22px #c2551a1c;backdrop-filter:blur(12px)}
+.mh-bottom>a{display:flex;flex:1;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:58px;border-radius:16px;color:#6b6f7c;font-size:12px;line-height:1.2}
+.mh-bottom>a svg{width:25px;height:25px}
+.mh-bottom .is-active{background:var(--mh-peach);color:var(--mh-or);font-weight:800}
+.mh-add{display:grid;place-items:center;flex-shrink:0;width:62px;height:62px;margin:-32px 4px 0;border:4px solid #fff;border-radius:50%;background:linear-gradient(145deg,#ff8a3d,#f05a14 55%,#d9420a);color:#fff;box-shadow:0 6px 16px #f05a1452;cursor:pointer}
+.mh-add svg{width:32px;height:32px}
+
+/* Dialog layanan */
+.mh-services{width:calc(100% - 24px);max-width:420px;max-height:80dvh;margin:auto auto 16px;border:0;border-radius:24px;padding:20px;background:#fffaf6;color:var(--mh-nv);box-shadow:0 20px 70px #5a230044}
+.mh-services::backdrop{background:#2a140870;backdrop-filter:blur(3px)}
+.mh-services header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.mh-services h2{margin:0;font-size:20px}
+.mh-services header button{width:44px;height:44px;border:0;border-radius:50%;background:var(--mh-peach);color:var(--mh-or);font-size:28px;cursor:pointer}
+.mh-services nav{display:grid;gap:8px}
+.mh-services nav a{display:flex;align-items:center;gap:12px;min-height:58px;padding:12px;border:1px solid var(--mh-line);border-radius:14px;background:#fff;color:var(--mh-nv);font-size:14px}
+.mh-services nav svg{color:var(--mh-or)}.mh-services nav a>span:last-child{margin-left:auto;color:var(--mh-or)}
+}
+@media(max-width:374px){
+.mh-quick{gap:5px;padding:7px}.mh-quick>a{min-height:96px;padding:10px 1px 8px}.mh-quick strong{font-size:10.5px}.mh-gloss-icon svg{width:34px;height:34px}
+.mh-card h2{font-size:16px}.mh-card-head>a{font-size:11.5px}.mh-news>div{padding-right:78px}.mh-news-art{width:96px}
+}
+@media(max-width:340px){.mh-quick strong{font-size:10px;letter-spacing:-.03em}.mh-gloss-icon svg{width:30px;height:30px}}

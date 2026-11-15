@@ -1,0 +1,29 @@
+<?php
+// Read-only HTTP smoke checks. Temporary sessions are removed even after failure.
+if(PHP_SAPI!=='cli'){http_response_code(404);exit;}
+$db=new mysqli('localhost','root','','sukamulya');$db->set_charset('utf8mb4');
+$citizen=$db->query('SELECT id,display_name FROM citizens WHERE is_active=1 ORDER BY id LIMIT 1')->fetch_assoc();
+$admin=$db->query("SELECT id,username,role FROM admins WHERE is_active=1 AND role='admin' ORDER BY id LIMIT 1")->fetch_assoc();
+if(!$citizen||!$admin)throw new RuntimeException('Active local citizen and admin required for smoke checks.');
+$out=sys_get_temp_dir().DIRECTORY_SEPARATOR.'sukamulya-dashboard-qa';if(!is_dir($out))mkdir($out,0700,TRUE);
+$files=array();$sessions=array();
+function seed_session($values){global $files,$sessions;$sid=bin2hex(random_bytes(16));$values['__ci_last_regenerate']=time();$content='';foreach($values as $key=>$value)$content.=$key.'|'.serialize($value);foreach(array_unique(array(__DIR__.'/../application/cache/sessions',sys_get_temp_dir(),'C:/Windows/Temp','C:/xampp/tmp')) as $dir){if(!is_dir($dir)||!is_writable($dir))continue;$path=$dir.DIRECTORY_SEPARATOR.'sukamulya_session'.$sid;file_put_contents($path,$content);$files[]=$path;}$sessions[]=$sid;return $sid;}
+function fetch_page($path,$sid){$ch=curl_init('http://localhost/sukamulya/'.$path);curl_setopt_array($ch,array(CURLOPT_RETURNTRANSFER=>TRUE,CURLOPT_FOLLOWLOCATION=>TRUE,CURLOPT_COOKIE=>'sukamulya_session='.$sid,CURLOPT_TIMEOUT=>20));$html=curl_exec($ch);$status=curl_getinfo($ch,CURLINFO_HTTP_CODE);curl_close($ch);if($status!==200||!is_string($html))throw new RuntimeException('HTTP failure: '.$path);return $html;}
+function check($condition,$message){if(!$condition)throw new RuntimeException('FAIL '.$message);echo 'PASS '.$message,PHP_EOL;}
+function snapshot($html,$file,$redactions){foreach($redactions as $from=>$to)$html=preg_replace('/>(\s*)'.preg_quote(htmlspecialchars($from,ENT_QUOTES,'UTF-8'),'/').'(\s*)</u','>$1'.$to.'$2<',$html);$html=preg_replace('/(<input[^>]*name="csrf_sukamulya"[^>]*value=")[^"]*/','$1REDACTED',$html);$html=str_replace('<head>','<head><base href="http://localhost/sukamulya/">',$html);$html=preg_replace('#<script>\(function\(\)\{const widget=.*?</script>#s','',$html);$html=str_replace('</body>','<script>setTimeout(function(){document.body.dataset.qaOverflow=String(document.documentElement.scrollWidth>innerWidth);var g=document.querySelector(".dwi-grid");if(g)document.body.dataset.qaColumns=getComputedStyle(g).gridTemplateColumns.split(" ").length;},1000);</script></body>',$html);file_put_contents($file,$html);}
+try{
+ $sid=seed_session(array('citizen_id'=>(int)$citizen['id'],'citizen_name'=>$citizen['display_name']));
+ $html=fetch_page('warga',$sid);check(strpos($html,'class="dwi-page"')!==FALSE,'authenticated dashboard renders');check(strpos($html,'class="dwi-grid"')!==FALSE,'menu grid renders');check(strpos($html,'class="citizen-letter-sidebar"')===FALSE,'dashboard has no sidebar');check(strpos($html,'ptx-stats')===FALSE&&strpos($html,'Pengumuman Terbaru')===FALSE,'old widgets absent');check(strpos($html,'Kontak Pengurus')!==FALSE&&strpos($html,'acx-logout')!==FALSE,'compact header and logout remain');
+ check(strpos($html,'dwi-favorites-title')!==FALSE,'favorites panel rendered');check(strpos($html,'warga/keluarga/scan')!==FALSE,'OCR upload icon rendered');
+ $gridStart=strpos($html,'<h2 class="dwi-section-title">');$mainGrid=substr($html,$gridStart);preg_match_all('/data-menu-key="([^"]+)"/',$mainGrid,$ordered);check(array_slice($ordered[1],0,5)===array('letters','ocr','family','history','dues'),'HTTP grid priority matches request');
+ foreach(array('warga/keluarga/scan','warga/keluarga','warga/riwayat','warga/iuran','warga/pengaduan','warga/chat','warga/ronda','warga/mutasi','pengumuman','agenda','keuangan','warga/profil','kontak','warga/kontak-penting','galeri','warga/password') as $route){$page=fetch_page($route,$sid);check(strpos($page,'A PHP Error was encountered')===FALSE&&strpos($page,'An uncaught Exception')===FALSE,'existing route opens: '.$route);}
+ snapshot($html,$out.'/dashboard.html',array($citizen['display_name']=>'Warga Contoh'));
+ preg_match_all('/data-menu-key="([^"]+)"/',$html,$keys);echo 'Visible icons: '.count($keys[1]),PHP_EOL;
+ foreach(array('warga/layanan','warga/ajukan?jenis=pengantar') as $route){$page=fetch_page($route,$sid);check(strpos($page,'letter-focus-body')!==FALSE,'focused letter page: '.$route);}
+ $asid=seed_session(array('admin_id'=>(int)$admin['id'],'admin_role'=>$admin['role'],'admin_username'=>$admin['username']));
+ $html=fetch_page('admin/fitur?tab=dashboard',$asid);check(strpos($html,'id="dashboard-settings-form"')!==FALSE,'admin editor renders');check(strpos($html,'id="dws-preview"')!==FALSE,'admin preview renders');check(strpos($html,'name="version"')!==FALSE,'optimistic version rendered');check(strpos($html,'name="csrf_sukamulya"')!==FALSE,'CSRF fields rendered');snapshot($html,$out.'/admin.html',array($admin['username']=>'Admin Demo'));
+ $history=fetch_page('admin/fitur?tab=riwayat',$asid);check(strpos($history,'Riwayat Perubahan')!==FALSE,'audit history renders');
+ // POST without CSRF must fail before any mutation.
+ $ch=curl_init('http://localhost/sukamulya/admin/fitur/dashboard-save');curl_setopt_array($ch,array(CURLOPT_RETURNTRANSFER=>TRUE,CURLOPT_POST=>TRUE,CURLOPT_POSTFIELDS=>'action=save',CURLOPT_COOKIE=>'sukamulya_session='.$asid));curl_exec($ch);check(curl_getinfo($ch,CURLINFO_HTTP_CODE)===403,'CSRF rejects unprotected save');curl_close($ch);
+ echo 'Snapshots: '.$out,PHP_EOL;
+}finally{foreach($files as $file)if(is_file($file))unlink($file);foreach($sessions as $sid)foreach(array_unique(array(__DIR__.'/../application/cache/sessions',sys_get_temp_dir(),'C:/Windows/Temp','C:/xampp/tmp')) as $dir){$file=$dir.DIRECTORY_SEPARATOR.'sukamulya_session'.$sid;if(is_file($file))unlink($file);}}

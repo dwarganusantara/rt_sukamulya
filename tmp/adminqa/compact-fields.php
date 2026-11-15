@@ -1,0 +1,7 @@
+<?php
+$root=dirname(__DIR__,2);$p=$root.'/application/views/admin/ops/fields.php';$s=file_get_contents($p);$advanced='';
+foreach(array('help_text','citizen_editable') as $key){$pattern='/^.*<\?= ops_field\(\''.preg_quote($key,'/').'\'.*\R?/m';if(preg_match($pattern,$s,$m)){$advanced.=$m[0];$s=str_replace($m[0],'',$s);}}
+if(preg_match('/^.*<p class="ops-note blue">.*<\/p>\R?/m',$s,$m)){$advanced.=$m[0];$s=str_replace($m[0],'',$s);}
+if(preg_match('/^.*<\?= ops_field\(\'sort_order\'.*\R?/m',$s,$order)&&preg_match('/^.*<\?= ops_field\(\'is_required\'.*\R?/m',$s,$required)){$s=str_replace($order[0],'',$s);$s=str_replace($required[0],$required[0].$order[0],$s);}
+$s=str_replace('<div class="ops-form-actions">','<details class="ops-field ops-field-advanced"><summary>Pengaturan Lanjutan</summary><div class="ops-advanced-body">'.$advanced.'</div></details><div class="ops-form-actions">',$s);file_put_contents($p,$s);
+$p=$root.'/application/views/admin/ops/backup.php';$s=file_get_contents($p);$warning='<?php if ($stale): ?><p class="ops-note">Belum ada backup berhasil dalam 7 hari terakhir.</p><?php endif; ?>';$s=str_replace($warning,'',$s);$s=str_replace('<p class="ops-muted">Retensi:', $warning.'<p class="ops-muted">Retensi:',$s);$s=str_replace('<?php if ($zip): ?>','<details class="ops-field-advanced"><summary>Opsi Backup</summary><?php if ($zip): ?>',$s);$s=str_replace("'checkbox', 0) ?><?php endif; ?>","'checkbox', 0) ?><?php endif; ?></details>",$s);file_put_contents($p,$s);

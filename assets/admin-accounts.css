@@ -1,0 +1,179 @@
+/* Akun Pengurus & Hak Akses — tab, panel Detail Hak Akses, matriks menu. Tema navy–putih/krem–oranye. */
+.admin-body .akx{--akx-navy:#0c214b;--akx-orange:#ff7a00;--akx-cream:#fff6ea;--akx-line:#e8ecf3;--akx-green:#22a447;--akx-muted:#6a7590}
+.admin-body .akx .ops-hero-art{display:block}
+.akx-tabs{display:flex;gap:6px;margin:4px 0 20px;padding:6px;background:#fff;border:1px solid var(--akx-line);border-radius:18px;overflow-x:auto;scrollbar-width:thin}
+.akx-tabs a{flex:1 0 auto;display:flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:8px 22px;border:1.5px solid transparent;border-radius:13px;color:var(--akx-navy);font-weight:600;text-decoration:none;white-space:nowrap}
+.akx-tabs a svg{width:21px;height:21px}
+.akx-tabs a:hover{background:#fff8ef}
+.akx-tabs a.active{background:var(--akx-cream);border-color:#ffb067;color:#e56a00}
+.akx-tabs a:focus-visible{outline:3px solid #1e64d1;outline-offset:2px}
+
+.akx-grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(320px,1fr);gap:20px;align-items:start}
+.admin-body .akx .akx-card{padding:24px;border-radius:22px;min-width:0}
+.akx-card-head{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.akx-card-head>div{flex:1;min-width:0}
+.akx-card-head h2{margin:0;font-size:21px;color:var(--akx-navy)}
+.akx-card-head p{margin:3px 0 0;color:var(--akx-muted);font-size:14px}
+.akx-head-icon{width:46px;height:46px;flex-shrink:0;display:grid;place-items:center;border-radius:13px;background:#fff0dd;color:var(--akx-orange)}
+.akx-head-icon.plain{background:none}
+.akx-head-icon svg{width:28px;height:28px}
+.admin-body .akx .akx-add{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.admin-body .akx .akx-add svg{width:18px;height:18px}
+
+/* Tabel akun */
+.akx-table thead th{background:#f6f7fa}
+.akx-table td{vertical-align:middle}
+.akx-th-action,.akx-td-action{text-align:center;width:70px}
+.admin-body .akx .ops-account-initial{color:#fff;font-weight:700;background:linear-gradient(135deg,#ffad3b,#ff7a00)}
+.admin-body .akx .ops-account-initial:is(.akx-av-sekretaris){background:linear-gradient(135deg,#c4a6ff,#8c63f0)}
+.admin-body .akx .ops-account-initial:is(.akx-av-bendahara,.akx-av-ketua){background:linear-gradient(135deg,#5f9dff,#2f67e0)}
+.admin-body .akx .ops-account-initial:is(.akx-av-operator,.akx-av-keamanan,.akx-av-inventaris,.akx-av-sosial,.akx-av-auditor){background:linear-gradient(135deg,#5fd6d0,#1fa6a0)}
+.admin-body .akx .ops-role-tag{display:inline-flex;align-items:center;gap:7px;border-radius:999px;font-weight:600}
+.admin-body .akx .ops-role-tag.akx-role-sekretaris,.admin-body .akx .ops-role-tag.akx-role-ketua{background:#eef3ff;color:#2f5fd0}
+.admin-body .akx .ops-role-tag.akx-role-bendahara{background:#f3edff;color:#6b3fd4}
+.admin-body .akx .ops-role-tag:is(.akx-role-operator,.akx-role-keamanan,.akx-role-inventaris,.akx-role-sosial,.akx-role-auditor){background:#eaf8ee;color:#1d7c3a}
+
+/* Peran */
+.akx-roles{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr));gap:14px}
+.akx-roles li{display:flex;flex-direction:column;gap:10px;padding:16px;border:1px solid var(--akx-line);border-radius:16px;background:#fff}
+.akx-roles li.active{border-color:#ffb067;background:#fffaf3}
+.akx-roles p{margin:0;color:var(--akx-muted);font-size:13px;line-height:1.5;flex:1}
+.akx-role-meta{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--akx-muted)}
+.akx-role-meta b{color:var(--akx-navy)}
+.akx-roles .ops-btn{align-self:flex-start}
+
+/* Detail Hak Akses */
+.akx-role-pick{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.akx-role-pick label{font-weight:600;color:var(--akx-navy);white-space:nowrap}
+.akx-select{position:relative;flex:1;min-width:0}
+.akx-select select{width:100%;min-height:46px;padding:10px 38px 10px 46px;border:1px solid #d6dce8;border-radius:12px;background:#fff;color:var(--akx-navy);font:inherit;font-weight:500;appearance:auto}
+.akx-select-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--akx-orange);pointer-events:none;display:flex}
+.akx-select-icon svg{width:21px;height:21px}
+.akx-groups{display:flex;flex-direction:column;gap:8px}
+.akx-group{position:relative;border-radius:14px;background:#f7f8fb;border:1px solid #eef0f5}
+.akx-group-head,.akx-group summary{display:flex;align-items:center;gap:12px;min-height:46px;padding:6px 14px;color:var(--akx-navy);font-weight:600}
+.akx-group summary{cursor:pointer;list-style:none;padding-right:82px;border-radius:14px}
+.akx-group summary::-webkit-details-marker{display:none}
+.akx-group summary:focus-visible{outline:3px solid #1e64d1;outline-offset:2px}
+.akx-g-icon{display:flex;color:#3b4a6b}
+.akx-g-icon svg{width:21px;height:21px}
+.akx-g-label{flex:1;min-width:0;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.akx-g-count{font-size:12px;color:var(--akx-muted);font-weight:500}
+.akx-chev{display:flex;color:#3b4a6b;transition:transform .2s;transform:rotate(90deg)}
+.akx-chev svg{width:17px;height:17px}
+.akx-group details[open] .akx-chev{transform:rotate(-90deg)}
+.admin-body .akx .akx-role-pick label{margin:0}
+.akx-switch.akx-group-switch{position:absolute;right:14px;top:9px}
+.akx-items{list-style:none;margin:0;padding:2px 14px 10px 47px}
+.akx-items li{display:flex;align-items:center;gap:10px;min-height:40px;border-top:1px dashed #e3e7ef;font-size:14px;color:#1d2d52}
+.akx-i-label{flex:1;min-width:0;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.akx-group.is-na,.akx-items li.is-na{opacity:.6}
+
+.akx-switch{position:relative;display:inline-flex;flex-shrink:0;cursor:pointer}
+.akx-switch input{position:absolute;inset:0;z-index:1;opacity:0;width:100%;height:100%;margin:0;cursor:inherit}
+.akx-switch i{width:46px;height:27px;border-radius:999px;background:#cfd5e1;transition:background .2s;position:relative}
+.akx-switch i::after{content:"";position:absolute;left:3px;top:3px;width:21px;height:21px;border-radius:50%;background:#fff;box-shadow:0 1px 3px #0003;transition:transform .2s}
+.akx-switch input:checked+span+i,.akx-switch input:checked~i{background:var(--akx-green)}
+.akx-switch input:checked~i::after{transform:translateX(19px)}
+.akx-switch input:indeterminate~i{background:#8fd1a2}
+.akx-switch input:indeterminate~i::after{transform:translateX(10px)}
+.akx-switch input:disabled{cursor:not-allowed}
+.akx-switch input:disabled~i{opacity:.55}
+.akx-switch input:focus-visible~i{outline:3px solid #1e64d1;outline-offset:2px}
+.akx-switch.small i{width:40px;height:23px}
+.akx-switch.small i::after{width:17px;height:17px}
+.akx-switch.small input:checked~i::after{transform:translateX(17px)}
+.akx-switch.small input:indeterminate~i::after{transform:translateX(8px)}
+
+.akx-chip{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;font-style:normal;white-space:nowrap}
+.akx-chip svg{width:12px;height:12px}
+.akx-chip.premium{background:#fff0d9;color:#a84d00}
+.akx-chip.off{background:#eef0f4;color:#5b6684}
+.akx-chip.lock{background:#e9f0ff;color:#2f5fd0}
+.akx-chip.na{background:#f1f2f5;color:#7a8299;font-weight:600}
+.akx-note{margin:14px 2px 0;font-size:12.5px;line-height:1.55;color:var(--akx-muted)}
+.akx-actions{display:grid;grid-template-columns:1fr 1.4fr;gap:12px;margin-top:16px}
+.admin-body .akx .akx-actions .ops-btn{display:inline-flex;justify-content:center;align-items:center;gap:8px;min-height:48px;font-size:15px}
+.admin-body .akx .akx-actions .ops-btn svg{width:19px;height:19px}
+.akx-default{display:block;margin:10px auto 0;padding:6px 10px;border:0;background:none;color:var(--akx-muted);font:inherit;font-size:13px;text-decoration:underline;cursor:pointer}
+.akx-default:hover{color:#c25a00}
+
+/* Matriks */
+.akx-legend{display:flex;flex-wrap:wrap;gap:16px;margin:0 0 12px;font-size:13px;color:var(--akx-muted)}
+.akx-legend span{display:inline-flex;align-items:center;gap:6px}
+.akx-dot{display:inline-block;width:14px;height:14px;border-radius:50%;vertical-align:middle}
+.akx-dot.on{background:var(--akx-green)}
+.akx-dot.off{background:#fff;border:2px solid #e05a3a}
+.akx-dot.lock{background:#2f5fd0}
+.akx-dot.na{background:#dfe3ea}
+.akx-matrix th,.akx-matrix td{text-align:center;white-space:nowrap}
+.admin-body .akx .akx-matrix tbody th{text-transform:none;letter-spacing:0;font-size:14px}
+.admin-body .akx .akx-matrix tbody th[scope=row]{text-align:left;font-weight:500;color:#1d2d52;background:#fff}
+.admin-body .akx .akx-matrix .akx-matrix-group svg{display:inline-block}
+.akx-matrix thead th a{color:var(--akx-navy);text-decoration:none}
+.akx-matrix thead th a:hover{color:#e56a00;text-decoration:underline}
+.akx-matrix .akx-matrix-group th{text-align:left;background:#fff6ea;color:var(--akx-navy);font-weight:700}
+.akx-matrix .akx-matrix-group svg{width:16px;height:16px;margin-right:8px;vertical-align:-3px;color:var(--akx-orange)}
+
+/* Dialog form akun */
+.akx-dialog{box-sizing:border-box;width:min(520px,calc(100% - 28px));max-height:calc(100dvh - 28px);overflow:auto;border:1px solid var(--akx-line);border-radius:22px;padding:22px 24px;color:var(--akx-navy);background:#fff;box-shadow:0 24px 70px #111c4b40}
+.akx-dialog:not([open]){display:none}
+.akx-dialog[open]:not(:modal){position:relative;margin:20px auto;z-index:5}
+.akx-dialog::backdrop{background:#111a3b70}
+.akx-dialog header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+.akx-dialog h2{margin:0;font-size:20px}
+.akx-x{font-size:30px;line-height:1;color:var(--akx-navy);text-decoration:none;padding:0 4px}
+.akx-dialog select{width:100%;min-height:44px;padding:9px 12px;border:1px solid #d6dce8;border-radius:10px;background:#fff;font:inherit;color:var(--akx-navy)}
+.akx-dialog small{display:block;margin:6px 0 10px;color:var(--akx-muted);font-size:12px}
+
+@media(max-width:1200px){.akx-grid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:760px){
+ .akx-tabs a{flex:1 0 auto;padding:8px 14px;font-size:14px;min-height:44px}
+ .admin-body .akx .akx-card{padding:18px}
+ .akx-card-head{flex-wrap:wrap}
+ .admin-body .akx .akx-add{width:100%;justify-content:center}
+ .akx-role-pick{flex-direction:column;align-items:stretch;gap:6px}
+ .akx-items{padding-left:14px}
+ .akx-actions{grid-template-columns:1fr}
+ .admin-body .akx .ops-hero-art{display:none}
+}
+/* Pengaturan Peran: komposisi kartu sesuai mockup, angka tetap dari izin aktual. */
+.admin-body .akx-role-design .akx-grid{grid-template-columns:minmax(0,1.62fr) minmax(370px,1fr);align-items:stretch;gap:16px}
+.admin-body .akx-role-design .akx-card{padding:20px;border:1px solid #e5eafa;box-shadow:0 5px 20px #20356c04;background:linear-gradient(140deg,#fff,#fcfdff)}
+.akx-role-design .akx-card-head{margin-bottom:22px;gap:12px}
+.akx-role-design .akx-head-icon{background:linear-gradient(140deg,#fff8ed,#ffe8c9);color:#ff8500;width:48px;height:48px;border-radius:17px}
+.akx-role-design .akx-card-head h2{font-size:22px;font-weight:750;letter-spacing:-.6px}
+.akx-role-design .akx-card-head p{font-size:13px;line-height:1.5}
+.akx-role-design .akx-roles{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.akx-role-design .akx-role-tile{--tile:#edf3ff;--edge:#cddcff;--ink:#2b72ed;padding:0;border-color:var(--edge);background:linear-gradient(135deg,#fff,var(--tile));border-radius:18px;min-width:0;overflow:hidden}
+.akx-role-design .akx-tile-admin{--tile:#fff4e7;--edge:#ffc27e;--ink:#ff8900}
+.akx-role-design .akx-tile-sekretaris,.akx-role-design .akx-tile-bendahara{--tile:#f3ecff;--edge:#e0d0ff;--ink:#8545ef}
+.akx-role-design .akx-tile-operator,.akx-role-design .akx-tile-keamanan{--tile:#eef9ef;--edge:#bde4be;--ink:#25ae42}
+.akx-role-design .akx-tile-sosial{--tile:#fff0f7;--edge:#ffdaeb;--ink:#f3398b}
+.akx-role-design .akx-role-tile.active{border-color:var(--ink);box-shadow:inset 0 0 0 1px #ffffff}
+.akx-role-link{display:flex;flex-direction:column;gap:10px;padding:15px 14px;height:100%;color:#0a1b50;text-decoration:none;box-sizing:border-box}
+.akx-role-link:hover{background:#ffffff65}
+.akx-role-link:focus-visible{outline:3px solid #296cf1;outline-offset:-3px}
+.akx-role-title{display:flex;align-items:center;gap:10px;font-size:16px;letter-spacing:-.5px;line-height:1.25}
+.akx-role-symbol{display:grid;place-items:center;flex-shrink:0;width:36px;height:36px;border-radius:12px;color:var(--ink);background:var(--tile);box-shadow:inset 0 1px 3px #fff,0 2px 4px #11224408}
+.akx-role-symbol svg{width:26px;height:26px}
+.akx-role-design .akx-roles p{color:#294576;font-size:12.5px;line-height:1.5;min-height:54px}
+.akx-role-design .akx-role-meta{justify-content:space-between;align-items:center;gap:5px;flex-wrap:nowrap;font-size:11px;letter-spacing:-.2px}
+.akx-role-meta>span{display:inline-flex;gap:3px;align-items:center;white-space:nowrap}
+.akx-role-meta svg{width:16px;height:16px;flex-shrink:0}
+.akx-role-status{background:#e1f6e6;color:#087d24;border-radius:20px;padding:5px 7px;font-weight:700}
+.akx-role-status i{width:7px;height:7px;background:#16882c;border-radius:50%}
+.akx-role-status.off{color:#63738f;background:#e9edf4}.akx-role-status.off i{background:#75839b}
+.akx-role-design .akx-group{border:0;background:linear-gradient(100deg,#f0f2f8,#f7f8fc);border-radius:11px}
+.akx-role-design .akx-group-head,.akx-role-design .akx-group summary{min-height:36px;padding-top:4px;padding-bottom:4px;font-size:12.5px;gap:9px}
+.akx-role-design .akx-group summary{padding-right:72px}
+.akx-role-design .akx-g-count{color:#3d5688;font-size:11px}.akx-role-design .akx-group.is-na{opacity:1}
+.akx-role-design .akx-switch i{width:43px;height:25px}.akx-role-design .akx-switch i:after{width:19px;height:19px}
+.akx-role-design .akx-group-switch{top:6px;right:10px}
+.akx-role-design .akx-groups{gap:7px}.akx-role-design .akx-g-label .na{display:none}
+.akx-role-design .akx-note{font-size:11px;margin-top:12px}
+.akx-role-design .akx-actions{margin-top:18px}.akx-role-design .akx-default{font-size:11px}
+@media(min-width:1450px){.akx-role-design .akx-role-link{padding:16px}.akx-role-design .akx-roles p{min-height:62px;font-size:13px}.akx-role-design .akx-role-meta{font-size:12px}}
+@media(max-width:1200px){.admin-body .akx-role-design .akx-grid{grid-template-columns:1fr}.akx-role-design .akx-roles{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:650px){.akx-role-design .akx-roles{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.akx-role-design .akx-role-link{padding:12px}.akx-role-title{font-size:14px;gap:6px}.akx-role-design .akx-role-meta{flex-wrap:wrap}.akx-role-design .akx-roles p{min-height:0}.akx-role-design .akx-card-head h2{font-size:20px}}
+@media(max-width:360px){.akx-role-design .akx-roles{grid-template-columns:1fr}}
