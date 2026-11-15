@@ -3,8 +3,8 @@
 #/tmp/adminqa/*browser.json
 #/application/config/central_admin.php
 #/application/config/secrets.php
-#/application/cache/sessions/*
-#!/application/cache/sessions/index.html
-#!/application/cache/sessions/.htaccess
+/application/cache/sessions/*
+!/application/cache/sessions/index.html
+!/application/cache/sessions/.htaccess
 
 #/tmp/responsive-audit/
