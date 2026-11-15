@@ -1,10 +1,10 @@
-/application/config/platform_owner.php
-/tmp/adminqa/application/
-/tmp/adminqa/*browser.json
-/application/config/central_admin.php
-/application/config/secrets.php
-/application/cache/sessions/*
-!/application/cache/sessions/index.html
-!/application/cache/sessions/.htaccess
+#/application/config/platform_owner.php
+#/tmp/adminqa/application/
+#/tmp/adminqa/*browser.json
+#/application/config/central_admin.php
+#/application/config/secrets.php
+#/application/cache/sessions/*
+#!/application/cache/sessions/index.html
+#!/application/cache/sessions/.htaccess
 
-/tmp/responsive-audit/
+#/tmp/responsive-audit/
