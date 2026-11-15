@@ -7877,3 +7877,50 @@ ERROR - 2026-11-15 12:16:59 --> OCR RAW RESULT: Array
 
 ERROR - 2026-11-15 12:30:28 --> 404 Page Not Found: Robotstxt/index
 ERROR - 2026-11-15 12:32:41 --> 404 Page Not Found: Faviconico/index
+ERROR - 2026-11-15 12:38:28 --> 404 Page Not Found: Sitemapxml/index
+ERROR - 2026-11-15 12:40:11 --> OCR RAW RESULT: Array
+(
+    [keluarga] => Array
+        (
+        )
+
+    [anggota] => Array
+        (
+            [0] => Array
+                (
+                    [nik] => 
+                    [agama] => islam 6-00,
+                    [pendidikan] => DIPLOMA IV/STRATA |
+                    [pekerjaan] => famawnemnsta id
+                    [nama_lengkap] => 3 | MUHAMMAD
+                    [fields_need_review] => Array
+                        (
+                            [0] => nik
+                            [1] => agama
+                            [2] => pendidikan
+                            [3] => pekerjaan
+                        )
+
+                )
+
+            [1] => Array
+                (
+                    [nik] => 3674050705190001
+                    [pekerjaan] => famawnemnsta KARYAWAN SWASTA Fron Tan | won eren rona
+                    [nama_lengkap] => 3 | MUHAMMAD AHSAN RIFHANDI 4_ | AHMAD ZA KRI RIFHANDI
+                    [agama] => 6-00, [ISLaM_____| orasa0%8|
+                    [pendidikan] => DIPLOMAIVISTRATAI TIDAK/BLM SEKOLAH
+                    [fields_need_review] => Array
+                        (
+                            [0] => nik
+                            [1] => pekerjaan
+                            [2] => agama
+                            [3] => nama_lengkap
+                        )
+
+                )
+
+        )
+
+)
+
